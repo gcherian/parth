@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+**/.DS_Store
+._*
+**/._*
+
+# Flutter / Dart
+app/build/
+app/.dart_tool/
+app/.idea/
+app/*.iml
+app/android/.gradle/
+app/android/local.properties
+app/android/app/google-services.json
+app/ios/.symlinks/
+app/ios/Flutter/Flutter.framework
+app/ios/Flutter/Flutter.podspec
+app/ios/Pods/
+app/ios/.flutter-plugins
+app/ios/.flutter-plugins-dependencies
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/pubspec.lock
+
+# Python server
+server/venv/
+server/__pycache__/
+server/*.pyc
+server/.env
+
+# Logs
+*.log

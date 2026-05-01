@@ -1,0 +1,44 @@
+name: parth
+description: A personal AI mentor for every Indian child.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  
+  # Storage
+  shared_preferences: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+  # HTTP / API
+  http: ^1.2.1
+  
+  # UI
+  google_fonts: ^6.2.1
+  flutter_markdown: ^0.6.22
+  lottie: ^3.1.2
+  fl_chart: ^0.68.0
+  
+  # Utils
+  uuid: ^4.4.0
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.9
+  riverpod_generator: ^2.4.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
