@@ -1,0 +1,467 @@
+{
+  "sphere": "biology_medicine",
+  "version": 2,
+  "description": "Subject-matter puzzles grounded in observation, experiment, and inference. Students discover biology by doing what biologists do — observing carefully, hypothesising, and testing.",
+  "thinkers": [
+    {
+      "id": "darwin",
+      "name": "Charles Darwin",
+      "domain": "Evolution / Natural Selection",
+      "puzzles": [
+        {
+          "id": "darwin_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "observation",
+          "title": "The Beak Game",
+          "hook": "Imagine different birds with different beak shapes competing for the same food. What happens over many generations to the beak shapes in a population?",
+          "challenge": "Set up four 'beaks' (chopsticks, tweezers, a spoon, and a clothespin). Scatter mixed 'food' on a tray: rice grains, dried beans, sunflower seeds, and marbles. Each 'beak' must pick up food and drop it into a cup in 30 seconds. Count what each beak collected. If beaks that collect less 'die,' and beaks that collect more 'reproduce,' which beak type would dominate after 10 generations in an environment of only rice? Now change the environment to mostly beans. Which wins?",
+          "materials": "Chopsticks, tweezers, spoon, clothespin, mixed seeds/beans/rice, cups, timer",
+          "discover": "The 'winning' beak changes when the environment changes. No single beak is best — only best for a specific context. This is natural selection: traits that help survival in the current environment become more common.",
+          "go_deeper": "Now mix beak types: start with 5 of each. Remove those that collected the least each round. Add new ones matching those that collected the most. Run 5 'generations.' What does the population look like at the end?",
+          "silent_lesson": "Natural selection; adaptation; fitness as environment-dependent; variation and selection."
+        },
+        {
+          "id": "darwin_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Fossil Record",
+          "hook": "If species change gradually over millions of years, what pattern of similarity would you expect to find as you compare older and older fossils?",
+          "challenge": "Compare images of horse fossils from different geological periods (provided): Eohippus (55 mya), Mesohippus (37 mya), Merychippus (17 mya), Equus (modern). Measure: leg bone length, number of toes, tooth crown height. Plot each measurement vs geological age. What is the direction of change? Is it gradual or sudden? Which features changed fastest?",
+          "materials": "Printed fossil comparison images, ruler, graph paper",
+          "discover": "Leg bones lengthened, toes reduced from 4 to 1, and teeth became taller (better for grazing grass). The changes are gradual and directional — consistent with an environment that was shifting from forest to grassland. The fossil record is a history book written in bone.",
+          "go_deeper": "Compare human, chimpanzee, and gorilla skeletons. Which bones are most similar? Which show the greatest divergence? What does this suggest about evolutionary relationships?",
+          "silent_lesson": "Fossil evidence for evolution; homologous structures; directional selection; reading the geological record."
+        },
+        {
+          "id": "darwin_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Selection Simulation",
+          "hook": "Evolution by natural selection has a mathematical structure — population genetics — that predicts exactly how fast a gene changes in frequency under selection pressure. Can you derive it?",
+          "challenge": "Start with a population of 100 individuals: 50 with trait A (survival rate 0.9/generation) and 50 with trait B (survival rate 0.7/generation). After each generation, the survivors reproduce to restore the population to 100. Calculate allele frequencies after 1, 5, 10, 20, 50 generations. Plot A frequency vs generation number. Fit an S-curve (logistic function). At what generation does A exceed 99%?",
+          "materials": "Calculator, graph paper",
+          "discover": "Even a small survival advantage (20% here) fixes the favoured trait within ~30 generations. The curve is S-shaped (slow start, fast middle, slow approach to fixation). Small selection pressures, acting for many generations, drive large evolutionary changes.",
+          "go_deeper": "What happens if A's advantage is only 1% instead of 20%? Recalculate. In a real population of 10,000, random drift can overwhelm selection at small advantages. This is why evolution in small isolated populations is faster.",
+          "silent_lesson": "Population genetics; Hardy-Weinberg equilibrium; selective sweep; genetic drift; mathematical structure of evolution."
+        }
+      ]
+    },
+    {
+      "id": "mendel",
+      "name": "Gregor Mendel",
+      "domain": "Genetics / Inheritance",
+      "puzzles": [
+        {
+          "id": "mendel_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Hidden Trait",
+          "hook": "You mix a purple-flowered plant with a white-flowered plant. All children are purple. But then the grandchildren are 3 purple: 1 white. Where did the white go, and how did it come back?",
+          "challenge": "Use coins to model inheritance. Flip two coins representing the two 'instructions' for colour. Heads = purple (dominant), tails = white (recessive). If at least one coin is heads, the plant is purple. If both are tails, it's white. Flip 40 pairs. Count purple vs white. What is the ratio? Now: create a 'hybrid' by giving each parent one heads and one tails. Simulate their offspring — flip one from each parent. Count the ratio of purple to white in 40 offspring.",
+          "materials": "Two coins, tally sheet",
+          "discover": "About 3:1 — three purple for every white. Traits are not blended; they are preserved in hidden form and can reappear unchanged generations later. The 'instructions' (genes) are discrete and passed on intact.",
+          "go_deeper": "What is the probability that two hybrid parents produce a white-flowered child? Show using probability (P = 1/4). Verify with 100 coin flips.",
+          "silent_lesson": "Mendelian inheritance; dominant and recessive alleles; 3:1 ratio; particulate inheritance vs blending."
+        },
+        {
+          "id": "mendel_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Two Traits at Once",
+          "hook": "If you track two traits simultaneously (flower colour AND seed shape), do they inherit independently — or do they travel together as a package?",
+          "challenge": "Use coloured cards to simulate a dihybrid cross: yellow/green cards for seed colour, smooth/wrinkled for seed shape. Create hybrid parents (YyRr — one of each). Draw 80 offspring by randomly selecting one card from each parent for each gene. Count: how many are Yellow+Smooth, Yellow+Wrinkled, Green+Smooth, Green+Wrinkled? What is the ratio?",
+          "materials": "4 sets of cards (YY, Yy, yy variations, same for R), tally sheet",
+          "discover": "The two traits segregate independently — roughly 9:3:3:1. The colour of a seed does not influence its shape. This is the Law of Independent Assortment — as long as the two genes are on different chromosomes.",
+          "go_deeper": "What would you expect if both genes were on the SAME chromosome? Design a simulation and explore what 'linked genes' means for inheritance ratios.",
+          "silent_lesson": "Law of Independent Assortment; dihybrid cross; 9:3:3:1 ratio; gene linkage contrast."
+        },
+        {
+          "id": "mendel_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Chi-Square Test",
+          "hook": "Mendel's data fits the expected ratios suspiciously well — so well that statisticians suspect the data may have been 'cleaned.' How well should data fit a theory?",
+          "challenge": "A 19th-century geneticist reported 787 tall to 277 short pea plants (3:1 ratio predicted). The expected counts for 1064 plants: 798 tall, 266 short. Compute χ² = Σ (observed - expected)² / expected for each category. Compare your χ² to the critical value for p=0.05 with 1 degree of freedom (= 3.84). Is the data too good? Now repeat for the seed colour data: 6022 yellow, 2001 green (expected: 6017, 2006).",
+          "materials": "Calculator",
+          "discover": "Mendel's χ² values are all unusually small — the data fits better than chance would produce. Fisher (1936) calculated that the probability of data THIS consistent is less than 0.007. This suggests data selection or smoothing — a famous unsolved controversy in the history of science.",
+          "go_deeper": "Design your own genetics experiment using fast-breeding organisms (or simulation). Collect 200 data points. Apply the chi-square test. Does your data fit Mendel's expected ratios?",
+          "silent_lesson": "Chi-square test; statistical significance; data quality and scientific integrity; Mendel controversy; hypothesis testing."
+        }
+      ]
+    },
+    {
+      "id": "pasteur",
+      "name": "Louis Pasteur",
+      "domain": "Germ Theory / Fermentation / Vaccination",
+      "puzzles": [
+        {
+          "id": "pasteur_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "Does Air Create Life?",
+          "hook": "People once believed that rotting meat spontaneously created maggots and flies — that life could appear from non-living matter. Can you design an experiment to test this?",
+          "challenge": "Set up two cups of warm sugar water. Cover one tightly with plastic wrap. Leave the other open. Wait 3 days. Observe: which grows mould/yeast first? Which smells first? Now consider: what is the air providing to the open cup that the sealed cup lacks?",
+          "materials": "Two cups, warm sugar water, plastic wrap, rubber band",
+          "discover": "The open cup grows mould faster — because airborne micro-organisms land and grow. The sealed cup is protected from contamination. Life comes from existing life, carried in the air — not generated spontaneously by the food itself.",
+          "go_deeper": "Pasteur used a swan-neck flask — curved so air could enter but dust couldn't settle into the broth. Why would this be a stronger test than just sealing the container?",
+          "silent_lesson": "Spontaneous generation disproved; germ theory; controlled experiment; contamination and sterility."
+        },
+        {
+          "id": "pasteur_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Fermentation Detective",
+          "hook": "Yeast converts sugar into alcohol and gas — but only when living yeast cells are present. How can you prove it's the cells doing the work, not just a chemical reaction?",
+          "challenge": "Set up three test tubes of sugar solution: (A) add active dry yeast + warm water, (B) add boiled (killed) yeast, (C) add just warm water. Seal each with a balloon over the top. Observe after 30 minutes and 2 hours. Measure balloon inflation (circumference). What produces gas? What doesn't? What does this prove?",
+          "materials": "3 test tubes or bottles, sugar, dry yeast, 3 small balloons, measuring tape",
+          "discover": "Only living yeast produces gas (CO₂) — the balloon inflates only on tube A. Killed yeast contains the same chemicals but produces nothing. It is the living cellular process, not the chemical components alone, that drives fermentation.",
+          "go_deeper": "What is the gas? Test by lighting a match near the balloon when it deflates into a glass of limewater. What happens? This identifies the gas as CO₂.",
+          "silent_lesson": "Fermentation; cellular metabolism; living vs non-living processes; control experiment design."
+        },
+        {
+          "id": "pasteur_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "design",
+          "title": "The Weakened Pathogen",
+          "hook": "Pasteur discovered that a weakened version of a pathogen could protect against the full-strength version. He called it 'vaccination' after the cowpox vaccine. Design an experiment to test this principle — without any real pathogens.",
+          "challenge": "Design a mathematical model of vaccination: start with a population of 1000 individuals, 10% initially infected. Each infected person infects R₀ = 3 others per generation (before recovery). A fraction V of the population is vaccinated and cannot be infected. Simulate (spreadsheet or hand calculation) the epidemic for: V=0%, V=50%, V=70%, V=90%. Calculate peak infected, total infected, and time to extinction for each scenario. Find the 'herd immunity threshold' (the minimum V that causes the epidemic to shrink).",
+          "materials": "Spreadsheet or paper, calculator",
+          "discover": "Herd immunity threshold = 1 - 1/R₀. For R₀=3, threshold = 67%. Below this, epidemics grow. Above it, they shrink even without vaccinating everyone. Vaccinating protects non-vaccinated individuals indirectly.",
+          "go_deeper": "For COVID-19, R₀ was estimated at 2–3 for the original strain and 8–12 for Omicron. How does the herd immunity threshold change? What fraction would need vaccination for Omicron to be controlled?",
+          "silent_lesson": "SIR epidemic model; herd immunity; basic reproduction number R₀; vaccination strategy; Pasteur's attenuation principle."
+        }
+      ]
+    },
+    {
+      "id": "harvey",
+      "name": "William Harvey",
+      "domain": "Blood Circulation / Quantitative Biology",
+      "puzzles": [
+        {
+          "id": "harvey_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The One-Way Valve",
+          "hook": "Your veins have tiny valves that only open one way. Can you feel them — and understand what they tell you about how blood flows?",
+          "challenge": "Hold your arm out horizontally. Find a visible vein on the back of your hand or inner forearm. Press down on the vein about 5cm from your wrist and slide your finger toward the wrist, pushing the blood out. Does the vein flatten? Now release the finger nearest the wrist while keeping the other pressed. Does blood flow back in? Now reverse: release the finger farther from the wrist first. What happens?",
+          "materials": "Your own arm, good lighting",
+          "discover": "Blood only flows one way — toward the heart — because the valves allow flow in only one direction. Release the valve closest to the heart first and blood flows back in. Release the far valve and the vein stays empty. Harvey showed this proves circulation is unidirectional.",
+          "go_deeper": "Count your pulse for 1 minute. Multiply by the volume per beat (~70mL). How many litres does your heart pump per hour? Per day? Harvey used this calculation to prove blood must circulate — there isn't enough blood in the body to be continuously created and consumed.",
+          "silent_lesson": "Venous valves; unidirectional blood flow; Harvey's quantitative argument; circulation as closed loop."
+        },
+        {
+          "id": "harvey_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Pump Calculation",
+          "hook": "Harvey proved blood circulates by doing a calculation so simple it seems obvious — yet it overturned 1400 years of medical belief. Can you reproduce his argument?",
+          "challenge": "A 17th-century physician estimated: heart capacity ≈ 57mL; heart beats 72 times/minute; therefore blood pumped per minute = 57 × 72 ≈ 4L/min. In one hour: 240L. Total blood in body ≈ 5L. Calculate: how many times does the entire blood volume circulate per hour? Now consider the prevailing theory (blood is continuously made by the liver and consumed by organs). How much blood would the liver need to produce per day?",
+          "materials": "Calculator",
+          "discover": "The blood circulates about 48 times per hour. The liver would need to produce 5,760L per day — far more than the body could handle. The calculation makes continuous production impossible, forcing the conclusion that blood must circulate.",
+          "go_deeper": "Measure your own resting and post-exercise heart rates. Calculate cardiac output at each state. How does your body increase oxygen delivery during exercise — rate, stroke volume, or both?",
+          "silent_lesson": "Harvey's quantitative argument; scientific reasoning from calculation; cardiac output; circulation as closed system."
+        },
+        {
+          "id": "harvey_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Mapping the Pressure Drop",
+          "hook": "Blood pressure isn't the same throughout the circulatory system — it drops from arteries through capillaries to veins. Can you map this pressure landscape and understand why it must be shaped this way?",
+          "challenge": "Given: aortic pressure ≈ 120/80 mmHg, arteriole ≈ 50 mmHg, capillary entrance ≈ 25 mmHg, capillary exit ≈ 10 mmHg, venule ≈ 8 mmHg, large vein ≈ 2 mmHg. Plot this pressure profile from heart to heart. The pressure drop across a segment follows Poiseuille's Law: ΔP = 8ηLQ/πr⁴. If capillary radius is half that of an arteriole, and length is similar, how much more pressure drop per unit length do capillaries produce?",
+          "materials": "Graph paper, calculator",
+          "discover": "Halving radius increases resistance by 2⁴ = 16×. Capillaries have tiny radius — huge resistance — which is why most pressure is dropped there. This isn't waste; it slows blood long enough for gas and nutrient exchange.",
+          "go_deeper": "High blood pressure (hypertension) occurs when arterioles narrow. Using Poiseuille's Law, calculate: if arteriole radius decreases by 10%, how much must the heart increase output pressure to maintain the same flow?",
+          "silent_lesson": "Poiseuille's Law; resistance ∝ 1/r⁴; pressure gradient; capillary exchange; hypertension mechanism."
+        }
+      ]
+    },
+    {
+      "id": "linnaeus",
+      "name": "Carl Linnaeus",
+      "domain": "Classification / Taxonomy",
+      "puzzles": [
+        {
+          "id": "linnaeus_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "design",
+          "title": "The Sorting System",
+          "hook": "Imagine discovering 100 new organisms nobody has seen before. How would you even begin to organise them so others can find them quickly?",
+          "challenge": "Collect 20 leaves from different plants (or use printed photos). Without being told any categories, sort them into groups by one visible feature (e.g., edge shape). Then sort each group further by a second feature (e.g., size). Then a third. Draw your hierarchy as a tree diagram. Now: if someone wants to find 'smooth-edged, large, oval' — how many leaves match?",
+          "materials": "20 different leaves (or printed photos), pencil, paper",
+          "discover": "A hierarchical classification lets you find any item by progressively narrowing down — just like a library. Using three features on 20 items, you can narrow to 2–3 leaves in 3 steps. This is why scientific naming uses nested categories.",
+          "go_deeper": "What if two leaves don't fit neatly into any category? Describe why 'edge cases' are a fundamental problem in any classification system.",
+          "silent_lesson": "Hierarchical classification; taxonomy; binary key; the problem of edge cases in category systems."
+        },
+        {
+          "id": "linnaeus_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Naming System",
+          "hook": "The same animal has a hundred different names in different languages. How do scientists worldwide agree on which animal they're discussing?",
+          "challenge": "Choose 10 common organisms (cat, tiger, lion, dog, wolf, rose, oak, mushroom, eagle, whale). Assign each a made-up binomial name using the pattern Genus species (Latin-style). Group organisms that share a Genus. Organisms in the same genus must share at least two observable features — specify which. Now compare your groupings to the actual scientific names and see where your intuitive grouping agreed or disagreed with the official classification.",
+          "materials": "Reference book or provided species list, pencil",
+          "discover": "Your intuitive groupings often match — because shared observable features DO reflect shared ancestry. Where they disagree (e.g., dolphins grouped with fish by appearance), molecular genetics reveals the true relationship: dolphin is closer to cow than to tuna.",
+          "go_deeper": "Binomial nomenclature uses Latin because it's a dead language — nobody's native language, so nobody gets an advantage. What are the two parts of the name, and what does each specify?",
+          "silent_lesson": "Binomial nomenclature; genus and species; classification based on shared features; conflict between morphological and molecular taxonomy."
+        },
+        {
+          "id": "linnaeus_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Phylogenetic Tree",
+          "hook": "Classification should reflect evolutionary history — not just appearance. But how do you build a family tree for species when you can't observe their ancestors?",
+          "challenge": "Given a matrix of shared DNA sequences (simplified: each row is a species, each column is a genomic region — 1 = present, 0 = absent): [provided 6×10 matrix]. Calculate pairwise 'distances' (fraction of columns where two species differ). Build a tree by repeatedly joining the two most similar species. This is the UPGMA clustering algorithm. Compare your tree to one built using only physical features. Where do they agree? Disagree?",
+          "materials": "Provided data matrix, paper, pencil",
+          "discover": "DNA-based trees often contradict appearance-based trees. Whales cluster with hippos, not fish. Crocodilians are more closely related to birds than to lizards. Molecular data reveals relationships invisible to anatomy — because DNA accumulates mutations at a roughly constant rate.",
+          "go_deeper": "The molecular clock hypothesis: DNA mutates at roughly constant rate over time. If two species' DNA differs by 5%, and mutations occur at ~1% per million years, when did they share a common ancestor?",
+          "silent_lesson": "Phylogenetic tree construction; UPGMA clustering; molecular vs morphological taxonomy; molecular clock; cladistics."
+        }
+      ]
+    },
+    {
+      "id": "fleming",
+      "name": "Alexander Fleming",
+      "domain": "Antibiotics / Bacterial Growth / Serendipity",
+      "puzzles": [
+        {
+          "id": "fleming_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Clear Zone",
+          "hook": "A scientist came back from holiday to find a mould had contaminated his petri dish — and around the mould, all the bacteria were dead. What would you do next?",
+          "challenge": "Grow bread mould on a slice of damp bread in a closed bag for 3–4 days. Observe: does everything around the mould grow equally, or is there a clear zone around the mould colony? Sketch the pattern. Now put the mouldy bread near (but not touching) a second slice of fresh bread with a wet paper towel between them. After 3 days, does the second slice grow bacteria/mould more or less than a control piece kept far from mould?",
+          "materials": "Bread slices, zip-lock bags, damp paper towels, magnifying glass",
+          "discover": "The clear zone shows that something the mould produces is killing or preventing nearby growth. The scientist's next step — isolating what the mould produces — led to penicillin. The critical skill is noticing the anomaly and asking why.",
+          "go_deeper": "Not every mould produces antibiotics. Why would natural selection cause a mould to produce a substance that kills bacteria?",
+          "silent_lesson": "Antibiotic discovery; clear zone of inhibition; serendipity + prepared mind; mould-bacteria competition."
+        },
+        {
+          "id": "fleming_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Inhibition Zone",
+          "hook": "If a substance kills bacteria, how do you measure HOW effective it is — and prove it's the substance and not something else?",
+          "challenge": "Using a safe model (yoghurt bacteria or bread yeast on agar plates — use plain agar made from agar powder + water): place discs of filter paper soaked in: (A) plain water, (B) dilute lemon juice, (C) dilute salt solution, (D) honey. After 24–48 hours, measure the clear zone (zone of inhibition) around each disc in mm. Which substance is most effective? Control for: disc size, soaking time, agar preparation.",
+          "materials": "Agar plates (home-made), filter paper discs, lemon juice, salt, honey, ruler, incubation at room temperature",
+          "discover": "Different substances produce different-sized zones — or no zone at all. Honey produces a large zone (hydrogen peroxide + osmotic effect). Lemon juice produces a moderate zone (acidity). Pure water produces none. The zone size quantifies antimicrobial activity.",
+          "go_deeper": "If you halve the concentration of lemon juice, does the zone halve too? Design a dilution series and test the relationship between concentration and zone size.",
+          "silent_lesson": "Zone of inhibition; Kirby-Bauer test; minimum inhibitory concentration; controlled variables."
+        },
+        {
+          "id": "fleming_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Resistance Problem",
+          "hook": "Bacteria can evolve resistance to antibiotics in days. How? And how does knowing the mechanism help you design strategies to slow it down?",
+          "challenge": "Model antibiotic resistance evolution mathematically. Start: 1,000,000 bacteria, of which 1 in 10,000 has a resistance mutation. Antibiotic kills 99.9% of non-resistant bacteria per day. Resistant bacteria double every 30 minutes. Calculate: population of resistant bacteria after 1, 2, 3 days of antibiotic treatment. What fraction of the population is resistant by day 3? How many days until resistant bacteria dominate? Now model: treatment stopped at day 2 vs continued until day 7.",
+          "materials": "Calculator, graph paper",
+          "discover": "By day 2, resistant bacteria are few but doubling rapidly. Stopping treatment lets the few resistant survivors repopulate with a resistant strain. Completing the full course kills the entire population before resistant bacteria dominate.",
+          "go_deeper": "Now model two antibiotics used simultaneously (each targeting different mechanisms, resistance mutations rare and independent). If resistance probability is 10⁻⁸ for each, what fraction of bacteria resist both simultaneously?",
+          "silent_lesson": "Antibiotic resistance mechanism; selection pressure; why completing antibiotic courses matters; combination therapy rationale."
+        }
+      ]
+    },
+    {
+      "id": "jenner",
+      "name": "Edward Jenner",
+      "domain": "Vaccination / Immunology",
+      "puzzles": [
+        {
+          "id": "jenner_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Memory in Your Blood",
+          "hook": "Get chickenpox once and you'll likely never get it again. Your body 'remembers' the virus. But how?",
+          "challenge": "Model immune memory with a game: you're a town that must defend against invaders. Round 1: invaders arrive with 100 soldiers. Your defenders number 10. Record: time to respond, casualties. After Round 1, the town builds a watchtower and trains 100 archers specific to this enemy. Round 2: same enemy, 100 soldiers. Record: time to respond, casualties. Round 3: completely different enemy, 100 soldiers. Record the same. Compare all three rounds.",
+          "materials": "Pencil, paper for tracking game rounds",
+          "discover": "Round 2 is faster and less damaging than Round 1. Round 3 is as slow as Round 1 (no memory). This is immunological memory — specific to each pathogen. Vaccination creates Round-2-type memory without the Round-1 damage.",
+          "go_deeper": "Why does immunity to one strain of flu virus not protect against a different strain, even though they're both flu viruses?",
+          "silent_lesson": "Immunological memory; specific vs general immunity; how vaccines work; secondary immune response."
+        },
+        {
+          "id": "jenner_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Cross-Immunity",
+          "hook": "Jenner noticed that milkmaids who got cowpox — a mild disease — never seemed to get smallpox — a deadly one. What does this suggest about how immunity works?",
+          "challenge": "Design an experiment (on paper — ethical constraints mean you can't actually infect people) to test whether exposure to a mild pathogen provides cross-immunity to a related severe pathogen. Specify: control group, treatment group, outcome measure, duration, and how you would rule out confounding factors (e.g., milkmaids being healthier generally). What data would convince you the cross-immunity is real?",
+          "materials": "Paper, pencil",
+          "discover": "A robust experimental design requires: random assignment, blinding, adequate sample size, and careful controls. Jenner's original experiment had none of these — yet his observation was correct. Discuss how science sometimes progresses from weak evidence to strong evidence.",
+          "go_deeper": "Cowpox and smallpox share surface proteins. Your immune system's memory cells recognise shared protein sequences. What does this tell you about how the immune system identifies pathogens?",
+          "silent_lesson": "Experimental design; cross-immunity; antigen similarity; history of vaccination; ethical constraints in human experiments."
+        },
+        {
+          "id": "jenner_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Herd Immunity Threshold",
+          "hook": "Once enough people in a population are immune, a pathogen can no longer spread even to those who are not immune. Calculate exactly when this happens — and what threatens it.",
+          "challenge": "In a population of 10,000, smallpox has R₀ = 5–7. Model the epidemic (SIR model) for V = 0%, 40%, 60%, 70%, 80%, 90% vaccinated. At each vaccination level: calculate effective R = R₀ × (1-V). Plot epidemic size vs V. Find the threshold V* where R < 1 (epidemic shrinks). How does V* change if R₀ = 6 vs R₀ = 4? If vaccine efficacy is 85% (not 100%), what fraction must be vaccinated to achieve V*?",
+          "materials": "Calculator, graph paper",
+          "discover": "V* = 1 - 1/R₀. For R₀=6, you need 83% immunity. For 85% vaccine efficacy, you need 83%/0.85 = 98% coverage — essentially everyone. This is why even small pockets of unvaccinated people can allow outbreaks of diseases thought eliminated.",
+          "go_deeper": "Smallpox was eradicated in 1980 — the first and only human infectious disease to be eradicated by vaccination. Using your model, explain why eradication requires maintaining vaccine coverage even after cases approach zero.",
+          "silent_lesson": "Herd immunity threshold; SIR model; effective reproduction number; vaccine efficacy vs coverage; eradication strategy."
+        }
+      ]
+    },
+    {
+      "id": "koch",
+      "name": "Robert Koch",
+      "domain": "Germ Theory / Bacterial Identification",
+      "puzzles": [
+        {
+          "id": "koch_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Which Germ is Guilty?",
+          "hook": "Many different germs live in and around us all the time. But only one specific germ causes tuberculosis. How would you prove which one is the culprit?",
+          "challenge": "Imagine 5 different coloured beads represent 5 different types of bacteria found in a patient with a disease. Design a procedure to prove which ONE bead is responsible for the disease (not just associated with it). Your procedure must: (1) isolate each bead separately, (2) test each on a healthy subject, (3) verify. Write the steps. What controls do you need? What result would prove guilt?",
+          "materials": "5 different coloured beads (to model bacteria), pencil, paper",
+          "discover": "You need: isolation of a single type, inoculation of healthy subject, observation of disease, and re-isolation of the same type from the sick subject. A single bead that repeatedly causes disease and can be retrieved from the sick animal is the culprit — this is Koch's Postulates.",
+          "go_deeper": "Some diseases are caused by viruses, which can't be grown in pure culture. How would Koch's postulates need to be modified for viruses?",
+          "silent_lesson": "Koch's postulates; causation vs correlation; controlled experiment; identification of pathogens."
+        },
+        {
+          "id": "koch_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Pure Culture",
+          "hook": "Before you can study a specific bacterium, you need to grow it alone — separated from the millions of other bacteria sharing the same space. How do you isolate a single type from a mixture?",
+          "challenge": "Model serial dilution: start with a 'mixed population' of 1,000,000 bacteria (represented by 1,000,000 in a calculation). Dilute 1:100 (add 1 unit of sample to 99 units of water). Dilute again 1:100. And again. Calculate the number of bacteria at each step. After 6 dilutions, how many bacteria remain? If you spread this diluted sample onto an agar plate, what is the probability of two bacteria landing within 1mm of each other?",
+          "materials": "Calculator",
+          "discover": "After 6 serial 1:100 dilutions, you have 1 bacterium per 10¹² units. Plated appropriately, individual bacteria land alone and grow as separate colonies — each colony a pure culture of one type. Isolation requires math, not just technique.",
+          "go_deeper": "Koch invented solid agar plates (suggested by his assistant's wife, who used agar to set jam). Why is solid media better than liquid broth for isolating individual bacteria? What happens in liquid broth?",
+          "silent_lesson": "Serial dilution; pure culture; colony counting; Koch's methodological innovations; quantitative microbiology."
+        },
+        {
+          "id": "koch_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Cause or Correlation?",
+          "hook": "A bacterium found in the lungs of every tuberculosis patient. But is it the CAUSE, or just an innocent bystander in a sick lung? Design the definitive test.",
+          "challenge": "You have: (A) 50 tuberculosis patients, all with Mycobacterium tuberculosis in their sputum. (B) 50 healthy controls, 30% of whom also have M. tuberculosis in their sputum (latent TB). Design a study that distinguishes causation from correlation. Consider: What is the incidence of TB in people with latent M. tuberculosis vs those without? What happens when you expose healthy animals to pure cultures of M. tuberculosis? What do the four postulates of germ causation require you to demonstrate? Write a complete study design.",
+          "materials": "Pencil, paper",
+          "discover": "Correlation (found in every sick patient) is necessary but not sufficient. Causation requires: exposure before disease, dose-response relationship, disease in previously healthy subjects after exposure, and re-isolation. Koch's postulates formalise these requirements.",
+          "go_deeper": "H. pylori was found in most stomach ulcer patients but dismissed for years because 'acid stomachs can't support bacteria.' Barry Marshall proved causation by drinking H. pylori culture. Describe the ethical and epistemological issues this case raises.",
+          "silent_lesson": "Causation vs correlation; Koch's postulates; Bradford Hill criteria; case-control vs experimental evidence; scientific resistance to paradigm change."
+        }
+      ]
+    },
+    {
+      "id": "lister",
+      "name": "Joseph Lister",
+      "domain": "Antisepsis / Surgery / Infection Prevention",
+      "puzzles": [
+        {
+          "id": "lister_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Invisible Contaminator",
+          "hook": "Before doctors understood germs, surgeons operated in their street clothes and never washed their hands. More patients died from surgery than survived. Can you show why?",
+          "challenge": "Prepare two apple slices. Cut one with clean, washed hands. Cut the other after touching doorknobs, shoes, or dirt. Put both in separate bags. Check every 12 hours for 3 days. Which rots faster? Photograph both at each check. What does the faster-rotting slice prove about invisible transfer?",
+          "materials": "Apple, knife, two zip-lock bags, camera or pencil for sketches",
+          "discover": "The contaminated slice rots faster — micro-organisms from hands transferred to the cut surface and grew rapidly. In surgery, the same transfer happens inside a patient's body, where there is no immune protection on a fresh wound.",
+          "go_deeper": "Lister used carbolic acid as an antiseptic spray during surgery. Design a simple test to see whether a dilute antiseptic solution (diluted mouthwash) slows the rotting of the cut apple.",
+          "silent_lesson": "Contamination; wound infection; antiseptic principle; germ transfer via contact."
+        },
+        {
+          "id": "lister_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Handwashing Study",
+          "hook": "A Hungarian doctor proved that doctors washing hands between autopsies and deliveries saved lives — and was mocked for it. Can you design a study that would convince skeptics?",
+          "challenge": "Design a controlled study to test whether handwashing reduces contamination transfer. Use agar plates as 'patients.' In Group A, press a clean (washed) hand onto the agar. In Group B, press a hand that has touched raw potato (natural bacteria source). In Group C, press the Group B hand after 20 seconds of soap-and-water washing. Incubate at room temperature for 48 hours. Count colonies on each plate. Calculate the reduction in colony count from Group B to Group C.",
+          "materials": "Agar plates (home-made or commercial), soap, raw potato, incubation space",
+          "discover": "Group C shows dramatically fewer colonies than Group B — handwashing removes the vast majority of surface bacteria. This is the simplest public health intervention, and it works quantifiably.",
+          "go_deeper": "Test different handwashing durations (5s, 15s, 30s, 60s). Plot duration vs colony reduction. Is there a point of diminishing returns? What is the recommendation of WHO (20 seconds minimum)?",
+          "silent_lesson": "Semmelweis; controlled study; handwashing efficacy; quantitative evidence for public health intervention."
+        },
+        {
+          "id": "lister_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Statistics of Infection",
+          "hook": "Lister's antiseptic technique reduced surgical mortality from 45% to 15% in his ward. But how do you prove statistically that this isn't just chance — that the improvement is real?",
+          "challenge": "Given: Ward A (pre-antiseptic): 50 amputations, 23 deaths. Ward B (antiseptic): 50 amputations, 7 deaths. (1) Calculate mortality rates. (2) Apply a chi-square test (2×2 contingency table) to determine if the difference is statistically significant at p < 0.05. (3) Calculate the Number Needed to Treat (NNT = 1/(absolute risk reduction)). (4) Calculate the 95% confidence interval for the difference in mortality rates.",
+          "materials": "Calculator, statistics reference for chi-square critical values",
+          "discover": "χ² ≈ 10.2, p < 0.001 — highly significant. NNT ≈ 3 (treat 3 patients with antisepsis to save one life). The CI for the difference (46%-14% = 32%) with 95% confidence is roughly 16%–48% — well above zero. The evidence is overwhelming.",
+          "go_deeper": "What would happen if Lister's result had been p=0.07 instead of p<0.001? Would you still adopt antiseptic technique? Discuss the difference between statistical significance and clinical significance.",
+          "silent_lesson": "Contingency tables; chi-square test; NNT; confidence intervals; statistical vs clinical significance; evidence-based medicine."
+        }
+      ]
+    },
+    {
+      "id": "vesalius",
+      "name": "Andreas Vesalius",
+      "domain": "Anatomy / Observation vs Authority",
+      "puzzles": [
+        {
+          "id": "vesalius_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "observation",
+          "title": "Your Body Map",
+          "hook": "Before one scientist started drawing the human body from actual dissections, medical students were taught anatomy from textbooks that had never been corrected in 1,400 years — and that contained many errors. What's the only way to find out the truth?",
+          "challenge": "Draw your own hand from observation — look closely at where each knuckle is, which finger is longest, how far the thumb can extend. Then draw your hand from memory without looking. Compare both drawings to your actual hand. How accurate was observation vs memory? Now feel your own ribs: starting from the sternum, count the ribs going sideways. How many on the left? The right? Are they symmetrical?",
+          "materials": "Paper, pencil, your own hand",
+          "discover": "Observation catches details memory misses. Every person's anatomy is slightly different from the textbook average. The only way to know what IS, as opposed to what we BELIEVE, is to look directly.",
+          "go_deeper": "Galen (the ancient authority) claimed men have one fewer rib than women (from the Biblical story of Adam). Count your ribs. Count a partner's. Is Galen's claim correct?",
+          "silent_lesson": "Empirical observation vs received authority; individual variation in anatomy; primary vs secondary sources."
+        },
+        {
+          "id": "vesalius_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Proportion Machine",
+          "hook": "Artists and anatomists both noticed that the human body has predictable proportions — the same ratios appear across people of different sizes. Can you find them?",
+          "challenge": "Measure the following on yourself and 5 classmates (cm): height, arm span (fingertip to fingertip with arms outstretched), head circumference, forearm length (elbow to wrist), foot length. Calculate ratios: arm span/height, head circumference/height, foot length/forearm length. How consistent are these ratios across people? Calculate the average and standard deviation for each ratio.",
+          "materials": "Measuring tape, ruler, paper, calculator",
+          "discover": "Most ratios are remarkably consistent (arm span ≈ height; head circumference ≈ 3/8 of height). This is why a skeleton can be used to estimate height, and forensic anthropologists can reconstruct a person's proportions from partial remains.",
+          "go_deeper": "The 'Vitruvian Man' proportions: navel divides height in golden ratio, face height = 1/10 of body height, etc. Test each claim on your measurements. Which hold? Which don't?",
+          "silent_lesson": "Body proportions; population variation; statistical reasoning in anatomy; forensic anthropology."
+        },
+        {
+          "id": "vesalius_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Reading Bone",
+          "hook": "A skeleton tells you the person's sex, approximate age, and probable height — even without any other information. What features carry this information?",
+          "challenge": "Given measurements from 10 forensic cases (pelvic inlet width, femur length, cranial suture closure, wisdom tooth eruption, bone density index), design a decision tree to estimate: (1) male or female (2) age at death within 10 years (3) height within 5cm. Test your tree on 3 unknown cases (provided). Compare your estimates to actual data. What is your accuracy?",
+          "materials": "Provided data tables, pencil, paper",
+          "discover": "Pelvis shape reliably distinguishes sex (female wider for childbirth). Bone fusion sequence tracks age. Long bone length estimates height with ~2cm error. These techniques require understanding why each feature exists — its developmental biology — not just memorising markers.",
+          "go_deeper": "Osteoporosis decreases bone density. How would this affect your age estimation from bone density? Design a correction factor.",
+          "silent_lesson": "Forensic osteology; skeletal age and sex estimation; vestigial structures; why anatomy requires understanding function."
+        }
+      ]
+    }
+  ]
+}

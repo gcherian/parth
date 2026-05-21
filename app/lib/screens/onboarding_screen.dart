@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import '../theme/app_theme.dart';
 import 'home_screen.dart';
@@ -36,6 +37,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     setState(() => _loading = true);
     final prefs = await SharedPreferences.getInstance();
+    // Generate a stable device-scoped learner ID on first launch.
+    final existingId = prefs.getString('learner_id');
+    if (existingId == null || existingId.isEmpty) {
+      await prefs.setString('learner_id', const Uuid().v4());
+    }
     await prefs.setString('user_name', name);
     await prefs.setInt('grade', _grade);
     await prefs.setBool('onboarded', true);

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../providers/chat_provider.dart';
 import '../theme/app_theme.dart';
+import 'parent_dashboard_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -196,6 +197,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 8),
           _CodeBlock(
             'cd /Volumes/Seagate/Parth/server\n./start.sh',
+          ),
+
+          const SizedBox(height: 28),
+
+          // ── Parent dashboard ──────────────────────────────────────────────
+          _SectionHeader(icon: Icons.family_restroom_outlined, title: 'For Parents'),
+          const SizedBox(height: 8),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.bar_chart_outlined, color: AppTheme.deepBlue),
+            title: const Text('View Progress Report'),
+            subtitle: const Text('See your child\'s learning activity and alerts'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ParentDashboardScreen()),
+            ),
           ),
 
           const SizedBox(height: 28),

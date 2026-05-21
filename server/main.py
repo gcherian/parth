@@ -1,24 +1,70 @@
-import json
+import asyncio
+import json as _json
 import logging
 import time
+import uuid
 from collections import defaultdict
 from datetime import datetime
 
 import httpx
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from config import Config
+from foundation.db import get_pool, apply_schema, close_pool
+from foundation.observability import configure_logging, get_logger
+from foundation.outbox import relay_loop
+from kernel.context import KernelContext
+from kernel.orchestrator import Orchestrator
+from kernel.router import Router
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s  %(levelname)-7s  %(message)s",
-    datefmt="%H:%M:%S",
-)
-log = logging.getLogger("parth")
+# ── Module registry ───────────────────────────────────────────────────────────
+from modules.moderation_ops.module import ModerationOpsModule
+from modules.learner_state.module import LearnerStateModule
+from modules.curriculum_graph.module import CurriculumGraphModule
+from modules.tutor_runtime.module import TutorRuntimeModule
+from modules.practice_engine.module import PracticeEngineModule
+from modules.parent_dashboard.module import ParentDashboardModule
+from modules.attention_federated.module import AttentionFederatedModule
+from modules.puzzle_engine.module import PuzzleEngineModule
 
-app = FastAPI(title="Parth AI Server", version="1.0.0", docs_url="/docs")
+configure_logging("INFO")
+log = get_logger("parth.main")
+
+# ── Monitor broadcast infrastructure ─────────────────────────────────────────
+_monitor_queues: list[asyncio.Queue] = []
+_server_start = datetime.utcnow()
+
+def _broadcast(event: dict):
+    dead = []
+    for q in list(_monitor_queues):
+        try:
+            q.put_nowait(event)
+        except asyncio.QueueFull:
+            dead.append(q)
+    for q in dead:
+        try: _monitor_queues.remove(q)
+        except ValueError: pass
+
+# Build module registry
+_modules_list = [
+    ModerationOpsModule(),
+    LearnerStateModule(),
+    CurriculumGraphModule(),
+    TutorRuntimeModule(),
+    PracticeEngineModule(),
+    ParentDashboardModule(),
+    AttentionFederatedModule(),
+    PuzzleEngineModule(),
+]
+_module_registry = {m.name: m for m in _modules_list}
+_router = Router(_module_registry)
+_orchestrator = Orchestrator(_router)
+
+app = FastAPI(title="Parth AI Server", version="4.0.0", docs_url="/docs")
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,12 +73,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.on_event("startup")
+async def startup():
+    await apply_schema()
+    asyncio.create_task(relay_loop(interval_ms=200))
+    log.info("parth_started", version="4.0.0", modules=list(_module_registry.keys()))
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await close_pool()
+
+
 # ── Rate limiter ──────────────────────────────────────────────────────────────
 _buckets: dict[str, list[float]] = defaultdict(list)
 
 
 def rate_limit(request: Request):
-    ip = request.client.host
+    ip = request.headers.get("cf-connecting-ip") or (
+        request.client.host if request.client else "unknown"
+    )
     now = time.time()
     _buckets[ip] = [t for t in _buckets[ip] if now - t < 60]
     if len(_buckets[ip]) >= Config.RATE_LIMIT:
@@ -45,7 +108,7 @@ def rate_limit(request: Request):
 
 # ── Request / Response models ─────────────────────────────────────────────────
 class Message(BaseModel):
-    role: str   # "user" | "assistant"
+    role: str
     content: str
 
 
@@ -53,80 +116,341 @@ class ChatRequest(BaseModel):
     message: str
     history: list[Message] = []
     subject: str = "General"
-    model: str | None = None   # override default model
+    grade: int = 6
+    learner_id: str = "anonymous"
+    learner_name: str = ""
+    model: str | None = None
+    request_id: str | None = None  # client can supply for idempotency
 
 
 class ChatResponse(BaseModel):
     response: str
     model: str
     duration_ms: int
+    request_id: str
 
 
 # ── Chat endpoint ─────────────────────────────────────────────────────────────
 @app.post("/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest, _: None = Depends(rate_limit)):
-    model = req.model or Config.DEFAULT_MODEL
-    t0 = time.time()
-
-    # Build message list for Ollama
-    messages = [
-        {
-            "role": "user",
-            "content": Config.system_prompt(req.subject),
-        },
-        {
-            "role": "assistant",
-            "content": "Namaste! I'm Parth, your personal AI mentor. Ask me anything!",
-        },
-    ]
-
-    # Append recent conversation history (last 8 exchanges = 16 turns)
-    for m in req.history[-16:]:
-        messages.append({"role": m.role, "content": m.content})
-
-    messages.append({"role": "user", "content": req.message})
-
-    log.info(f"[{req.subject}] [{model}] {req.message[:80]!r}")
-
+async def chat(
+    req: ChatRequest,
+    _: None = Depends(rate_limit),
+):
+    history = [{"role": m.role, "content": m.content} for m in req.history]
     try:
-        async with httpx.AsyncClient(timeout=180) as client:
-            r = await client.post(
-                f"{Config.OLLAMA_URL}/api/chat",
-                json={"model": model, "messages": messages, "stream": False},
-            )
-            r.raise_for_status()
-    except httpx.TimeoutException:
-        log.warning("Ollama timed out — switching to fast model")
-        # Auto-fallback to faster model on timeout
-        try:
-            async with httpx.AsyncClient(timeout=60) as client:
-                r = await client.post(
-                    f"{Config.OLLAMA_URL}/api/chat",
-                    json={
-                        "model": Config.FAST_MODEL,
-                        "messages": messages,
-                        "stream": False,
-                    },
-                )
-                r.raise_for_status()
-                model = Config.FAST_MODEL
-        except Exception as e:
-            raise HTTPException(status_code=504, detail="AI is thinking hard — please try again in a moment!")
+        result = await _orchestrator.handle(
+            learner_id=req.learner_id,
+            message=req.message,
+            subject=req.subject,
+            grade=req.grade,
+            history=history,
+            model_override=req.model,
+            request_id=req.request_id,
+        )
     except httpx.ConnectError:
         raise HTTPException(
             status_code=503,
             detail="Ollama is not running. Please start it with: ollama serve",
         )
+    except httpx.TimeoutException:
+        raise HTTPException(
+            status_code=504,
+            detail="AI is thinking hard — please try again in a moment!",
+        )
     except Exception as e:
-        log.error(f"Ollama error: {e}")
+        log.error("chat_error", error=str(e))
         raise HTTPException(status_code=503, detail=str(e))
 
-    data = r.json()
-    reply = data["message"]["content"]
-    duration = int((time.time() - t0) * 1000)
+    _broadcast({
+        "type":         "interaction",
+        "ts":           datetime.utcnow().isoformat(),
+        "learner_id":   req.learner_id,
+        "learner_name": req.learner_name or "",
+        "subject":      req.subject,
+        "grade":        req.grade,
+        "model":        result["model"],
+        "duration_ms":  result["duration_ms"],
+        "emotion":      result.get("_emotion", "neutral"),
+        "engagement":   result.get("_engagement", 5.0),
+        "misconception": result.get("_misconception", ""),
+        "distress":     result.get("distress_detected", False),
+    })
 
-    log.info(f"  ↳ {len(reply)} chars in {duration}ms")
-    return ChatResponse(response=reply, model=model, duration_ms=duration)
+    return ChatResponse(
+        response=result["response"],
+        model=result["model"],
+        duration_ms=result["duration_ms"],
+        request_id=result["request_id"],
+    )
+
+
+# ── Learner profile endpoint ──────────────────────────────────────────────────
+@app.get("/learner/{learner_id}")
+async def get_learner(learner_id: str):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        profile = await conn.fetchrow(
+            "SELECT * FROM learner_state.profiles WHERE learner_id = $1",
+            learner_id,
+        )
+        if not profile:
+            raise HTTPException(status_code=404, detail="Learner not found")
+
+        from modules.learner_state.knowledge import weak_concepts, strong_concepts
+        weak  = await weak_concepts(conn, learner_id)
+        strong = await strong_concepts(conn, learner_id)
+
+        return {
+            **dict(profile),
+            "weak_concepts": weak,
+            "strong_concepts": strong,
+        }
+
+
+# ── Learner psyche endpoint ───────────────────────────────────────────────────
+@app.get("/learner/{learner_id}/psyche")
+async def get_learner_psyche(learner_id: str):
+    from modules.learner_state.psyche import get_psyche, interpret_psyche
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        psyche = await get_psyche(conn, learner_id)
+    return interpret_psyche(psyche)
+
+
+# ── Erase learner (GDPR / DPDP right to erasure) ─────────────────────────────
+@app.delete("/learner/{learner_id}")
+async def erase_learner(learner_id: str):
+    await _orchestrator.erase_learner(learner_id)
+    return {"erased": True, "learner_id": learner_id}
+
+
+# ── Puzzle engine endpoints ──────────────────────────────────────────────────
+
+class PuzzleResponseRequest(BaseModel):
+    learner_id: str
+    puzzle_id: str
+    response: str
+    time_seconds: int = 0
+    reached_deeper: bool = False
+    grade: int = 6
+
+
+@app.get("/puzzle/next/{learner_id}")
+async def puzzle_next(learner_id: str, grade: int = 6, subject: str = "General"):
+    from kernel.context import Event, KernelContext
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        ctx = KernelContext(
+            request_id=str(uuid.uuid4()),
+            trace_id=str(uuid.uuid4()),
+            learner_id=learner_id,
+            subject=subject,
+            grade=grade,
+            message="",
+            db=conn,
+        )
+        event = Event(
+            type="puzzle.next_requested",
+            aggregate="learner",
+            aggregate_id=learner_id,
+            payload={"grade": grade},
+        )
+        result = await _module_registry["puzzle.engine"].handle(event, ctx)
+    return result.data
+
+
+@app.post("/puzzle/respond")
+async def puzzle_respond(req: PuzzleResponseRequest, background_tasks: BackgroundTasks):
+    from kernel.context import Event, KernelContext
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        ctx = KernelContext(
+            request_id=str(uuid.uuid4()),
+            trace_id=str(uuid.uuid4()),
+            learner_id=req.learner_id,
+            subject="puzzle",
+            grade=req.grade,
+            message=req.response,
+            db=conn,
+        )
+        event = Event(
+            type="puzzle.response_recorded",
+            aggregate="learner",
+            aggregate_id=req.learner_id,
+            payload={
+                "puzzle_id":      req.puzzle_id,
+                "response":       req.response,
+                "time_seconds":   req.time_seconds,
+                "reached_deeper": req.reached_deeper,
+            },
+        )
+
+        # Persist the raw response
+        await conn.execute("""
+            INSERT INTO puzzle_engine.responses
+                (learner_id, puzzle_id, thinker_id, sphere, level,
+                 response_text, time_seconds, reached_deeper)
+            SELECT $1,$2,
+                   COALESCE((SELECT thinker_id FROM puzzle_engine.responses
+                              WHERE puzzle_id=$2 LIMIT 1), 'unknown'),
+                   'unknown', 'beginner', $3, $4, $5
+        """, req.learner_id, req.puzzle_id, req.response,
+             req.time_seconds, req.reached_deeper)
+
+        result = await _module_registry["puzzle.engine"].handle(event, ctx)
+    return result.data
+
+
+@app.get("/puzzle/portrait/{learner_id}")
+async def puzzle_portrait(learner_id: str):
+    from modules.puzzle_engine.module import _load_portrait, _load_register_state
+    from modules.puzzle_engine.register import RegisterState, register_visualisation
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        portrait = await _load_portrait(conn, learner_id)
+        reg_raw = await _load_register_state(conn, learner_id)
+    reg = RegisterState(
+        learner_id=learner_id,
+        probs=reg_raw.get("probs", {}),
+        n_messages=reg_raw.get("n_messages", 0),
+    )
+    return {
+        "portrait":   portrait,
+        "register":   register_visualisation(reg),
+    }
+
+
+@app.get("/puzzle/bridge/{concept_id}")
+async def puzzle_bridge(concept_id: str, learner_id: str | None = None):
+    """Return the best conceptual bridge for this concept, personalised to the learner."""
+    import json as _j
+    from pathlib import Path
+    bridges_path = Path(__file__).parent / "data" / "concept_bridges.json"
+    bridges = _j.loads(bridges_path.read_text()) if bridges_path.exists() else {}
+
+    if learner_id:
+        from modules.puzzle_engine.module import _load_register_state
+        from modules.puzzle_engine.register import RegisterState, best_bridge_for_concept
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            reg_raw = await _load_register_state(conn, learner_id)
+        reg = RegisterState(
+            learner_id=learner_id,
+            probs=reg_raw.get("probs", {}),
+            n_messages=reg_raw.get("n_messages", 0),
+        )
+        bridge = best_bridge_for_concept(concept_id, reg, bridges)
+        return {"concept": concept_id, "learner_id": learner_id, "bridge": bridge}
+
+    # No learner — return all bridges for this concept
+    return {"concept": concept_id, "bridges": bridges.get(concept_id, {})}
+
+
+# ── Parent dashboard endpoints ────────────────────────────────────────────────
+@app.get("/parent/{learner_id}/report")
+async def parent_report(learner_id: str):
+    from modules.parent_dashboard.module import build_report
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        report = await build_report(conn, learner_id)
+    return report
+
+
+@app.get("/parent/{learner_id}/alerts")
+async def parent_alerts(learner_id: str):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT alert_type, message, acknowledged, created_at
+            FROM parent_dashboard.alerts
+            WHERE learner_id = $1
+            ORDER BY created_at DESC
+            LIMIT 20
+            """,
+            learner_id,
+        )
+        return [dict(r) for r in rows]
+
+
+# ── Monitor dashboard ─────────────────────────────────────────────────────────
+@app.get("/monitor", include_in_schema=False)
+async def monitor_ui():
+    return FileResponse("static/monitor.html")
+
+
+@app.get("/monitor/stream")
+async def monitor_stream(request: Request):
+    q: asyncio.Queue = asyncio.Queue(maxsize=200)
+    _monitor_queues.append(q)
+
+    async def generate():
+        try:
+            # Send a heartbeat immediately so the browser knows it connected
+            yield f"data: {_json.dumps({'type': 'connected', 'ts': datetime.utcnow().isoformat()})}\n\n"
+            while True:
+                if await request.is_disconnected():
+                    break
+                try:
+                    event = await asyncio.wait_for(q.get(), timeout=15.0)
+                    yield f"data: {_json.dumps(event, default=str)}\n\n"
+                except asyncio.TimeoutError:
+                    yield "data: {\"type\":\"heartbeat\"}\n\n"
+        finally:
+            try: _monitor_queues.remove(q)
+            except ValueError: pass
+
+    return StreamingResponse(generate(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+@app.get("/monitor/stats")
+async def monitor_stats():
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        today   = await conn.fetchval(
+            "SELECT COUNT(*) FROM learner_state.interactions WHERE created_at > now() - interval '24 hours'"
+        ) or 0
+        active  = await conn.fetchval(
+            "SELECT COUNT(DISTINCT learner_id) FROM learner_state.interactions WHERE created_at > now() - interval '1 hour'"
+        ) or 0
+        avg_eng = await conn.fetchval(
+            "SELECT AVG(engagement) FROM learner_state.interactions WHERE created_at > now() - interval '1 hour'"
+        )
+        recent  = await conn.fetch(
+            """SELECT learner_id, subject, grade, emotion, engagement, misconception,
+                      model, duration_ms, created_at
+               FROM learner_state.interactions
+               ORDER BY created_at DESC LIMIT 30"""
+        )
+        subject_dist = await conn.fetch(
+            """SELECT subject, COUNT(*) as cnt
+               FROM learner_state.interactions
+               WHERE created_at > now() - interval '24 hours'
+               GROUP BY subject ORDER BY cnt DESC"""
+        )
+        emotion_dist = await conn.fetch(
+            """SELECT emotion, COUNT(*) as cnt
+               FROM learner_state.interactions
+               WHERE created_at > now() - interval '24 hours'
+               GROUP BY emotion"""
+        )
+
+    uptime_s = int((datetime.utcnow() - _server_start).total_seconds())
+    h, rem   = divmod(uptime_s, 3600)
+    m, s     = divmod(rem, 60)
+
+    return {
+        "today_interactions": int(today),
+        "active_learners":    int(active),
+        "avg_engagement":     round(float(avg_eng or 5.0), 1),
+        "uptime":             f"{h}h {m}m {s}s",
+        "live_clients":       len(_monitor_queues),
+        "recent":             [dict(r) for r in recent],
+        "subject_dist":       [dict(r) for r in subject_dist],
+        "emotion_dist":       [dict(r) for r in emotion_dist],
+        "ts":                 datetime.utcnow().isoformat(),
+    }
 
 
 # ── Health check ──────────────────────────────────────────────────────────────
@@ -141,15 +465,116 @@ async def health():
         models = []
         ollama_ok = False
 
+    pool = await get_pool()
+    try:
+        async with pool.acquire() as conn:
+            await conn.fetchval("SELECT 1")
+        pg_ok = True
+    except Exception:
+        pg_ok = False
+
+    from modules.curriculum_graph.graph import _get_collection
+    try:
+        rag_chunks = _get_collection().count()
+    except Exception:
+        rag_chunks = 0
+
     return {
-        "status": "ok" if ollama_ok else "degraded",
+        "status": "ok" if (ollama_ok and pg_ok) else "degraded",
+        "version": "4.0.0",
         "ollama": ollama_ok,
+        "postgres": pg_ok,
         "default_model": Config.DEFAULT_MODEL,
         "fast_model": Config.FAST_MODEL,
         "available_models": models,
+        "rag_chunks": rag_chunks,
+        "modules": list(_module_registry.keys()),
         "server_ip": Config.local_ip(),
         "timestamp": datetime.utcnow().isoformat(),
     }
+
+
+# ── Knowledge Graph UI & API ─────────────────────────────────────────────────
+@app.get("/graph")
+async def graph_ui():
+    return FileResponse("static/graph.html")
+
+
+@app.get("/graph/data")
+async def graph_data(learner_id: str | None = None):
+    from config import Config
+    import json as _json
+
+    mastery_map = {}
+
+    # ── Try Postgres first ────────────────────────────────────────────────
+    try:
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            concept_rows = await conn.fetch(
+                "SELECT id, label, subject, grade_min, grade_max, description, video_ids "
+                "FROM curriculum_graph.concepts ORDER BY subject, grade_min"
+            )
+            if concept_rows:
+                edge_rows = await conn.fetch(
+                    "SELECT from_id, to_id, type FROM curriculum_graph.concept_edges"
+                )
+                video_counts = await conn.fetch(
+                    "SELECT concept_id, count(*) as cnt FROM curriculum_graph.ka_videos "
+                    "WHERE embedded=true GROUP BY concept_id"
+                )
+                vc_map = {r["concept_id"]: r["cnt"] for r in video_counts}
+
+                if learner_id:
+                    mastery_rows = await conn.fetch(
+                        "SELECT concept_id, p_mastery FROM learner_state.knowledge WHERE learner_id=$1",
+                        learner_id,
+                    )
+                    mastery_map = {r["concept_id"]: r["p_mastery"] for r in mastery_rows}
+
+                nodes = []
+                for r in concept_rows:
+                    node = {
+                        "id": r["id"], "label": r["label"], "subject": r["subject"],
+                        "grade_min": r["grade_min"], "grade_max": r["grade_max"],
+                        "description": r["description"],
+                        "video_count": vc_map.get(r["id"], 0),
+                        "video_ids": list(r["video_ids"] or []),
+                    }
+                    if learner_id:
+                        node["mastery"] = mastery_map.get(r["id"])
+                    nodes.append(node)
+
+                edges = [{"source": r["from_id"], "target": r["to_id"], "type": r["type"]} for r in edge_rows]
+                return {"nodes": nodes, "edges": edges, "source": "postgres"}
+    except Exception:
+        pass
+
+    # ── Fallback: JSON file written by ingest script ──────────────────────
+    graph_json = Config.DATA_DIR / "concept_graph.json"
+    if graph_json.exists():
+        data = _json.loads(graph_json.read_text())
+        if learner_id:
+            try:
+                pool = await get_pool()
+                async with pool.acquire() as conn:
+                    mastery_rows = await conn.fetch(
+                        "SELECT concept_id, p_mastery FROM learner_state.knowledge WHERE learner_id=$1",
+                        learner_id,
+                    )
+                    mastery_map = {r["concept_id"]: r["p_mastery"] for r in mastery_rows}
+            except Exception:
+                pass
+            for node in data["nodes"]:
+                node["mastery"] = mastery_map.get(node["id"])
+        data["source"] = "json_cache"
+        return data
+
+    # ── Fallback: hardcoded structure (first run before any ingest) ───────
+    from rag.ingest_graph import NCERT_CONCEPTS, NCERT_EDGES
+    nodes = [{**c, "video_count": 0, "video_ids": []} for c in NCERT_CONCEPTS]
+    edges = [{"source": f, "target": t, "type": tp} for f, t, tp in NCERT_EDGES]
+    return {"nodes": nodes, "edges": edges, "source": "hardcoded"}
 
 
 # ── Model list ────────────────────────────────────────────────────────────────
@@ -166,10 +591,13 @@ async def root():
     ip = Config.local_ip()
     return {
         "name": "Parth AI Server",
-        "status": "running",
+        "version": "4.0.0",
         "endpoints": {
-            "chat": f"POST http://{ip}:{Config.PORT}/chat",
-            "health": f"GET  http://{ip}:{Config.PORT}/health",
-            "docs": f"GET  http://{ip}:{Config.PORT}/docs",
+            "chat":    f"POST http://{ip}:{Config.PORT}/chat",
+            "health":  f"GET  http://{ip}:{Config.PORT}/health",
+            "learner": f"GET  http://{ip}:{Config.PORT}/learner/{{id}}",
+            "erase":   f"DELETE http://{ip}:{Config.PORT}/learner/{{id}}",
+            "alerts":  f"GET  http://{ip}:{Config.PORT}/parent/{{id}}/alerts",
+            "docs":    f"GET  http://{ip}:{Config.PORT}/docs",
         },
     }

@@ -1,4 +1,6 @@
+import os
 import socket
+from pathlib import Path
 
 
 class Config:
@@ -6,9 +8,17 @@ class Config:
     DEFAULT_MODEL = "gemma3:12b"
     FAST_MODEL = "llama3.2:latest"
     PORT = 8000
+    RATE_LIMIT = 20  # requests per minute per IP
 
-    # Max requests per minute per IP
-    RATE_LIMIT = 20
+    # Krishna Oracle — Anthropic frontier model for background pedagogical guidance
+    # Set ANTHROPIC_API_KEY in environment or .env to enable.
+    # If absent, Krishna is silently disabled (Parth still works normally).
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
+    KRISHNA_MODEL: str = "claude-haiku-4-5-20251001"   # cheapest capable frontier model
+    KRISHNA_INTERVAL: int = 10                          # interactions between Krishna consultations
+
+    # Data lives on local SSD — never on an external drive that can be unmounted
+    DATA_DIR = Path.home() / ".parth"
 
     @staticmethod
     def local_ip() -> str:
@@ -22,8 +32,8 @@ class Config:
             return "localhost"
 
     @staticmethod
-    def system_prompt(subject: str) -> str:
-        return f"""You are Parth (पार्थ), a warm and encouraging AI mentor for Indian school children aged 6–16.
+    def system_prompt(subject: str, context: str = "", learner_context: str = "") -> str:
+        base = f"""You are Parth (पार्थ), a warm and encouraging AI mentor for Indian school children aged 6–16.
 
 Your teaching style:
 - Use simple, age-appropriate language — never talk down, always uplift
@@ -40,3 +50,11 @@ Your teaching style:
 
 Current subject: {subject}
 Language rule: reply in English by default; if the student writes in Hindi, reply in Hindi with English explanation where needed."""
+
+        if learner_context:
+            base += f"\n\nWhat you know about this child:\n{learner_context}"
+
+        if context:
+            base += f"\n\nRelevant NCERT curriculum content (use this to ground your answer):\n{context}"
+
+        return base

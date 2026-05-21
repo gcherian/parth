@@ -1,0 +1,467 @@
+{
+  "sphere": "social_sciences",
+  "version": 2,
+  "description": "Subject-matter puzzles that make social science tangible. Students run experiments, analyse data, model systems, and discover the structural forces that shape human behaviour — without realising they are doing social science.",
+  "thinkers": [
+    {
+      "id": "freud",
+      "name": "Sigmund Freud",
+      "domain": "Unconscious Mind / Defence Mechanisms / Memory",
+      "puzzles": [
+        {
+          "id": "freud_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Automatic Thought",
+          "hook": "Your mind sometimes acts before you consciously decide. Can you catch it in the act?",
+          "challenge": "Perform the Stroop test: write a list of 20 colour words where the word and the ink colour match (RED written in red, BLUE in blue). Time how long it takes you to name all the ink colours. Now make a list where words and colours clash (RED written in blue, BLUE in green). Time the same task. Measure the difference. Is it harder? Why?",
+          "materials": "Coloured markers or coloured pencils, paper, timer",
+          "discover": "Reading is automatic — it happens faster than consciously deciding to read. Your 'automatic' reading process interferes with the conscious task of naming the ink colour. Parts of your mental processing happen below intentional control.",
+          "go_deeper": "Repeat the Stroop test after 30 minutes of practice with the mismatched version. Does the interference reduce? What does this suggest about the relationship between practice and automaticity?",
+          "silent_lesson": "Stroop effect; automaticity; unconscious processing; executive control; inhibition."
+        },
+        {
+          "id": "freud_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Defence Inventory",
+          "hook": "When faced with something threatening or uncomfortable, people automatically use mental strategies to manage the discomfort. Can you identify these strategies in real behaviour?",
+          "challenge": "Read 10 short scenarios (provided — each depicts a person responding to failure, criticism, or loss). For each, classify the response as one of: rationalisation (inventing logical reasons), projection (attributing feelings to others), denial (refusing to accept reality), displacement (redirecting emotion at a different target), or reaction formation (expressing the opposite of what is felt). Compare your classifications with a partner. Where do you agree? Disagree?",
+          "materials": "Provided scenario list, pencil",
+          "discover": "Classifying requires inferring internal states from external behaviour — an inherently uncertain task. Two observers often disagree. This reveals both the partial truth in Freud's categories AND their limitation: concepts that explain everything explain nothing precisely.",
+          "go_deeper": "Design your own scenario that would be classifiable as either rationalisation OR displacement — genuinely ambiguous. What would you need to observe to resolve the ambiguity?",
+          "silent_lesson": "Defence mechanisms; unconscious process inference; limitations of unfalsifiable theories; observational ambiguity."
+        },
+        {
+          "id": "freud_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Falsifiability Problem",
+          "hook": "A theory that can explain any possible outcome is a theory that explains nothing. Is the unconscious mind a scientific concept or an unfalsifiable metaphor?",
+          "challenge": "Design three experiments that would, in principle, disprove specific psychoanalytic claims: (1) repression causes forgetting of threatening memories, (2) dream content reflects unconscious wishes, (3) childhood experiences determine adult personality. For each: specify the measurement, the control condition, the result that would falsify the claim, and the result that would support it. Identify any experiment where the theory could explain away a negative result ('the unconscious hid the evidence').",
+          "materials": "Pencil, paper",
+          "discover": "Some Freudian claims are falsifiable and have been tested (with mixed results). Others are structured to absorb any evidence — a property Karl Popper called pseudoscience. The line between a profound insight and an unfalsifiable claim is where psychoanalysis gets complicated.",
+          "go_deeper": "The concept of repression predicts that memories of trauma should be harder to recall. But research on flashbulb memories shows trauma is often recalled with unusual clarity. Design a study to resolve this contradiction.',",
+          "silent_lesson": "Popper's falsifiability criterion; pseudoscience; limitations of Freudian theory; evidence-based psychology vs psychoanalysis."
+        }
+      ]
+    },
+    {
+      "id": "piaget",
+      "name": "Jean Piaget",
+      "domain": "Cognitive Development / Stages of Thinking",
+      "puzzles": [
+        {
+          "id": "piaget_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "Does Amount Change When You Move It?",
+          "hook": "Pour juice into a tall thin glass. Pour the same juice into a short wide glass. Which has more juice? Most adults know the answer immediately — but young children disagree. Why?",
+          "challenge": "Take two identical glasses. Fill both with the same amount of water. Confirm to a younger sibling or friend (age 4–6) that they have equal amounts. Now pour one glass into a tall, thin container. Ask: 'Which has more water now?' Record their answer and reason. Then pour back into the original glass and repeat. Ask again. Does the child change their answer?",
+          "materials": "Two identical glasses, one tall narrow container, water",
+          "discover": "Younger children typically say the taller glass has more water — they follow the most visible dimension (height) and haven't yet developed conservation of volume. This isn't a mistake — it's a genuine stage of reasoning that every child passes through.",
+          "go_deeper": "What age does 'conservation of volume' typically develop? Test the same child in 6 months. Does their answer change? Test conservation of number: spread out vs bunch together 10 coins — does the child think the number changed?",
+          "silent_lesson": "Piaget's conservation tasks; concrete operational stage; developmental sequence; why adult logic cannot be rushed into children."
+        },
+        {
+          "id": "piaget_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "How Children Explain the World",
+          "hook": "At different ages, children explain the same physical event in systematically different ways — not because they're wrong, but because they're using a different logical framework. Can you detect these frameworks?",
+          "challenge": "Interview three children of different ages (6, 9, 12) with these questions: (1) Why does the sun set? (2) Where does the wind come from? (3) If you push a ball, why does it slow down? Record exact answers verbatim. Classify each answer as: animistic (attributing intention to nature), precausal (describing sequence without mechanism), or mechanistic (cause-effect relationship). Map the development.",
+          "materials": "Paper for recording, three children to interview",
+          "discover": "Younger children tend toward animistic and precausal explanations (the sun goes to sleep; the wind is angry). Older children develop mechanistic explanations. This is not cultural — it's a developmental sequence that appears across all human populations.",
+          "go_deeper": "Adults sometimes revert to animistic explanations for complex systems (the stock market 'wants' to rise; the virus is 'trying' to spread). When is this metaphor useful, and when is it misleading?",
+          "silent_lesson": "Piaget's stages; animism and preoperational thinking; concrete vs formal operational reasoning; developmental universality."
+        },
+        {
+          "id": "piaget_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Schema and Assimilation",
+          "hook": "When you encounter new information, you either fit it into existing mental categories (assimilation) or restructure your categories to accommodate it (accommodation). Which is happening when you learn something truly new?",
+          "challenge": "Design a teaching experiment: create a concept that contradicts common intuition (e.g., in quantum mechanics, 'observation changes the result'; in evolution, 'species don't have goals'). Present it to three people with no background in the concept. Measure: (1) initial understanding (written explanation), (2) their first analogies (what category did they fit it into?), (3) understanding after 10 minutes of explanation, (4) understanding one week later. Did they assimilate (fitting it into a wrong category) or accommodate (restructuring their model)?',",
+          "materials": "Paper, pencil, three volunteers",
+          "discover": "Most learners initially assimilate — fitting the new concept into the closest existing schema, even if it distorts the meaning. True accommodation (schema restructuring) requires cognitive dissonance: the old schema must visibly fail before a new one is built.",
+          "go_deeper": "Piaget believed cognitive development follows a fixed universal sequence. Vygotsky argued that social interaction accelerates it. Design a study to test whether children learn conservation tasks faster when taught by slightly older peers vs adults.",
+          "silent_lesson": "Schema; assimilation vs accommodation; cognitive dissonance as learning trigger; Piaget vs Vygotsky on development."
+        }
+      ]
+    },
+    {
+      "id": "vygotsky",
+      "name": "Lev Vygotsky",
+      "domain": "Zone of Proximal Development / Social Learning",
+      "puzzles": [
+        {
+          "id": "vygotsky_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Helping Edge",
+          "hook": "What you can do with help today, you can do alone tomorrow. But how much help is too much, and how much is not enough?",
+          "challenge": "Try three tasks: (A) a puzzle clearly too easy (a 3-piece puzzle). (B) A puzzle slightly beyond you (a 24-piece puzzle, first time). (C) A puzzle clearly impossible (a 1000-piece puzzle in 5 minutes). Rate your frustration and engagement (1–5) for each. Now do task B again — but this time with a partner who only gives hints when you're stuck for more than 30 seconds. Compare your engagement. How does the 'slightly beyond you + support' feel compared to the other two?",
+          "materials": "Puzzles of varying difficulty, timer, a partner",
+          "discover": "The middle zone — slightly beyond your current ability, with just-in-time support — produces the most engagement and learning. Too easy: boredom. Too hard alone: frustration. Just beyond + supported: the productive edge.",
+          "go_deeper": "In your own subjects, identify one skill that is currently in your 'Zone of Proximal Development' — something you can almost do alone. What would be the ideal form of support?",
+          "silent_lesson": "Zone of Proximal Development; scaffolding; optimal challenge level; the role of the more capable peer."
+        },
+        {
+          "id": "vygotsky_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Language of Thought",
+          "hook": "Vygotsky believed that language doesn't just describe thinking — it shapes it. Can you think a thought you have no words for?",
+          "challenge": "Part 1: Try to describe the colour 'chartreuse' without using words for other colours or comparing to objects. Then do the same for the feeling of nostalgia, the concept of justice, and the taste of umami. Record how far you get. Part 2: Learn the precise definition of each concept. Now try again. How has having the word changed your ability to think about the concept?",
+          "materials": "Pencil, paper, dictionary",
+          "discover": "Abstract concepts are genuinely harder to think about before you have a word for them. New vocabulary doesn't just name existing thoughts — it creates new cognitive tools for new thoughts. This is why learning a second language changes how you think, not just what you can say.",
+          "go_deeper": "The Sapir-Whorf hypothesis: do people who speak languages with many words for snow perceive snow differently? Design an experiment to test a weak version of this hypothesis using colour vocabulary differences across languages.",
+          "silent_lesson": "Language shapes thought; Vygotsky's linguistic mediation; Sapir-Whorf hypothesis; vocabulary as cognitive tool."
+        },
+        {
+          "id": "vygotsky_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "design",
+          "title": "The Scaffold Designer",
+          "hook": "If the Zone of Proximal Development is the space between what a learner can do alone and what they can do with support, then good teaching means mapping that zone precisely and designing support that fades as competence grows.",
+          "challenge": "Choose a skill you have mastered (any: a game, a craft, a mathematical technique, a sport). Map the skill into at least 8 sub-components, ordered from simplest to most complex. For each sub-component, design a 'scaffold' (hint, demonstration, reduced version of the task) that would allow someone at the previous stage to succeed with it. Finally, design the 'fading' schedule — at what point does each scaffold get removed?",
+          "materials": "Paper, pencil",
+          "discover": "Mapping any skill reveals that what feels like a single ability is actually a tower of smaller abilities. Effective scaffolding is precise — it targets the specific gap between current ability and the next step, not the overall goal.",
+          "go_deeper": "Compare your scaffold design to how the skill is actually taught (formally or informally). Where does typical instruction skip steps or fail to remove scaffolds at the right time?",
+          "silent_lesson": "ZPD and scaffolding; skill decomposition; instructional design; fading scaffolds; Vygotsky's theory applied to curriculum."
+        }
+      ]
+    },
+    {
+      "id": "keynes",
+      "name": "John Maynard Keynes",
+      "domain": "Macroeconomics / Demand / Fiscal Policy",
+      "puzzles": [
+        {
+          "id": "keynes_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "game",
+          "title": "The Spending Multiplier",
+          "hook": "If the government gives every family in a village ₹1,000, they spend some of it — and whoever receives that spending spends some of it — and so on. How much economic activity does one injection of money actually create?",
+          "challenge": "Model a simple economy: 10 players each start with ₹100 in tokens. Player 1 receives an extra ₹50 ('government spending'). In each round, every player spends 80% of what they received in the previous round (saving 20%). Track the total new spending generated in 6 rounds (round by round). Sum it up. How much total economic activity did the original ₹50 injection create?",
+          "materials": "10 players, tokens or paper money, tally sheet",
+          "discover": "The multiplier effect: ₹50 → ₹40 → ₹32 → ₹25.6... converging to ₹250 total. The multiplier = 1/(1 - spending rate) = 1/0.2 = 5. A single injection creates 5× its value in economic activity — IF people actually spend it.",
+          "go_deeper": "What happens if the savings rate increases to 50%? Calculate the new multiplier. What does this suggest about why recessions (when people save more) are hard to escape?",
+          "silent_lesson": "Keynesian multiplier; marginal propensity to consume; demand-side economics; why government spending can amplify economic activity."
+        },
+        {
+          "id": "keynes_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Paradox of Thrift",
+          "hook": "It makes sense for every household to save during hard times. But if ALL households save simultaneously, economic output collapses. How can individually rational behaviour be collectively catastrophic?",
+          "challenge": "Model a classroom economy: each student starts with ₹100. In each round, they decide to spend or save. A 'recession' starts (income drops by 20%). If each student individually decides to save more (say, keep 50% instead of 20%), model what happens to total spending in the classroom. Then: if one student doesn't save and spends freely, what happens to their neighbours' income? Track 5 rounds of each scenario.',",
+          "materials": "Tokens, tally sheet",
+          "discover": "Individually rational saving reduces everyone's income — which causes more saving — a self-reinforcing spiral downward. The paradox: thrift is good individually, destructive collectively. This is why government might need to spend MORE during a recession to replace private spending that has vanished.",
+          "go_deeper": "Find historical examples: the Great Depression (1929–33) and the 2008 financial crisis. In both cases, did governments initially cut spending or increase it? What happened to GDP in each approach?",
+          "silent_lesson": "Paradox of thrift; fallacy of composition; aggregate demand; Keynesian counter-cyclical fiscal policy."
+        },
+        {
+          "id": "keynes_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The AD-AS Model",
+          "hook": "An economy's output and price level are jointly determined by aggregate demand and aggregate supply. Can you use this model to predict what happens when government spending changes — and test the prediction against real data?",
+          "challenge": "Plot an AD-AS diagram (price level vs real GDP) for a simplified economy. Model the effect of: (1) government increasing spending by 10%, (2) an oil price shock reducing supply. For each: show the shift on the diagram, predict direction of change in output and price level, and then find real historical data (India 2008–2009 fiscal stimulus, 1973 oil shock) to compare your prediction against.",
+          "materials": "Graph paper, macroeconomic data reference",
+          "discover": "AD-AS correctly predicts that a demand shock raises both prices and output; a supply shock raises prices while reducing output (stagflation). Real data roughly follows the model, with lags of 1–2 years. The model is a simplification but a useful one.",
+          "go_deeper": "Critics argue that in the long run, output always returns to the natural rate regardless of demand. The AS curve becomes vertical. Draw the long-run equilibrium and explain why Keynes responded: 'In the long run, we are all dead.'",
+          "silent_lesson": "Aggregate demand and supply; fiscal multiplier; stagflation; short-run vs long-run macroeconomics."
+        }
+      ]
+    },
+    {
+      "id": "smith",
+      "name": "Adam Smith",
+      "domain": "Markets / Division of Labour / Invisible Hand",
+      "puzzles": [
+        {
+          "id": "smith_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Pin Factory",
+          "hook": "One person making a pin from start to finish might make 20 pins per day. Ten people each doing one step of the process might make 48,000 per day. Why?",
+          "challenge": "Make paper cranes in two conditions: (A) each person makes one complete crane from start to finish (allow 5 minutes). (B) divide into an assembly line: person 1 folds base, person 2 folds wings, person 3 forms head, etc. Compare total cranes made in 5 minutes. Calculate the difference. Why does specialisation increase output even with the same number of people and the same total time?",
+          "materials": "Origami paper, timer, 5 people",
+          "discover": "Division of labour dramatically multiplies output. Each specialised step is performed faster due to practice, no switching time, and tool optimisation. But: the assembly line workers lose the satisfaction of the whole product, and cannot adapt if demand changes.",
+          "go_deeper": "What happens when the assembly line has an imbalanced step — one that takes twice as long? Model the bottleneck. How does this relate to the concept of 'throughput' in manufacturing?",
+          "silent_lesson": "Division of labour; specialisation and productivity; Smith's pin factory example; trade-off between efficiency and adaptability."
+        },
+        {
+          "id": "smith_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Price Signal",
+          "hook": "Nobody coordinates the production of bread in your city — and yet there is almost always exactly the right amount of bread at the bakery. How?",
+          "challenge": "Run a classroom market simulation: 10 'sellers' each have 5 red tokens (bread), each valued at a different random cost (write cost on back). 10 'buyers' each have money tokens and a private 'value' they'd pay (written on back). Let buyers and sellers trade freely for 5 minutes. Record all transaction prices. Now: double the value buyers would pay (demand shock). Run another 5 minutes. Record prices again. How did the price change? How did the quantity traded change?",
+          "materials": "Tokens, paper money, timer",
+          "discover": "Without any central planning, prices rise when demand increases — signalling producers to supply more and buyers to economise. The price mechanism coordinates thousands of individual decisions without anyone directing them.",
+          "go_deeper": "Now introduce a 'price cap' (government sets maximum price below equilibrium). What happens to the supply of tokens? What shortage appears? Connect to real-world rent controls.",
+          "silent_lesson": "Price mechanism; supply and demand; market equilibrium; price signals as information; unintended consequences of price controls."
+        },
+        {
+          "id": "smith_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Market Failure",
+          "hook": "Adam Smith's invisible hand works beautifully when markets are competitive and prices reflect all costs. But some costs never appear in the price — so the market systematically overproduces certain goods. Identify and quantify one such failure.",
+          "challenge": "Choose a local market failure: plastic packaging, diesel vehicle exhaust, or industrial effluent. Estimate: (1) private cost to producer (material + labour), (2) price charged to consumer, (3) external costs not included in price (health costs, environmental cleanup, carbon damage). Express the external cost as a percentage of market price. If a Pigouvian tax equal to the external cost were applied, estimate the new equilibrium price and quantity.",
+          "materials": "Local cost data (estimate or research), pencil, calculator",
+          "discover": "The 'true' price including externalities is often 2–5× the market price. The market is not failing due to irrationality — it is behaving rationally given the incentives. The fix requires changing the incentive structure, not the market.",
+          "go_deeper": "India introduced a plastic bag charge and a carbon tax on coal. Research the actual price level of each. Compare to your estimated external cost. Are these taxes too high, too low, or about right?",
+          "silent_lesson": "Market failure; externalities; Pigouvian tax; social cost vs private cost; limits of the invisible hand."
+        }
+      ]
+    },
+    {
+      "id": "weber",
+      "name": "Max Weber",
+      "domain": "Bureaucracy / Social Structures / Authority",
+      "puzzles": [
+        {
+          "id": "weber_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Why Do We Follow Rules?",
+          "hook": "You follow different rules in different places — at home, at school, on the street. But WHY do you follow them? Is it fear, habit, respect, or something else?",
+          "challenge": "List 10 rules you follow regularly. For each, classify WHY you follow it: (A) fear of punishment, (B) habit/tradition, (C) respect for the person who made it, (D) you think it's genuinely right, (E) social pressure. Now group the rules by WHERE they come from: family, school, law, religion, social norms. Do different sources use different reasons to motivate compliance?",
+          "materials": "Paper, pencil",
+          "discover": "Different authorities use different types of legitimacy. Tradition-based authority says 'we've always done it this way.' Charismatic authority says 'follow me because I'm special.' Legal-rational authority says 'follow the rule because it was properly made.' Most real authorities combine all three.",
+          "go_deeper": "Find an example of a rule that has no punishment, no tradition, and no personal respect behind it — yet people follow it anyway. What maintains compliance?",
+          "silent_lesson": "Weber's three types of authority; legitimacy; why authority is obeyed; social norm enforcement."
+        },
+        {
+          "id": "weber_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Bureaucracy Audit",
+          "hook": "Bureaucracies were designed to eliminate favouritism and ensure consistent, predictable treatment. But they also create slowness, rigidity, and dehumanisation. Can you find both sides in a real system?",
+          "challenge": "Audit your school's procedure for: (a) getting a duplicate marksheet, (b) requesting a leave of absence. Map the process as a flowchart: who fills what form, who signs it, where it goes, how long each step takes. Count the total number of steps and the minimum number of days. Now identify: which steps prevent corruption or favoritism? Which steps exist only because of inertia? Which steps actually make the outcome worse?",
+          "materials": "Paper for flowchart, pencil",
+          "discover": "Every bureaucracy has both load-bearing rules (prevent corruption) and vestigial rules (nobody knows why they exist). The challenge is that removing rules requires proving they're vestigial — which requires studying a world where they don't exist.",
+          "go_deeper": "Weber predicted that once bureaucracies form, they tend to perpetuate themselves even when their original purpose disappears. Find a historical example (e.g., a British colonial regulation still in India's legal code).",
+          "silent_lesson": "Bureaucracy as rational organisation; bureaucratic dysfunction; Weber's ideal type; iron cage metaphor."
+        },
+        {
+          "id": "weber_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Protestant Ethic",
+          "hook": "Weber argued that capitalism as a cultural system (not just as an economic system) emerged from Protestant theology — specifically, Calvinist ideas about work, saving, and the calling. Can cultural beliefs cause economic systems?",
+          "challenge": "The historical evidence: Protestant countries in 17th-18th century Europe became capitalist earlier and more thoroughly than Catholic ones, despite similar resources. Design a test of this hypothesis using contemporary data: compare economic development indicators (GDP per capita, savings rate, trust in institutions) across countries grouped by dominant religion. Control for: geography, colonial history, natural resources. What do you find?",
+          "materials": "World Bank or UN development data (research), calculator, graph paper",
+          "discover": "The correlation between Protestantism and early capitalism is real but not fully determinative. Many Catholic countries are now equally developed; many Protestant countries have struggled. The 'Protestant ethic' may have been sufficient but not necessary — and may have worked through specific cultural channels, not theology itself.",
+          "go_deeper": "Amartya Sen argued that 'Asian values' (Confucian) equally explain East Asian economic success. Does this extend or contradict Weber's thesis? Compare the mechanisms proposed in each theory.",
+          "silent_lesson": "Weber's Protestant ethic thesis; culture as causal factor in economic development; correlation and causation in historical analysis; comparative method."
+        }
+      ]
+    },
+    {
+      "id": "durkheim",
+      "name": "Émile Durkheim",
+      "domain": "Social Cohesion / Collective Behaviour / Anomie",
+      "puzzles": [
+        {
+          "id": "durkheim_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Power of the Group",
+          "hook": "When you're alone, you make one kind of choice. When you're in a crowd, something changes. Can you measure the difference?",
+          "challenge": "Test social conformity: place 3 lines on a card (clearly different lengths: 10cm, 15cm, 20cm). Show the card to one person and ask which is longest (correct answer obvious). Now have 3 confederates (secretly briefed) consistently choose the wrong line. Show the same card to a naive participant in the presence of these 3. Does the naive participant follow the group or their own eyes? Test 5 people and record.",
+          "materials": "Line cards, paper for recording",
+          "discover": "Many people follow the incorrect group consensus even when their own perception is clear. Social pressure is powerful enough to override direct sensory evidence. This is the Asch conformity effect — and it has nothing to do with intelligence or weakness.',",
+          "go_deeper": "What happens when just ONE confederate breaks from the group and gives the correct answer? Does this change the naive participant's behavior? What does this suggest about dissent?",
+          "silent_lesson": "Social conformity; Asch effect; group pressure; Durkheim's collective consciousness; the power of dissent."
+        },
+        {
+          "id": "durkheim_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Data Behind Social Facts",
+          "hook": "Durkheim argued that sociology is a science — that social patterns can be measured and analysed like physical phenomena. He studied suicide rates across different groups to find patterns no individual psychology could explain.",
+          "challenge": "Examine suicide rate data across different countries and groups (data provided or researched). Calculate the ratio of rates for: urban vs rural populations, married vs unmarried adults, high social integration vs low. Plot the relationships. Does social integration correlate with lower rates? Does anomie (rapid social change, norm breakdown) correlate with higher rates? Identify two confounds that might explain the pattern without requiring the social integration theory.',",
+          "materials": "Provided or researched statistical data, graph paper, calculator",
+          "discover": "The pattern is clear: higher social integration and stable norms correlate with lower rates. But the correlation doesn't prove Durkheim's mechanism (it could be mental health services, economic security, etc.). Social science requires ruling out alternatives.',",
+          "go_deeper": "Durkheim identified four types of suicide: egoistic, altruistic, anomic, fatalistic. Find one real-world example of each type and explain which social mechanism drives each.',",
+          "silent_lesson": "Durkheim's methodology; social facts; correlation in social data; confounds; four types of social cohesion."
+        },
+        {
+          "id": "durkheim_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Measuring Anomie",
+          "hook": "Anomie — a state where social norms lose their force and individuals feel unmoored — peaks during rapid social change. Can you operationalise and measure it?",
+          "challenge": "Design a 10-item survey instrument to measure anomie in your school or neighbourhood community. Each item should assess one of: norm clarity (do people know what's expected?), norm agreement (do people share the same norms?), norm enforcement (are violations sanctioned?), social trust (do people trust institutions and each other?). Pilot your survey on 20 people. Calculate a composite anomie score. Correlate your score with self-reported wellbeing. Is higher anomie associated with lower wellbeing?",
+          "materials": "Survey form, 20 participants, calculator",
+          "discover": "Anomie is measurable. Your survey likely shows that people with lower norm clarity and lower trust report lower wellbeing — consistent with Durkheim's prediction. But your instrument may measure social isolation, economic anxiety, or other factors simultaneously.",
+          "go_deeper": "Durkheim argued that organic solidarity (interdependence in complex societies) replaces mechanical solidarity (sameness) in modern societies. Survey your community: do people feel connected to strangers through shared identity or through functional interdependence? Which type of solidarity is stronger?",
+          "silent_lesson": "Operationalising abstract concepts; survey design; anomie scale; Durkheim's two types of solidarity; measurement validity."
+        }
+      ]
+    },
+    {
+      "id": "wollstonecraft",
+      "name": "Mary Wollstonecraft",
+      "domain": "Education / Rights / Rational Development",
+      "puzzles": [
+        {
+          "id": "wollstonecraft_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "What Are You Allowed to Do?",
+          "hook": "The rules about what different people are allowed to do change across time, culture, and place. What do these rules reveal about what a society values?",
+          "challenge": "List 20 activities you do regularly (playing a sport, reading, cooking, travelling alone, choosing your own clothes, speaking in class, voting in school elections). For each activity, find out: at what age are children allowed to do it, and has this changed in the past 50 years? Interview an adult about what they were allowed to do at your age. How has the list changed?",
+          "materials": "Paper, pencil, an adult to interview",
+          "discover": "Rights and permissions expand over time — and the expansion usually follows arguments about capability and autonomy, not about what feels comfortable for those already in power. Who gets to decide when someone is capable is itself a political question.",
+          "go_deeper": "Find three activities where different genders, castes, or age groups are still treated differently. For each, identify: what argument is used to justify the difference, and how would you evaluate that argument?",
+          "silent_lesson": "Wollstonecraft's argument for equal education; rights as contingent on perceived capability; who defines capability; historical expansion of rights."
+        },
+        {
+          "id": "wollstonecraft_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Rational Argument",
+          "hook": "Wollstonecraft argued that the apparent differences between men and women in her time were caused by education and circumstance — not nature. How would you test this kind of argument?",
+          "challenge": "A key Enlightenment claim: if women were given the same education as men, they would develop the same rational capacities. Design a test of the analogous modern claim: if boys and girls receive identical instruction and encouragement in mathematics, will the performance gap disappear? Review: (1) data on mathematics gender gaps across countries with different education systems, (2) data on gaps before and after educational reforms, (3) experimental data on teacher expectation effects. What pattern do you find?",
+          "materials": "Provided or researched educational data, pencil",
+          "discover": "Mathematics gender gaps vary dramatically across countries — near zero in some (Finland), larger in others. This variation correlates with gender equity indices and cultural attitudes. The gap is not fixed — it changes with social conditions. This supports the Wollstonecraft-style argument.',",
+          "go_deeper": "Stereotype threat: being reminded of a negative group stereotype before a test reduces performance for members of that group. Look up the original Steele & Aronson (1995) study. Design a replication.',",
+          "silent_lesson": "Nature vs nurture in cognitive development; cross-cultural variation as evidence; stereotype threat; Wollstonecraft's argument modernised."
+        },
+        {
+          "id": "wollstonecraft_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Capability Argument",
+          "hook": "Amartya Sen and Martha Nussbaum extended Wollstonecraft's idea into the 'capabilities approach': development means expanding what people are actually able to do and be — not just their income. Can you use this framework to evaluate a real policy?",
+          "challenge": "Select a government policy (e.g., India's mid-day meal scheme, Beti Bachao Beti Padhao, or a local education initiative). Evaluate it using the capabilities framework: (1) which central capabilities does it enhance (health, education, social participation, emotional development, play)? (2) which capabilities does it neglect or harm? (3) for whom? Map your evaluation on a 5-capability × 3-group matrix. What policy changes does this analysis suggest?',",
+          "materials": "Policy document, pencil, capabilities list (from Nussbaum's list of 10 central capabilities)",
+          "discover": "Income-focused evaluation would ask 'does this increase family income?' Capabilities evaluation asks 'does this expand what women/children/marginalised groups can do and be?' The same policy may score very differently on each measure.',",
+          "go_deeper": "The capabilities approach has been criticised for being culturally relative — who defines which capabilities matter? Draft a response to this criticism and evaluate it.",
+          "silent_lesson": "Sen's capability approach; multidimensional development; Nussbaum's central capabilities; gender and development; policy evaluation framework."
+        }
+      ]
+    },
+    {
+      "id": "sen",
+      "name": "Amartya Sen",
+      "domain": "Development / Famine / Freedom",
+      "puzzles": [
+        {
+          "id": "sen_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Is Hunger Always About Food?",
+          "hook": "A country can have more food than it needs — and people still starve. How is that possible?",
+          "challenge": "Research three historical famines: (1) Bengal famine 1943, (2) Irish famine 1845–49, (3) Ethiopian famine 1983–85. For each: Was there a reduction in total food available? Who had access to food? What political decisions affected food distribution? Compare the total food supply in the country to the number who starved. Was the famine caused by too little food — or by too little access?",
+          "materials": "Reference book or teacher-provided summaries, pencil",
+          "discover": "In all three cases, total food supply did not fall catastrophically. People starved because they lacked the income, rights, or political power to claim available food. Famine is a failure of entitlement, not just production.',",
+          "go_deeper": "Sen observed that famines have never occurred in functioning democracies. Why might a free press and multiparty elections prevent famine — even if they don't increase food production?",
+          "silent_lesson": "Sen's entitlement theory of famine; food security vs food availability; political freedom as economic protection."
+        },
+        {
+          "id": "sen_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Development Index",
+          "hook": "GDP (income per person) is the most common measure of a country's development. But two countries with the same GDP can have vastly different levels of human wellbeing. What's missing?",
+          "challenge": "For 8 countries (data provided or researched): collect GDP per capita, life expectancy, adult literacy rate, and under-5 mortality rate. Rank each country on each indicator. Calculate the average rank across all four indicators. Now compare: does the GDP ranking match the average wellbeing ranking? Find two countries where the mismatch is greatest. What explains the gap?",
+          "materials": "Data table (researched or provided), calculator, pencil",
+          "discover": "Kerala (India's poorest states by income) ranks near the top in life expectancy and literacy. Kuwait (high income) ranks much lower in equality and women's literacy. Income and wellbeing are correlated but not identical — what matters is how income is distributed and invested.',",
+          "go_deeper": "The Human Development Index (HDI) combines income, education, and health. Calculate the HDI for two countries using the UNDP formula (data provided). Compare to their pure income ranking. Which country 'outperforms' its income?",
+          "silent_lesson": "HDI vs GDP; capabilities vs income; Kerala model; what development actually means."
+        },
+        {
+          "id": "sen_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Freedom as Development",
+          "hook": "Sen's central argument: development is the expansion of real freedoms — not just income. This means that civil liberties and economic development are not in tension; they enable each other.",
+          "challenge": "Test the claim that political freedom and economic development are mutually reinforcing. For 20 countries, collect: (1) Freedom House index (political freedom 1–7), (2) HDI, (3) GDP growth rate (10-year average), (4) income inequality (Gini coefficient). Plot: freedom vs HDI, freedom vs growth, freedom vs Gini. Calculate correlation coefficients. What is the relationship? Are there outliers? Do they support or undermine the freedom-development thesis?',",
+          "materials": "World Bank, Freedom House, and UNDP data (researched), graph paper, calculator",
+          "discover": "The correlations are positive but imperfect. High-growth authoritarian exceptions (China, Singapore) suggest freedom is not always necessary for growth in the short term. But high equality and high HDI are more strongly associated with political freedom. Sen's claim is long-run and capability-focused, not purely growth-focused.',",
+          "go_deeper": "Sen argues that even one person prevented from reading or speaking loses a freedom — regardless of what the GDP indicator shows. Design a measurement instrument that captures 'real freedom' at the individual level (not just at the country level).",
+          "silent_lesson": "Sen's freedom as development thesis; instrumental vs constitutive role of freedom; political liberty and economic development; Human Development paradigm."
+        }
+      ]
+    },
+    {
+      "id": "jung",
+      "name": "Carl Jung",
+      "domain": "Archetypes / Collective Unconscious / Personality Types",
+      "puzzles": [
+        {
+          "id": "jung_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Shape of Meaning",
+          "hook": "You have never discussed what shapes mean with your classmates. But when you see a sharp spiky form, something in you reacts. Does everyone react the same way — and if so, why?",
+          "challenge": "Create a set of 10 simple drawings: two perfect circles, two sharp jagged stars, two soft wavy blobs, two upward-pointing triangles, and two spirals. Show each drawing, one at a time, to 10 classmates. Ask each person to write one word that comes to mind immediately — do not allow discussion. Collect all responses. For each drawing, tally the words used: are certain shapes consistently linked to certain meanings (wholeness, danger, calm, growth)? Calculate the percentage of respondents who gave similar responses for each shape.",
+          "materials": "Paper, pencil, 10 classmates, tally sheet",
+          "discover": "Certain shapes reliably trigger similar responses across people who have never compared notes: spiky forms cluster around danger and energy, circles around wholeness and safety, spirals around growth and mystery. The pattern is not random — something in how humans perceive the world produces shared associations.",
+          "go_deeper": "Show the same shapes to adults and to young children aged 4–5. Do they produce the same clusters? What would it mean if children who have not yet learned the words still produce the same associations?",
+          "silent_lesson": "Collective unconscious; symbolic universals; archetypes as shared mental structures; the difference between learned and innate associations."
+        },
+        {
+          "id": "jung_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "game",
+          "title": "The Hesitation Map",
+          "hook": "When a word touches something hidden in the mind, the pause before answering grows. Can you map the places where people hesitate — and decode what the hesitation reveals?",
+          "challenge": "Run a word association test with at least 5 subjects. Read each word aloud and ask the subject to say the first word that comes to mind. Use a stopwatch to record response time to the nearest second. Use 30 words in this order: 10 neutral (table, window, tree, chair, road, cloud, stone, floor, door, river), 10 moderately emotional (mother, money, friend, school, home, teacher, food, music, sleep, work), 10 potentially charged (failure, alone, dark, anger, blame, fear, loss, wrong, weak, secret). Record both the response word and the response time for every subject. Calculate average response times for each category. Which category produces the longest average pause? Which produces the most unusual or unexpected responses? Create a table comparing subjects.",
+          "materials": "Word list (printed), stopwatch, pencil, response sheet, 5 or more subjects",
+          "discover": "Longer pauses and more unusual responses cluster around the charged category — subjects are not slower because the words are harder, but because something internal is interfering with the immediate answer. The hesitation is a signal: the mind is briefly occupied with something it did not expect to encounter.",
+          "go_deeper": "Compare two subjects whose hesitation patterns differ most. Are the words that delayed one person the same words that delayed the other? What might explain why different people hesitate at different words?",
+          "silent_lesson": "Word association method; psychological complexes; the unconscious as detectable through reaction time; individual vs shared patterns; the diagnostic use of hesitation."
+        },
+        {
+          "id": "jung_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "thought_experiment",
+          "title": "The Universal Cast",
+          "hook": "Every culture that has ever existed produced stories — and those stories keep casting the same characters. Is this a coincidence, a shared history, or something deeper about how human minds work?",
+          "challenge": "Using reference cards provided (or a library), investigate five mythological traditions: Greek, Hindu, Norse, Aztec, and West African (Yoruba). For each tradition, search for the following character types: (1) the Trickster — a figure who breaks rules and disrupts order, (2) the Wise Elder — a guide who holds knowledge but does not act directly, (3) the Hero who must descend or be transformed before succeeding, (4) the Great Mother — a figure of creation, nurture, or terrible destruction, (5) the Shadow or Monster — an adversary that mirrors the hero's hidden nature. Create a 5-tradition × 5-archetype grid. Mark each cell: present, partially present, or absent. Calculate what percentage of traditions contain each character type. Then: propose at least two competing explanations for the pattern you find — one that supports the idea of universal mental structures, and one that does not require it.",
+          "materials": "Reference cards or library access for five mythologies, pencil, grid paper",
+          "discover": "Most or all of the five character types appear across all five traditions — cultures separated by oceans and millennia with no known contact. The pattern is striking. But the alternative explanation — that these types reflect universal human experiences (childhood dependence, fear of death, encounters with the unknown) — is equally compelling and does not require positing a shared unconscious. The data alone cannot decide between the two theories.",
+          "go_deeper": "The anthropologist Joseph Campbell argued that all hero stories follow a single structure (the monomyth). Read his summary of the hero's journey and map it onto one myth from each of your five traditions. Where does it fit precisely — and where does it not fit? What does the misfit reveal about the theory?",
+          "silent_lesson": "Archetypes and the collective unconscious; cross-cultural pattern recognition; competing explanations for universal structures; the limits of structural analysis; Campbell's monomyth and its critics."
+        }
+      ]
+    }
+  ]
+}

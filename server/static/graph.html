@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth — Knowledge Graph</title>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0b1120;
+    color: #e2e8f0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Top bar ─────────────────────────────────────── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  .logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #f8fafc;
+  }
+  .logo span { color: #6366f1; }
+
+  .stats {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #64748b;
+  }
+  .stats b { color: #94a3b8; }
+
+  .learner-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .learner-input input {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 12px;
+    padding: 5px 10px;
+    width: 200px;
+    outline: none;
+  }
+  .learner-input input:focus { border-color: #6366f1; }
+  .learner-input button {
+    background: #6366f1;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 5px 12px;
+    transition: background 0.15s;
+  }
+  .learner-input button:hover { background: #4f46e5; }
+
+  /* ── Legend ──────────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    font-size: 11px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #94a3b8;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-line {
+    width: 20px;
+    height: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── Main layout ─────────────────────────────────── */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Graph canvas ────────────────────────────────── */
+  #graph-container {
+    flex: 1;
+    position: relative;
+  }
+  #network {
+    width: 100%;
+    height: 100%;
+  }
+
+  .loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #64748b;
+    font-size: 14px;
+  }
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #1e293b;
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Sidebar ─────────────────────────────────────── */
+  #sidebar {
+    width: 320px;
+    background: #0f172a;
+    border-left: 1px solid #1e293b;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  #sidebar.hidden { transform: translateX(320px); width: 0; border: none; }
+
+  .sidebar-header {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid #1e293b;
+    flex-shrink: 0;
+  }
+  .sidebar-close {
+    float: right;
+    background: none;
+    border: none;
+    color: #475569;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0;
+  }
+  .sidebar-close:hover { color: #e2e8f0; }
+
+  .concept-subject-badge {
+    display: inline-block;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding: 2px 8px;
+    text-transform: uppercase;
+  }
+  .badge-mathematics { background: #1d4ed820; color: #60a5fa; border: 1px solid #1d4ed840; }
+  .badge-science     { background: #06523920; color: #34d399; border: 1px solid #06523940; }
+  .badge-history     { background: #78350f20; color: #fbbf24; border: 1px solid #78350f40; }
+
+  .concept-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #f1f5f9;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .concept-grades {
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  .sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .sidebar-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #475569;
+    margin-bottom: 8px;
+  }
+
+  .concept-description {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  /* Mastery ring */
+  .mastery-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .mastery-ring-wrap {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+  }
+  .mastery-ring-wrap svg { transform: rotate(-90deg); }
+  .mastery-pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    transform: rotate(0deg);
+  }
+  .mastery-label {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+  }
+  .mastery-label b { color: #e2e8f0; display: block; font-size: 13px; margin-bottom: 2px; }
+
+  /* Prerequisites */
+  .pill-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 3px 10px;
+    color: #94a3b8;
+    transition: all 0.15s;
+  }
+  .pill:hover { border-color: #6366f1; color: #a5b4fc; }
+
+  /* Videos */
+  .video-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 12px;
+    transition: all 0.15s;
+    margin-bottom: 6px;
+  }
+  .video-link:hover { border-color: #ef4444; color: #fca5a5; background: #1e293b; }
+  .yt-icon {
+    width: 20px;
+    height: 14px;
+    background: #ef4444;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .yt-icon::after {
+    content: '';
+    border-left: 6px solid white;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    margin-left: 1px;
+  }
+  .no-videos { font-size: 12px; color: #475569; font-style: italic; }
+
+  /* Edge type hints */
+  .edge-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 11px;
+    color: #64748b;
+  }
+  .edge-legend-item { display: flex; align-items: center; gap: 8px; }
+  .edge-line {
+    width: 24px;
+    height: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── Filter bar ──────────────────────────────────── */
+  .filter-bar {
+    padding: 8px 20px;
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .filter-label { font-size: 11px; color: #475569; margin-right: 4px; }
+  .filter-btn {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 5px;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 3px 10px;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover, .filter-btn.active { background: #1d4ed820; border-color: #6366f1; color: #a5b4fc; }
+  .filter-btn.active-science { background: #06523920; border-color: #10b981; color: #34d399; }
+  .filter-btn.active-mathematics { background: #1d4ed820; border-color: #3b82f6; color: #60a5fa; }
+  .filter-btn.active-history { background: #78350f20; border-color: #f59e0b; color: #fbbf24; }
+
+  /* ── Tooltip override ────────────────────────────── */
+  .vis-tooltip {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 6px !important;
+    color: #e2e8f0 !important;
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">पार्थ <span>Knowledge Graph</span></div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Mathematics</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> Science</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> History</div>
+    <div class="legend-item"><div class="legend-line" style="background:#6366f1"></div> Prerequisite</div>
+    <div class="legend-item"><div class="legend-line" style="background:#475569; border-top: 2px dashed #475569; height:0"></div> Co-requisite</div>
+    <div class="legend-item"><div class="legend-line" style="background:#22d3ee"></div> Leads to</div>
+  </div>
+
+  <div class="learner-input">
+    <input type="text" id="learner-id-input" placeholder="Learner ID (for mastery overlay)" />
+    <button onclick="loadGraph()">Load</button>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" id="btn-all" onclick="filterSubject('all')">All</button>
+  <button class="filter-btn" id="btn-mathematics" onclick="filterSubject('mathematics')">Mathematics</button>
+  <button class="filter-btn" id="btn-science" onclick="filterSubject('science')">Science</button>
+  <button class="filter-btn" id="btn-history" onclick="filterSubject('history')">History</button>
+  <span style="flex:1"></span>
+  <div class="stats" id="stats-bar">Loading…</div>
+</div>
+
+<div class="main">
+  <div id="graph-container">
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <span>Building graph…</span>
+    </div>
+    <div id="network"></div>
+  </div>
+
+  <div id="sidebar" class="hidden">
+    <div class="sidebar-header">
+      <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+      <div class="concept-subject-badge" id="sb-badge"></div>
+      <div class="concept-name" id="sb-name"></div>
+      <div class="concept-grades" id="sb-grades"></div>
+    </div>
+    <div class="sidebar-body" id="sidebar-body"></div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let _allNodes = [];
+let _allEdges = [];
+let _network  = null;
+let _nodesDS  = null;
+let _edgesDS  = null;
+let _currentFilter = 'all';
+let _nodeMap = {};
+
+const SUBJECT_COLOR = {
+  mathematics: { bg: '#1e3a5f', border: '#3b82f6', highlight: '#2563eb', font: '#bfdbfe' },
+  science:     { bg: '#064e3b', border: '#10b981', highlight: '#059669', font: '#a7f3d0' },
+  history:     { bg: '#451a03', border: '#f59e0b', highlight: '#d97706', font: '#fde68a' },
+};
+const EDGE_COLOR = {
+  'prerequisite': { color: '#6366f1', dash: false },
+  'co-requisite': { color: '#475569', dash: true  },
+  'leads-to':     { color: '#22d3ee', dash: false },
+};
+
+// ── Data loading ───────────────────────────────────────────────────────────
+async function loadGraph() {
+  const learnerId = document.getElementById('learner-id-input').value.trim();
+  const url = '/graph/data' + (learnerId ? `?learner_id=${encodeURIComponent(learnerId)}` : '');
+  document.getElementById('loading').style.display = 'flex';
+  closeSidebar();
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    _allNodes = data.nodes;
+    _allEdges = data.edges;
+    _nodeMap  = Object.fromEntries(_allNodes.map(n => [n.id, n]));
+    renderGraph();
+    updateStats();
+  } catch(e) {
+    document.getElementById('loading').innerHTML =
+      '<span style="color:#ef4444">Failed to load — is the server running?</span>';
+  }
+}
+
+// ── Graph rendering ────────────────────────────────────────────────────────
+function renderGraph(filterSubjectVal) {
+  const filter = filterSubjectVal || _currentFilter;
+
+  const visNodes = _allNodes
+    .filter(n => filter === 'all' || n.subject === filter)
+    .map(nodeToVis);
+
+  const visNodeIds = new Set(visNodes.map(n => n.id));
+  const visEdges = _allEdges
+    .filter(e => visNodeIds.has(e.source) && visNodeIds.has(e.target))
+    .map(edgeToVis);
+
+  if (_network) {
+    _nodesDS.clear(); _nodesDS.add(visNodes);
+    _edgesDS.clear(); _edgesDS.add(visEdges);
+    return;
+  }
+
+  // First render
+  _nodesDS = new vis.DataSet(visNodes);
+  _edgesDS = new vis.DataSet(visEdges);
+
+  const container = document.getElementById('network');
+  _network = new vis.Network(container, { nodes: _nodesDS, edges: _edgesDS }, networkOptions());
+
+  _network.on('stabilizationIterationsDone', () => {
+    document.getElementById('loading').style.display = 'none';
+  });
+
+  _network.on('click', e => {
+    if (e.nodes.length > 0) showSidebar(e.nodes[0]);
+    else closeSidebar();
+  });
+}
+
+function nodeToVis(n) {
+  const col = SUBJECT_COLOR[n.subject] || SUBJECT_COLOR.mathematics;
+  const gradeSpan = n.grade_max - n.grade_min;
+  const size = 20 + gradeSpan * 3 + Math.min(n.video_count, 6) * 2;
+
+  // Mastery border glow
+  let borderWidth = 2;
+  let borderColor = col.border;
+  if (n.mastery !== undefined && n.mastery !== null) {
+    borderWidth = 4;
+    borderColor = masteryColor(n.mastery);
+  }
+
+  const shortLabel = n.label.length > 22 ? n.label.slice(0, 22) + '…' : n.label;
+  const tooltip = `
+    <b>${n.label}</b><br>
+    Grade ${n.grade_min}–${n.grade_max}<br>
+    ${n.video_count} Khan Academy video${n.video_count !== 1 ? 's' : ''}
+    ${n.mastery !== undefined && n.mastery !== null ? `<br>Mastery: ${Math.round(n.mastery*100)}%` : ''}
+  `;
+
+  return {
+    id:    n.id,
+    label: shortLabel,
+    title: tooltip,
+    size,
+    color: {
+      background:        col.bg,
+      border:            borderColor,
+      highlight:         { background: col.highlight, border: borderColor },
+      hover:             { background: col.highlight, border: borderColor },
+    },
+    borderWidth,
+    font:  { color: col.font, size: 11, face: '-apple-system, sans-serif', bold: { size: 12 } },
+    shape: 'dot',
+  };
+}
+
+function edgeToVis(e) {
+  const ec = EDGE_COLOR[e.type] || EDGE_COLOR['prerequisite'];
+  return {
+    from:    e.source,
+    to:      e.target,
+    arrows:  e.type !== 'co-requisite' ? 'to' : { to: { enabled: true }, from: { enabled: true } },
+    dashes:  ec.dash,
+    color:   { color: ec.color, highlight: ec.color, hover: ec.color, opacity: 0.7 },
+    width:   1.5,
+    smooth:  { type: 'curvedCW', roundness: 0.15 },
+    title:   e.type,
+    label:   '',
+    selectionWidth: 3,
+  };
+}
+
+function networkOptions() {
+  return {
+    physics: {
+      solver: 'forceAtlas2Based',
+      forceAtlas2Based: {
+        gravitationalConstant: -60,
+        centralGravity:        0.01,
+        springLength:          180,
+        springConstant:        0.08,
+        damping:               0.4,
+      },
+      stabilization: { iterations: 300, updateInterval: 25 },
+    },
+    interaction: {
+      hover:          true,
+      tooltipDelay:   150,
+      zoomView:       true,
+      dragView:       true,
+      navigationButtons: false,
+    },
+    nodes: { scaling: { min: 16, max: 50 } },
+    edges: { selectionWidth: 2 },
+  };
+}
+
+// ── Mastery helpers ────────────────────────────────────────────────────────
+function masteryColor(m) {
+  if (m >= 0.75) return '#10b981';
+  if (m >= 0.45) return '#f59e0b';
+  return '#ef4444';
+}
+
+function masteryLabel(m) {
+  if (m === undefined || m === null) return 'No data yet';
+  if (m >= 0.75) return 'Mastered';
+  if (m >= 0.45) return 'Developing';
+  return 'Needs work';
+}
+
+// ── Sidebar ────────────────────────────────────────────────────────────────
+function showSidebar(nodeId) {
+  const node = _nodeMap[nodeId];
+  if (!node) return;
+
+  // Header
+  const badge = document.getElementById('sb-badge');
+  badge.textContent = node.subject;
+  badge.className = `concept-subject-badge badge-${node.subject}`;
+  document.getElementById('sb-name').textContent = node.label;
+  document.getElementById('sb-grades').textContent = `Grade ${node.grade_min} – ${node.grade_max}`;
+
+  // Body
+  const body = document.getElementById('sidebar-body');
+  body.innerHTML = '';
+
+  // Description
+  if (node.description) {
+    const sec = sidebarSection('Description');
+    sec.innerHTML += `<p class="concept-description">${node.description}</p>`;
+    body.appendChild(sec);
+  }
+
+  // Mastery ring (if learner data)
+  if (node.mastery !== undefined && node.mastery !== null) {
+    const pct = Math.round(node.mastery * 100);
+    const col = masteryColor(node.mastery);
+    const circ = 2 * Math.PI * 22;
+    const dash = (node.mastery * circ).toFixed(1);
+    const sec = sidebarSection('Your Mastery');
+    sec.innerHTML += `
+      <div class="mastery-row">
+        <div class="mastery-ring-wrap">
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="22" fill="none" stroke="#1e293b" stroke-width="5"/>
+            <circle cx="28" cy="28" r="22" fill="none" stroke="${col}" stroke-width="5"
+              stroke-dasharray="${dash} ${circ.toFixed(1)}" stroke-linecap="round"/>
+          </svg>
+          <div class="mastery-pct" style="color:${col}">${pct}%</div>
+        </div>
+        <div class="mastery-label">
+          <b>${masteryLabel(node.mastery)}</b>
+          ${pct < 50 ? 'Keep practising — you\'re getting there!' :
+            pct < 75 ? 'Good progress, almost there!' :
+            'Excellent! Ready for the next concept.'}
+        </div>
+      </div>`;
+    body.appendChild(sec);
+  }
+
+  // Prerequisites
+  const prereqs = _allEdges
+    .filter(e => e.target === nodeId && e.type === 'prerequisite')
+    .map(e => _nodeMap[e.source])
+    .filter(Boolean);
+  if (prereqs.length) {
+    const sec = sidebarSection('Prerequisites');
+    const pills = document.createElement('div');
+    pills.className = 'pill-list';
+    prereqs.forEach(p => {
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.textContent = p.label;
+      pill.onclick = () => { showSidebar(p.id); _network.selectNodes([p.id]); };
+      pills.appendChild(pill);
+    });
+    sec.appendChild(pills);
+    body.appendChild(sec);
+  }
+
+  // Leads to
+  const leads = _allEdges
+    .filter(e => e.source === nodeId && e.type === 'leads-to')
+    .map(e => _nodeMap[e.target])
+    .filter(Boolean);
+  if (leads.length) {
+    const sec = sidebarSection('Leads to');
+    const pills = document.createElement('div');
+    pills.className = 'pill-list';
+    leads.forEach(p => {
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.textContent = p.label;
+      pill.onclick = () => { showSidebar(p.id); _network.selectNodes([p.id]); };
+      pills.appendChild(pill);
+    });
+    sec.appendChild(pills);
+    body.appendChild(sec);
+  }
+
+  // Khan Academy videos
+  const sec = sidebarSection(`Khan Academy Videos (${node.video_count})`);
+  if (node.video_ids && node.video_ids.length > 0) {
+    node.video_ids.slice(0, 6).forEach(vid => {
+      const link = document.createElement('a');
+      link.href = `https://www.youtube.com/watch?v=${vid}`;
+      link.target = '_blank';
+      link.className = 'video-link';
+      link.innerHTML = `<div class="yt-icon"></div><span>Watch on YouTube</span>`;
+      sec.appendChild(link);
+    });
+  } else {
+    sec.innerHTML += `<p class="no-videos">Ingestion running overnight — check back in the morning</p>`;
+  }
+  body.appendChild(sec);
+
+  document.getElementById('sidebar').classList.remove('hidden');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.add('hidden');
+  if (_network) _network.unselectAll();
+}
+
+function sidebarSection(title) {
+  const div = document.createElement('div');
+  div.innerHTML = `<div class="sidebar-section-title">${title}</div>`;
+  return div;
+}
+
+// ── Filters ────────────────────────────────────────────────────────────────
+function filterSubject(subject) {
+  _currentFilter = subject;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.className = 'filter-btn';
+    if (b.id === `btn-${subject}`) {
+      b.className = subject === 'all' ? 'filter-btn active' : `filter-btn active-${subject}`;
+    }
+  });
+  if (_network) renderGraph(subject);
+}
+
+// ── Stats bar ──────────────────────────────────────────────────────────────
+function updateStats() {
+  const totalVideos = _allNodes.reduce((s, n) => s + n.video_count, 0);
+  const withMastery = _allNodes.filter(n => n.mastery !== undefined && n.mastery !== null).length;
+  document.getElementById('stats-bar').innerHTML =
+    `<b>${_allNodes.length}</b> concepts &nbsp;·&nbsp; ` +
+    `<b>${_allEdges.length}</b> edges &nbsp;·&nbsp; ` +
+    `<b>${totalVideos}</b> KA videos embedded` +
+    (withMastery ? ` &nbsp;·&nbsp; <b>${withMastery}</b> concepts tracked` : '');
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+// Read learner_id from URL param if present
+const _urlParams = new URLSearchParams(window.location.search);
+if (_urlParams.get('learner_id')) {
+  document.getElementById('learner-id-input').value = _urlParams.get('learner_id');
+}
+loadGraph();
+</script>
+</body>
+</html>

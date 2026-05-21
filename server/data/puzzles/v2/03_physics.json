@@ -1,0 +1,697 @@
+{
+  "sphere": "physics",
+  "version": 2,
+  "description": "Subject-matter puzzles where students discover the laws of nature by doing what physicists do — measuring, modelling, predicting, and being surprised by the universe. No thinker's name appears in the challenge text.",
+  "thinkers": [
+    {
+      "id": "galileo",
+      "name": "Galileo Galilei",
+      "domain": "Motion / Free Fall / Pendulum",
+      "puzzles": [
+        {
+          "id": "galileo_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Falling Objects Bet",
+          "hook": "Drop a heavy book and a lighter book from the same height simultaneously. Which hits the ground first? Most people are wrong about this.",
+          "challenge": "Drop: (1) a heavy textbook and a thin notebook from 1 metre — simultaneously. (2) a coin and a small piece of paper from 1 metre. (3) the same paper crumpled into a tight ball and the coin from 1 metre. Record which hits first each time. What changes between experiments 2 and 3? What is doing the work in each case?",
+          "materials": "Heavy and light books, coin, paper, 1-metre height (table edge)",
+          "discover": "The two books land simultaneously (gravity pulls all objects equally). The flat paper lands later (air resistance). The crumpled paper lands almost simultaneously with the coin (same weight but less air resistance). Gravity accelerates everything equally; air drag depends on shape and surface area.",
+          "go_deeper": "If you could do experiment 2 in a vacuum (no air), what would happen? A famous demonstration was done on the Moon with a feather and a hammer. Look it up — and calculate: if air resistance is the only difference, at what mass/area ratio would a falling object's terminal velocity equal the speed it hits the ground from 1 metre?",
+          "silent_lesson": "Free fall and gravitational acceleration; air resistance; Galileo's refutation of Aristotle; equivalence principle."
+        },
+        {
+          "id": "galileo_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Clock in the Ceiling",
+          "hook": "Before mechanical clocks were reliable, scientists used a pendulum as a precision timer. But what determines exactly how long each swing takes?",
+          "challenge": "Build three pendulums from string: (A) 25cm long, 50g weight. (B) 50cm long, 50g weight. (C) 25cm long, 100g weight. Time 20 swings for each. Calculate the period (time per swing). Now vary the starting angle: swing pendulum A from 10°, 20°, 30°. Does the period change? Plot: period vs length (for A and B). What mathematical relationship do you find?",
+          "materials": "String, weights (coins in a bag), protractor, timer",
+          "discover": "Period depends on length (longer = slower), NOT on mass (A and C have the same period), and NOT on angle (for small angles). The relationship is T = 2π√(L/g). This means pendulum period is entirely determined by length — making it a perfect clock.",
+          "go_deeper": "Calculate g (acceleration due to gravity) from your data: T² = 4π²L/g → g = 4π²L/T². How close is your value to the accepted 9.81 m/s²? What are the main sources of error?",
+          "silent_lesson": "Simple pendulum period; T ∝ √L; independence from mass and amplitude; pendulum as clock; measurement of g."
+        },
+        {
+          "id": "galileo_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "experiment",
+          "title": "The Inclined Plane Trick",
+          "hook": "Free fall is too fast to measure without modern instruments. A scientist solved this by diluting gravity — rolling balls down inclines to slow the acceleration enough to time with a water clock.",
+          "challenge": "Roll a ball down an inclined ramp at angles of 5°, 10°, 15°, 20°. For each angle: (1) measure the time to roll a fixed distance (1 metre), (2) calculate acceleration a = 2d/t². Plot a vs sin(θ). The relationship should be: a = g sin(θ). Fit a line. From its slope, calculate g. Compare to 9.81 m/s². At what angle does your incline produce g? (It won't — why not?)',",
+          "materials": "Ramp (plank), ball, timer, protractor, metre ruler",
+          "discover": "At θ=90° (vertical), the inclined plane becomes free fall and a=g. Your plot should extrapolate to g at sin(θ)=1. The deviation from theory comes from friction and rolling vs sliding. By plotting the data from multiple angles, you can extract g from a trendline more accurately than from any single measurement.",
+          "go_deeper": "Real free-fall timing requires g sin(θ) → g as θ → 90°. But a ball rolling down a ramp also rotates — its angular kinetic energy means it accelerates LESS than g sin(θ) predicts. Derive the correct formula for a rolling ball and redo your analysis. How big is the correction?",
+          "silent_lesson": "Galileo's inclined plane method; g sin(θ); kinematic equations; rolling vs sliding; systematic vs random error."
+        }
+      ]
+    },
+    {
+      "id": "newton",
+      "name": "Isaac Newton",
+      "domain": "Gravity / Laws of Motion / Optics",
+      "puzzles": [
+        {
+          "id": "newton_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Colour Hidden in White",
+          "hook": "White light looks like 'no colour.' But pass it through glass and a rainbow appears. Where were all those colours hiding?",
+          "challenge": "Fill a clear glass with water. Hold it near a sunny window or white wall and find the angle where it projects a rainbow. Sketch the colour order (from inside to outside of the arc). Now: hold a second glass of water and try to combine two different coloured patches from the rainbow back into a single patch. What colour do you get when you recombine them?",
+          "materials": "Clear glass, water, sunny window or torch",
+          "discover": "White light contains all colours mixed together. The glass separates them by bending each colour a different amount (dispersion). Recombining them produces white again. Light isn't changed by the glass — the colours were already present, just overlapping.',",
+          "go_deeper": "Why is the sky blue? The atmosphere scatters short-wavelength (blue) light more than long-wavelength (red) light. At sunset, light travels through more atmosphere, scattering away all but red. Design an experiment using a glass of slightly milky water and a torch to reproduce this scattering effect.",
+          "silent_lesson": "Dispersion; white light as composite; Newton's prism experiment; Rayleigh scattering; why the sky is blue."
+        },
+        {
+          "id": "newton_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Invisible Force",
+          "hook": "A force can act at a distance — pulling without touching. Can you measure this force and show that it weakens in a precise mathematical way?",
+          "challenge": "Use a phone's magnetometer (compass app) to measure magnetic field strength from a bar magnet at distances of 2, 4, 6, 8, 10, 12cm. Record the field value (in µT or the app's units). Plot field strength vs distance. Now plot: field vs 1/d², field vs 1/d³. Which plot is more linear? The force between magnets (dipole-dipole) falls off as 1/d³ at large distances. Does your data match?",
+          "materials": "Smartphone with compass/magnetometer app, bar magnet, ruler",
+          "discover": "The field decreases rapidly — plotting against 1/d³ should produce a straighter line than 1/d². Gravity follows an inverse square law (1/d²); magnetic dipole fields fall off faster (1/d³). The inverse power law is nature's pattern for forces that spread through space.",
+          "go_deeper": "Gravity follows 1/d². If you could measure the gravitational attraction between two 1kg weights (it's about 6.67×10⁻¹¹ N, undetectably small), predict what would happen to this force if you doubled the distance. Calculate the new force.",
+          "silent_lesson": "Inverse power laws; gravitational vs magnetic force; Newton's Law of Gravitation; action at a distance; measuring field strength."
+        },
+        {
+          "id": "newton_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Deriving Kepler from Gravity",
+          "hook": "Kepler discovered the orbital laws by careful data analysis. One scientist derived them from a single equation — and showed that the laws must be true whenever gravity obeys an inverse square law.",
+          "challenge": "Start with the law of universal gravitation: F = GMm/r². For circular orbit: centripetal force = gravitational force → mv²/r = GMm/r² → v² = GM/r. Orbital period: T = 2πr/v. Show that T² = (4π²/GM) × r³ — this is Kepler's Third Law, derived purely from the law of gravitation. Now: what would change about Kepler's Third Law if gravity fell off as 1/r³ instead of 1/r²? Calculate the modified law.',",
+          "materials": "Pencil, paper, algebra skills",
+          "discover": "The exponent in T² ∝ rⁿ is completely determined by the power in the force law. Only 1/r² gives T² ∝ r³. The fact that planets obey T² ∝ r³ is therefore evidence for the inverse square law — and Newton's derivation is a proof that these laws are logically equivalent.",
+          "go_deeper": "What if gravity were repulsive? Set up the equations for repulsive 1/r² force. What orbit (if any) would result? What does this tell you about why attractive gravity produces stable orbits?",
+          "silent_lesson": "Deriving Kepler from Newton; circular orbit mechanics; inverse square law; logical equivalence of orbital and gravitational laws."
+        }
+      ]
+    },
+    {
+      "id": "faraday",
+      "name": "Michael Faraday",
+      "domain": "Electromagnetism / Induction / Field Concept",
+      "puzzles": [
+        {
+          "id": "faraday_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "Making Electricity from Movement",
+          "hook": "Can you create electricity without a battery — just by moving a magnet?",
+          "challenge": "Coil 50 turns of wire around a cardboard tube. Connect the ends to an LED or galvanometer (or the input jack of a phone with a sound app). Push a strong magnet into the coil quickly. Pull it out quickly. Hold it still inside. What does the meter show in each case? Now try 20 turns vs 50 turns — what changes?',",
+          "materials": "Wire (insulated), cardboard tube, strong magnet (neodymium if possible), LED or galvanometer or phone",
+          "discover": "Electricity flows only when the magnet is moving — not when it's stationary. More turns = stronger signal. Faster movement = stronger signal. The key is CHANGE in magnetic field — static fields create nothing, changing fields create current.",
+          "go_deeper": "How does a bicycle dynamo work? It uses this exact principle — a rotating magnet inside a coil. When you ride faster, why does the light get brighter? What happens to the generator when you brake suddenly?",
+          "silent_lesson": "Faraday's law of induction; electromagnetic induction; rate of change as key variable; applications in dynamos and generators."
+        },
+        {
+          "id": "faraday_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Invisible Field",
+          "hook": "A magnet exerts force through empty space. But 'through empty space' is not a satisfying explanation. What is actually there?",
+          "challenge": "Lay a bar magnet flat. Cover it with paper. Sprinkle iron filings over the paper and tap gently. Sketch the pattern in detail — the density of filings at different locations, the shape of curves, where they converge. Now: place two magnets with like poles facing (North-North). Cover and sprinkle. Sketch again. Opposite poles (North-South): sketch again. From the three sketches, write three rules about how field lines behave.',",
+          "materials": "Bar magnet(s), paper, iron filings, pencil",
+          "discover": "Field lines never cross. They are denser where the force is stronger. They point from N to S poles. They repel when like poles face each other (lines push apart). The 'field' is not a metaphor — the iron filings reveal a real spatial structure that determines where forces act.",
+          "go_deeper": "Faraday invented the concept of the field to replace 'action at a distance.' Maxwell later gave it a mathematical form. Why did Faraday — who had little formal mathematics — find the field concept easier than the action-at-a-distance picture?",
+          "silent_lesson": "Magnetic field lines; field as physical reality; Faraday's field concept; properties of field lines; field strength from density."
+        },
+        {
+          "id": "faraday_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "experiment",
+          "title": "Lenz's Law",
+          "hook": "When a magnet falls through a copper tube, it falls much slower than it would through air — even though copper is not magnetic. The force slowing it is invisible. Where does it come from?",
+          "challenge": "Drop a strong magnet down: (1) a plastic tube, (2) a copper tube of the same diameter. Time the fall through a fixed distance (e.g., 50cm). Calculate the ratio of fall times. Now model the braking force using Lenz's Law: the falling magnet induces a current in the copper; this current creates its own magnetic field opposing the magnet's motion; this is the braking force. Verify: if you increase the tube's wall thickness (more copper = more current), does braking increase?',",
+          "materials": "Strong neodymium magnet, copper tube (plumbing section from hardware store), plastic tube, timer",
+          "discover": "The copper tube fall takes 5–10× longer. The opposing magnetic field created by induced currents resists the change in flux (Lenz's Law: induced current always opposes the cause). No friction, no magnets in the copper — pure electromagnetic induction creates a velocity-dependent braking force.",
+          "go_deeper": "Magnetic braking is used in roller coasters (eddy current brakes) and high-speed trains (regenerative braking). Calculate: if the braking force is proportional to velocity, what terminal velocity would a 10g magnet reach in your copper tube?",
+          "silent_lesson": "Lenz's Law; eddy currents; electromagnetic braking; induction opposing change; energy conservation through Lenz's Law."
+        }
+      ]
+    },
+    {
+      "id": "maxwell",
+      "name": "James Clerk Maxwell",
+      "domain": "Electromagnetism / Light / Equations",
+      "puzzles": [
+        {
+          "id": "maxwell_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Wave That Carries No Medium",
+          "hook": "Sound needs air to travel. Light reaches us from the Sun across a perfect vacuum. What is light made of?",
+          "challenge": "Model wave behaviour using a slinky. Create: (1) a transverse wave (shake side to side — rope wave). (2) a longitudinal wave (push-pull — sound wave). Now: try to create a wave that travels in the absence of any medium (no slinky, no air, no string). Can you? What does light need as medium? Investigate: put a ringing phone inside a sealed jar. Pump air out slowly with a bicycle pump in reverse (or use a bell-jar vacuum demonstration). Does the sound change? Does the light inside the jar change?',",
+          "materials": "Slinky, ringing phone, sealed jar (ideally with rubber stopper)",
+          "discover": "Sound disappears when air is removed — it needs a medium. Light does not disappear — it travels through vacuum. Light is a wave in an electromagnetic field, which exists even in empty space. The field is the medium.",
+          "go_deeper": "Radio, microwaves, infrared, visible light, ultraviolet, X-rays, and gamma rays are all the same type of wave — differing only in frequency. List one use of each. Why can you see visible light but not feel ultraviolet (yet it causes sunburn)?",
+          "silent_lesson": "Electromagnetic waves need no medium; light as EM wave; longitudinal vs transverse waves; electromagnetic spectrum."
+        },
+        {
+          "id": "maxwell_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Measuring the Speed of Light with Chocolate",
+          "hook": "The speed of light can be measured using a microwave oven, a chocolate bar, and a ruler. The method takes 5 minutes.",
+          "challenge": "Remove the rotating turntable from a microwave. Place a flat chocolate bar on the floor of the oven. Microwave for 20–30 seconds on low power. Remove and find the melted spots — they mark where the standing wave antinodes are. Measure the distance between melted spots in centimetres. This is half the wavelength (λ/2). Find the microwave's operating frequency on its label (usually 2,450 MHz = 2.45 × 10⁹ Hz). Calculate c = f × λ. Compare to 3 × 10⁸ m/s.',",
+          "materials": "Microwave oven, flat chocolate bar, ruler",
+          "discover": "You typically measure λ/2 ≈ 6.1 cm → λ ≈ 12.2 cm. c = 2.45 × 10⁹ × 0.122 = 2.99 × 10⁸ m/s ≈ 3 × 10⁸ m/s. The speed of light, measured with chocolate, accurate to within a few percent.",
+          "go_deeper": "Microwaves and visible light are both electromagnetic waves. Why can microwaves penetrate a wall but visible light cannot? Why can visible light pass through glass but not through brick?",
+          "silent_lesson": "Speed of light measurement; standing waves; c = fλ; microwave wavelength; EM wave properties."
+        },
+        {
+          "id": "maxwell_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Light from Electricity and Magnetism",
+          "hook": "Four equations describing electric and magnetic fields, when combined, automatically predict the existence of waves — travelling at exactly the speed of light. This is how we know light is electromagnetic.",
+          "challenge": "Starting from the four field equations in free space (where there are no charges or currents): ∇·E = 0, ∇·B = 0, ∇×E = -∂B/∂t, ∇×B = µ₀ε₀ ∂E/∂t. Take the curl of both sides of the third equation. Use the vector identity ∇×(∇×E) = ∇(∇·E) - ∇²E and substitute the fourth equation. Show that E satisfies the wave equation ∇²E = µ₀ε₀ ∂²E/∂t², with wave speed v = 1/√(µ₀ε₀). Calculate v using µ₀ = 4π×10⁻⁷, ε₀ = 8.85×10⁻¹² SI units. What do you get?',",
+          "materials": "Pencil, paper, vector calculus reference, calculator",
+          "discover": "v = 1/√(µ₀ε₀) = 1/√(4π×10⁻⁷ × 8.85×10⁻¹²) ≈ 3.00 × 10⁸ m/s. This is the measured speed of light — to within measurement precision. The identification of light as an electromagnetic wave emerged purely from this mathematical derivation.",
+          "go_deeper": "Maxwell derived this result in 1865, 23 years before Hertz experimentally demonstrated radio waves. This is one of the great theoretical predictions in physics. What does it mean for a mathematical equation to 'predict' a physical phenomenon?",
+          "silent_lesson": "Maxwell's equations; derivation of wave equation; c = 1/√(µ₀ε₀); theoretical prediction of electromagnetic waves; light as EM wave."
+        }
+      ]
+    },
+    {
+      "id": "planck",
+      "name": "Max Planck",
+      "domain": "Quantum Theory / Blackbody Radiation",
+      "puzzles": [
+        {
+          "id": "planck_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "observation",
+          "title": "The Glow of Heat",
+          "hook": "Heat a metal slowly and it doesn't just get warm — it glows. First red, then orange, then white. Can you find the pattern?",
+          "challenge": "Observe (safely): a low-powered electric stove element or a thick wire connected carefully to a battery (nichrome wire from a hardware store). At low power: does it glow? At medium: what colour? At high: what colour? Sketch the colour at each temperature. Now: look at the Sun (never directly), a candle flame, and a tungsten light bulb. Order them from 'coolest' to 'hottest' based on colour alone. How can you tell temperature from colour?',",
+          "materials": "Safe heating source, paper, coloured pencils (do NOT use mains power)",
+          "discover": "Hotter objects glow bluer. Cooler objects glow redder. The colour of the glow contains exact temperature information — this is blackbody radiation. The Sun's yellowish-white glow indicates ~5,500°C surface temperature. A candle's orange flame indicates ~1,200°C.",
+          "go_deeper": "Wien's Displacement Law: peak wavelength = 2,898,000 / temperature (in nanometres and Kelvin). Calculate the peak wavelength for: human body (310K), a red star (3,000K), the Sun (5,778K), a blue star (30,000K). What part of the spectrum is each in?",
+          "silent_lesson": "Blackbody radiation; temperature and colour of glow; Wien's Displacement Law; thermal radiation."
+        },
+        {
+          "id": "planck_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Ultraviolet Catastrophe",
+          "hook": "Classical physics predicted that a hot object should emit infinite energy in ultraviolet and higher frequencies. Objects would be infinitely bright. This is called the 'ultraviolet catastrophe.' Since objects are NOT infinitely bright, classical physics was wrong. What saved it?",
+          "challenge": "Plot two curves on the same graph (data provided for room temperature blackbody): (1) Rayleigh-Jeans Law: intensity ∝ frequency² (classical prediction). (2) the quantum law: intensity = (2hf³/c²) / (e^(hf/kT) - 1). At what frequency does the classical law diverge from the quantum law? What happens to the classical curve at high frequency? What happens to the quantum curve?',",
+          "materials": "Provided data tables, graph paper, pencil",
+          "discover": "Classical prediction gives intensity → ∞ at high frequency (catastrophe). Planck's curve peaks and then falls to zero. The fix: energy comes in discrete chunks (quanta), so high-frequency radiation requires huge energy chunks — too large for thermal vibrations to supply. The quantisation naturally cuts off the high-frequency excess.",
+          "go_deeper": "The energy of one quantum of light: E = hf where h = 6.626×10⁻³⁴ J·s. Calculate the energy of one photon of: red light (700nm), visible violet (400nm), X-ray (0.1nm). Why does X-ray damage DNA but visible light generally doesn't?",
+          "silent_lesson": "Ultraviolet catastrophe; Planck's law; quantisation of energy; blackbody spectrum; photon energy E = hf."
+        },
+        {
+          "id": "planck_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Measuring Planck's Constant",
+          "hook": "The fundamental constant of quantum mechanics can be measured using LED light bulbs and a voltmeter. Try it.",
+          "challenge": "Collect LEDs of several colours (red, yellow, green, blue). Slowly increase the voltage across each LED until it just begins to glow visibly. Record the threshold voltage V for each colour. The photon energy at threshold = eV (where e = 1.6×10⁻¹⁹ C). The photon energy also = hf = hc/λ. So hc/λ = eV → h = eVλ/c. Measure wavelength for each LED colour (use a spectroscope or look up typical LED peak wavelengths). Calculate h for each LED. Average your values. Compare to 6.626×10⁻³⁴ J·s.',",
+          "materials": "LEDs (red, yellow, green, blue), variable power supply or batteries with potentiometer, voltmeter, spectroscope (optional)",
+          "discover": "Your values should cluster around 6–7×10⁻³⁴ J·s — accurate to within 10–20% from basic equipment. This is a direct measurement of the fundamental quantum of action, done with LEDs and a voltmeter.",
+          "go_deeper": "Why does a blue LED require higher threshold voltage than a red LED? If you use a green laser pointer (λ=532nm), calculate the expected threshold voltage. Is this consistent with the physics?",
+          "silent_lesson": "Planck's constant from LED threshold voltage; E = hf; quantum of action; direct measurement of fundamental constants."
+        }
+      ]
+    },
+    {
+      "id": "einstein",
+      "name": "Albert Einstein",
+      "domain": "Relativity / Equivalence / Photoelectric Effect",
+      "puzzles": [
+        {
+          "id": "einstein_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "No Preferred Viewpoint",
+          "hook": "You're on a train moving smoothly at 100km/h. You throw a ball straight up. To you, it goes straight up and comes back. To someone on the platform, the ball travels in an arc. Who is right?",
+          "challenge": "On a sheet of paper, draw the ball's path as seen from: (1) inside the train (reference frame of the thrower), (2) from the platform (reference frame of the observer). Both paths are 'correct' in their own reference frame. Now: if you're in a sealed box with no windows and the motion is perfectly smooth — can you tell whether you're moving at 100km/h or standing still? Design an experiment using objects in the box to test. Can it work?',",
+          "materials": "Paper, pencil",
+          "discover": "No experiment in a sealed, smoothly moving box can detect uniform motion. There is no 'absolutely stationary' viewpoint. All uniform motions are equivalent. This is the principle of relativity — and it forces strange consequences when the speed of light is involved.",
+          "go_deeper": "If you throw a ball at 10km/h forward on a train moving at 100km/h, the platform observer sees the ball at 110km/h. What if you shine a torch (light at 300,000km/s) from the moving train? Classical physics says 300,100km/s. But experiments show 300,000km/s for both observers. What breaks?",
+          "silent_lesson": "Principle of relativity; inertial reference frames; no preferred frame; Galilean relativity; why the constant speed of light is paradoxical."
+        },
+        {
+          "id": "einstein_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "Light as Particles",
+          "hook": "If light were purely a wave, shining brighter light on a metal should eventually knock electrons off — regardless of frequency. If light is made of particles, each particle must have enough energy on its own. Which is true?",
+          "challenge": "Use a UV torch and a zinc plate connected to an electroscope (or improvise: charged comb near a metal surface with a phone measuring static). Charge the metal negatively. Shine visible light (torch) — does it discharge? Shine UV light — does it discharge faster? Cover the UV torch with glass (blocks most UV) — effect? Cover with plastic film (passes UV) — effect? Vary the brightness of the UV — does doubling brightness double the discharge rate, or just make it faster?',",
+          "materials": "UV torch, zinc plate or metal object, electroscope or static meter, glass, clear plastic film",
+          "discover": "Visible light (regardless of brightness) cannot discharge the metal if frequency is below threshold. UV light can — even at low brightness. This proves energy per photon depends on frequency, not brightness. Brighter UV means more photons per second but same energy per photon. Only photons above the threshold energy can knock out electrons.",
+          "go_deeper": "The stopping voltage experiment: if you apply a reverse voltage to stop the ejected electrons, the stopping voltage depends on frequency, not brightness. Calculate the kinetic energy of ejected electrons for UV light (f=8×10¹⁴ Hz) hitting zinc (work function Φ=4.3eV): KE = hf - Φ.",
+          "silent_lesson": "Photoelectric effect; photons; work function; frequency determines energy per photon; Einstein's Nobel Prize explanation."
+        },
+        {
+          "id": "einstein_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Time Dilation with GPS",
+          "hook": "GPS satellites experience time passing slightly differently than clocks on the ground — both due to their high speed (slows time) and their higher altitude (less gravity speeds time up). If not corrected, GPS would be wrong by 10km per day. Verify the magnitude of this correction.",
+          "challenge": "GPS satellites orbit at h = 20,200 km, v = 3.87 km/s. (1) Special relativistic time dilation: Δt_SR = -v²/(2c²) × t ≈ -7.2 µs/day. (2) General relativistic time dilation: Δt_GR = +gh/c² × t ≈ +45.9 µs/day. Calculate both corrections (verify the numbers). Net correction = +38.7 µs/day. GPS pulses travel at c ≈ 3×10⁸ m/s. If GPS clocks are 38.7 µs fast per day, how many metres of position error would accumulate per day without correction?',",
+          "materials": "Calculator, pencil",
+          "discover": "38.7 µs × 3×10⁸ m/s = 11.6 km/day of position error. GPS must correct for both special and general relativistic effects continuously. Einstein's theories are not abstract philosophy — they are engineering requirements for systems you use every day.",
+          "go_deeper": "The Pound-Rebka experiment (1959) verified gravitational time dilation by measuring the shift in gamma ray frequency as it fell 22.5 metres in a Harvard laboratory. Calculate the expected fractional frequency shift: Δf/f = gh/c². Compare to their measured value (4.9×10⁻¹⁵).",
+          "silent_lesson": "Special and general relativistic time dilation; GPS correction; Pound-Rebka experiment; physics in everyday technology."
+        }
+      ]
+    },
+    {
+      "id": "bohr",
+      "name": "Niels Bohr",
+      "domain": "Atomic Structure / Spectral Lines",
+      "puzzles": [
+        {
+          "id": "bohr_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Fingerprint of Fire",
+          "hook": "Every element burns with a unique colour. Copper burns green, sodium burns yellow, lithium burns red. Each element has its own colour signature — why?",
+          "challenge": "With adult supervision: dip a clean copper wire in different salt solutions (table salt = sodium → yellow; copper sulfate → blue-green; potassium chloride → lilac; calcium chloride → orange-red). Hold each in the outer edge of a gas flame. Record the colour precisely. Now: view the same flames through a CD disc held at a slight angle (it acts as a diffraction grating). Do you see a continuous rainbow, or discrete coloured lines?',",
+          "materials": "Copper wire, various salt solutions, gas flame (adult supervision), CD disc",
+          "discover": "Each element produces discrete coloured lines — not a continuous rainbow. These are the element's 'spectral fingerprint.' The CD disperses the light into its components, revealing that each element emits only specific wavelengths, not all wavelengths.",
+          "go_deeper": "Astronomers identify elements in distant stars by their spectral fingerprints. Helium was discovered in the Sun before it was found on Earth. How does a spectroscope work? What does the arrangement of lines in hydrogen's spectrum tell you?",
+          "silent_lesson": "Atomic emission spectra; discrete energy levels; spectral fingerprinting; spectroscopy; discovering elements from light."
+        },
+        {
+          "id": "bohr_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Quantum Ladder",
+          "hook": "Electrons in atoms can only exist at specific energy levels — like rungs on a ladder. When they jump between rungs, they emit or absorb light of a very specific colour. Can you calculate the colours?",
+          "challenge": "The energy levels of hydrogen are: Eₙ = -13.6/n² eV (n = 1, 2, 3...). Calculate the energy of the photon emitted when an electron drops from: n=3 to n=2, n=4 to n=2, n=5 to n=2, n=3 to n=1. Convert each energy to wavelength (λ = hc/E). Which of these are visible? (Visible range: 400–700nm.) Compare your calculated wavelengths to the observed Balmer series: 656nm (red), 486nm (blue-green), 434nm (violet).',",
+          "materials": "Calculator, pencil",
+          "discover": "Your calculated values match the observed hydrogen spectrum exactly. The model (energy levels at -13.6/n² eV) predicts precisely which colours hydrogen emits — an extraordinary agreement between theory and experiment. Atoms are quantised: electrons live on a ladder, not a ramp.",
+          "go_deeper": "Why does the n=3→n=1 transition emit ultraviolet (not visible) light? What is special about n=1 (the ground state)? Why can't electrons fall below n=1?",
+          "silent_lesson": "Bohr model; energy levels Eₙ = -13.6/n²; Balmer series; E = hc/λ; why atomic spectra are discrete."
+        },
+        {
+          "id": "bohr_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Quantisation from Wave Conditions",
+          "hook": "The Bohr model's energy levels seem arbitrary — why those specific values? de Broglie showed that if electrons are waves, the allowed orbits are those where exactly a whole number of wavelengths fits around the circular path. Derive the energy levels from this wave condition.",
+          "challenge": "de Broglie wavelength: λ = h/mv. For a circular orbit of radius r, the wave condition: nλ = 2πr (n wavelengths fit around the orbit). Angular momentum: L = mvr = nh/2π (Planck's constant / 2π × integer). For a circular orbit: centripetal force = Coulomb force → mv²/r = ke²/r². From these three equations, derive: (1) the allowed radii rₙ, (2) the allowed energies Eₙ = -ke²/(2rₙ). Show that your formula gives Eₙ = -13.6/n² eV.',",
+          "materials": "Pencil, paper, algebra skills, constants table",
+          "discover": "The Bohr energy levels emerge naturally from wave quantisation — they are the only orbits where the electron wave constructively interferes with itself. No whole-number of wavelengths = destructive interference = no stable orbit. Quantisation is a wave phenomenon.",
+          "go_deeper": "This same 'standing wave in a circle' idea explains: the quantisation of electron orbitals in all atoms, the modes of vibration of a circular drum, and the quantum numbers in the full Schrödinger equation. Map the structural parallel in each case.",
+          "silent_lesson": "de Broglie wavelength; standing wave condition for orbits; angular momentum quantisation; derivation of Bohr energy levels from wave mechanics."
+        }
+      ]
+    },
+    {
+      "id": "heisenberg",
+      "name": "Werner Heisenberg",
+      "domain": "Uncertainty Principle / Quantum Measurement",
+      "puzzles": [
+        {
+          "id": "heisenberg_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "Knowing Where and How Fast",
+          "hook": "You can always know exactly where something is and how fast it's moving — right? Try to know both at exactly the same moment.",
+          "challenge": "A friend rolls a marble across the floor. Your task: at the moment you clap your hands, write down both the marble's exact position AND its exact speed. Now: to know its exact position, you must watch it momentarily — but it was moving the entire time you were 'measuring.' To know its speed, you must observe it for some time — but its position changes during that time. How precisely can you measure both simultaneously? Try different timing strategies and record your position vs speed error.',",
+          "materials": "Marble, ruler, timer, pencil",
+          "discover": "Knowing position precisely requires a short measurement time — during which speed is hard to average. Knowing speed precisely requires a long time — during which position changes. This is the classical version of a fundamental quantum truth: position and momentum cannot both be precisely defined simultaneously.",
+          "go_deeper": "The quantum version: Δx × Δp ≥ ħ/2. For an electron confined to 10⁻¹⁰ m (atom size), calculate the minimum uncertainty in momentum and then velocity. Compare to the speed of light. Is a precise classical description of an electron in an atom possible?",
+          "silent_lesson": "Heisenberg uncertainty principle; classical analogue; Δx × Δp ≥ ħ/2; quantum measurement; why atomic electrons cannot have classical trajectories."
+        },
+        {
+          "id": "heisenberg_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Diffraction as Uncertainty",
+          "hook": "When you force light through a very narrow slit, it spreads out — the narrower the slit, the wider the spread. This is not an imperfection of the apparatus. It is the Uncertainty Principle, made visible.",
+          "challenge": "Shine a laser pointer through slits of different widths (made from two razor blades or using a diffraction grating film). Measure the central bright band width W at a screen 50cm away for each slit width d. Plot W vs 1/d. Is the relationship linear? Now: interpret this as position-momentum uncertainty: the slit fixes the photon's y-position to within Δy = d. The spread angle θ determines the uncertainty in transverse momentum: Δp_y = p sin(θ). Calculate Δy × Δp_y for several slit widths. Compare to ħ = 1.05×10⁻³⁴ J·s.',",
+          "materials": "Laser pointer, adjustable slit (razor blades on cardboard), white screen, ruler",
+          "discover": "The product Δy × Δp_y is approximately constant across slit widths — and of order ħ. Single-slit diffraction is a macroscopic demonstration of quantum uncertainty. You can see the principle in action on a table-top.",
+          "go_deeper": "Double-slit experiment: if you cover one slit, the interference pattern disappears. You've gained information about which slit the photon went through (position certainty) — and the momentum uncertainty (spread angle) should increase. Does it? Test and explain.",
+          "silent_lesson": "Single-slit diffraction as position-momentum uncertainty; Δy × Δp_y ≈ ħ; wave-particle duality; complementarity."
+        },
+        {
+          "id": "heisenberg_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Deriving the Uncertainty Principle",
+          "hook": "The Uncertainty Principle is not just an experimental observation — it can be derived mathematically from the wave properties of quantum particles. Reconstruct the core argument.",
+          "challenge": "A quantum particle's wave function Ψ(x) can be decomposed into plane waves of different momenta (Fourier decomposition). A wave packet localised to width Δx requires contributions from momenta spanning Δk ~ 1/Δx (standard result from Fourier analysis). Since p = ħk, we get Δp = ħΔk ~ ħ/Δx, giving Δx × Δp ~ ħ. (1) Verify the Fourier relation Δx × Δk ~ 1 for a Gaussian wave packet by computing the Fourier transform of e^(-x²/2σ²) and identifying the width in k-space. (2) Show this gives Δx × Δp = ħ/2 for the minimum-uncertainty Gaussian state.',",
+          "materials": "Fourier transform reference, algebra skills, pencil",
+          "discover": "The Uncertainty Principle is not a statement about the limitations of our instruments. It is a mathematical property of waves: a wave localised in space necessarily has a broad frequency spectrum, and vice versa. This is why quantum particles with both definite position and momentum cannot exist — not as a practical limitation, but as a logical one.",
+          "go_deeper": "Energy-time uncertainty: ΔE × Δt ≥ ħ/2. This allows 'virtual particles' to exist for very short times, borrowing energy from the vacuum. The Casimir effect (measurable force between two uncharged metal plates in vacuum) is evidence for this. Research and describe the mechanism.",
+          "silent_lesson": "Fourier uncertainty relation; Δx × Δk ≥ 1/2; momentum as Fourier frequency; minimum uncertainty Gaussian; energy-time uncertainty."
+        }
+      ]
+    },
+    {
+      "id": "schrodinger",
+      "name": "Erwin Schrödinger",
+      "domain": "Wave Mechanics / Quantum Superposition",
+      "puzzles": [
+        {
+          "id": "schrodinger_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "The Undecided Coin",
+          "hook": "Flip a coin and cover it before looking. Is it heads or tails? You don't know — but is it heads OR tails, or is it something else?",
+          "challenge": "Flip a coin and cover it. Now: (1) Is it definitely heads, definitely tails, or genuinely neither until you look? (2) If a friend looks and says it's heads — does knowing change the coin? (3) Now put a coin in a box with a device that flips it if a particle decays (random quantum event). Seal the box. After 1 hour: the device may or may not have flipped the coin. Is the coin now in a definite state — or is it in both states simultaneously until you open the box? Write down your reasoning for each question.',",
+          "materials": "Coin, small box, pencil",
+          "discover": "A classical covered coin has a definite (unknown) state. A quantum particle is genuinely in superposition — BOTH states simultaneously — until measured. The coin in the box, coupled to a quantum process, inherits this quantum ambiguity. This is the paradox: quantum uncertainty, when connected to macroscopic objects, produces absurd conclusions.",
+          "go_deeper": "What is meant by 'measurement' in quantum mechanics? Why does looking at the coin (a macroscopic act) seem to 'collapse' the quantum superposition? Is this the observer, the apparatus, the air molecules, or something else?",
+          "silent_lesson": "Quantum superposition; Copenhagen interpretation; Schrödinger's cat; measurement problem; quantum vs classical probability."
+        },
+        {
+          "id": "schrodinger_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Standing Waves in a Box",
+          "hook": "A guitar string can only vibrate at specific frequencies — because both ends are fixed. Electrons in atoms do the same thing. Can you find the pattern for allowed frequencies?",
+          "challenge": "Model a guitar string: fix a rope between two points 1 metre apart. Shake it at different frequencies to find resonant modes. Count the nodes (stationary points) in each mode. Sketch modes with 1 loop, 2 loops, 3 loops, 4 loops. For each mode: (1) what is the wavelength in terms of the rope length L? (2) if wave speed v is constant, what is the frequency? Plot frequency vs mode number. What is the pattern?',",
+          "materials": "Rope or slinky, two fixed points (chairs), pencil, graph paper",
+          "discover": "Allowed wavelengths: λₙ = 2L/n (n = 1, 2, 3...). Frequencies: fₙ = nv/2L — exactly n times the fundamental. This is identical to the mathematical condition for electron energy levels in a 1D box: Eₙ = n²E₁. Quantum energy quantisation is standing wave quantisation.",
+          "go_deeper": "Real atomic orbitals are 3D standing waves, not 1D. The quantum numbers n, l, m correspond to the number of nodes in three perpendicular directions. Find an image of hydrogen atomic orbitals and identify the number of nodes in each.",
+          "silent_lesson": "Standing waves; modes of vibration; boundary conditions; analogy between guitar string and electron in box; quantum numbers from nodes."
+        },
+        {
+          "id": "schrodinger_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Particle in a Box",
+          "hook": "The Schrödinger equation for a particle confined in a box has exact solutions — energy levels that can be calculated analytically. Derive them.",
+          "challenge": "The time-independent wave equation in 1D: -ħ²/(2m) × d²Ψ/dx² = EΨ (inside the box, V=0). Boundary conditions: Ψ(0) = Ψ(L) = 0 (particle cannot exist outside). (1) Show that Ψₙ(x) = A sin(nπx/L) satisfies the equation. (2) Find the eigenvalues Eₙ. (3) Normalise: ∫₀ᴸ |Ψₙ|² dx = 1, find A. (4) Calculate E₁ for an electron (m = 9.1×10⁻³¹ kg) in a box of size L = 10⁻¹⁰ m (atom size). What is E₁ in eV?',",
+          "materials": "Pencil, paper, calculus reference, constants table",
+          "discover": "Eₙ = n²π²ħ²/(2mL²). For n=1, electron in atom-size box: E₁ ≈ 3.8 eV — comparable to real atomic energy scales. The quantisation emerges from boundary conditions (standing wave condition), not from any assumed quantum rule. The maths forces discreteness.",
+          "go_deeper": "How does E₁ scale with L? If you confine a particle in a box twice as small (L/2), how does the ground state energy change? This has a name in nanotechnology: quantum confinement — it's how quantum dots (coloured nanocrystals used in QLED TVs) work.",
+          "silent_lesson": "Schrödinger equation; particle in a box; energy eigenvalues; normalisation; quantum confinement; quantum dots."
+        }
+      ]
+    },
+    {
+      "id": "curie",
+      "name": "Marie Curie",
+      "domain": "Radioactivity / Atomic Structure / Scientific Method",
+      "puzzles": [
+        {
+          "id": "curie_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Invisible Ray",
+          "hook": "A rock sitting on a photographic plate in a dark room can expose the film — without any light. Something is coming out of the rock that we cannot see. What could it be?",
+          "challenge": "Use a Geiger counter (or a radiation monitor app on a phone — some phones have sensors) near: different locations in your school or home (basement vs upper floor), near granite or ceramic tiles, near a smoke detector (contains a tiny radioactive source), far from all materials in the open air. Record counts per minute for each. What varies? What is the 'background' radiation level? Is all radiation from human-made sources?',",
+          "materials": "Geiger counter app or detector, varied locations, pencil",
+          "discover": "Background radiation is everywhere — from rocks, cosmic rays, radon gas, even bananas (potassium-40). Granite is more radioactive than concrete. The cosmic ray contribution increases with altitude. Radiation is a natural phenomenon, not purely industrial.",
+          "go_deeper": "Radon gas (produced by uranium decay in rock) seeps into basements and is the second leading cause of lung cancer. How would you measure radon levels in a home? What mitigation strategies exist?",
+          "silent_lesson": "Background radiation; radioactivity as natural phenomenon; cosmic rays; radon; radiation is not exclusively man-made."
+        },
+        {
+          "id": "curie_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Half-Life Clock",
+          "hook": "Radioactive elements decay at a fixed rate — half their atoms transform every fixed time period (the half-life). This makes them perfect clocks for dating ancient materials.",
+          "challenge": "Simulate radioactive decay with 100 coins (each coin = one atom). Shake all and remove all that land 'heads' (these have 'decayed'). Count remaining and record. Repeat with remaining coins. Continue for 10 rounds. Plot: number remaining vs rounds. Fit an exponential curve. Identify the 'half-life' (number of rounds for the population to halve). Compare to theoretical: half-life = ln(2) ≈ 0.693 rounds (since each coin has 50% chance of decaying).',",
+          "materials": "100 coins (or dice, using a specific number as 'decay'), graph paper, pencil",
+          "discover": "The decay curve is exponential: N(t) = N₀ × (1/2)^(t/T½). Your simulation shows this directly — the half-life is consistent even though individual decays are random. Statistical regularity emerges from random individual events at large numbers.",
+          "go_deeper": "Carbon-14 has a half-life of 5,730 years. A wooden artifact contains 25% of the original C-14. How old is it? Radiocarbon dating works because living organisms exchange carbon with the atmosphere — and stop when they die.",
+          "silent_lesson": "Radioactive decay; half-life; exponential decay; N(t) = N₀ e^(-λt); radiocarbon dating principle; statistical regularity from quantum randomness."
+        },
+        {
+          "id": "curie_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Isotope Detective",
+          "hook": "The same element can have different numbers of neutrons — creating isotopes with identical chemistry but different nuclear stability. How do you identify them?",
+          "challenge": "Given decay data for three unknown isotopes (decay rate vs time, provided): (1) calculate the decay constant λ from the slope of ln(N) vs t. (2) Calculate the half-life T½ = ln(2)/λ. (3) Identify each isotope from a provided table of known half-lives. (4) If isotope A has a decay chain (A → B → C → stable D), and B has a shorter half-life than A, model the population of B over time. When does B reach its maximum population?',",
+          "materials": "Provided decay data, graph paper, calculator, isotope reference table",
+          "discover": "The population of a daughter isotope B peaks when its rate of creation (from A decay) equals its rate of decay. This is the principle of secular equilibrium — used in nuclear medicine to create short-lived isotopes from longer-lived parents for diagnostic use.",
+          "go_deeper": "Technetium-99m (half-life 6 hours) is the most widely used medical imaging isotope. It is produced from Molybdenum-99 (half-life 66 hours) in a 'radionuclide generator.' Using secular equilibrium, explain how a hospital can receive a Mo-99 source and 'milk' Tc-99m from it multiple times per day.",
+          "silent_lesson": "Decay constant; half-life calculation; isotope identification; secular equilibrium; nuclear medicine applications."
+        }
+      ]
+    },
+    {
+      "id": "rutherford",
+      "name": "Ernest Rutherford",
+      "domain": "Nuclear Model / Alpha Scattering / Transmutation",
+      "puzzles": [
+        {
+          "id": "rutherford_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Probing Without Seeing",
+          "hook": "How do you find the shape of something you cannot see, touch, or open? By throwing things at it and watching how they bounce.",
+          "challenge": "Put a small object (a marble, coin, or irregular shape) under a piece of cardboard on a table. Without lifting the cardboard, roll marbles across the table toward the hidden object from many different angles. Observe how each marble deflects. From the deflection patterns, draw a map of where the object must be and estimate its shape and size. How accurate is your map?',",
+          "materials": "Cardboard, small object (hidden), marbles, pencil, large paper",
+          "discover": "You can reconstruct the shape of the hidden object from deflection patterns — without ever seeing it directly. This is exactly how nuclear structure was discovered: by firing alpha particles at atoms and mapping the deflections. Most particles passed through; a few bounced back sharply.",
+          "go_deeper": "Rutherford expected most alpha particles to pass through with small deflections (based on the 'plum pudding' model). Instead, some bounced back almost 180°. He said it was 'as if you fired artillery shells at tissue paper and they came back and hit you.' What does a head-on bounce reveal about the structure inside?",
+          "silent_lesson": "Rutherford scattering; probing structure via scattering; discovery of nucleus; contrast with Thomson's model."
+        },
+        {
+          "id": "rutherford_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Nuclear Size",
+          "hook": "If the atom were the size of a football stadium, the nucleus would be a pea at the centre. Can you calculate the scale of this comparison?",
+          "challenge": "Atom: radius ≈ 10⁻¹⁰ m. Nucleus: radius ≈ 10⁻¹⁵ m. (1) Calculate the ratio of radii. (2) If the atom is scaled to 100m radius (a large stadium): what is the nucleus radius in this scale? (3) Calculate the ratio of volumes (V ∝ r³). What fraction of atomic volume is the nucleus? (4) Given that the nucleus contains ~99.97% of atomic mass: calculate the density of the nucleus (mass of proton = 1.67×10⁻²⁷ kg, radius of proton ≈ 0.85 fm = 0.85×10⁻¹⁵ m).',",
+          "materials": "Calculator, pencil",
+          "discover": "Nucleus radius is 10⁻¹⁵/10⁻¹⁰ = 10⁻⁵ of the atom. In the 100m stadium, the nucleus is 10⁻³ m = 1mm. Nuclear volume fraction = (10⁻⁵)³ = 10⁻¹⁵ of atomic volume. Nuclear density ≈ 10¹⁷ kg/m³ — 10¹⁴ times denser than water. A spoonful of nuclear matter would weigh 10¹¹ kg.",
+          "go_deeper": "Neutron stars are essentially giant nuclei (held together by gravity rather than nuclear force). Their density is similar to nuclear density. Calculate: a neutron star of 1.4 solar masses (2.8×10³⁰ kg) at nuclear density. What radius should it have? Compare to the actual observed neutron star radius (~10km).",
+          "silent_lesson": "Nuclear vs atomic scale; density calculation; nuclear density; neutron stars as macro-nuclear matter; Rutherford's scattering geometry."
+        },
+        {
+          "id": "rutherford_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Scattering Formula",
+          "hook": "Rutherford calculated the exact fraction of alpha particles that should be deflected by various angles — and the formula perfectly matched the data. Derive it.",
+          "challenge": "The alpha-particle scattering formula: dσ/dΩ = (Z₁Z₂e²/4Mv²)² × 1/sin⁴(θ/2). Derivation outline: (1) alpha particle (charge Z₁e) approaches gold nucleus (charge Z₂e) with velocity v, impact parameter b. (2) Coulomb force = Z₁Z₂e²/(4πε₀r²). (3) Trajectory calculation gives: b = (Z₁Z₂e²/4πε₀Mv²) × cot(θ/2). (4) Differential cross-section: dσ = 2πb|db|; dΩ = 2π sin(θ)|dθ|. Compute dσ/dΩ. Show the 1/sin⁴(θ/2) dependence. Predict: what fraction of particles deflect by more than 90°?',",
+          "materials": "Calculus reference, pencil, paper, constants table",
+          "discover": "The 1/sin⁴(θ/2) factor means: forward scattering (θ→0) is extremely common; backward scattering (θ→180°) is extremely rare. But ANY backward scattering would have been impossible in the Thomson ('plum pudding') model — the positive charge was spread too thinly. Even one backward-scattered particle proved the nuclear model.",
+          "go_deeper": "At high energies, alpha particles can penetrate the nuclear surface and Rutherford scattering breaks down (nuclei attract each other via strong nuclear force at short range). Calculate the minimum distance of closest approach for a 5.5 MeV alpha particle to a gold nucleus (Z=79). Is it within the nuclear radius?",
+          "silent_lesson": "Rutherford scattering cross-section; 1/sin⁴(θ/2) dependence; impact parameter; nuclear discovery from scattering data; limitations of the model."
+        }
+      ]
+    },
+    {
+      "id": "feynman",
+      "name": "Richard Feynman",
+      "domain": "Quantum Electrodynamics / Path Integrals / Problem Solving",
+      "puzzles": [
+        {
+          "id": "feynman_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Light Takes the Quickest Path",
+          "hook": "When light travels from water to air (or vice versa), it bends. Why does it bend at exactly the angle it does — and not some other angle?",
+          "challenge": "Model light bending with a rescue scenario: a lifeguard on a beach must reach a drowning swimmer. The lifeguard runs at 4m/s on sand and swims at 1m/s in water. The swimmer is 20m from shore and 30m along the beach. If the lifeguard runs straight toward the swimmer (crossing the beach at the shortest distance to the water), calculate rescue time. Now try different crossing points (5m, 10m, 15m, 20m, 25m from the current position along beach). Find the crossing point that minimises total time.',",
+          "materials": "Calculator, pencil, graph paper",
+          "discover": "The optimal path crosses the beach at a specific angle — where the ratio of sin(angle in sand)/sin(angle in water) = v_sand/v_water. This is Snell's Law. Light bends for the same reason: it always travels the quickest possible route. Nature is lazy in the most elegant way.",
+          "go_deeper": "This 'principle of least time' (Fermat's principle) also predicts reflection (angle of incidence = angle of reflection — verify geometrically). Why does light behave as if it 'knows' all possible paths and chooses the fastest? Feynman's answer: it takes all paths simultaneously.',",
+          "silent_lesson": "Snell's Law; Fermat's principle of least time; refraction; path integral concept; light choosing the fastest path."
+        },
+        {
+          "id": "feynman_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Arrow Diagrams",
+          "hook": "How do you calculate the probability of a quantum event when particles can travel every possible path simultaneously? Draw all the paths, assign each an arrow, add the arrows, square the result.",
+          "challenge": "Simulate QED probability calculation for double-slit interference: (1) For each path from source to a specific point on the screen, assign an arrow of fixed length but whose direction depends on the path length (one rotation per wavelength). (2) For paths through slit 1 and slit 2, calculate the path lengths to the first maximum and first minimum on the screen. (3) Add the two arrows (vector addition). (4) The square of the combined arrow length = probability. Verify that at the maximum, arrows point the same direction; at the minimum, they point opposite.',",
+          "materials": "Paper, protractor, ruler, pencil",
+          "discover": "The probability of a quantum event is the squared magnitude of the sum of complex amplitudes (arrows) over all paths. Constructive interference of arrows → high probability. Destructive → zero probability. This geometric picture replaces the differential equations of standard quantum mechanics.",
+          "go_deeper": "Feynman's path integral: probability amplitude = Σ exp(iS/ħ) over all paths, where S is the classical action. In the classical limit (ħ→0), the phases oscillate wildly and cancel except near the path of stationary action — the classical trajectory. Show that this gives back Newton's laws.',",
+          "silent_lesson": "Feynman diagrams and path amplitudes; complex probability amplitude; double-slit as amplitude sum; path integral principle; classical limit."
+        },
+        {
+          "id": "feynman_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Thinking Like a Physicist",
+          "hook": "Feynman insisted that a phenomenon is not understood until you can explain it simply enough that a first-year student could follow the argument. Can you find the simplest explanation for why mirrors reverse left-right but not up-down?",
+          "challenge": "(1) Formulate the question precisely: does a mirror reverse left-right? Take a flat mirror and verify. (2) Generate three hypotheses: (a) mirrors reverse left-right because of some optical property, (b) mirrors don't actually reverse left-right — they reverse front-back, (c) the reversal is a perceptual illusion from imagining yourself in the mirror's position. (3) Design a definitive experiment that distinguishes between (a), (b), and (c). Execute it. (4) Write the clearest, simplest possible correct explanation — in language a 10-year-old would understand.',",
+          "materials": "Flat mirror, paper with letters on it, pencil",
+          "discover": "Mirrors reverse front-back (your nose points at the mirror; the image's nose points toward you). Left-right reversal is an artefact of imagining yourself having turned around — which you do when you compare yourself to someone facing you. The mirror itself does not prefer left-right. The simplest explanation requires precisely defining 'reversal.'",
+          "go_deeper": "Why does a horizontal mirror (lying flat, like a lake) NOT appear to reverse up-down? By exactly the same logic, it reverses front-back (above vs below the mirror plane). Find the general principle.',",
+          "silent_lesson": "Mirror symmetry; front-back reversal vs left-right; precise definition of concepts; Feynman's standard of explanation; scientific clarity."
+        }
+      ]
+    },
+    {
+      "id": "boltzmann",
+      "name": "Ludwig Boltzmann",
+      "domain": "Statistical Mechanics / Entropy / Arrow of Time",
+      "puzzles": [
+        {
+          "id": "boltzmann_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "Why Things Get Messy",
+          "hook": "A tidy room becomes messy by itself. A messy room never becomes tidy by itself. Why does disorder only ever increase?",
+          "challenge": "Put 4 red marbles on the left of a tray and 4 blue marbles on the right. This is the 'ordered' state. Now shake the tray randomly for 5 seconds. Observe. Repeat 10 times. How many times do all red marbles return to the left half spontaneously? Now: count the number of ways to arrange 8 marbles where all 4 red are on the left vs all mixed. Which arrangement has more possibilities?',",
+          "materials": "Tray, 4 red and 4 blue marbles",
+          "discover": "There are far more 'mixed' arrangements than 'ordered' ones. Random shuffling produces mixed states almost always because there are many more ways to be mixed. The system doesn't 'want' disorder — it's just that disorder has more options, and random processes tend toward the most common outcome.",
+          "go_deeper": "Calculate: with 8 marbles in 2 halves, how many arrangements have all red on the left? How many arrangements exist in total? What fraction is 'ordered'? How does this fraction change for 16 marbles? 100 marbles?",
+          "silent_lesson": "Statistical definition of entropy; microstates; entropy as number of arrangements; why disorder increases; Boltzmann's S = k ln W."
+        },
+        {
+          "id": "boltzmann_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Temperature from Randomness",
+          "hook": "Temperature is not a fundamental property of matter. It is an average over billions of particles each moving at different speeds. Can you derive what 'temperature' really means?",
+          "challenge": "Simulate a gas of 20 particles: assign each a random speed (roll a die, multiply by 100 m/s). Calculate the average kinetic energy = ½m<v²> (average of v²). Kinetic theory: average KE per particle = (3/2)kT. Calculate the 'temperature' implied by your simulated gas. Now: double all speeds. How does this change average KE? How does it change temperature? Triple one particle's speed — how does this affect the temperature?',",
+          "materials": "Dice, calculator, pencil",
+          "discover": "Temperature = (2/3) × average KE / k. Doubling all speeds quadruples average KE and quadruples temperature. Changing one particle doesn't much change the average. Temperature is a property of a collection, not of individual particles — you can't assign a temperature to a single atom.",
+          "go_deeper": "Maxwell-Boltzmann distribution: the fraction of molecules at speed v is proportional to v² × e^(-mv²/2kT). Plot this for T=300K and T=600K for nitrogen molecules. What is the most probable speed? The average speed? The rms speed? Why are they different?",
+          "silent_lesson": "Kinetic theory of temperature; temperature as average KE; Maxwell-Boltzmann distribution; statistical nature of thermodynamic quantities."
+        },
+        {
+          "id": "boltzmann_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Entropy as Counting",
+          "hook": "Entropy S = k ln W, where W is the number of microscopic arrangements consistent with a given macroscopic state. Derive the Second Law of Thermodynamics from this equation alone.",
+          "challenge": "(1) For two systems A (W_A arrangements) and B (W_B arrangements): total arrangements = W_A × W_B. Show that S_total = S_A + S_B (entropy is additive — it uses logarithms). (2) When systems are brought into thermal contact, they exchange energy. The total W (summed over all ways to split the total energy between A and B) is maximised when ∂(ln W_A)/∂E_A = ∂(ln W_B)/∂E_B. Show this condition defines a common temperature T = 1/(k × ∂S/∂E). (3) Since total W only increases or stays the same when constraint is removed, show that total entropy S can only increase — this IS the Second Law.',",
+          "materials": "Pencil, paper, calculus reference",
+          "discover": "The Second Law is not a separate postulate — it follows from the statistical definition of entropy and the mathematical property that removing constraints always allows access to more microstates. The arrow of time (past vs future) emerges from statistics: high-entropy states are overwhelmingly more common than low-entropy ones.",
+          "go_deeper": "Maxwell's Demon: a tiny demon opens and closes a door to let fast molecules through one way. Without doing work, it creates a temperature gradient — apparently violating the Second Law. Research Szilard's resolution: why does the demon's act of measurement generate entropy? This connects thermodynamics to information theory.",
+          "silent_lesson": "Boltzmann entropy; S = k ln W; derivation of Second Law; temperature from entropy maximisation; Maxwell's Demon; thermodynamics-information connection."
+        }
+      ]
+    },
+    {
+      "id": "dirac",
+      "name": "Paul Dirac",
+      "domain": "Quantum Mechanics / Antimatter / Mathematical Elegance",
+      "puzzles": [
+        {
+          "id": "dirac_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "The Mirror Particle",
+          "hook": "Every particle has a mirror-image twin with the same mass but opposite charge. When they meet, they annihilate each other — converting entirely to light. Where does the matter go?",
+          "challenge": "Model particle-antiparticle annihilation with paper: draw an electron (circle with minus) and a positron (circle with plus). When they meet, they 'annihilate.' Use E=mc² to calculate how much energy is released by annihilating one electron-positron pair (m_e = 9.1×10⁻³¹ kg, c = 3×10⁸ m/s). Convert to electronvolts (1 eV = 1.6×10⁻¹⁹ J). Compare to the energy released by burning one atom of carbon (about 4 eV). Which releases more energy per particle?',",
+          "materials": "Calculator, pencil, paper for diagrams",
+          "discover": "E = 2m_e c² ≈ 1.022 MeV = 1,022,000 eV — one million times more than burning carbon. Matter-antimatter annihilation is the most efficient energy source possible (100% mass → energy conversion). Mass is concentrated energy.",
+          "go_deeper": "PET (Positron Emission Tomography) scanners work by detecting the two gamma rays produced when a positron from a radioactive tracer annihilates with an electron in tissue. Calculate: what is the wavelength of the two gamma rays? Why do they travel in exactly opposite directions?',",
+          "silent_lesson": "Antimatter; E=mc²; pair annihilation; mass-energy equivalence; PET scanner application."
+        },
+        {
+          "id": "dirac_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Prediction from Mathematics",
+          "hook": "A physicist combined special relativity and quantum mechanics into one equation. The equation had solutions corresponding to particles with positive energy — and equally valid solutions with negative energy. Instead of discarding these 'wrong' solutions, he predicted that they were real. He was right.",
+          "challenge": "Examine the solutions of the following relativistic equation (simplified version): for an electron, there are two positive-energy solutions (spin up, spin down) and two negative-energy solutions. If negative-energy states are filled (the negative-energy sea), a 'hole' in the sea behaves like a positive-energy particle with positive charge. (1) List the quantum numbers of the electron: mass, charge, spin. (2) List the quantum numbers of the 'hole': mass (same), charge (opposite), spin (same). What particle does this describe? (3) When was the positron actually discovered?',",
+          "materials": "Pencil, paper",
+          "discover": "The 'hole' is the positron — the electron's antiparticle. Dirac predicted it in 1928 from pure mathematical necessity; Carl Anderson discovered it experimentally in 1932. Mathematical elegance forced the prediction; experiment confirmed it. This is how theoretical physics works.",
+          "go_deeper": "Dirac's equation also predicted electron spin (two-valued) without any assumption about spin. Show that a 2-component wave function (spinor) is the minimal solution consistent with the relativistic energy-momentum relation E² = (pc)² + (m_ec²)².",
+          "silent_lesson": "Dirac equation; prediction of antimatter; Dirac sea; positron discovery; mathematics predicting physical reality."
+        },
+        {
+          "id": "dirac_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Spin from Relativity",
+          "hook": "Electron spin was discovered experimentally and added to quantum mechanics as a new postulate. But it is actually a necessary consequence of combining quantum mechanics with special relativity. Reconstruct Dirac's derivation at its core.",
+          "challenge": "The relativistic energy-momentum relation: E² = (pc)² + (mc²)². Schrödinger's approach: replace E → iħ ∂/∂t and p → -iħ∇. This gives the Klein-Gordon equation (second order in time and space). The key insight: factorise E² - p²c² - m²c⁴ as (αᵢpᵢc + βmc²)². For this factorisation to work with αᵢ and β being numbers: show that it is impossible (because αᵢ² = β² = I and αᵢαⱼ + αⱼαᵢ = 0 for i≠j cannot be satisfied by ordinary numbers). Conclude: αᵢ and β must be matrices. The minimal solution: 4×4 matrices. This is the relativistic spinor — it naturally incorporates two spin states for particle and two for antiparticle.',",
+          "materials": "Matrix algebra reference, pencil, paper",
+          "discover": "Spin is not an additional assumption in relativistic quantum mechanics — it is forced by the factorisation that makes a first-order equation possible. The 4-component structure is not freedom but necessity: it automatically gives spin-½, and also predicts the antiparticle.",
+          "go_deeper": "The Dirac matrices (γ matrices) satisfy γᵘγᵛ + γᵛγᵘ = 2gᵘᵛI (the Clifford algebra). Show that the two-dimensional Pauli matrices σᵢ satisfy the analogous relation σᵢσⱼ + σⱼσᵢ = 2δᵢⱼI. How are the Pauli matrices related to the Dirac gamma matrices?",
+          "silent_lesson": "Dirac equation derivation; spin from relativistic factorisation; Clifford algebra; 4-component spinor; spinor as minimal representation of Lorentz group."
+        }
+      ]
+    },
+    {
+      "id": "lorentz",
+      "name": "Hendrik Lorentz",
+      "domain": "Relativity / Transformation / Aether",
+      "puzzles": [
+        {
+          "id": "lorentz_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "Moving Clocks Run Slow",
+          "hook": "A clock on a moving train ticks slower than an identical clock on the platform — even though neither clock is broken. How can motion affect time?",
+          "challenge": "Model a 'light clock': light bounces between two mirrors 1 metre apart. One tick = light travels 2m. (1) In the clock's rest frame: period = 2m / c. (2) For an observer watching the clock move sideways at speed v: the light must travel a diagonal path (it still moves at c, but the mirror has moved). The light path length is longer — calculate it using Pythagoras for one tick: the light travels √(1² + (v×t/2)²) × 2 in the observer's frame. Set this equal to c × t. Solve for t in terms of t₀ (rest frame period) and v.',",
+          "materials": "Pencil, paper, Pythagorean theorem",
+          "discover": "t = t₀/√(1 - v²/c²). Moving clocks run slower by this factor. The faster the clock moves, the more slowly it ticks. At v = 0.866c, the clock runs half as fast. This is not a mechanical effect — it is the nature of time itself.",
+          "go_deeper": "Muons created in the upper atmosphere (90km up) at 0.998c should decay before reaching sea level (half-life 2.2µs in their rest frame → 660m range). But we detect them at sea level. Calculate their time-dilated lifetime in Earth's frame and verify they can reach us.',",
+          "silent_lesson": "Time dilation; light clock derivation; Lorentz factor; muon lifetime as experimental proof; time as not absolute."
+        },
+        {
+          "id": "lorentz_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Contracted Ruler",
+          "hook": "Not only do moving clocks run slow — moving objects are also shorter in the direction of motion. This is not an optical illusion; the object genuinely fits into a smaller space.",
+          "challenge": "(1) Calculate the relativistically contracted length of a 1-metre ruler moving at v = 0.6c, 0.8c, 0.9c, 0.99c, 0.999c. Use the contraction formula L = L₀√(1 - v²/c²). Plot contracted length vs speed. (2) The 'ladder paradox': a 10m ladder moves at 0.866c (γ=2) into a 5m barn. In the barn frame, the ladder contracts to 5m — it fits. In the ladder frame, the barn contracts to 2.5m — it doesn't fit. Design the thought experiment and explain how both observers can be simultaneously correct.',",
+          "materials": "Calculator, graph paper, pencil",
+          "discover": "At 0.866c, the ruler contracts to half its rest length. The ladder paradox is resolved by simultaneity — the events 'barn doors close simultaneously' are NOT simultaneous in the ladder's frame. Special relativity requires abandoning absolute simultaneity, not just absolute time.",
+          "go_deeper": "The spacetime interval: s² = c²t² - x² is invariant (same value in all inertial frames). Verify: for two events that are simultaneous in one frame (t=0, x=L), calculate s². For the same events in a moving frame, they are not simultaneous. Show that s² is the same in both frames.',",
+          "silent_lesson": "Length contraction; Lorentz factor; ladder paradox; relativity of simultaneity; spacetime interval invariance."
+        },
+        {
+          "id": "lorentz_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Transformation That Keeps Light Constant",
+          "hook": "What is the unique transformation of space and time coordinates that preserves the speed of light in all frames? Derive it from the requirement that c is constant.",
+          "challenge": "Event P has coordinates (t, x) in frame S and (t', x') in frame S' (moving at v relative to S). Require: (1) the transformation is linear (x' = ax + bt, t' = cx + dt), (2) the origin of S' is at x = vt in S, (3) the inverse transformation has the same form with v → -v, (4) the speed of light c is the same in both frames: x=ct implies x'=ct'. From these four conditions, derive the relativistic space-time transformation: x' = γ(x - vt), t' = γ(t - vx/c²), where γ = 1/√(1 - v²/c²).',",
+          "materials": "Algebra skills, pencil, paper",
+          "discover": "The four conditions uniquely determine the Lorentz transformation — there is no other consistent linear transformation that preserves the speed of light. The factor γ is forced. The 'vx/c²' term in the time transformation is the origin of relative simultaneity. Lorentz had found this transformation empirically before Einstein gave it its physical meaning.",
+          "go_deeper": "Show that in the limit v ≪ c, the Lorentz transformation reduces to the Galilean transformation (x' = x - vt, t' = t). What term in the time transformation is responsible for the non-Galilean behaviour, and why is it negligible at low speeds?",
+          "silent_lesson": "Lorentz transformation derivation; four axioms uniquely determine it; relative simultaneity; Galilean limit; Lorentz vs Einstein interpretation."
+        }
+      ]
+    }
+  ]
+}
