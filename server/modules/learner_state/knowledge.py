@@ -48,22 +48,53 @@ async def record_demonstration(conn, learner_id: str, concepts: list[str]):
             )
 
 
-async def record_misconception(conn, learner_id: str, concepts: list[str]):
+async def record_misconception(conn, learner_id: str, concepts: list[str], session_id: str = ''):
+    """
+    Record a misconception for each concept.
+
+    If the misconception is from the same session as last_misconception_session,
+    apply only 0.5× weight to the mastery penalty — frustration in one session
+    shouldn't permanently tank mastery.
+
+    If it's a new session, reset session_misconception_count to 1 and apply full weight.
+    """
     for concept_id in concepts:
-        row = await _raw_counts(conn, learner_id, concept_id)
+        row = await conn.fetchrow(
+            """
+            SELECT exposures, demonstrations, misconceptions,
+                   last_misconception_session, session_misconception_count
+            FROM learner_state.knowledge
+            WHERE learner_id = $1 AND concept_id = $2
+            """,
+            learner_id, concept_id,
+        )
         if row:
+            same_session = (session_id and session_id == (row["last_misconception_session"] or ""))
+
+            if same_session:
+                # Same session — apply 0.5× weight (add 0.5 effective misconception)
+                effective_misconceptions = row["misconceptions"] + 0.5
+                new_session_count = (row["session_misconception_count"] or 0) + 1
+            else:
+                # New session — full weight
+                effective_misconceptions = row["misconceptions"] + 1
+                new_session_count = 1
+
             new_mastery = _mastery(
-                row["exposures"], row["demonstrations"], row["misconceptions"] + 1
+                row["exposures"], row["demonstrations"], effective_misconceptions
             )
             await conn.execute(
                 """
                 UPDATE learner_state.knowledge
                 SET misconceptions = misconceptions + 1,
                     p_mastery = $3,
-                    last_updated = now()
+                    last_updated = now(),
+                    last_misconception_session = $4,
+                    session_misconception_count = $5
                 WHERE learner_id = $1 AND concept_id = $2
                 """,
                 learner_id, concept_id, new_mastery,
+                session_id or '', new_session_count,
             )
 
 

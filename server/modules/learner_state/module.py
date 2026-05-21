@@ -6,15 +6,20 @@ Phase 3 (post-generation): updates knowledge, emotion, language, analogy scores,
                            and the psychological profile (psyche).
 """
 import asyncio
+from datetime import date
 
 from kernel.context import Event, KernelContext, ModuleResult
 from kernel.module import Module
 from foundation.observability import get_logger
 from foundation.outbox import publish
+from foundation import metrics as metrics_mod
 from modules.learner_state import profile as prof
 from modules.learner_state import knowledge as know
 from modules.learner_state.signals import extract as extract_signals
 from modules.learner_state import psyche as psy
+from modules.learner_state import curiosity as cur
+from modules.learner_state import episodes as epi
+from modules.learner_state import open_loops as opl
 from config import Config
 
 log = get_logger("learner.state")
@@ -94,6 +99,34 @@ class LearnerStateModule(Module):
             except Exception:
                 pass   # puzzle engine not yet active — silent fallback
 
+            # ── Curiosity tracker injection ───────────────────────────────
+            try:
+                threads = await cur.load(conn, ctx.learner_id, ctx.session_id)
+                curiosity_ctx = cur.build_curiosity_context(threads)
+                if curiosity_ctx:
+                    learner_ctx = learner_ctx + "\n\n" + curiosity_ctx
+            except Exception:
+                pass   # never block generation on curiosity tracker
+
+            # ── Episodic memory injection ─────────────────────────────────
+            try:
+                episode_list = await epi.load_for_prompt(conn, ctx.learner_id)
+                episode_ctx  = epi.build_episode_context(episode_list)
+                if episode_ctx:
+                    learner_ctx = learner_ctx + "\n\n" + episode_ctx
+            except Exception:
+                pass   # never block generation on episodic memory
+
+            # ── Open-loop injection ───────────────────────────────────────
+            try:
+                await opl.expire_old(conn, ctx.learner_id)
+                loops = await opl.load_open(conn, ctx.learner_id)
+                loop_ctx = opl.build_context(loops)
+                if loop_ctx:
+                    learner_ctx = learner_ctx + "\n\n" + loop_ctx
+            except Exception:
+                pass   # never block generation on open loops
+
             return ModuleResult(data={
                 "learner_context": learner_ctx,
                 "profile": profile,
@@ -104,6 +137,32 @@ class LearnerStateModule(Module):
             # ── Phase 3: post-generation ───────────────────────────────────
             signals     = extract_signals(ctx.message)
             eval_result = await _evaluate(ctx.message, signals["emotion_hint"])
+
+            # ── Episodic memory — detect and store meaningful moments ─────
+            try:
+                ep_type = epi.detect_type(ctx.message)
+                if ep_type:
+                    sig      = extract_signals(ctx.message)
+                    concepts = sig["concepts"]
+                    patterns = await epi.get_patterns_for_message(conn, concepts)
+                    await epi.store(conn, ctx.learner_id, ep_type,
+                                    ctx.message, concepts, patterns)
+            except Exception as e:
+                log.warning("episode_store_failed", error=str(e))
+
+            # ── Curiosity tracker update ───────────────────────────────────
+            cur_threads: list = []
+            try:
+                recent_kws = await cur.get_recent_keywords(conn, ctx.learner_id, ctx.session_id)
+                signal     = cur.detect_signal(ctx.message, recent_kws)
+                cur_threads = await cur.load(conn, ctx.learner_id, ctx.session_id)
+                cur_threads = cur.update_threads(cur_threads, signal, ctx.message)
+                await cur.save(conn, ctx.learner_id, ctx.session_id, cur_threads)
+                if signal["type"] != "none":
+                    log.debug("curiosity_signal", learner_id=ctx.learner_id,
+                              type=signal["type"], heat_delta=signal["heat_delta"])
+            except Exception as e:
+                log.warning("curiosity_update_failed", error=str(e))
 
             misconception = eval_result.get("misconception", "")
             misc_concept  = eval_result.get("misconception_concept", "")
@@ -117,7 +176,9 @@ class LearnerStateModule(Module):
             if signals["concepts"]:
                 await know.record_exposure(conn, ctx.learner_id, signals["concepts"])
             if misconception and misc_concept:
-                await know.record_misconception(conn, ctx.learner_id, [misc_concept])
+                await know.record_misconception(
+                    conn, ctx.learner_id, [misc_concept], session_id=ctx.session_id
+                )
             if not misconception and signals["concepts"]:
                 await know.record_demonstration(conn, ctx.learner_id, signals["concepts"])
 
@@ -150,6 +211,25 @@ class LearnerStateModule(Module):
                    if k not in ("sample_count", "learner_id")},
             )
 
+            # ── Open-loop generation ───────────────────────────────────────
+            try:
+                ep_type_for_loop = epi.detect_type(ctx.message)
+                total_q = profile.get("total_questions", 0) + 1
+                if opl.should_generate(total_q, ep_type_for_loop):
+                    recent_episodes = await epi.load_for_prompt(conn, ctx.learner_id)
+                    q_text, q_concepts = opl.generate(
+                        concepts=signals.get("concepts", []),
+                        episodes=recent_episodes,
+                        threads=cur_threads,
+                    )
+                    if q_text:
+                        await opl.store(conn, ctx.learner_id, q_text,
+                                        q_concepts or signals.get("concepts", []))
+                        log.debug("open_loop_generated", learner_id=ctx.learner_id,
+                                  question=q_text[:60])
+            except Exception as e:
+                log.warning("open_loop_generate_failed", error=str(e))
+
             # Log interaction
             await conn.execute(
                 """
@@ -172,6 +252,19 @@ class LearnerStateModule(Module):
                     {"learner_id": ctx.learner_id, "weak_concepts": weak},
                     aggregate="learner", aggregate_id=ctx.learner_id,
                 )
+
+            # ── Pilot metrics (fire-and-forget, never block) ───────────────
+            try:
+                await metrics_mod.record_interaction(
+                    conn,
+                    learner_id=ctx.learner_id,
+                    session_date=date.today(),
+                    concepts=signals.get("concepts", []),
+                    had_misconception=bool(misconception and misc_concept),
+                    harmful=False,
+                )
+            except Exception as _m_exc:
+                log.warning("metrics_fire_forget_failed", error=str(_m_exc))
 
             # ── Trigger Krishna Oracle asynchronously ──────────────────────
             # Periodic: every KRISHNA_INTERVAL interactions
@@ -211,6 +304,9 @@ class LearnerStateModule(Module):
             "learner_state.emotion_history",
             "learner_state.interactions",
             "learner_state.psyche",
+            "learner_state.episodes",
+            "learner_state.curiosity_sessions",
+            "learner_state.open_loops",
         ]:
             await conn.execute(
                 f"DELETE FROM {table} WHERE learner_id = $1", learner_id

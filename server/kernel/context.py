@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, date
 from typing import Any
 
 
@@ -17,6 +17,12 @@ class Event:
     trace_id: str = ""
     schema_ver: int = 1
     ts: datetime = field(default_factory=datetime.utcnow)
+
+
+def _derive_session_id(learner_id: str) -> str:
+    """All messages in the same calendar day share a session_id."""
+    today = date.today().isoformat()
+    return f"{learner_id}:{today}"
 
 
 @dataclass
@@ -39,6 +45,12 @@ class KernelContext:
     model_used: str = ""
     # Database connection (injected by kernel, shared across modules in one transaction)
     db: Any = None
+    # Session ID — derived from learner_id + date so all messages in a day share one session
+    session_id: str = field(default="")
+
+    def __post_init__(self):
+        if not self.session_id:
+            self.session_id = _derive_session_id(self.learner_id)
 
 
 @dataclass

@@ -13,6 +13,7 @@ from kernel.context import Event, KernelContext, ModuleResult
 from kernel.module import Module
 from foundation.observability import get_logger
 from modules.tutor_runtime.prompt import build_system_prompt, build_messages
+from modules.tutor_runtime.verifier import verify_math
 
 log = get_logger("tutor.runtime")
 
@@ -36,10 +37,7 @@ def _detect_domains(text: str) -> list[str]:
 def _pick_model(message: str, history_len: int, override: str | None) -> str:
     if override:
         return override
-    # Use fast model for short/simple queries to reduce latency
-    if history_len == 0 and len(message.split()) < 8:
-        return Config.FAST_MODEL
-    return Config.DEFAULT_MODEL
+    return Config.FAST_MODEL
 
 
 class TutorRuntimeModule(Module):
@@ -62,17 +60,54 @@ class TutorRuntimeModule(Module):
 
         reply, model_used = await self._call_ollama(model, messages)
 
+        # ── Math verification (Gap 8) ──────────────────────────────────────
+        is_correct, math_error = await verify_math(reply, Config.FAST_MODEL)
+        if not is_correct:
+            log.warning(
+                "math_error_detected",
+                model=model_used,
+                error=math_error,
+                learner_id=ctx.learner_id,
+            )
+            # One retry with a correction hint appended to the last user message
+            retry_messages = messages.copy()
+            if retry_messages and retry_messages[-1]["role"] == "user":
+                retry_messages[-1] = {
+                    "role": "user",
+                    "content": (
+                        retry_messages[-1]["content"]
+                        + f"\n\nNote: your previous attempt had this error: {math_error}. "
+                        "Please correct it."
+                    ),
+                }
+            retry_reply, retry_model = await self._call_ollama(model, retry_messages)
+            retry_correct, retry_error = await verify_math(retry_reply, Config.FAST_MODEL)
+            if retry_correct:
+                reply = retry_reply
+                model_used = retry_model
+                is_correct = True
+            else:
+                log.warning(
+                    "math_retry_also_failed",
+                    model=retry_model,
+                    error=retry_error,
+                    learner_id=ctx.learner_id,
+                    msg="Failing open — returning original reply.",
+                )
+                # Fail open: return original reply unchanged
+
         response_domains = _detect_domains(reply)
 
         return ModuleResult(data={
             "response_text": reply,
             "model_used": model_used,
             "response_domains": response_domains,
+            "math_verified": is_correct,
         })
 
     async def _call_ollama(self, model: str, messages: list[dict]) -> tuple[str, str]:
         try:
-            async with httpx.AsyncClient(timeout=180) as client:
+            async with httpx.AsyncClient(timeout=60) as client:
                 r = await client.post(
                     f"{Config.OLLAMA_URL}/api/chat",
                     json={"model": model, "messages": messages, "stream": False},

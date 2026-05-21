@@ -7,6 +7,62 @@ from modules.learner_state.knowledge import weak_concepts, strong_concepts
 
 log = get_logger("learner_state.profile")
 
+# Domains available for introduction when a child has few analogy signals
+_CANDIDATE_DOMAINS = ["nature", "cooking", "transport"]
+
+# Threshold: domain score above this AND enough mastered concepts → candidate for retirement
+_RETIREMENT_SCORE_THRESHOLD = 0.70
+_RETIREMENT_MASTERY_COUNT = 3   # concepts mastered before we retire the top domain
+_MASTERY_THRESHOLD = 0.72       # p_mastery above this = "mastered"
+_LOW_SIGNAL_THRESHOLD = 0.2     # scores below this = no real signal yet
+
+
+def get_active_analogies(profile: dict, mastered_concepts: list[str]) -> dict:
+    """
+    Returns the analogy domains Parth should actively use.
+
+    Retires a domain when:
+      - The child has mastered >= 3 concepts (p_mastery > 0.72) AND
+      - The top domain score is > 0.70 (the EMA is high — analogy has been heavily used)
+
+    Returns: {"active": [domain,...], "retired": [domain,...], "introduce": domain|None}
+    """
+    analogy_scores: dict = profile.get("analogy_scores") or {}
+    if isinstance(analogy_scores, str):
+        analogy_scores = json.loads(analogy_scores)
+
+    if not analogy_scores:
+        # No signal yet — suggest the first candidate domain
+        for candidate in _CANDIDATE_DOMAINS:
+            return {"active": [], "retired": [], "introduce": candidate}
+        return {"active": [], "retired": [], "introduce": None}
+
+    # Sort domains by score descending
+    sorted_domains = sorted(analogy_scores.items(), key=lambda x: x[1], reverse=True)
+    top_domain, top_score = sorted_domains[0]
+
+    retired = []
+    active = [d for d, _ in sorted_domains]
+    introduce = None
+
+    n_mastered = len(mastered_concepts)
+
+    # Retire top domain if the child has learned enough with it
+    if n_mastered >= _RETIREMENT_MASTERY_COUNT and top_score > _RETIREMENT_SCORE_THRESHOLD:
+        retired.append(top_domain)
+        active = [d for d in active if d != top_domain]
+
+    # Determine if we should introduce a new domain
+    # Condition: all other domains have very low signal (< 0.2)
+    other_scores = [s for d, s in sorted_domains if d != top_domain]
+    if not other_scores or all(s < _LOW_SIGNAL_THRESHOLD for s in other_scores):
+        for candidate in _CANDIDATE_DOMAINS:
+            if candidate not in analogy_scores:
+                introduce = candidate
+                break
+
+    return {"active": active, "retired": retired, "introduce": introduce}
+
 
 async def get_or_create(conn, learner_id: str, name: str = "", grade: int = 6) -> dict:
     row = await conn.fetchrow(
@@ -150,11 +206,27 @@ async def build_learner_context(
     else:
         lang_str = "Hindi-English mix"
 
-    # Top 2 analogy domains
+    # Analogy domain retirement logic
+    mastered_rows = await conn.fetch(
+        """
+        SELECT concept_id FROM learner_state.knowledge
+        WHERE learner_id = $1 AND p_mastery > $2
+        """,
+        learner_id, _MASTERY_THRESHOLD,
+    )
+    mastered_concepts = [r["concept_id"] for r in mastered_rows]
+
+    analogy_rec = get_active_analogies(profile, mastered_concepts)
+    active_domains = analogy_rec["active"]
+    retired_domains = analogy_rec["retired"]
+    introduce_domain = analogy_rec["introduce"]
+
+    # Top 2 active analogy domains (for prompt context)
     analogy_scores: dict = profile.get("analogy_scores") or {}
     if isinstance(analogy_scores, str):
         analogy_scores = json.loads(analogy_scores)
-    top_domains = sorted(analogy_scores, key=lambda k: analogy_scores[k], reverse=True)[:2]
+    top_domains = [d for d in sorted(analogy_scores, key=lambda k: analogy_scores[k], reverse=True)
+                   if d in active_domains][:2]
 
     # High-engagement subjects
     motiv: dict = profile.get("motivational_profile") or {}
@@ -194,6 +266,22 @@ async def build_learner_context(
     if high_subjects:
         lines.append("High-engagement subjects: " + ", ".join(high_subjects))
     lines.append(tone)
+
+    # Analogy retirement and introduction hints
+    if retired_domains:
+        top_retired = retired_domains[0]
+        suggestion = introduce_domain or "a new domain"
+        lines.append(
+            f"{top_retired.capitalize()} analogies have served their purpose for mastered "
+            f"concepts — try introducing a new domain (suggest: {suggestion}) to build transfer."
+        )
+    elif introduce_domain:
+        top_active = (top_domains[0] if top_domains else
+                      next(iter(sorted(analogy_scores, key=lambda k: analogy_scores[k], reverse=True)), "current"))
+        lines.append(
+            f"Consider introducing {introduce_domain} analogies to build conceptual transfer "
+            f"beyond {top_active}."
+        )
 
     # Psyche-based pedagogical calibration
     if psyche:

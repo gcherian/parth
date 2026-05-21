@@ -60,3 +60,7 @@ async def apply_schema():
         for p in module_schemas:
             if p.exists():
                 await conn.execute(p.read_text())
+        # Curriculum graph seed (idempotent — uses ON CONFLICT DO NOTHING)
+        seed_path = Path(__file__).parents[1] / "data" / "curriculum_seed.sql"
+        if seed_path.exists():
+            await conn.execute(seed_path.read_text())

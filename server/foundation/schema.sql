@@ -96,6 +96,45 @@ CREATE TABLE IF NOT EXISTS learner_state.misconception_map (
 CREATE INDEX IF NOT EXISTS misconception_map_learner_idx
     ON learner_state.misconception_map (learner_id, concept_id);
 
+-- ── Episodic Memory — moments worth remembering ────────────────────────────
+-- Not a log. Specific meaningful moments: breakthroughs, stated beliefs,
+-- deep questions, struggles, connections, moments of awe.
+-- Parth uses these to be a mentor who remembers, not a system that processes.
+
+CREATE TABLE IF NOT EXISTS learner_state.episodes (
+    id               TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    learner_id       TEXT NOT NULL,
+    episode_type     TEXT NOT NULL CHECK (episode_type IN
+                         ('breakthrough','belief','question','struggle','connection','awe')),
+    verbatim         TEXT NOT NULL,       -- what the child actually said (≤ 200 chars)
+    summary          TEXT NOT NULL,       -- one-liner Parth uses to reference this
+    concept_ids      TEXT[] DEFAULT '{}',
+    pattern_ids      TEXT[] DEFAULT '{}',
+    follow_up        TEXT DEFAULT '',     -- question Parth can use to revisit
+    referenced_count INT DEFAULT 0,       -- how many times Parth mentioned this
+    last_referenced  TIMESTAMPTZ,
+    created_at       TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS episodes_learner_recent_idx
+    ON learner_state.episodes (learner_id, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS episodes_learner_popular_idx
+    ON learner_state.episodes (learner_id, referenced_count DESC);
+
+-- ── Curiosity Tracker (session-scoped) ──────────────────────────────────────
+-- Stores live curiosity threads per session. Expires at end of day.
+-- Never accumulates into a permanent profile — what the child wonders today
+-- is theirs today. Parth uses it; no one archives it.
+
+CREATE TABLE IF NOT EXISTS learner_state.curiosity_sessions (
+    learner_id   TEXT NOT NULL,
+    session_id   TEXT NOT NULL,
+    threads_json TEXT NOT NULL DEFAULT '[]',
+    updated_at   TIMESTAMPTZ DEFAULT now(),
+    PRIMARY KEY (learner_id, session_id)
+);
+
 -- ── Learner Psyche (inferred psychological dimensions) ─────────────────────
 
 CREATE TABLE IF NOT EXISTS learner_state.psyche (
@@ -172,8 +211,45 @@ CREATE TABLE IF NOT EXISTS curriculum_graph.concepts (
     grade_min   INT DEFAULT 1,
     grade_max   INT DEFAULT 12,
     description TEXT DEFAULT '',
-    video_ids   TEXT[] DEFAULT '{}'
+    video_ids   TEXT[] DEFAULT '{}',
+    patterns    TEXT[] DEFAULT '{}'   -- universal structural patterns this concept exhibits
 );
+
+ALTER TABLE curriculum_graph.concepts ADD COLUMN IF NOT EXISTS patterns TEXT[] DEFAULT '{}';
+
+-- ── Pattern Library — the universal patterns children discover ───────────────
+-- Each pattern appears across radically different scales and domains.
+-- When two children find the same pattern in different places, they can meet.
+
+CREATE TABLE IF NOT EXISTS curriculum_graph.pattern_library (
+    id          TEXT PRIMARY KEY,      -- 'spiral', 'branching', etc.
+    label       TEXT NOT NULL,
+    description TEXT NOT NULL,         -- what this pattern IS, in plain language
+    examples    TEXT[] DEFAULT '{}',   -- concrete real-world examples across scales
+    scales      TEXT[] DEFAULT '{}'    -- 'cosmic' | 'planetary' | 'biological' | 'atomic' | 'mathematical'
+);
+
+-- ── Pattern Encounters — what has each child discovered ─────────────────────
+-- Session-agnostic. A child "owns" a pattern encounter when they engage with
+-- a concept exhibiting that pattern. This is the hook for the future social feature:
+-- find another child who found the same pattern from a different domain.
+
+CREATE TABLE IF NOT EXISTS learner_state.pattern_encounters (
+    id              BIGSERIAL PRIMARY KEY,
+    learner_id      TEXT NOT NULL,
+    pattern_id      TEXT NOT NULL REFERENCES curriculum_graph.pattern_library(id),
+    concept_id      TEXT NOT NULL,          -- which concept revealed this pattern
+    domain          TEXT NOT NULL,          -- 'mathematics' | 'science' | 'social_science'
+    discovery_note  TEXT DEFAULT '',        -- what the child said when they found it (verbatim snippet)
+    engagement      REAL DEFAULT 5.0,       -- engagement at moment of discovery
+    discovered_at   TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS pattern_encounters_learner_idx
+    ON learner_state.pattern_encounters (learner_id, pattern_id);
+
+CREATE INDEX IF NOT EXISTS pattern_encounters_pattern_idx
+    ON learner_state.pattern_encounters (pattern_id, discovered_at DESC);
 
 CREATE TABLE IF NOT EXISTS curriculum_graph.concept_edges (
     from_id TEXT NOT NULL REFERENCES curriculum_graph.concepts(id),
@@ -235,3 +311,56 @@ CREATE TABLE IF NOT EXISTS parent_dashboard.alerts (
     acknowledged BOOLEAN DEFAULT false,
     created_at  TIMESTAMPTZ DEFAULT now()
 );
+
+-- ── Gap 6: Emotional state TTL — session-scoped misconception tracking ───────
+
+ALTER TABLE learner_state.knowledge ADD COLUMN IF NOT EXISTS last_misconception_session TEXT DEFAULT '';
+ALTER TABLE learner_state.knowledge ADD COLUMN IF NOT EXISTS session_misconception_count INT DEFAULT 0;
+
+-- ── Gap 7: Pilot metrics instrumentation ────────────────────────────────────
+
+CREATE SCHEMA IF NOT EXISTS metrics;
+
+CREATE TABLE IF NOT EXISTS metrics.sessions (
+    id                     BIGSERIAL,
+    learner_id             TEXT NOT NULL,
+    session_date           DATE NOT NULL DEFAULT CURRENT_DATE,
+    messages_sent          INT DEFAULT 0,
+    concepts_covered       TEXT[] DEFAULT '{}',
+    misconceptions_detected INT DEFAULT 0,
+    model_calls            INT DEFAULT 0,
+    -- Cost tracking: gemma3:12b ≈ 0 (local), claude ≈ $0.000025/token
+    krishna_tokens         INT DEFAULT 0,
+    harmful_flag           BOOLEAN DEFAULT FALSE,
+    session_start          TIMESTAMPTZ DEFAULT now(),
+    session_end            TIMESTAMPTZ,
+    PRIMARY KEY (id)
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS metrics_sessions_learner_date
+    ON metrics.sessions (learner_id, session_date);
+
+CREATE TABLE IF NOT EXISTS metrics.pilot_gates (
+    learner_id   TEXT NOT NULL,
+    gate         TEXT NOT NULL,  -- 'activation', 'd7_retention', 'w4_gain', 'harmful_ai'
+    value        REAL,
+    passed       BOOLEAN,
+    evaluated_at TIMESTAMPTZ DEFAULT now(),
+    PRIMARY KEY (learner_id, gate)
+);
+
+-- ── Open-loop generator — planted wonders that bring children back ────────────
+
+CREATE TABLE IF NOT EXISTS learner_state.open_loops (
+    id          TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    learner_id  TEXT NOT NULL,
+    question    TEXT NOT NULL,
+    concept_ids TEXT[] DEFAULT '{}',
+    status      TEXT DEFAULT 'open' CHECK (status IN ('open','closed','expired')),
+    created_at  TIMESTAMPTZ DEFAULT now(),
+    closed_at   TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS open_loops_learner_open_idx
+    ON learner_state.open_loops (learner_id, created_at DESC)
+    WHERE status = 'open';

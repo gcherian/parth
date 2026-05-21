@@ -15,6 +15,8 @@ from pydantic import BaseModel
 
 from config import Config
 from foundation.db import get_pool, apply_schema, close_pool
+from foundation.identity import check_consent, SCOPE_AI_INTERACTION
+from foundation import metrics as metrics_mod
 from foundation.observability import configure_logging, get_logger
 from foundation.outbox import relay_loop
 from kernel.context import KernelContext
@@ -130,12 +132,33 @@ class ChatResponse(BaseModel):
     request_id: str
 
 
+# ── Consent grant request model ───────────────────────────────────────────────
+class ConsentGrantRequest(BaseModel):
+    guardian_id: str
+    child_id: str
+    scopes: list[str] = ["ai_interaction", "learner_data", "progress_report"]
+
+
 # ── Chat endpoint ─────────────────────────────────────────────────────────────
 @app.post("/chat", response_model=ChatResponse)
 async def chat(
     req: ChatRequest,
     _: None = Depends(rate_limit),
 ):
+    # Consent gate — blocks child learners without guardian approval
+    consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
+    if not consent_ok:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": (
+                    "A parent or guardian must give consent before Parth can begin. "
+                    "Please complete onboarding."
+                ),
+            },
+        )
+
     history = [{"role": m.role, "content": m.content} for m in req.history]
     try:
         result = await _orchestrator.handle(
@@ -182,6 +205,39 @@ async def chat(
         duration_ms=result["duration_ms"],
         request_id=result["request_id"],
     )
+
+
+# ── Consent grant endpoint ───────────────────────────────────────────────────
+@app.post("/consent/grant")
+async def consent_grant(req: ConsentGrantRequest):
+    """
+    Guardian grants consent for a child.
+    Body: {"guardian_id": str, "child_id": str, "scopes": [...]}
+    Upserts guardian_links row with consent_given=true.
+    """
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute(
+            """
+            INSERT INTO foundation.guardian_links
+                (guardian_id, child_id, consent_given, consent_ts, scope)
+            VALUES ($1::uuid, $2::uuid, true, now(), $3)
+            ON CONFLICT (guardian_id, child_id) DO UPDATE
+                SET consent_given = true,
+                    consent_ts    = now(),
+                    scope         = $3
+            """,
+            req.guardian_id,
+            req.child_id,
+            req.scopes,
+        )
+    log.info(
+        "consent_granted",
+        guardian_id=req.guardian_id,
+        child_id=req.child_id,
+        scopes=req.scopes,
+    )
+    return {"status": "consent_granted"}
 
 
 # ── Learner profile endpoint ──────────────────────────────────────────────────
@@ -344,6 +400,16 @@ async def puzzle_bridge(concept_id: str, learner_id: str | None = None):
 
     # No learner — return all bridges for this concept
     return {"concept": concept_id, "bridges": bridges.get(concept_id, {})}
+
+
+# ── Pilot metrics endpoint ───────────────────────────────────────────────────
+@app.get("/metrics/pilot/{learner_id}")
+async def pilot_metrics(learner_id: str):
+    """Compute and return pilot gate metrics for a learner."""
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        gates = await metrics_mod.compute_pilot_gates(conn, learner_id)
+    return {"learner_id": learner_id, "gates": gates}
 
 
 # ── Parent dashboard endpoints ────────────────────────────────────────────────

@@ -488,6 +488,8 @@ connectSSE();
 // ═══════════════════════════════════════════════════════════════════════════════
 // STATS POLLING
 // ═══════════════════════════════════════════════════════════════════════════════
+let _seedDone = false;
+
 async function refreshStats() {
   try {
     const [stats, health] = await Promise.all([
@@ -503,6 +505,27 @@ async function refreshStats() {
 
     setPill('pill-pg', health.postgres);
     setPill('pill-ol', health.ollama);
+
+    // Pre-populate feed from DB on first load (oldest-first so newest ends up on top)
+    if (!_seedDone && stats.recent && stats.recent.length > 0) {
+      _seedDone = true;
+      [...stats.recent].reverse().forEach(row => {
+        addFeedCard({
+          type:         'interaction',
+          ts:           row.created_at,
+          learner_id:   row.learner_id,
+          learner_name: '',
+          subject:      row.subject,
+          grade:        row.grade,
+          model:        row.model,
+          duration_ms:  row.duration_ms,
+          emotion:      row.emotion,
+          engagement:   row.engagement,
+          misconception: row.misconception,
+          distress:     false,
+        });
+      });
+    }
   } catch(_) {}
 }
 
