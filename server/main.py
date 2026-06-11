@@ -560,6 +560,12 @@ async def health():
     }
 
 
+# ── Investor Demo ────────────────────────────────────────────────────────────
+@app.get("/demo")
+async def demo_ui():
+    return FileResponse("static/demo.html")
+
+
 # ── Knowledge Graph UI & API ─────────────────────────────────────────────────
 @app.get("/graph")
 async def graph_ui():
@@ -649,6 +655,243 @@ async def list_models():
     async with httpx.AsyncClient(timeout=10) as client:
         r = await client.get(f"{Config.OLLAMA_URL}/api/tags")
         return r.json()
+
+
+# ── Shared World (Playground) ────────────────────────────────────────────────
+
+from modules.shared_world.locations import LOCATIONS, PLAYGROUND_PERSONAS, PERSONA_MAP, get_location
+from modules.shared_world.chat import generate_response as _world_generate
+
+
+class WorldArriveRequest(BaseModel):
+    learner_id: str
+    location_id: str
+
+
+class WorldChatRequest(BaseModel):
+    learner_id: str
+    location_id: str
+    message: str
+
+
+_PRESENCE_TTL = "10 minutes"
+
+
+async def _active_presence(conn, location_id: str) -> list[dict]:
+    """Return learners present at a location in the last 10 min."""
+    rows = await conn.fetch(
+        f"""SELECT learner_id, learner_name, emoji, color FROM shared_world.presence
+            WHERE location_id=$1 AND last_seen > now() - interval '{_PRESENCE_TTL}'
+            ORDER BY last_seen DESC""",
+        location_id,
+    )
+    return [dict(r) for r in rows]
+
+
+async def _learner_context_brief(conn, learner_id: str, grade: int, subject: str) -> str:
+    """One-line knowledge/affect summary for the group prompt."""
+    try:
+        knowledge = await conn.fetch(
+            "SELECT concept_id, p_mastery FROM learner_state.knowledge "
+            "WHERE learner_id=$1 ORDER BY p_mastery DESC LIMIT 3",
+            learner_id,
+        )
+        emotion_row = await conn.fetchrow(
+            "SELECT last_emotion, engagement_score FROM learner_state.profiles WHERE learner_id=$1",
+            learner_id,
+        )
+        parts = []
+        if knowledge:
+            parts.append("knows: " + ", ".join(
+                f"{r['concept_id']}({r['p_mastery']:.2f})" for r in knowledge
+            ))
+        if emotion_row and emotion_row["last_emotion"] not in ("neutral", None):
+            parts.append(f"feeling {emotion_row['last_emotion']}")
+        return "; ".join(parts) if parts else "new here"
+    except Exception:
+        return "new here"
+
+
+@app.get("/world/locations")
+async def world_locations():
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        result = []
+        for loc in LOCATIONS.values():
+            present = await _active_presence(conn, loc["id"])
+            result.append({
+                "id": loc["id"],
+                "name": loc["name"],
+                "emoji": loc["emoji"],
+                "tagline": loc["tagline"],
+                "bg_from": loc["bg_from"],
+                "bg_to": loc["bg_to"],
+                "accent": loc["accent"],
+                "depth_levels": loc["depth_levels"],
+                "present": present,
+                "present_count": len(present),
+            })
+    return result
+
+
+@app.post("/world/arrive")
+async def world_arrive(req: WorldArriveRequest):
+    if req.location_id not in LOCATIONS:
+        raise HTTPException(status_code=404, detail="Unknown location")
+    persona = PERSONA_MAP.get(req.learner_id, {})
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute(
+            """INSERT INTO shared_world.presence
+               (learner_id, location_id, learner_name, emoji, color, last_seen)
+               VALUES ($1,$2,$3,$4,$5,now())
+               ON CONFLICT (learner_id) DO UPDATE
+               SET location_id=$2, learner_name=$3, emoji=$4, color=$5, last_seen=now()""",
+            req.learner_id,
+            req.location_id,
+            persona.get("name", req.learner_id),
+            persona.get("emoji", "👤"),
+            persona.get("color", "#64748b"),
+        )
+        present = await _active_presence(conn, req.location_id)
+        # Fetch recent messages for this location (last 20)
+        msgs = await conn.fetch(
+            "SELECT learner_id, learner_name, role, content, created_at "
+            "FROM shared_world.messages WHERE location_id=$1 "
+            "ORDER BY created_at DESC LIMIT 20",
+            req.location_id,
+        )
+    location = LOCATIONS[req.location_id]
+    return {
+        "location": {k: location[k] for k in ("id","name","emoji","description","wonder_hook","solo_opener","depth_levels","group_bonus")},
+        "present": present,
+        "messages": list(reversed([dict(m) for m in msgs])),
+    }
+
+
+@app.post("/world/depart")
+async def world_depart(req: WorldArriveRequest):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute(
+            "DELETE FROM shared_world.presence WHERE learner_id=$1",
+            req.learner_id,
+        )
+    return {"departed": True}
+
+
+@app.get("/world/presence/{location_id}")
+async def world_presence(location_id: str):
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        present = await _active_presence(conn, location_id)
+        # Also return messages since a given timestamp (for polling)
+        msgs = await conn.fetch(
+            "SELECT learner_id, learner_name, role, content, created_at "
+            "FROM shared_world.messages WHERE location_id=$1 "
+            "ORDER BY created_at DESC LIMIT 5",
+            location_id,
+        )
+    return {
+        "present": present,
+        "recent_messages": list(reversed([dict(m) for m in msgs])),
+    }
+
+
+@app.post("/world/chat")
+async def world_chat(req: WorldChatRequest):
+    if req.location_id not in LOCATIONS:
+        raise HTTPException(status_code=404, detail="Unknown location")
+
+    persona = PERSONA_MAP.get(req.learner_id)
+    if not persona:
+        raise HTTPException(status_code=400, detail="Unknown learner — use a Playground persona")
+
+    location = LOCATIONS[req.location_id]
+    pool = await get_pool()
+
+    async with pool.acquire() as conn:
+        # Touch presence so learner stays active
+        await conn.execute(
+            "UPDATE shared_world.presence SET last_seen=now() WHERE learner_id=$1",
+            req.learner_id,
+        )
+
+        # Who else is here?
+        present_rows = await _active_presence(conn, req.location_id)
+
+        # Build learner dicts for the prompt (include real knowledge context)
+        learners = []
+        for row in present_rows:
+            p = PERSONA_MAP.get(row["learner_id"], {})
+            ctx = await _learner_context_brief(conn, row["learner_id"], p.get("grade", 6), p.get("subject", "General"))
+            learners.append({
+                "id": row["learner_id"],
+                "name": row["learner_name"] or row["learner_id"],
+                "grade": p.get("grade", 6),
+                "subject": p.get("subject", "General"),
+                "context": ctx,
+            })
+
+        # If somehow speaker not in present list (race condition), add them
+        if not any(l["id"] == req.learner_id for l in learners):
+            p = persona
+            ctx = await _learner_context_brief(conn, req.learner_id, p["grade"], p["subject"])
+            learners.append({
+                "id": req.learner_id,
+                "name": p["name"],
+                "grade": p["grade"],
+                "subject": p["subject"],
+                "context": ctx,
+            })
+
+        # Fetch last 12 messages from shared thread as history
+        history_rows = await conn.fetch(
+            "SELECT learner_id, learner_name, role, content FROM shared_world.messages "
+            "WHERE location_id=$1 ORDER BY created_at DESC LIMIT 12",
+            req.location_id,
+        )
+        history = [dict(r) for r in reversed(history_rows)]
+
+        # Store child message
+        await conn.execute(
+            "INSERT INTO shared_world.messages (location_id, learner_id, learner_name, role, content) "
+            "VALUES ($1,$2,$3,'child',$4)",
+            req.location_id, req.learner_id, persona["name"], req.message,
+        )
+
+    # Generate Parth's response (outside DB transaction)
+    try:
+        reply = await _world_generate(
+            location=location,
+            learners=learners,
+            new_message=req.message,
+            speaker_name=persona["name"],
+            history=history,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+    async with pool.acquire() as conn:
+        # Store Parth's reply
+        await conn.execute(
+            "INSERT INTO shared_world.messages (location_id, learner_id, learner_name, role, content) "
+            "VALUES ($1,'parth','Parth','parth',$2)",
+            req.location_id, reply,
+        )
+        # Final presence snapshot
+        present_rows = await _active_presence(conn, req.location_id)
+
+    return {
+        "response": reply,
+        "present": present_rows,
+        "group_size": len(present_rows),
+    }
+
+
+@app.get("/playground", include_in_schema=False)
+async def playground_ui():
+    return FileResponse("static/playground.html")
 
 
 # ── Root ──────────────────────────────────────────────────────────────────────

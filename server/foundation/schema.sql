@@ -364,3 +364,167 @@ CREATE TABLE IF NOT EXISTS learner_state.open_loops (
 CREATE INDEX IF NOT EXISTS open_loops_learner_open_idx
     ON learner_state.open_loops (learner_id, created_at DESC)
     WHERE status = 'open';
+
+-- ── Shared World — Pokemon-style locations for group learning ───────────────
+
+CREATE SCHEMA IF NOT EXISTS shared_world;
+
+-- Who is at which location right now (one row per learner, TTL = 10 min idle)
+CREATE TABLE IF NOT EXISTS shared_world.presence (
+    learner_id   TEXT PRIMARY KEY,
+    location_id  TEXT NOT NULL,
+    learner_name TEXT DEFAULT '',
+    emoji        TEXT DEFAULT '👤',
+    color        TEXT DEFAULT '#64748b',
+    last_seen    TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS presence_location_idx
+    ON shared_world.presence (location_id, last_seen DESC);
+
+-- Shared message thread per location (all students see the same thread)
+CREATE TABLE IF NOT EXISTS shared_world.messages (
+    id          BIGSERIAL PRIMARY KEY,
+    location_id TEXT NOT NULL,
+    learner_id  TEXT NOT NULL,
+    learner_name TEXT DEFAULT '',
+    role        TEXT NOT NULL CHECK (role IN ('child','parth')),
+    content     TEXT NOT NULL,
+    created_at  TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS world_messages_location_idx
+    ON shared_world.messages (location_id, created_at DESC);
+
+-- ── 15-Agent Harness: new tables ────────────────────────────────────────────
+
+-- Emotion Compass: affect probability vector
+CREATE TABLE IF NOT EXISTS learner_state.affect_state (
+    learner_id  TEXT PRIMARY KEY,
+    frustration REAL DEFAULT 0.1,
+    confusion   REAL DEFAULT 0.15,
+    boredom     REAL DEFAULT 0.1,
+    curiosity   REAL DEFAULT 0.2,
+    delight     REAL DEFAULT 0.1,
+    uncertainty REAL DEFAULT 0.5,
+    updated_at  TIMESTAMPTZ DEFAULT now()
+);
+
+-- Curriculum Cartographer: seen concepts per learner
+CREATE TABLE IF NOT EXISTS learner_state.curriculum_map (
+    learner_id   TEXT NOT NULL,
+    concept_id   TEXT NOT NULL,
+    subject      TEXT DEFAULT '',
+    grade        INT DEFAULT 6,
+    first_seen   TIMESTAMPTZ DEFAULT now(),
+    last_seen    TIMESTAMPTZ DEFAULT now(),
+    seen_count   INT DEFAULT 1,
+    PRIMARY KEY (learner_id, concept_id)
+);
+
+-- Challenge Calibrator: struggle streak and difficulty level
+CREATE TABLE IF NOT EXISTS learner_state.challenge_state (
+    learner_id            TEXT PRIMARY KEY,
+    consecutive_struggles INT DEFAULT 0,
+    frustration_threshold REAL DEFAULT 3.0,
+    difficulty_level      REAL DEFAULT 0.5,
+    updated_at            TIMESTAMPTZ DEFAULT now()
+);
+
+-- Transfer Weaver: analogy history (worked/failed per domain)
+CREATE TABLE IF NOT EXISTS learner_state.analogy_history (
+    id          BIGSERIAL PRIMARY KEY,
+    learner_id  TEXT NOT NULL,
+    domain      TEXT NOT NULL,
+    worked      BOOLEAN DEFAULT true,
+    concept_id  TEXT DEFAULT '',
+    created_at  TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS analogy_history_learner_idx
+    ON learner_state.analogy_history (learner_id, created_at DESC);
+
+-- Language Bridge: preferred language and code-mesh policy
+CREATE TABLE IF NOT EXISTS learner_state.language_state (
+    learner_id     TEXT PRIMARY KEY,
+    preferred_lang TEXT DEFAULT 'english',
+    language_ratio REAL DEFAULT 1.0,
+    updated_at     TIMESTAMPTZ DEFAULT now()
+);
+
+-- Register Tuner: tone and sentence-length preference
+CREATE TABLE IF NOT EXISTS learner_state.register_state (
+    learner_id           TEXT PRIMARY KEY,
+    sentence_length_pref TEXT DEFAULT 'medium',
+    formality            REAL DEFAULT 0.5,
+    updated_at           TIMESTAMPTZ DEFAULT now()
+);
+
+-- Humor & Delight Guide: humor tolerance and delight triggers
+CREATE TABLE IF NOT EXISTS learner_state.delight_state (
+    learner_id       TEXT PRIMARY KEY,
+    humor_tolerance  REAL DEFAULT 0.5,
+    delight_triggers TEXT DEFAULT '[]',
+    nogo_zones       TEXT DEFAULT '["identity","religion","family","appearance"]',
+    updated_at       TIMESTAMPTZ DEFAULT now()
+);
+
+-- Inquiry Alchemist: SEL repair tracking
+CREATE TABLE IF NOT EXISTS learner_state.inquiry_state (
+    learner_id      TEXT PRIMARY KEY,
+    repair_count    INT DEFAULT 0,
+    last_repair_at  TIMESTAMPTZ,
+    updated_at      TIMESTAMPTZ DEFAULT now()
+);
+
+-- Family Alliance: caregiver context (consent-gated)
+CREATE TABLE IF NOT EXISTS learner_state.family_context (
+    learner_id      TEXT PRIMARY KEY,
+    consent_level   INT DEFAULT 1,
+    caregiver_lang  TEXT DEFAULT '',
+    routines        TEXT DEFAULT '{}',
+    home_supports   TEXT DEFAULT '{}',
+    updated_at      TIMESTAMPTZ DEFAULT now()
+);
+
+-- Rhythm & Time Steward: peak focus hour and pacing
+CREATE TABLE IF NOT EXISTS learner_state.rhythm_state (
+    learner_id            TEXT PRIMARY KEY,
+    peak_hour             INT DEFAULT 15,
+    session_count_today   INT DEFAULT 0,
+    last_session_quality  REAL DEFAULT 5.0,
+    updated_at            TIMESTAMPTZ DEFAULT now()
+);
+
+-- Pattern & Creation Guide: cross-scale pattern encounters
+CREATE TABLE IF NOT EXISTS learner_state.pattern_state (
+    learner_id             TEXT PRIMARY KEY,
+    latest_pattern_message TEXT DEFAULT '',
+    updated_at             TIMESTAMPTZ DEFAULT now()
+);
+
+-- SAINT+: knowledge tracing event log (elapsed_ms + lag_ms for temporal features)
+CREATE TABLE IF NOT EXISTS learner_state.kt_events (
+    id          BIGSERIAL PRIMARY KEY,
+    learner_id  TEXT NOT NULL,
+    concept_id  TEXT NOT NULL,
+    correct     BOOLEAN NOT NULL,
+    elapsed_ms  INT DEFAULT 0,
+    lag_ms      INT DEFAULT 0,
+    session_id  TEXT DEFAULT '',
+    created_at  TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS kt_events_learner_idx
+    ON learner_state.kt_events (learner_id, created_at DESC);
+
+-- ── Agent 11: Confidence Calibration ─────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS learner_state.confidence_calibration (
+    learner_id     TEXT NOT NULL,
+    concept_id     TEXT NOT NULL,
+    stated_high    BOOLEAN DEFAULT false,
+    actual_mastery REAL DEFAULT 0.0,
+    gap            REAL DEFAULT 0.0,
+    updated_at     TIMESTAMPTZ DEFAULT now(),
+    PRIMARY KEY (learner_id, concept_id)
+);

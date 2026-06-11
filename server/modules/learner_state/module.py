@@ -10,6 +10,8 @@ from datetime import date
 
 from kernel.context import Event, KernelContext, ModuleResult
 from kernel.module import Module
+from kernel.agent import AgentSignals
+from kernel.agent_harness import AgentHarness
 from foundation.observability import get_logger
 from foundation.outbox import publish
 from foundation import metrics as metrics_mod
@@ -20,9 +22,13 @@ from modules.learner_state import psyche as psy
 from modules.learner_state import curiosity as cur
 from modules.learner_state import episodes as epi
 from modules.learner_state import open_loops as opl
+from modules.learner_state.agents import build_agent_registry
 from config import Config
 
 log = get_logger("learner.state")
+
+# Module-level harness — instantiated once, shared across all requests
+_harness = AgentHarness(build_agent_registry())
 
 
 async def _consult_krishna(learner_id: str, trigger: str):
@@ -62,6 +68,11 @@ class LearnerStateModule(Module):
                 conn, ctx.learner_id, profile, psyche
             )
 
+            # ── Agent harness — all 18 agents contribute their context slice ──
+            agent_ctx = await _harness.build_context(conn, ctx.learner_id)
+            if agent_ctx:
+                learner_ctx = learner_ctx + "\n\n" + agent_ctx
+
             # ── Puzzle portrait injection ─────────────────────────────────
             # If the child has done any puzzles, append their portrait context
             # to the learner_context string so Parth knows their register + telos.
@@ -99,34 +110,6 @@ class LearnerStateModule(Module):
             except Exception:
                 pass   # puzzle engine not yet active — silent fallback
 
-            # ── Curiosity tracker injection ───────────────────────────────
-            try:
-                threads = await cur.load(conn, ctx.learner_id, ctx.session_id)
-                curiosity_ctx = cur.build_curiosity_context(threads)
-                if curiosity_ctx:
-                    learner_ctx = learner_ctx + "\n\n" + curiosity_ctx
-            except Exception:
-                pass   # never block generation on curiosity tracker
-
-            # ── Episodic memory injection ─────────────────────────────────
-            try:
-                episode_list = await epi.load_for_prompt(conn, ctx.learner_id)
-                episode_ctx  = epi.build_episode_context(episode_list)
-                if episode_ctx:
-                    learner_ctx = learner_ctx + "\n\n" + episode_ctx
-            except Exception:
-                pass   # never block generation on episodic memory
-
-            # ── Open-loop injection ───────────────────────────────────────
-            try:
-                await opl.expire_old(conn, ctx.learner_id)
-                loops = await opl.load_open(conn, ctx.learner_id)
-                loop_ctx = opl.build_context(loops)
-                if loop_ctx:
-                    learner_ctx = learner_ctx + "\n\n" + loop_ctx
-            except Exception:
-                pass   # never block generation on open loops
-
             return ModuleResult(data={
                 "learner_context": learner_ctx,
                 "profile": profile,
@@ -135,102 +118,44 @@ class LearnerStateModule(Module):
 
         else:
             # ── Phase 3: post-generation ───────────────────────────────────
-            signals     = extract_signals(ctx.message)
-            eval_result = await _evaluate(ctx.message, signals["emotion_hint"])
+            signals_raw = extract_signals(ctx.message)
+            eval_result = await _evaluate(ctx.message, signals_raw["emotion_hint"])
 
-            # ── Episodic memory — detect and store meaningful moments ─────
-            try:
-                ep_type = epi.detect_type(ctx.message)
-                if ep_type:
-                    sig      = extract_signals(ctx.message)
-                    concepts = sig["concepts"]
-                    patterns = await epi.get_patterns_for_message(conn, concepts)
-                    await epi.store(conn, ctx.learner_id, ep_type,
-                                    ctx.message, concepts, patterns)
-            except Exception as e:
-                log.warning("episode_store_failed", error=str(e))
-
-            # ── Curiosity tracker update ───────────────────────────────────
-            cur_threads: list = []
-            try:
-                recent_kws = await cur.get_recent_keywords(conn, ctx.learner_id, ctx.session_id)
-                signal     = cur.detect_signal(ctx.message, recent_kws)
-                cur_threads = await cur.load(conn, ctx.learner_id, ctx.session_id)
-                cur_threads = cur.update_threads(cur_threads, signal, ctx.message)
-                await cur.save(conn, ctx.learner_id, ctx.session_id, cur_threads)
-                if signal["type"] != "none":
-                    log.debug("curiosity_signal", learner_id=ctx.learner_id,
-                              type=signal["type"], heat_delta=signal["heat_delta"])
-            except Exception as e:
-                log.warning("curiosity_update_failed", error=str(e))
-
-            misconception = eval_result.get("misconception", "")
-            misc_concept  = eval_result.get("misconception_concept", "")
-            emotion       = eval_result.get("emotion", "neutral")
-            engagement    = float(eval_result.get("engagement", 5))
-
-            # Load current profile for psyche signal extraction
+            # Load current profile
             profile = await prof.get_or_create(conn, ctx.learner_id)
 
-            # Knowledge state updates
-            if signals["concepts"]:
-                await know.record_exposure(conn, ctx.learner_id, signals["concepts"])
-            if misconception and misc_concept:
-                await know.record_misconception(
-                    conn, ctx.learner_id, [misc_concept], session_id=ctx.session_id
-                )
-            if not misconception and signals["concepts"]:
-                await know.record_demonstration(conn, ctx.learner_id, signals["concepts"])
+            # ── Build AgentSignals and dispatch to all agents ──────────────
+            agent_signals = AgentSignals(
+                learner_id=ctx.learner_id,
+                session_id=ctx.session_id,
+                phase="post",
+                message=ctx.message,
+                response_text=ctx.response_text,
+                subject=ctx.subject,
+                grade=ctx.grade,
+                concepts=signals_raw.get("concepts", []),
+                emotion=eval_result.get("emotion", "neutral"),
+                engagement=float(eval_result.get("engagement", 5)),
+                misconception=eval_result.get("misconception", ""),
+                misconception_concept=eval_result.get("misconception_concept", ""),
+                language_ratio=signals_raw.get("language_ratio", 1.0),
+                total_questions=profile.get("total_questions", 0),
+                prev_domains=ctx.module_data.get("tutor.runtime", {}).get("response_domains", []),
+                profile=dict(profile),
+                eval_result=eval_result,
+            )
+            await _harness.dispatch(agent_signals, conn)
 
-            # Profile updates
-            if misconception and misc_concept:
-                await prof.update_misconception_map(conn, ctx.learner_id, misc_concept, misconception)
-            await prof.update_emotion(conn, ctx.learner_id, emotion, engagement)
-            await prof.update_language(conn, ctx.learner_id, signals["language_ratio"])
-            await prof.update_motivational_profile(conn, ctx.learner_id, ctx.subject, engagement)
+            # Convenience aliases (used below)
+            misconception = agent_signals.misconception
+            misc_concept  = agent_signals.misconception_concept
+            emotion       = agent_signals.emotion
+            engagement    = agent_signals.engagement
+
+            # ── record_question (not in harness — needs module-level context) ──
             await prof.record_question(conn, ctx.learner_id)
 
-            # Analogy lag-attribution
-            prev_domains = ctx.module_data.get("tutor.runtime", {}).get("response_domains", [])
-            if prev_domains:
-                await prof.update_analogy_scores(conn, ctx.learner_id, prev_domains, engagement)
-
-            # ── Psyche update (runs every interaction) ─────────────────────
-            psych_signals = psy.extract_psyche_signals(
-                message=ctx.message,
-                signals=signals,
-                eval_result=eval_result,
-                profile=profile,
-            )
-            updated_psyche = await psy.update_psyche(conn, ctx.learner_id, psych_signals)
-            log.debug(
-                "psyche_updated",
-                learner_id=ctx.learner_id,
-                sample_count=updated_psyche["sample_count"],
-                **{k: v for k, v in updated_psyche.items()
-                   if k not in ("sample_count", "learner_id")},
-            )
-
-            # ── Open-loop generation ───────────────────────────────────────
-            try:
-                ep_type_for_loop = epi.detect_type(ctx.message)
-                total_q = profile.get("total_questions", 0) + 1
-                if opl.should_generate(total_q, ep_type_for_loop):
-                    recent_episodes = await epi.load_for_prompt(conn, ctx.learner_id)
-                    q_text, q_concepts = opl.generate(
-                        concepts=signals.get("concepts", []),
-                        episodes=recent_episodes,
-                        threads=cur_threads,
-                    )
-                    if q_text:
-                        await opl.store(conn, ctx.learner_id, q_text,
-                                        q_concepts or signals.get("concepts", []))
-                        log.debug("open_loop_generated", learner_id=ctx.learner_id,
-                                  question=q_text[:60])
-            except Exception as e:
-                log.warning("open_loop_generate_failed", error=str(e))
-
-            # Log interaction
+            # ── Log interaction ────────────────────────────────────────────
             await conn.execute(
                 """
                 INSERT INTO learner_state.interactions
@@ -244,7 +169,7 @@ class LearnerStateModule(Module):
                 misconception, emotion, engagement,
             )
 
-            # Emit events for downstream modules
+            # ── Weak concepts → publish learner.struggling ─────────────────
             weak = await know.weak_concepts(conn, ctx.learner_id)
             if len(weak) >= 3:
                 await publish(
@@ -259,7 +184,7 @@ class LearnerStateModule(Module):
                     conn,
                     learner_id=ctx.learner_id,
                     session_date=date.today(),
-                    concepts=signals.get("concepts", []),
+                    concepts=signals_raw.get("concepts", []),
                     had_misconception=bool(misconception and misc_concept),
                     harmful=False,
                 )
@@ -267,14 +192,12 @@ class LearnerStateModule(Module):
                 log.warning("metrics_fire_forget_failed", error=str(_m_exc))
 
             # ── Trigger Krishna Oracle asynchronously ──────────────────────
-            # Periodic: every KRISHNA_INTERVAL interactions
             total_q = profile.get("total_questions", 0) + 1
             should_consult_krishna = (
                 Config.ANTHROPIC_API_KEY and
                 total_q > 0 and
                 total_q % Config.KRISHNA_INTERVAL == 0
             )
-            # Also trigger on 3rd+ occurrence of same misconception
             if not should_consult_krishna and misconception and misc_concept:
                 misc_count = await conn.fetchval(
                     "SELECT count FROM learner_state.misconception_map "
@@ -288,25 +211,52 @@ class LearnerStateModule(Module):
                 asyncio.create_task(_consult_krishna(ctx.learner_id, trigger))
                 log.info("krishna_triggered", learner_id=ctx.learner_id, trigger=trigger)
 
+            # Read back updated psyche for return value
+            updated_psyche = await psy.get_psyche(conn, ctx.learner_id)
+            log.debug(
+                "psyche_updated",
+                learner_id=ctx.learner_id,
+                sample_count=updated_psyche["sample_count"],
+            )
+
             return ModuleResult(data={
-                "emotion":     emotion,
-                "engagement":  engagement,
+                "emotion":       emotion,
+                "engagement":    engagement,
                 "misconception": misconception,
-                "psyche":      updated_psyche,
+                "psyche":        updated_psyche,
             })
 
     async def on_erase(self, learner_id: str, ctx: KernelContext):
         conn = ctx.db
         for table in [
+            # core
             "learner_state.profiles",
             "learner_state.knowledge",
             "learner_state.misconception_map",
             "learner_state.emotion_history",
             "learner_state.interactions",
             "learner_state.psyche",
+            "learner_state.confidence_calibration",
+            # memory
             "learner_state.episodes",
             "learner_state.curiosity_sessions",
             "learner_state.open_loops",
+            # 15-agent harness tables
+            "learner_state.affect_state",
+            "learner_state.curriculum_map",
+            "learner_state.challenge_state",
+            "learner_state.analogy_history",
+            "learner_state.language_state",
+            "learner_state.register_state",
+            "learner_state.delight_state",
+            "learner_state.inquiry_state",
+            "learner_state.family_context",
+            "learner_state.rhythm_state",
+            "learner_state.pattern_state",
+            "learner_state.kt_events",
+            # practice engine
+            "practice_engine.cards",
+            "practice_engine.answers",
         ]:
             await conn.execute(
                 f"DELETE FROM {table} WHERE learner_id = $1", learner_id

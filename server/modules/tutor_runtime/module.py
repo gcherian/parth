@@ -40,6 +40,23 @@ def _pick_model(message: str, history_len: int, override: str | None) -> str:
     return Config.FAST_MODEL
 
 
+def _pick_temperature(psyche: dict | None) -> float:
+    """
+    Per-child temperature from psyche profile.
+    Anxious children need predictable responses (low temp).
+    Curious/exploratory children benefit from creative responses (high temp).
+    Default 0.7 until psyche has enough samples.
+    """
+    if not psyche or psyche.get("sample_count", 0) < 3:
+        return 0.7
+    anxiety = psyche.get("anxiety", 0.5)
+    depth = psyche.get("depth_preference", 0.5)
+    # High anxiety → lower temperature (more predictable, less surprising)
+    # High depth preference → slightly higher (more exploratory)
+    base = 0.7 - (anxiety - 0.5) * 0.4 + (depth - 0.5) * 0.2
+    return round(max(0.3, min(0.95, base)), 2)
+
+
 class TutorRuntimeModule(Module):
     name = "tutor.runtime"
     handles = ["interaction.requested"]
@@ -53,15 +70,20 @@ class TutorRuntimeModule(Module):
         model_override = event.payload.get("model_override")
         model = _pick_model(ctx.message, len(ctx.history), model_override)
 
+        # Per-child temperature from psyche (set by learner.state Phase 1)
+        psyche = ctx.module_data.get("learner.state", {}).get("psyche")
+        temperature = _pick_temperature(psyche)
+
         system_prompt = build_system_prompt(ctx)
         messages = build_messages(ctx, system_prompt)
 
-        log.info("llm_call", model=model, subject=ctx.subject, grade=ctx.grade)
+        log.info("llm_call", model=model, subject=ctx.subject, grade=ctx.grade,
+                 temperature=temperature)
 
-        reply, model_used = await self._call_ollama(model, messages)
+        reply, model_used = await self._call_ollama(model, messages, temperature)
 
         # ── Math verification (Gap 8) ──────────────────────────────────────
-        is_correct, math_error = await verify_math(reply, Config.FAST_MODEL)
+        is_correct, math_error = await verify_math(reply, Config.FAST_MODEL)  # noqa: E501
         if not is_correct:
             log.warning(
                 "math_error_detected",
@@ -80,7 +102,7 @@ class TutorRuntimeModule(Module):
                         "Please correct it."
                     ),
                 }
-            retry_reply, retry_model = await self._call_ollama(model, retry_messages)
+            retry_reply, retry_model = await self._call_ollama(model, retry_messages, temperature)
             retry_correct, retry_error = await verify_math(retry_reply, Config.FAST_MODEL)
             if retry_correct:
                 reply = retry_reply
@@ -105,12 +127,15 @@ class TutorRuntimeModule(Module):
             "math_verified": is_correct,
         })
 
-    async def _call_ollama(self, model: str, messages: list[dict]) -> tuple[str, str]:
+    async def _call_ollama(self, model: str, messages: list[dict],
+                           temperature: float = 0.7) -> tuple[str, str]:
+        options = {"temperature": temperature}
         try:
             async with httpx.AsyncClient(timeout=60) as client:
                 r = await client.post(
                     f"{Config.OLLAMA_URL}/api/chat",
-                    json={"model": model, "messages": messages, "stream": False},
+                    json={"model": model, "messages": messages, "stream": False,
+                          "options": options},
                 )
                 r.raise_for_status()
                 data = r.json()
@@ -122,7 +147,8 @@ class TutorRuntimeModule(Module):
                 async with httpx.AsyncClient(timeout=60) as client:
                     r = await client.post(
                         f"{Config.OLLAMA_URL}/api/chat",
-                        json={"model": Config.FAST_MODEL, "messages": messages, "stream": False},
+                        json={"model": Config.FAST_MODEL, "messages": messages,
+                              "stream": False, "options": options},
                     )
                     r.raise_for_status()
                     data = r.json()

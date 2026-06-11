@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth — Live Demo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 1px solid #1e2130;
+  background: #0b0d14;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+}
+
+.brand p {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.counter {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  min-width: 90px;
+  text-align: right;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+button:hover { opacity: 0.88; transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+button:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+#btnRun  { background: #f97316; color: #fff; }
+#btnReset { background: transparent; color: #94a3b8; border: 1px solid #2d3446; }
+
+/* ── Grid ── */
+main {
+  flex: 1;
+  padding: 20px 20px 0;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+/* ── Card ── */
+.card {
+  background: #131720;
+  border: 1px solid #1e2130;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  min-height: 320px;
+}
+
+.card.active {
+  border-color: #f9731640;
+  box-shadow: 0 0 18px 2px #f9731618;
+}
+
+.card.done {
+  border-color: #1e2130;
+  box-shadow: none;
+}
+
+/* Card header */
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid #1e2130;
+  background: #0d1018;
+}
+
+.avatar { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
+.card-name { font-weight: 700; font-size: 0.88rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
+}
+.badge-grade { background: #1e2130; color: #94a3b8; }
+.badge-sci   { background: #0891b220; color: #22d3ee; border: 1px solid #0891b240; }
+.badge-math  { background: #7c3aed20; color: #a78bfa; border: 1px solid #7c3aed40; }
+.badge-gen   { background: #64748b20; color: #94a3b8;  border: 1px solid #64748b40; }
+
+/* Message feed */
+.feed {
+  flex: 1;
+  padding: 10px 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  max-height: 210px;
+  scrollbar-width: thin;
+  scrollbar-color: #2d3446 transparent;
+}
+
+.feed::-webkit-scrollbar { width: 4px; }
+.feed::-webkit-scrollbar-thumb { background: #2d3446; border-radius: 4px; }
+
+.idle-msg {
+  color: #334155;
+  font-size: 0.78rem;
+  text-align: center;
+  margin: auto;
+}
+
+.bubble {
+  max-width: 88%;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  word-wrap: break-word;
+  animation: fadeUp 0.25s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.bubble.child {
+  align-self: flex-start;
+  background: #1e2130;
+  color: #e2e8f0;
+  border-bottom-left-radius: 3px;
+}
+
+.bubble.parth {
+  align-self: flex-end;
+  background: #1e1810;
+  color: #fde68a;
+  border-bottom-right-radius: 3px;
+}
+
+.bubble.error {
+  align-self: center;
+  background: #2d1515;
+  color: #f87171;
+  font-size: 0.72rem;
+}
+
+/* Typing indicator */
+.typing {
+  align-self: flex-end;
+  display: flex;
+  gap: 3px;
+  padding: 8px 10px;
+  background: #1e1810;
+  border-radius: 10px;
+  border-bottom-right-radius: 3px;
+}
+.typing span {
+  width: 5px; height: 5px;
+  background: #f97316;
+  border-radius: 50%;
+  animation: bounce 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30%            { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Status bar */
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-top: 1px solid #1e2130;
+  background: #0d1018;
+  min-height: 30px;
+}
+
+.emotion-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #334155;
+  flex-shrink: 0;
+  transition: background 0.5s;
+}
+
+.status-text {
+  font-size: 0.7rem;
+  color: #475569;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress-bar {
+  width: 40px;
+  height: 3px;
+  background: #1e2130;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: #f97316;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ── Footer ── */
+footer {
+  margin-top: 16px;
+  padding: 14px 28px;
+  border-top: 1px solid #1e2130;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0b0d14;
+}
+
+.footer-text {
+  font-size: 0.78rem;
+  color: #475569;
+  max-width: 560px;
+  line-height: 1.5;
+}
+
+.total-counter {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f97316;
+}
+.total-counter span { color: #64748b; font-weight: 400; font-size: 0.78rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>पार्थ &middot; Parth</h1>
+    <p>Every child deserves a tutor who knows them</p>
+  </div>
+  <div class="controls">
+    <div class="counter" id="activeCounter">0 / 15 active</div>
+    <button id="btnReset" onclick="resetDemo()">&#9209; Reset</button>
+    <button id="btnRun"   onclick="runDemo()">&#9654; Run Demo</button>
+  </div>
+</header>
+
+<main>
+  <div id="grid"></div>
+</main>
+
+<footer>
+  <div class="footer-text">
+    Parth is building a unique model for each of these 15 children in real time —
+    18 agents per child, updating after every message.
+  </div>
+  <div class="total-counter">
+    <span id="totalMsgs">0</span>
+    <span>&nbsp;total messages</span>
+  </div>
+</footer>
+
+<script>
+const PERSONAS = [
+  { id:"arjun_s8",     name:"Arjun",      grade:8,  subject:"Science",     avatar:"🏏",
+    messages:["why does a cricket ball swing in the air?","oh! so it's the same as an airplane wing — pressure difference on both sides","wait but then how does a googly spin backwards? the seam is pointing the wrong way","that's insane. the wrist flick creates a different pressure zone entirely. I never thought physics was IN cricket","so heavier balls would swing more right? because more momentum"] },
+  { id:"priya_s6",     name:"Priya",      grade:6,  subject:"Science",     avatar:"🌱",
+    messages:["why do plants need sunlight? can't they just eat the soil?","ohh they make their own food! that's so cool, but how do they KNOW how to do that","wait that's like a factory inside the leaf? same as how our stomach digests?","yaar that's crazy — both plants and us are just running chemical reactions","so if I put a plant in space with artificial light it would still work?"] },
+  { id:"rohan_s9",     name:"Rohan",      grade:9,  subject:"Mathematics", avatar:"😰",
+    messages:["I know trigonometry already, we did it last year","wait what is this sin(A+B) formula, I've never seen this","I can't do this, it makes no sense, why are there so many formulas","okay wait — so it comes from drawing the triangle inside a unit circle?","oh I get it now. The formula is just geometry hidden as algebra"] },
+  { id:"ananya_s7",    name:"Ananya",     grade:7,  subject:"Science",     avatar:"🔬",
+    messages:["yeh osmosis kya hota hai exactly?","toh matlab water apne aap move karta hai? without anyone pushing it?","same as how smell spreads in a room na — diffusion waisa hi hai","lekin agar dono sides pe equal concentration ho toh kuch nahi hoga?","that's like equilibrium in economics! supply and demand balancing"] },
+  { id:"dev_s10",      name:"Dev",        grade:10, subject:"Mathematics", avatar:"🎮",
+    messages:["calculus seems easy just tell me the rules","okay but why does differentiation give the slope — I want the actual reason not just the formula","ohh it's like finding the instantaneous speed — same as lag compensation in gaming","so integration is just differentiation in reverse? like respawning?","what if the function has a sharp corner — is the derivative undefined there?"] },
+  { id:"sneha_s6",     name:"Sneha",      grade:6,  subject:"Science",     avatar:"🌸",
+    messages:["mujhe light ke baare mein samajhna hai","toh light ko reflect karne ke liye surface smooth hona chahiye?","par mirror pe toh hum apna chehra dekhte hain aur paani mein bhi... same reason?","acha samjha! dono mein surface flat hai isliye image banti hai","toh agar paani mein lehren hon toh image distort ho jaati hai kyunki surface uneven ho jaata hai"] },
+  { id:"kabir_s8",     name:"Kabir",      grade:8,  subject:"Science",     avatar:"⚡",
+    messages:["I thought electricity travels at the speed of light","but that can't be right — electrons are heavy particles, they can't move that fast","wait so the ELECTRONS are slow but the SIGNAL is fast? how is that possible","ohh like a pipe full of water — push one end and the other end moves immediately even though the water molecules didn't travel","are you sure? that seems too weird. the electrons never actually reach the light bulb?"] },
+  { id:"meera_s7",     name:"Meera",      grade:7,  subject:"Mathematics", avatar:"📐",
+    messages:["I can't do fractions, I give up","what's the point of dividing fractions, when do you even use this","bahut mushkil hai, I never get it right in tests","okay if I think of it as sharing pizza... 1/2 divided by 1/4 means how many quarter slices fit in half a pizza?","that's 2! oh my god I actually got it. So I just flip the second fraction?"] },
+  { id:"rishi_s9",     name:"Rishi",      grade:9,  subject:"Science",     avatar:"🌌",
+    messages:["how does DNA actually store information?","so it's literally a 4-letter code? like binary but with 4 symbols instead of 2?","NO WAY. DNA is the same concept as a computer hard drive but made of chemistry","so the same information theory that Shannon invented for computers works for biology?","what's the error correction mechanism? computers have checksums — does DNA have something like that?"] },
+  { id:"aisha_s6",     name:"Aisha",      grade:6,  subject:"Science",     avatar:"🌾",
+    messages:["why does my dadi say crops grow better in black soil?","toh black soil mein zyada nutrients hote hain? like fertilizer already inside?","hamare khet mein bhi black soil hai aur actually better crops aate hain wahan","and in science class we learned about minerals — toh yeh wahi minerals hain jo plants eat?","so when it rains the water carries minerals from the top down to the roots?"] },
+  { id:"vikram_s10",   name:"Vikram",     grade:10, subject:"Mathematics", avatar:"💪",
+    messages:["probability is easy, I always thought it was just common sense","the Monty Hall problem is obviously 50-50, any answer other than that is wrong","that makes no sense, you can't convince me switching matters","okay fine I worked it out with all the cases... switching wins 2 out of 3 times","I always thought probability was about intuition but actually it's about listing all cases systematically"] },
+  { id:"tara_s7",      name:"Tara",       grade:7,  subject:"Science",     avatar:"🦋",
+    messages:["can you explain gravity to me like I'm going to teach it to someone else","okay so I would say: gravity is a force between any two masses, bigger mass pulls harder","and if someone asks me why the moon doesn't fall — I would say it IS falling, just sideways fast enough to keep missing Earth","is that right? the moon is basically in permanent free fall?","that's the same as the ISS! the astronauts feel weightless because they're also falling alongside the station"] },
+  { id:"aryan_s8",     name:"Aryan",      grade:8,  subject:"Science",     avatar:"🔥",
+    messages:["magnetism is easy, opposite poles attract same poles repel, I already know this","wait what is this — magnetic field lines and flux and permeability, I thought it was simple","I can't do this, too many new terms at once","okay slow down — so a moving charge creates a magnetic field? electricity and magnetism are the SAME thing?","that's wild. I always thought they were completely separate. Maxwell unified them?"] },
+  { id:"lakshmi_s9",   name:"Lakshmi",    grade:9,  subject:"Mathematics", avatar:"📊",
+    messages:["please show me how to solve quadratic equations step by step","okay I understand the factoring method, can you show me one more example before I try","for the discriminant formula — if b squared minus 4ac is negative what does that mean exactly","so no real solutions means the parabola never touches the x-axis? can you show me the graph?","now I want to solve one myself — please tell me if each step is correct as I go"] },
+  { id:"siddharth_s6", name:"Siddharth",  grade:6,  subject:"Science",     avatar:"✨",
+    messages:["how big is the universe?","that can't be right — the observable universe is 93 BILLION light years across but it's only 13 billion years old?","no way. light from some places will NEVER reach us because space is expanding faster than light?","that means there are stars we can never ever see. ever. that is the most insane thing I have ever heard","so the universe could be infinite and we'd never know? we're just stuck in our little bubble forever?"] }
+];
+
+const EMOTIONS = {
+  excited:   '#22c55e',
+  confused:  '#f59e0b',
+  neutral:   '#475569',
+  frustrated:'#ef4444',
+  curious:   '#3b82f6',
+  amazed:    '#a855f7'
+};
+
+// Infer emotion from message text (simple heuristics for visual flair)
+function detectEmotion(text) {
+  const t = text.toLowerCase();
+  if (/wow|insane|crazy|wild|no way|oh my god|amazing|that's the same|i never thought/.test(t)) return 'amazed';
+  if (/!/.test(t) && /oh|so cool|get it|actually/.test(t)) return 'excited';
+  if (/i can't|give up|never get|too many|makes no sense|mushkil/.test(t)) return 'frustrated';
+  if (/why|how|what if|does that mean|so.*right\?|is that right|are you sure/.test(t)) return 'curious';
+  if (/wait|i thought|can't be|what is this/.test(t)) return 'confused';
+  return 'neutral';
+}
+
+function subjectBadgeClass(subject) {
+  if (subject === 'Science')     return 'badge-sci';
+  if (subject === 'Mathematics') return 'badge-math';
+  return 'badge-gen';
+}
+
+function rand(min, max) { return Math.random() * (max - min) + min; }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+let totalMessages = 0;
+let activeCount   = 0;
+let running       = false;
+let abortControllers = [];
+
+// Semaphore — max 3 concurrent Ollama calls (Ollama is single-threaded; >3 just adds queue time)
+let _slots = 3;
+const _queue = [];
+function acquireSlot(signal) {
+  if (_slots > 0) { _slots--; return Promise.resolve(); }
+  return new Promise((res, rej) => {
+    const entry = { res, signal };
+    _queue.push(entry);
+    signal.addEventListener('abort', () => {
+      const idx = _queue.indexOf(entry);
+      if (idx !== -1) _queue.splice(idx, 1);
+      rej(new DOMException('Aborted', 'AbortError'));
+    });
+  }).then(() => { _slots--; });
+}
+function releaseSlot() {
+  _slots++;
+  if (_queue.length > 0) _queue.shift().res();
+}
+
+function updateCounters() {
+  document.getElementById('activeCounter').textContent = `${activeCount} / 15 active`;
+  document.getElementById('totalMsgs').textContent = totalMessages;
+}
+
+// Build the grid
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  PERSONAS.forEach(p => {
+    const subBadge = subjectBadgeClass(p.subject);
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="card" id="card-${p.id}">
+        <div class="card-head">
+          <span class="avatar">${p.avatar}</span>
+          <span class="card-name">${p.name}</span>
+          <span class="badge badge-grade">G${p.grade}</span>
+          <span class="badge ${subBadge}">${p.subject === 'Mathematics' ? 'Math' : p.subject}</span>
+        </div>
+        <div class="feed" id="feed-${p.id}">
+          <div class="idle-msg">Waiting…</div>
+        </div>
+        <div class="card-foot">
+          <div class="emotion-dot" id="dot-${p.id}"></div>
+          <div class="status-text" id="status-${p.id}">Idle</div>
+          <div class="progress-bar"><div class="progress-fill" id="prog-${p.id}"></div></div>
+        </div>
+      </div>`);
+  });
+}
+
+function addBubble(feedEl, text, side) {
+  // Remove idle message if present
+  const idle = feedEl.querySelector('.idle-msg');
+  if (idle) idle.remove();
+
+  const div = document.createElement('div');
+  div.className = `bubble ${side}`;
+  div.textContent = text;
+  feedEl.appendChild(div);
+  feedEl.scrollTop = feedEl.scrollHeight;
+  return div;
+}
+
+function showTyping(feedEl) {
+  const el = document.createElement('div');
+  el.className = 'typing';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  el.id = `typing-${Date.now()}`;
+  feedEl.appendChild(el);
+  feedEl.scrollTop = feedEl.scrollHeight;
+  return el;
+}
+
+async function runPersona(persona, signal) {
+  const card    = document.getElementById(`card-${persona.id}`);
+  const feed    = document.getElementById(`feed-${persona.id}`);
+  const dot     = document.getElementById(`dot-${persona.id}`);
+  const status  = document.getElementById(`status-${persona.id}`);
+  const prog    = document.getElementById(`prog-${persona.id}`);
+  const total   = persona.messages.length;
+  const history = [];
+
+  card.classList.add('active');
+  activeCount++;
+  updateCounters();
+
+  for (let i = 0; i < total; i++) {
+    if (signal.aborted) break;
+
+    const msg = persona.messages[i];
+    const emotion = detectEmotion(msg);
+    dot.style.background = EMOTIONS[emotion];
+
+    // Show child message
+    addBubble(feed, msg, 'child');
+    totalMessages++;
+    updateCounters();
+    status.textContent = 'Reading…';
+
+    // Wait a moment before Parth replies
+    await sleep(rand(300, 700));
+    if (signal.aborted) break;
+
+    // Show typing indicator
+    const typingEl = showTyping(feed);
+    status.textContent = 'Parth is thinking…';
+
+    // Call the API (semaphore ensures ≤3 concurrent Ollama requests)
+    let reply = null;
+    try {
+      await acquireSlot(signal);
+      try {
+        const body = {
+          message:      msg,
+          history:      history.slice(),
+          subject:      persona.subject,
+          grade:        persona.grade,
+          learner_id:   persona.id,
+          learner_name: persona.name
+        };
+        const res = await fetch('/chat', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(body),
+          signal
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        reply = data.response || '(no response)';
+      } finally {
+        releaseSlot();
+      }
+    } catch (err) {
+      if (signal.aborted) break;
+      typingEl.remove();
+      addBubble(feed, '⚠ Server busy — retrying…', 'error');
+      await sleep(3000);
+      if (signal.aborted) break;
+      // one retry (also goes through semaphore)
+      try {
+        await acquireSlot(signal);
+        try {
+          const body = { message: msg, history: history.slice(), subject: persona.subject, grade: persona.grade, learner_id: persona.id, learner_name: persona.name };
+          const res  = await fetch('/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal });
+          const data = await res.json();
+          reply = data.response || '(no response)';
+        } finally {
+          releaseSlot();
+        }
+      } catch (_) {
+        reply = null;
+      }
+    }
+
+    if (signal.aborted) break;
+    typingEl.remove();
+
+    if (reply) {
+      // Update history
+      history.push({ role: 'user',      content: msg   });
+      history.push({ role: 'assistant', content: reply });
+
+      addBubble(feed, reply, 'parth');
+      totalMessages++;
+      updateCounters();
+
+      const replyEmotion = detectEmotion(msg); // keep child's emotion driving the dot
+      dot.style.background = EMOTIONS[replyEmotion];
+    } else {
+      addBubble(feed, '⚠ No response from server', 'error');
+    }
+
+    // Update progress
+    prog.style.width = `${((i + 1) / total) * 100}%`;
+    status.textContent = `${i + 1} / ${total} messages`;
+
+    // Pause before next child message (simulates child reading & typing)
+    if (i < total - 1) {
+      await sleep(rand(1800, 2800));
+    }
+  }
+
+  if (!signal.aborted) {
+    card.classList.remove('active');
+    card.classList.add('done');
+    status.textContent = 'Conversation done';
+    dot.style.background = EMOTIONS['neutral'];
+  }
+
+  activeCount = Math.max(0, activeCount - 1);
+  updateCounters();
+}
+
+async function runDemo() {
+  if (running) return;
+  running = true;
+  document.getElementById('btnRun').disabled   = true;
+  document.getElementById('btnReset').disabled = false;
+
+  abortControllers = PERSONAS.map(() => new AbortController());
+
+  const promises = PERSONAS.map((p, i) => {
+    const delay = rand(0, 1500);
+    return sleep(delay).then(() => runPersona(p, abortControllers[i].signal));
+  });
+
+  await Promise.allSettled(promises);
+  running = false;
+  document.getElementById('btnRun').disabled = false;
+}
+
+function resetDemo() {
+  // Abort all running conversations
+  abortControllers.forEach(ac => ac.abort());
+  abortControllers = [];
+  running      = false;
+  activeCount  = 0;
+  totalMessages = 0;
+  // Reset semaphore — aborted waiters already removed themselves
+  _slots = 3;
+  _queue.length = 0;
+  updateCounters();
+  document.getElementById('btnRun').disabled   = false;
+  document.getElementById('btnReset').disabled = false;
+  buildGrid();
+}
+
+// Init
+buildGrid();
+updateCounters();
+</script>
+</body>
+</html>
