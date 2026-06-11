@@ -1,0 +1,13 @@
+class IdentityState:
+
+    interests
+
+    values
+
+    aspirations
+
+    language_register
+
+    self_confidence
+
+    evolving_hypotheses
