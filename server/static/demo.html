@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth — Learning Intelligence Platform</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f1117; color: #e2e8f0;
+  height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+}
+
+/* ── Header ── */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 20px; border-bottom: 1px solid #1e2130;
+  background: #0b0d14; flex-shrink: 0;
+}
+.brand h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; color: #f8fafc; }
+.brand p  { font-size: 0.72rem; color: #64748b; margin-top: 1px; }
+
+.controls { display: flex; align-items: center; gap: 10px; }
+.hstat { font-size: 0.72rem; color: #64748b; }
+.hstat strong { color: #f97316; font-size: 0.9rem; }
+
+button {
+  border: none; border-radius: 6px; padding: 6px 14px;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+button:hover  { opacity: 0.88; transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+button:disabled { opacity: 0.4; cursor: default; transform: none; }
+#btnRun   { background: #f97316; color: #fff; }
+#btnStory { background: #6366f1; color: #fff; }
+#btnReset { background: transparent; color: #94a3b8; border: 1px solid #2d3446; }
+
+/* ── Grid section ── */
+#grid-section { flex: 1; overflow-y: auto; padding: 12px 12px 0; min-height: 0; }
+#grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+
+/* ── Card ── */
+.card {
+  background: #131720; border: 1px solid #1e2130; border-radius: 10px;
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s; cursor: default;
+}
+.card.active { border-color: #f9731640; box-shadow: 0 0 14px 2px #f9731612; }
+.card.selected { border-color: #6366f160; box-shadow: 0 0 14px 2px #6366f110; }
+
+.card-head { padding: 7px 9px 5px; border-bottom: 1px solid #1e2130; background: #0d1018; }
+.card-head-top { display: flex; align-items: center; gap: 5px; }
+.avatar   { font-size: 1.1rem; flex-shrink: 0; }
+.card-name { font-weight: 700; font-size: 0.8rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge { font-size: 0.6rem; font-weight: 700; padding: 2px 4px; border-radius: 3px; flex-shrink: 0; }
+.badge-grade { background: #1e2130; color: #94a3b8; }
+.badge-sci   { background: #0891b216; color: #22d3ee; border: 1px solid #0891b228; }
+.badge-math  { background: #7c3aed16; color: #a78bfa; border: 1px solid #7c3aed28; }
+.card-archetype { font-size: 0.6rem; color: #334155; margin-top: 2px; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.feed {
+  flex: 1; padding: 6px 7px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 4px;
+  max-height: 155px; min-height: 0;
+  scrollbar-width: thin; scrollbar-color: #2d3446 transparent;
+}
+.feed::-webkit-scrollbar { width: 3px; }
+.feed::-webkit-scrollbar-thumb { background: #2d3446; border-radius: 3px; }
+.idle-msg { color: #334155; font-size: 0.7rem; text-align: center; margin: auto; }
+
+.bubble {
+  max-width: 90%; padding: 5px 8px; border-radius: 8px;
+  font-size: 0.71rem; line-height: 1.4; word-wrap: break-word;
+  animation: fadeUp 0.2s ease-out;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)} }
+.bubble.child { align-self: flex-start; background: #1e2130; color: #e2e8f0; border-bottom-left-radius: 2px; }
+.bubble.parth { align-self: flex-end; background: #1e1810; color: #fde68a; border-bottom-right-radius: 2px; }
+.bubble.error { align-self: center; background: #2d1515; color: #f87171; font-size: 0.66rem; }
+
+.typing {
+  align-self: flex-end; display: flex; gap: 3px;
+  padding: 6px 8px; background: #1e1810;
+  border-radius: 8px; border-bottom-right-radius: 2px;
+}
+.typing span { width: 3px; height: 3px; background: #f97316; border-radius: 50%; animation: bounce 1.2s infinite; }
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-3px);opacity:1} }
+
+.scenario-bar { display: flex; gap: 3px; padding: 4px 7px; border-top: 1px solid #1e2130; background: #0a0c12; flex-shrink: 0; }
+.scen-btn {
+  flex: 1; padding: 3px 4px; background: transparent; color: #475569;
+  border: 1px solid #1e2130; border-radius: 4px;
+  font-size: 0.6rem; font-weight: 600; cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.scen-btn:hover { color: #f97316; border-color: #f9731650; background: #f9731608; transform: none; opacity: 1; }
+
+.card-foot {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 9px; border-top: 1px solid #1e2130;
+  background: #0d1018; min-height: 24px; flex-shrink: 0;
+}
+.emotion-dot { width: 5px; height: 5px; border-radius: 50%; background: #334155; flex-shrink: 0; transition: background 0.5s; }
+.status-text { font-size: 0.64rem; color: #475569; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.progress-bar { width: 30px; height: 2px; background: #1e2130; border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+.progress-fill { height: 100%; background: #f97316; border-radius: 2px; transition: width 0.5s; width: 0%; }
+
+/* ══ AGENT CASCADE PANEL ══════════════════════════════════════════════════════
+   The "dmesg" of the learning kernel — shows what the 15 agents detected
+   and emitted, cluster by cluster, after every interaction.
+*/
+#cascade-section {
+  flex-shrink: 0; border-top: 1px solid #1e2130;
+  background: #090b10; display: flex; flex-direction: column;
+  height: 190px;
+}
+.cascade-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 14px; border-bottom: 1px solid #1e2130; flex-shrink: 0;
+}
+.cascade-hdr-left { display: flex; align-items: center; gap: 10px; }
+.cascade-title { font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
+.cascade-who   { font-size: 0.72rem; color: #e2e8f0; font-weight: 600; }
+.cascade-meta  { font-size: 0.68rem; color: #334155; font-family: 'SF Mono','Fira Code',monospace; }
+.cascade-body  {
+  flex: 1; overflow-x: auto; overflow-y: hidden;
+  display: flex; gap: 8px; padding: 8px 14px;
+  scrollbar-width: thin; scrollbar-color: #2d3446 transparent;
+}
+.cascade-body::-webkit-scrollbar { height: 3px; }
+.cascade-body::-webkit-scrollbar-thumb { background: #2d3446; border-radius: 3px; }
+
+.cascade-empty { color: #334155; font-size: 0.72rem; margin: auto; font-style: italic; }
+
+/* One column per cluster */
+.cc {
+  flex-shrink: 0; min-width: 190px;
+  background: #0e1118; border: 1px solid #1e2130; border-radius: 7px;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.cc.cc-fired { border-color: currentColor; }
+.cc-hdr {
+  padding: 5px 9px; border-bottom: 1px solid #1e2130;
+  font-size: 0.68rem; font-weight: 700; display: flex; align-items: center; gap: 5px;
+  background: #0b0d14;
+}
+.cc-agents { flex: 1; padding: 5px 7px; display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+
+/* Per-agent row inside a cluster column */
+.ca {
+  display: flex; align-items: baseline; gap: 5px;
+  font-size: 0.62rem; line-height: 1.4; min-height: 16px;
+}
+.ca-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #1e2130; flex-shrink: 0; margin-top: 2px;
+}
+.ca.ca-fired .ca-dot { background: currentColor; }
+.ca-name { color: #475569; white-space: nowrap; flex-shrink: 0; font-family: 'SF Mono','Fira Code',monospace; }
+.ca.ca-fired .ca-name { color: #94a3b8; }
+.ca-events { display: flex; flex-wrap: wrap; gap: 2px; }
+.ca-event {
+  font-size: 0.58rem; padding: 1px 4px; border-radius: 2px;
+  background: rgba(255,255,255,.05); border: 1px solid;
+  font-family: 'SF Mono','Fira Code',monospace; white-space: nowrap;
+}
+.ca-read {
+  font-size: 0.59rem; color: #334155; font-style: italic;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;
+}
+
+/* Event colour coding */
+.ev-distress     { color: #ef4444; border-color: #ef444430; }
+.ev-misconception{ color: #f59e0b; border-color: #f59e0b30; }
+.ev-curiosity    { color: #3b82f6; border-color: #3b82f630; }
+.ev-engagement   { color: #22c55e; border-color: #22c55e30; }
+.ev-linguistic   { color: #10b981; border-color: #10b98130; }
+.ev-default      { color: #64748b; border-color: #64748b30; }
+
+/* Cluster colours */
+.cc-affect    { color: #ef4444; }
+.cc-cognition { color: #6366f1; }
+.cc-linguistic{ color: #10b981; }
+.cc-context   { color: #f59e0b; }
+.cc-pedagogy  { color: #8b5cf6; }
+
+/* ── Story overlay ─────────────────────────────────────────────────────────── */
+#story-overlay {
+  display: none; position: fixed; inset: 0; z-index: 100;
+  background: #07090fee; flex-direction: column;
+}
+#story-overlay.open { display: flex; }
+.story-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px; border-bottom: 1px solid #1e2130; background: #0b0d14; flex-shrink: 0;
+}
+.story-hdr h2 { font-size: 1.1rem; font-weight: 700; color: #f8fafc; }
+.story-hdr p  { font-size: 0.73rem; color: #64748b; margin-top: 2px; }
+.story-close  { background: transparent; color: #64748b; border: 1px solid #2d3446; border-radius: 6px; padding: 6px 14px; font-size: 0.82rem; }
+
+.story-body {
+  flex: 1; display: grid; grid-template-columns: 380px 1fr; overflow: hidden;
+}
+
+/* Left: chat */
+.story-chat {
+  border-right: 1px solid #1e2130; display: flex; flex-direction: column; overflow: hidden;
+}
+.story-chat-hdr { padding: 10px 14px; border-bottom: 1px solid #1e2130; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .05em; flex-shrink: 0; }
+.story-feed { flex: 1; padding: 10px 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.story-controls { padding: 10px 12px; border-top: 1px solid #1e2130; display: flex; gap: 8px; flex-shrink: 0; }
+#btnNext { background: #f97316; color: #fff; flex: 1; }
+#btnAutoplay { background: transparent; color: #94a3b8; border: 1px solid #2d3446; }
+
+/* Right: agent panel */
+.story-agents { display: flex; flex-direction: column; overflow: hidden; }
+.story-agents-hdr { padding: 10px 14px; border-bottom: 1px solid #1e2130; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .05em; flex-shrink: 0; }
+.story-narrative {
+  padding: 12px 16px; flex-shrink: 0;
+  border-bottom: 1px solid #1e2130; font-size: 0.78rem; color: #94a3b8; line-height: 1.7;
+  min-height: 70px;
+}
+.story-narrative strong { color: #e2e8f0; }
+.story-cascade { flex: 1; overflow-x: auto; overflow-y: hidden; padding: 10px 14px; display: flex; gap: 8px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>पार्थ · Parth</h1>
+    <p>15 children · 15 specialist agents · one living model per child</p>
+  </div>
+  <div class="controls">
+    <div class="hstat"><strong id="totalMsgs">0</strong> model updates &nbsp;·&nbsp; <span id="activeCounter">0 / 15</span> active</div>
+    <button id="btnReset" onclick="resetDemo()">⏹ Reset</button>
+    <button id="btnStory" onclick="openStory()">📖 Meera's Story</button>
+    <button id="btnRun"   onclick="runDemo()">▶ Run All 15</button>
+  </div>
+</header>
+
+<div id="grid-section"><div id="grid"></div></div>
+
+<!-- Agent Cascade Panel ─────────────────────────────────────────────────────
+     Shows what the 15 agents detected after every interaction.
+     Selecting a card or sending a message populates this automatically.
+-->
+<div id="cascade-section">
+  <div class="cascade-hdr">
+    <div class="cascade-hdr-left">
+      <span class="cascade-title">Agent Cascade</span>
+      <span class="cascade-who" id="cascade-who">— select a student or run the demo</span>
+    </div>
+    <span class="cascade-meta" id="cascade-meta"></span>
+  </div>
+  <div class="cascade-body" id="cascade-body">
+    <div class="cascade-empty">The 15 agents observe every interaction. Send a message or click a scenario to see them fire.</div>
+  </div>
+</div>
+
+<!-- Story overlay ───────────────────────────────────────────────────────────
+     Meera's full fraction journey: frustration → scaffolding → breakthrough.
+     Shows how the 15 agents build a child model across 5 interactions.
+-->
+<div id="story-overlay">
+  <div class="story-hdr">
+    <div>
+      <h2>📐 Meera's Fraction Journey — a learning arc in 5 interactions</h2>
+      <p>Watch how the agent cascade evolves as Meera goes from "I give up" to "I actually got it"</p>
+    </div>
+    <button class="story-close" onclick="closeStory()">✕ Close</button>
+  </div>
+  <div class="story-body">
+    <div class="story-chat">
+      <div class="story-chat-hdr">📐 Meera · Grade 7 · Mathematics</div>
+      <div class="story-feed" id="story-feed"></div>
+      <div class="story-controls">
+        <button id="btnNext" onclick="storyNext()">Next →</button>
+        <button id="btnAutoplay" onclick="storyAutoplay()">⏯ Autoplay</button>
+      </div>
+    </div>
+    <div class="story-agents">
+      <div class="story-agents-hdr">What the agents detected</div>
+      <div class="story-narrative" id="story-narrative">Press "Next" to begin Meera's journey.</div>
+      <div class="story-cascade" id="story-cascade">
+        <div class="cascade-empty">No trace yet</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Cluster definitions (used by cascade renderer) ────────────────────────────
+const CLUSTERS = [
+  { id:'affect',    cls:'cc-affect',    icon:'❤️',  label:'Affect & Motivation',
+    agents:['emotion_compass','belief_coach','challenge_calibrator','humor_delight_guide'] },
+  { id:'cognition', cls:'cc-cognition', icon:'🧠',  label:'Knowledge & Cognition',
+    agents:['mastery_tracker','misconception_hunter','curriculum_cartographer','memory_keeper'] },
+  { id:'linguistic',cls:'cc-linguistic',icon:'🌐',  label:'Linguistic & Cultural',
+    agents:['language_bridge','register_tuner','transfer_weaver'] },
+  { id:'context',   cls:'cc-context',   icon:'🏠',  label:'Context & Relationships',
+    agents:['family_alliance','rhythm_time_steward','inquiry_alchemist'] },
+  { id:'pedagogy',  cls:'cc-pedagogy',  icon:'🎯',  label:'Pedagogy & Preference',
+    agents:['pattern_creation_guide'] },
+];
+
+// ── Persona definitions ───────────────────────────────────────────────────────
+const PERSONAS = [
+  {
+    id:"arjun_s8", name:"Arjun", grade:8, subject:"Science", avatar:"🏏",
+    archetype:"Cross-domain connector",
+    messages:[
+      "why does a cricket ball swing in the air?",
+      "oh! so it's the same as an airplane wing — pressure difference on both sides",
+      "wait but then how does a googly spin backwards? the seam is pointing the wrong way",
+      "that's insane. the wrist flick creates a different pressure zone entirely. I never thought physics was IN cricket",
+      "so heavier balls would swing more right? because more momentum",
+    ],
+    scenarios:[
+      { label:"Cricket ball swing?",    msg:"why does a cricket ball swing in the air?" },
+      { label:"Heavier = more swing?",  msg:"so heavier balls would swing more right? because more momentum" },
+    ],
+  },
+  {
+    id:"priya_s6", name:"Priya", grade:6, subject:"Science", avatar:"🌱",
+    archetype:"Analogical thinker",
+    messages:[
+      "why do plants need sunlight? can't they just eat the soil?",
+      "ohh they make their own food! that's so cool, but how do they KNOW how to do that",
+      "wait that's like a factory inside the leaf? same as how our stomach digests?",
+      "yaar that's crazy — both plants and us are just running chemical reactions",
+      "so if I put a plant in space with artificial light it would still work?",
+    ],
+    scenarios:[
+      { label:"Plants eat soil?",       msg:"why do plants need sunlight? can't they just eat the soil?" },
+      { label:"Leaf = stomach?",        msg:"wait that's like a factory inside the leaf? same as how our stomach digests?" },
+    ],
+  },
+  {
+    id:"rohan_s9", name:"Rohan", grade:9, subject:"Mathematics", avatar:"😰",
+    archetype:"Misconception → insight",
+    messages:[
+      "I know trigonometry already, we did it last year",
+      "wait what is this sin(A+B) formula, I've never seen this",
+      "I can't do this, it makes no sense, why are there so many formulas",
+      "okay wait — so it comes from drawing the triangle inside a unit circle?",
+      "oh I get it now. The formula is just geometry hidden as algebra",
+    ],
+    scenarios:[
+      { label:"I already know trig!",   msg:"I know trigonometry already, we did it last year" },
+      { label:"Just geometry hidden?",  msg:"oh I get it now. The formula is just geometry hidden as algebra" },
+    ],
+  },
+  {
+    id:"ananya_s7", name:"Ananya", grade:7, subject:"Science", avatar:"🔬",
+    archetype:"Hinglish code-switcher",
+    messages:[
+      "yeh osmosis kya hota hai exactly?",
+      "toh matlab water apne aap move karta hai? without anyone pushing it?",
+      "same as how smell spreads in a room na — diffusion waisa hi hai",
+      "lekin agar dono sides pe equal concentration ho toh kuch nahi hoga?",
+      "that's like equilibrium in economics! supply and demand balancing",
+    ],
+    scenarios:[
+      { label:"Osmosis kya hai?",       msg:"yeh osmosis kya hota hai exactly?" },
+      { label:"Like economics?",        msg:"that's like equilibrium in economics! supply and demand balancing" },
+    ],
+  },
+  {
+    id:"dev_s10", name:"Dev", grade:10, subject:"Mathematics", avatar:"🎮",
+    archetype:"Gaming-anchored learner",
+    messages:[
+      "calculus seems easy just tell me the rules",
+      "okay but why does differentiation give the slope — I want the actual reason not just the formula",
+      "ohh it's like finding the instantaneous speed — same as lag compensation in gaming",
+      "so integration is just differentiation in reverse? like respawning?",
+      "what if the function has a sharp corner — is the derivative undefined there?",
+    ],
+    scenarios:[
+      { label:"Just give me the rules", msg:"calculus seems easy just tell me the rules" },
+      { label:"Like gaming lag comp!",  msg:"ohh it's like finding the instantaneous speed — same as lag compensation in gaming" },
+    ],
+  },
+  {
+    id:"sneha_s6", name:"Sneha", grade:6, subject:"Science", avatar:"🌸",
+    archetype:"Hindi-dominant, real-world bridges",
+    messages:[
+      "mujhe light ke baare mein samajhna hai",
+      "toh light ko reflect karne ke liye surface smooth hona chahiye?",
+      "par mirror pe toh hum apna chehra dekhte hain aur paani mein bhi... same reason?",
+      "acha samjha! dono mein surface flat hai isliye image banti hai",
+      "toh agar paani mein lehren hon toh image distort ho jaati hai kyunki surface uneven ho jaata hai",
+    ],
+    scenarios:[
+      { label:"Light reflect karna?",   msg:"mujhe light ke baare mein samajhna hai" },
+      { label:"Mirror aur paani same?", msg:"par mirror pe toh hum apna chehra dekhte hain aur paani mein bhi... same reason?" },
+    ],
+  },
+  {
+    id:"kabir_s8", name:"Kabir", grade:8, subject:"Science", avatar:"⚡",
+    archetype:"Persistent challenger",
+    messages:[
+      "I thought electricity travels at the speed of light",
+      "but that can't be right — electrons are heavy particles, they can't move that fast",
+      "wait so the ELECTRONS are slow but the SIGNAL is fast? how is that possible",
+      "ohh like a pipe full of water — push one end and the other end moves immediately even though the water molecules didn't travel",
+      "are you sure? that seems too weird. the electrons never actually reach the light bulb?",
+    ],
+    scenarios:[
+      { label:"Electrons = light speed?",msg:"I thought electricity travels at the speed of light" },
+      { label:"Never reach the bulb?",  msg:"are you sure? that seems too weird. the electrons never actually reach the light bulb?" },
+    ],
+  },
+  {
+    id:"meera_s7", name:"Meera", grade:7, subject:"Mathematics", avatar:"📐",
+    archetype:"Frustration → breakthrough",
+    messages:[
+      "I can't do fractions, I give up",
+      "what's the point of dividing fractions, when do you even use this",
+      "bahut mushkil hai, I never get it right in tests",
+      "okay if I think of it as sharing pizza... 1/2 divided by 1/4 means how many quarter slices fit in half a pizza?",
+      "that's 2! oh my god I actually got it. So I just flip the second fraction?",
+    ],
+    scenarios:[
+      { label:"I give up on fractions", msg:"I can't do fractions, I give up" },
+      { label:"Pizza — I got it!",      msg:"that's 2! oh my god I actually got it. So I just flip the second fraction?" },
+    ],
+  },
+  {
+    id:"rishi_s9", name:"Rishi", grade:9, subject:"Science", avatar:"🌌",
+    archetype:"Cross-scale pattern seeker",
+    messages:[
+      "how does DNA actually store information?",
+      "so it's literally a 4-letter code? like binary but with 4 symbols instead of 2?",
+      "NO WAY. DNA is the same concept as a computer hard drive but made of chemistry",
+      "so the same information theory that Shannon invented for computers works for biology?",
+      "what's the error correction mechanism? computers have checksums — does DNA have something like that?",
+    ],
+    scenarios:[
+      { label:"DNA = hard drive?",      msg:"NO WAY. DNA is the same concept as a computer hard drive but made of chemistry" },
+      { label:"Shannon in biology?!",   msg:"so the same information theory that Shannon invented for computers works for biology?" },
+    ],
+  },
+  {
+    id:"aisha_s6", name:"Aisha", grade:6, subject:"Science", avatar:"🌾",
+    archetype:"Real-world grounded",
+    messages:[
+      "why does my dadi say crops grow better in black soil?",
+      "toh black soil mein zyada nutrients hote hain? like fertilizer already inside?",
+      "hamare khet mein bhi black soil hai aur actually better crops aate hain wahan",
+      "and in science class we learned about minerals — toh yeh wahi minerals hain jo plants eat?",
+      "so when it rains the water carries minerals from the top down to the roots?",
+    ],
+    scenarios:[
+      { label:"Dadi's black soil?",     msg:"why does my dadi say crops grow better in black soil?" },
+      { label:"Rain carries minerals?", msg:"so when it rains the water carries minerals from the top down to the roots?" },
+    ],
+  },
+  {
+    id:"vikram_s10", name:"Vikram", grade:10, subject:"Mathematics", avatar:"💪",
+    archetype:"Overconfident → converted",
+    messages:[
+      "probability is easy, I always thought it was just common sense",
+      "the Monty Hall problem is obviously 50-50, any answer other than that is wrong",
+      "that makes no sense, you can't convince me switching matters",
+      "okay fine I worked it out with all the cases... switching wins 2 out of 3 times",
+      "I always thought probability was about intuition but actually it's about listing all cases systematically",
+    ],
+    scenarios:[
+      { label:"Obviously 50-50!",       msg:"the Monty Hall problem is obviously 50-50, any answer other than that is wrong" },
+      { label:"Switching wins 2/3?!",   msg:"okay fine I worked it out with all the cases... switching wins 2 out of 3 times" },
+    ],
+  },
+  {
+    id:"tara_s7", name:"Tara", grade:7, subject:"Science", avatar:"🦋",
+    archetype:"Teaches to learn",
+    messages:[
+      "can you explain gravity to me like I'm going to teach it to someone else",
+      "okay so I would say: gravity is a force between any two masses, bigger mass pulls harder",
+      "and if someone asks me why the moon doesn't fall — I would say it IS falling, just sideways fast enough to keep missing Earth",
+      "is that right? the moon is basically in permanent free fall?",
+      "that's the same as the ISS! the astronauts feel weightless because they're also falling alongside the station",
+    ],
+    scenarios:[
+      { label:"Moon IS falling!",       msg:"the moon is basically in permanent free fall?" },
+      { label:"Same as the ISS?",       msg:"that's the same as the ISS! the astronauts feel weightless because they're also falling alongside the station" },
+    ],
+  },
+  {
+    id:"aryan_s8", name:"Aryan", grade:8, subject:"Science", avatar:"🔥",
+    archetype:"Overconfident → humbled",
+    messages:[
+      "magnetism is easy, opposite poles attract same poles repel, I already know this",
+      "wait what is this — magnetic field lines and flux and permeability, I thought it was simple",
+      "I can't do this, too many new terms at once",
+      "okay slow down — so a moving charge creates a magnetic field? electricity and magnetism are the SAME thing?",
+      "that's wild. I always thought they were completely separate. Maxwell unified them?",
+    ],
+    scenarios:[
+      { label:"Magnetism is simple!",   msg:"magnetism is easy, opposite poles attract same poles repel, I already know this" },
+      { label:"Maxwell unified them?!", msg:"that's wild. I always thought they were completely separate. Maxwell unified them?" },
+    ],
+  },
+  {
+    id:"lakshmi_s9", name:"Lakshmi", grade:9, subject:"Mathematics", avatar:"📊",
+    archetype:"Step-by-step procedural",
+    messages:[
+      "please show me how to solve quadratic equations step by step",
+      "okay I understand the factoring method, can you show me one more example before I try",
+      "for the discriminant formula — if b squared minus 4ac is negative what does that mean exactly",
+      "so no real solutions means the parabola never touches the x-axis? can you show me the graph?",
+      "now I want to solve one myself — please tell me if each step is correct as I go",
+    ],
+    scenarios:[
+      { label:"Step by step please",   msg:"please show me how to solve quadratic equations step by step" },
+      { label:"I'll solve one myself", msg:"now I want to solve one myself — please tell me if each step is correct as I go" },
+    ],
+  },
+  {
+    id:"siddharth_s6", name:"Siddharth", grade:6, subject:"Science", avatar:"✨",
+    archetype:"Awe-driven explorer",
+    messages:[
+      "how big is the universe?",
+      "that can't be right — the observable universe is 93 BILLION light years across but it's only 13 billion years old?",
+      "no way. light from some places will NEVER reach us because space is expanding faster than light?",
+      "that means there are stars we can never ever see. ever. that is the most insane thing I have ever heard",
+      "so the universe could be infinite and we'd never know? we're just stuck in our little bubble forever?",
+    ],
+    scenarios:[
+      { label:"93 billion light-years?!", msg:"that can't be right — the observable universe is 93 BILLION light years across but it's only 13 billion years old?" },
+      { label:"Stuck in our bubble?",  msg:"so the universe could be infinite and we'd never know? we're just stuck in our little bubble forever?" },
+    ],
+  },
+];
+
+const EMOTIONS = {
+  amazed:'#a855f7', excited:'#22c55e', curious:'#3b82f6',
+  confused:'#f59e0b', frustrated:'#ef4444', neutral:'#475569',
+};
+
+function detectEmotion(t) {
+  t = t.toLowerCase();
+  if (/no way|that's insane|same concept|same theory|oh my god|that's wild/.test(t)) return 'amazed';
+  if (/i can't|give up|mushkil|never get|too many new|makes no sense/.test(t)) return 'frustrated';
+  if (/already know|obviously|seems easy|common sense/.test(t)) return 'confused';
+  if (/oh!|i get it|actually got|that's the same/.test(t)) return 'excited';
+  if (/why|how|what if|is that right|are you sure/.test(t)) return 'curious';
+  if (/wait|i thought|can't be right|what is this/.test(t)) return 'confused';
+  return 'neutral';
+}
+
+function rand(min, max) { return Math.random() * (max - min) + min; }
+function sleep(ms)       { return new Promise(r => setTimeout(r, ms)); }
+
+const histories = {};
+let totalMessages = 0;
+let activeCount   = 0;
+let running       = false;
+let abortControllers = [];
+
+let _slots = 3;
+const _queue = [];
+function acquireSlot(sig) {
+  if (_slots > 0) { _slots--; return Promise.resolve(); }
+  return new Promise((res, rej) => {
+    const e = { res, sig };
+    _queue.push(e);
+    sig?.addEventListener('abort', () => { const i=_queue.indexOf(e); if(i!==-1)_queue.splice(i,1); rej(new DOMException('','AbortError')); });
+  }).then(() => { _slots--; });
+}
+function releaseSlot() { _slots++; if (_queue.length>0) _queue.shift().res(); }
+
+function updateCounters() {
+  document.getElementById('activeCounter').textContent = `${activeCount} / 15`;
+  document.getElementById('totalMsgs').textContent = totalMessages;
+}
+
+// ── Agent cascade renderer ────────────────────────────────────────────────────
+// Colours for known event types in the cascade panel
+function eventClass(key) {
+  if (/distress|difficulty/.test(key)) return 'ev-distress';
+  if (/misconception|concept|mastery/.test(key)) return 'ev-misconception';
+  if (/curiosity|analogy|pattern/.test(key)) return 'ev-curiosity';
+  if (/engagement|delight/.test(key)) return 'ev-engagement';
+  if (/lang|register/.test(key)) return 'ev-linguistic';
+  return 'ev-default';
+}
+
+function renderCascade(containerId, trace) {
+  const container = document.getElementById(containerId);
+  if (!trace || !trace.dispatch_trace) {
+    container.innerHTML = '<div class="cascade-empty">No trace yet</div>';
+    return;
+  }
+  const dispatch = trace.dispatch_trace;
+  const readMap  = Object.fromEntries((trace.read_trace || []).map(r => [r.agent, r.read]));
+
+  container.innerHTML = CLUSTERS.map(c => {
+    const agentRows = c.agents.map(name => {
+      const dt      = dispatch.find(d => d.agent === name);
+      const emitted = (!dt || dt.skipped) ? {} : (dt.emitted || {});
+      const read    = readMap[name] || '';
+      const fired   = Object.keys(emitted).length > 0;
+      const hasRead = read.length > 0;
+
+      const evTags = Object.entries(emitted).map(([k, v]) => {
+        const val = typeof v === 'object' ? JSON.stringify(v) : String(v);
+        const short = val.length > 18 ? val.slice(0,18)+'…' : val;
+        return `<span class="ca-event ${eventClass(k)}" title="${k}=${val}">${k.split('.').pop()}=${short}</span>`;
+      }).join('');
+
+      const readSnip = hasRead && !fired
+        ? `<span class="ca-read" title="${read}">${read.slice(0,55)}…</span>`
+        : '';
+
+      return `<div class="ca ${fired ? 'ca-fired' : ''}" style="${fired ? `color:${c.color||'inherit'}` : ''}">
+        <span class="ca-dot"></span>
+        <span class="ca-name">${name.replace(/_/g,' ')}</span>
+        ${fired ? `<span class="ca-events">${evTags}</span>` : readSnip}
+      </div>`;
+    }).join('');
+
+    const clusterFired = c.agents.some(name => {
+      const dt = dispatch.find(d => d.agent === name);
+      return dt && !dt.skipped && Object.keys(dt.emitted||{}).length > 0;
+    });
+
+    return `<div class="cc ${c.cls} ${clusterFired ? 'cc-fired' : ''}">
+      <div class="cc-hdr">${c.icon} ${c.label}</div>
+      <div class="cc-agents">${agentRows}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadCascade(learnerId, cascadeId, whoId, metaId) {
+  try {
+    const r = await fetch(`/api/trace/${learnerId}/latest`);
+    if (!r.ok) return;
+    const t = await r.json();
+    if (!t || !t.dispatch_trace) return;
+
+    if (whoId) {
+      const p = PERSONAS.find(x => x.id === learnerId);
+      document.getElementById(whoId).textContent =
+        `${p?.avatar || ''} ${p?.name || learnerId} · ${t.message?.slice(0,50) || ''}`;
+    }
+    if (metaId) {
+      const fired  = (t.dispatch_trace||[]).filter(d => !d.skipped && Object.keys(d.emitted||{}).length > 0).length;
+      const reads  = Object.values(Object.fromEntries((t.read_trace||[]).map(r=>[r.agent,r.read]))).filter(Boolean).length;
+      const em     = t.emotion || '—'; const eng = t.engagement?.toFixed(1) || '—';
+      document.getElementById(metaId).textContent =
+        `${fired} events emitted · ${reads} contexts read into LLM · emotion=${em} engagement=${eng}/10`;
+    }
+    renderCascade(cascadeId, t);
+  } catch(_) {}
+}
+
+// ── Build grid ────────────────────────────────────────────────────────────────
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  PERSONAS.forEach(p => {
+    histories[p.id] = [];
+    const bc = p.subject === 'Mathematics' ? 'badge-math' : 'badge-sci';
+    const sl = p.subject === 'Mathematics' ? 'Math' : p.subject;
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="card" id="card-${p.id}">
+        <div class="card-head">
+          <div class="card-head-top">
+            <span class="avatar">${p.avatar}</span>
+            <span class="card-name">${p.name}</span>
+            <span class="badge badge-grade">G${p.grade}</span>
+            <span class="badge ${bc}">${sl}</span>
+          </div>
+          <div class="card-archetype">${p.archetype}</div>
+        </div>
+        <div class="feed" id="feed-${p.id}"><div class="idle-msg">Waiting…</div></div>
+        <div class="scenario-bar">
+          ${p.scenarios.map((s,i) => `<button class="scen-btn" data-pid="${p.id}" data-si="${i}" title="${s.msg}">${s.label}</button>`).join('')}
+        </div>
+        <div class="card-foot">
+          <div class="emotion-dot" id="dot-${p.id}"></div>
+          <div class="status-text" id="status-${p.id}">Idle</div>
+          <div class="progress-bar"><div class="progress-fill" id="prog-${p.id}"></div></div>
+        </div>
+      </div>`);
+  });
+
+  grid.addEventListener('click', e => {
+    const btn = e.target.closest('.scen-btn');
+    if (!btn) return;
+    const pid  = btn.dataset.pid;
+    const si   = parseInt(btn.dataset.si);
+    const pers = PERSONAS.find(x => x.id === pid);
+    if (pers?.scenarios[si]) sendManual(pers, pers.scenarios[si].msg);
+  });
+}
+
+// ── UI helpers ────────────────────────────────────────────────────────────────
+function addBubble(feedEl, text, side) {
+  const idle = feedEl.querySelector('.idle-msg');
+  if (idle) idle.remove();
+  const d = document.createElement('div');
+  d.className = `bubble ${side}`;
+  d.textContent = text;
+  feedEl.appendChild(d);
+  feedEl.scrollTop = feedEl.scrollHeight;
+  return d;
+}
+function showTyping(feedEl) {
+  const el = document.createElement('div');
+  el.className = 'typing';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  feedEl.appendChild(el);
+  feedEl.scrollTop = feedEl.scrollHeight;
+  return el;
+}
+
+// ── Core: send one message, get reply, update cascade ────────────────────────
+async function callAPI(persona, msg, signal) {
+  const body = { message:msg, history:histories[persona.id].slice(), subject:persona.subject, grade:persona.grade, learner_id:persona.id, learner_name:persona.name };
+  const r = await fetch('/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), signal });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return (await r.json()).response || '(no response)';
+}
+
+async function sendOne(persona, msg, signal) {
+  const feed   = document.getElementById(`feed-${persona.id}`);
+  const dot    = document.getElementById(`dot-${persona.id}`);
+  const status = document.getElementById(`status-${persona.id}`);
+
+  dot.style.background = EMOTIONS[detectEmotion(msg)] || EMOTIONS.neutral;
+  addBubble(feed, msg, 'child');
+  totalMessages++; updateCounters();
+  status.textContent = 'Reading…';
+
+  if (signal?.aborted) return null;
+  await sleep(rand(200, 500));
+  if (signal?.aborted) return null;
+
+  const typingEl = showTyping(feed);
+  status.textContent = 'Parth thinking…';
+
+  let reply = null;
+  try {
+    await acquireSlot(signal);
+    try { reply = await callAPI(persona, msg, signal); }
+    finally { releaseSlot(); }
+  } catch (err) {
+    if (err.name === 'AbortError' || signal?.aborted) { typingEl.remove(); return null; }
+    typingEl.remove();
+    addBubble(feed, '⚠ Server busy — retrying…', 'error');
+    await sleep(3000);
+    if (signal?.aborted) return null;
+    try { await acquireSlot(signal); try { reply = await callAPI(persona, msg, null); } finally { releaseSlot(); } }
+    catch(_) { reply = null; }
+  }
+
+  if (signal?.aborted) { typingEl.remove(); return null; }
+  typingEl.remove();
+
+  if (reply) {
+    histories[persona.id].push({ role:'user', content:msg });
+    histories[persona.id].push({ role:'assistant', content:reply });
+    addBubble(feed, reply, 'parth');
+    totalMessages++; updateCounters();
+    // Non-blocking: update the main cascade panel
+    loadCascade(persona.id, 'cascade-body', 'cascade-who', 'cascade-meta');
+  } else {
+    addBubble(feed, '⚠ No response', 'error');
+  }
+  return reply;
+}
+
+async function sendManual(persona, msg) {
+  const card = document.getElementById(`card-${persona.id}`);
+  const prog  = document.getElementById(`prog-${persona.id}`);
+  card.classList.add('active'); activeCount++; updateCounters();
+  await sendOne(persona, msg, null);
+  prog.style.width = '100%';
+  document.getElementById(`status-${persona.id}`).textContent = 'Done';
+  card.classList.remove('active');
+  activeCount = Math.max(0, activeCount - 1); updateCounters();
+}
+
+async function runPersona(persona, signal) {
+  const card  = document.getElementById(`card-${persona.id}`);
+  const prog  = document.getElementById(`prog-${persona.id}`);
+  const total = persona.messages.length;
+  card.classList.add('active'); activeCount++; updateCounters();
+  for (let i = 0; i < total; i++) {
+    if (signal.aborted) break;
+    const reply = await sendOne(persona, persona.messages[i], signal);
+    if (signal.aborted) break;
+    prog.style.width = `${((i+1)/total)*100}%`;
+    document.getElementById(`status-${persona.id}`).textContent = `${i+1} / ${total}`;
+    if (reply && i < total - 1) await sleep(rand(2000, 3200));
+  }
+  if (!signal.aborted) {
+    card.classList.remove('active');
+    document.getElementById(`status-${persona.id}`).textContent = 'Done';
+    document.getElementById(`dot-${persona.id}`).style.background = EMOTIONS.neutral;
+  }
+  activeCount = Math.max(0, activeCount - 1); updateCounters();
+}
+
+async function runDemo() {
+  if (running) return;
+  running = true;
+  document.getElementById('btnRun').disabled   = true;
+  document.getElementById('btnReset').disabled = false;
+  abortControllers = PERSONAS.map(() => new AbortController());
+  await Promise.allSettled(PERSONAS.map((p, i) =>
+    sleep(rand(0, 2000)).then(() => runPersona(p, abortControllers[i].signal))
+  ));
+  running = false;
+  document.getElementById('btnRun').disabled = false;
+}
+
+function resetDemo() {
+  abortControllers.forEach(ac => ac.abort());
+  abortControllers = []; running = false; activeCount = 0; totalMessages = 0;
+  _slots = 3; _queue.length = 0;
+  updateCounters();
+  document.getElementById('btnRun').disabled   = false;
+  document.getElementById('btnReset').disabled = false;
+  buildGrid();
+}
+
+// ── Story mode: Meera's fraction journey ─────────────────────────────────────
+// One child, five messages, live narration of what the agents are doing and why.
+const MEERA = PERSONAS.find(p => p.id === 'meera_s7');
+
+const STORY_STEPS = [
+  {
+    msg: "I can't do fractions, I give up",
+    narration: "<strong>Affect cluster fires first.</strong> EmotionCompass detects frustration. BeliefCoach reads Meera's profile: under-confidence (built over prior sessions). HumorDelightGuide suspends levity. ChallengeCalibrator reduces difficulty. The LLM receives: <em>\"child is frustrated and has low confidence — validate, simplify, do not push\"</em>.",
+  },
+  {
+    msg: "what's the point of dividing fractions, when do you even use this",
+    narration: "<strong>Cognition cluster engages.</strong> MisconceptionHunter detects a procedural gap — Meera doesn't see fractions as quantities. MasteryTracker marks fraction_division as weak. TransferWeaver looks for an analogy in Meera's history: <em>cooking, sharing food</em>. The LLM is told to use a sharing analogy rather than abstract symbols.",
+  },
+  {
+    msg: "bahut mushkil hai, I never get it right in tests",
+    narration: "<strong>Linguistic cluster reads mixed-script input.</strong> LanguageBridge detects Hinglish (ratio ~0.65). RegisterTuner adjusts: shorter sentences, Hinglish welcome. Meanwhile BeliefCoach records a second under-confidence signal — threshold crossed. The LLM is now told: <em>\"use Hindi-English mix, very short explanations, no formulas yet\"</em>.",
+  },
+  {
+    msg: "okay if I think of it as sharing pizza... 1/2 divided by 1/4 means how many quarter slices fit in half a pizza?",
+    narration: "<strong>The analogy landed.</strong> TransferWeaver records pizza → fractions as a successful mapping (score +0.3). MasteryTracker sees a correct application attempt — BKT posterior for fraction_division rises. Engagement climbs to 7. ChallengeCalibrator notes the shift upward. MemoryKeeper records this episode.",
+  },
+  {
+    msg: "that's 2! oh my god I actually got it. So I just flip the second fraction?",
+    narration: "<strong>Breakthrough recorded.</strong> EmotionCompass detects excitement (engagement 9/10). MemoryKeeper stores this as a high-value episode — next session will surface it first. BeliefCoach records a confidence recovery event. InquiryAlchemist queues a wonder question: <em>\"what happens when you divide by a fraction smaller than the one on top?\"</em> PatternCreationGuide links this to division-as-measurement, a cross-domain pattern.",
+  },
+];
+
+let storyStep   = -1;
+let storyAuto   = false;
+let storyTimer  = null;
+
+function openStory() {
+  document.getElementById('story-overlay').classList.add('open');
+  if (storyStep === -1) {
+    histories['meera_s7_story'] = [];
+    document.getElementById('story-feed').innerHTML = '';
+    document.getElementById('story-cascade').innerHTML = '<div class="cascade-empty">No trace yet</div>';
+    document.getElementById('story-narrative').innerHTML = 'Press <strong>Next</strong> to begin Meera\'s journey.';
+  }
+}
+function closeStory() {
+  document.getElementById('story-overlay').classList.remove('open');
+  clearTimeout(storyTimer); storyAuto = false;
+  document.getElementById('btnAutoplay').textContent = '⏯ Autoplay';
+}
+
+async function storyNext() {
+  storyStep++;
+  if (storyStep >= STORY_STEPS.length) {
+    document.getElementById('story-narrative').innerHTML = '<strong>Journey complete.</strong> Meera\'s learner model now carries: low frustration, high pizza-analogy confidence, Hinglish language preference, fraction_division mastery rising. The next session will start from this state.';
+    clearTimeout(storyTimer); storyAuto = false;
+    document.getElementById('btnAutoplay').textContent = '⏯ Autoplay';
+    document.getElementById('btnNext').disabled = true;
+    return;
+  }
+
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('btnAutoplay').disabled = true;
+
+  const step = STORY_STEPS[storyStep];
+  const feed = document.getElementById('story-feed');
+
+  // Show narrative first
+  document.getElementById('story-narrative').innerHTML = `<em>Step ${storyStep + 1} / ${STORY_STEPS.length}</em><br><br>${step.narration}`;
+
+  // Send the message using the real API (separate history from main demo)
+  const dot    = document.getElementById(`dot-${MEERA.id}`);
+  dot.style.background = EMOTIONS[detectEmotion(step.msg)] || EMOTIONS.neutral;
+
+  const idle = feed.querySelector('.idle-msg');
+  if (idle) idle.remove();
+  const cb = document.createElement('div'); cb.className = 'bubble child'; cb.textContent = step.msg; feed.appendChild(cb);
+  const ty = document.createElement('div'); ty.className = 'typing'; ty.innerHTML = '<span></span><span></span><span></span>'; feed.appendChild(ty);
+  feed.scrollTop = feed.scrollHeight;
+
+  const body = { message:step.msg, history:histories['meera_s7_story'].slice(), subject:'Mathematics', grade:7, learner_id:'meera_s7', learner_name:'Meera' };
+  try {
+    await acquireSlot(null);
+    let reply;
+    try {
+      const r = await fetch('/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      reply = (await r.json()).response || '(no response)';
+    } finally { releaseSlot(); }
+
+    ty.remove();
+    const pb = document.createElement('div'); pb.className = 'bubble parth'; pb.textContent = reply; feed.appendChild(pb);
+    feed.scrollTop = feed.scrollHeight;
+    histories['meera_s7_story'].push({role:'user',content:step.msg});
+    histories['meera_s7_story'].push({role:'assistant',content:reply});
+
+    // Load cascade into story panel
+    await new Promise(r => setTimeout(r, 800));
+    const tr = await fetch(`/api/trace/meera_s7/latest`);
+    if (tr.ok) { const t = await tr.json(); renderCascade('story-cascade', t); }
+  } catch(_) {
+    ty.remove();
+    const eb = document.createElement('div'); eb.className = 'bubble error'; eb.textContent = '⚠ error'; feed.appendChild(eb);
+  }
+
+  document.getElementById('btnNext').disabled = (storyStep >= STORY_STEPS.length - 1) && storyStep >= STORY_STEPS.length - 1;
+  document.getElementById('btnNext').disabled = false;
+  document.getElementById('btnAutoplay').disabled = false;
+
+  if (storyAuto && storyStep < STORY_STEPS.length - 1) {
+    storyTimer = setTimeout(storyNext, 6000);
+  }
+}
+
+function storyAutoplay() {
+  storyAuto = !storyAuto;
+  document.getElementById('btnAutoplay').textContent = storyAuto ? '⏸ Pause' : '⏯ Autoplay';
+  if (storyAuto) { if (storyStep === -1 || storyStep < STORY_STEPS.length - 1) storyNext(); }
+  else clearTimeout(storyTimer);
+}
+
+// Init
+buildGrid();
+updateCounters();
+</script>
+</body>
+</html>

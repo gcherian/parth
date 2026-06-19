@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth — Set Up Your Child's Profile</title>
+<style>
+  :root {
+    --bg:       #f8f7f4;
+    --surface:  #ffffff;
+    --border:   #e5e3de;
+    --text:     #1a1814;
+    --muted:    #8b8680;
+    --accent:   #5b4fcf;
+    --accent2:  #7c6fdd;
+    --parth:    #5b4fcf;
+    --green:    #16a34a;
+    --amber:    #b45309;
+    --bubble-p: #f0eeff;
+    --bubble-g: #ffffff;
+    --shadow:   0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Header ── */
+  header {
+    width: 100%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky; top: 0; z-index: 10;
+    box-shadow: var(--shadow);
+  }
+  .logo-badge {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, #5b4fcf, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .logo-text { line-height: 1.2; }
+  .logo-name { font-weight: 700; font-size: 16px; color: var(--text); }
+  .logo-sub  { font-size: 12px; color: var(--muted); }
+
+  /* ── Setup form (pre-chat) ── */
+  #setup-screen {
+    width: 100%; max-width: 520px;
+    padding: 40px 24px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .setup-title { font-size: 22px; font-weight: 700; text-align: center; }
+  .setup-sub   { font-size: 14px; color: var(--muted); text-align: center; line-height: 1.5; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--muted); }
+  .field input {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 15px; color: var(--text); background: var(--surface);
+    outline: none; transition: border-color .15s;
+  }
+  .field input:focus { border-color: var(--accent); }
+  .start-btn {
+    width: 100%; padding: 13px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: background .15s;
+  }
+  .start-btn:hover { background: var(--accent2); }
+
+  /* ── Chat screen ── */
+  #chat-screen {
+    display: none;
+    width: 100%; max-width: 620px;
+    flex-direction: column;
+    flex: 1;
+    padding: 0 0 24px;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    padding: 14px 20px 10px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 67px; z-index: 9;
+  }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--muted); margin-bottom: 6px;
+  }
+  .progress-bar-bg {
+    height: 5px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--accent);
+    border-radius: 3px; transition: width .4s ease;
+    width: 0%;
+  }
+
+  /* Messages */
+  .messages {
+    flex: 1; padding: 20px 16px;
+    display: flex; flex-direction: column; gap: 14px;
+    overflow-y: auto;
+  }
+
+  .bubble-wrap {
+    display: flex; gap: 10px; align-items: flex-end;
+    animation: fadeUp .25s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(8px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .bubble-wrap.parth { flex-direction: row; }
+  .bubble-wrap.guardian { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .avatar-parth    { background: #f0eeff; }
+  .avatar-guardian { background: #f0f9ff; }
+
+  .bubble {
+    max-width: 78%; padding: 12px 16px;
+    border-radius: 16px; line-height: 1.55; font-size: 14px;
+    box-shadow: var(--shadow);
+  }
+  .bubble.parth {
+    background: var(--bubble-p);
+    border-bottom-left-radius: 4px;
+    color: var(--text);
+  }
+  .bubble.guardian {
+    background: var(--surface);
+    border-bottom-right-radius: 4px;
+    border: 1.5px solid var(--border);
+  }
+  .bubble .sender {
+    font-size: 11px; font-weight: 700;
+    margin-bottom: 4px; color: var(--muted);
+  }
+  .bubble.parth .sender { color: var(--accent); }
+
+  /* Typing indicator */
+  .typing-dot {
+    display: inline-block; width: 7px; height: 7px;
+    background: var(--accent); border-radius: 50%; margin: 0 2px;
+    animation: blink 1.2s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: .2s; }
+  .typing-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+
+  /* Input */
+  .input-area {
+    padding: 14px 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: flex-end;
+  }
+  .input-area textarea {
+    flex: 1; padding: 11px 14px;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    font-size: 14px; font-family: inherit;
+    color: var(--text); background: var(--bg);
+    resize: none; outline: none;
+    transition: border-color .15s;
+    max-height: 120px; min-height: 44px;
+    line-height: 1.4;
+  }
+  .input-area textarea:focus { border-color: var(--accent); }
+  .send-btn {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--accent); color: #fff;
+    border: none; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s; flex-shrink: 0;
+  }
+  .send-btn:hover { background: var(--accent2); }
+  .send-btn:disabled { background: var(--border); cursor: not-allowed; }
+
+  /* ── Completion card ── */
+  #completion-screen {
+    display: none;
+    width: 100%; max-width: 620px;
+    padding: 32px 20px 40px;
+    flex-direction: column; gap: 20px;
+  }
+  .completion-hero {
+    text-align: center; padding: 24px;
+    background: linear-gradient(135deg, #f0eeff, #faf5ff);
+    border-radius: 16px; border: 1px solid #e0d9ff;
+  }
+  .completion-hero .icon { font-size: 40px; margin-bottom: 10px; }
+  .completion-hero h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .completion-hero p  { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .config-preview {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .config-preview-hdr {
+    padding: 12px 16px; background: #f6f4ff;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .config-item {
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    font-size: 13px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .config-item:last-child { border-bottom: none; }
+  .config-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); margin-top: 5px; flex-shrink: 0;
+  }
+  .apply-btn {
+    width: 100%; padding: 14px;
+    background: var(--green); color: #fff;
+    border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    transition: opacity .15s;
+  }
+  .apply-btn:hover { opacity: .9; }
+  .apply-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .applied-msg {
+    text-align: center; font-size: 14px; color: var(--green);
+    font-weight: 600; padding: 8px;
+  }
+
+  /* ── BMAD badge ── */
+  .bmad-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 3px 10px;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">🌟</div>
+  <div class="logo-text">
+    <div class="logo-name">Parth</div>
+    <div class="logo-sub">Guardian Setup</div>
+  </div>
+  <div style="margin-left:auto">
+    <span class="bmad-badge">⚙️ BMAD Onboarding Agent</span>
+  </div>
+</header>
+
+<!-- Step 1: Setup form -->
+<div id="setup-screen">
+  <div>
+    <div class="setup-title">Set up Parth for your child</div>
+    <div class="setup-sub" style="margin-top:8px">
+      A short conversation helps Parth understand your child before their first lesson.
+      Language, confidence, interests, schedule — all personalised, just for them.
+    </div>
+  </div>
+  <div class="field">
+    <label>YOUR CHILD'S NAME</label>
+    <input id="inp-child" type="text" placeholder="e.g. Priya" autocomplete="off">
+  </div>
+  <div class="field">
+    <label>YOUR NAME (GUARDIAN)</label>
+    <input id="inp-guardian" type="text" placeholder="e.g. Sunita" autocomplete="off">
+  </div>
+  <div class="field">
+    <label>CHILD'S LEARNER ID <span style="font-weight:400;color:var(--muted)">(from your Parth account)</span></label>
+    <input id="inp-learner" type="text" placeholder="e.g. priya_s5" autocomplete="off">
+  </div>
+  <button class="start-btn" onclick="startOnboarding()">Begin Setup →</button>
+  <div style="text-align:center;font-size:12px;color:var(--muted)">
+    Takes about 3 minutes · 12 questions · You can change settings later
+  </div>
+</div>
+
+<!-- Step 2: Chat -->
+<div id="chat-screen">
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="prog-label">Question 1 of 12</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="prog-fill"></div>
+    </div>
+  </div>
+  <div class="messages" id="messages"></div>
+  <div class="input-area">
+    <textarea id="inp-answer" placeholder="Type your answer…" rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAnswer();}"
+      oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="send-btn" onclick="sendAnswer()">↑</button>
+  </div>
+</div>
+
+<!-- Step 3: Completion -->
+<div id="completion-screen">
+  <div class="completion-hero">
+    <div class="icon">✅</div>
+    <h2>Parth is ready for <span id="child-name-final"></span></h2>
+    <p>Here's what Parth now knows — these settings will take effect immediately.</p>
+  </div>
+  <div class="config-preview">
+    <div class="config-preview-hdr">🔧 Configuration applied by BMAD Onboarding Agent</div>
+    <div id="config-list"></div>
+  </div>
+  <button class="apply-btn" id="apply-btn" onclick="applyConfig()">
+    ✓ Apply &amp; Start Learning
+  </button>
+  <div id="applied-msg" class="applied-msg" style="display:none"></div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────
+let SESSION_ID      = null;
+let LEARNER_NAME    = '';
+let SUMMARY         = [];
+let DERIVED_CONFIG  = {};
+let GLOBAL_CONFIG   = {};
+
+// ── Setup ──────────────────────────────────────────────────────────────
+async function startOnboarding() {
+  const child    = document.getElementById('inp-child').value.trim();
+  const guardian = document.getElementById('inp-guardian').value.trim();
+  const learner  = document.getElementById('inp-learner').value.trim();
+
+  if (!child || !guardian || !learner) {
+    alert('Please fill in all three fields.');
+    return;
+  }
+
+  LEARNER_NAME = child;
+  document.getElementById('child-name-final').textContent = child;
+
+  try {
+    const res = await fetch('/api/onboarding/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ learner_id: learner, learner_name: child, guardian_name: guardian }),
+    });
+    const data = await res.json();
+
+    if (data.error) { alert(data.error); return; }
+
+    SESSION_ID = data.session_id;
+
+    document.getElementById('setup-screen').style.display  = 'none';
+    document.getElementById('chat-screen').style.display   = 'flex';
+
+    // Show greeting then first question
+    addBubble('parth', data.message);
+    setTimeout(() => {
+      addBubble('parth', data.question, data.question_num, data.total);
+      updateProgress(data.question_num, data.total);
+    }, 600);
+
+  } catch(e) {
+    alert('Could not connect to Parth server: ' + e.message);
+  }
+}
+
+// ── Chat ───────────────────────────────────────────────────────────────
+async function sendAnswer() {
+  const ta  = document.getElementById('inp-answer');
+  const text = ta.value.trim();
+  if (!text || !SESSION_ID) return;
+
+  ta.value = '';
+  autoResize(ta);
+  document.getElementById('send-btn').disabled = true;
+
+  addBubble('guardian', text);
+  showTyping();
+
+  try {
+    const res = await fetch(`/api/onboarding/${SESSION_ID}/answer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+    const data = await res.json();
+    removeTyping();
+
+    if (data.error) { addBubble('parth', '⚠️ ' + data.error); return; }
+
+    // Show acknowledgment
+    if (data.understood) {
+      addBubble('parth', '✓ ' + data.understood);
+    }
+
+    if (data.status === 'complete') {
+      SUMMARY        = data.summary || [];
+      DERIVED_CONFIG = data.config || {};
+      GLOBAL_CONFIG  = data.global_config || {};
+
+      setTimeout(() => {
+        addBubble('parth',
+          `That's everything I need! Parth is now configured for ${LEARNER_NAME}. ` +
+          `Let me show you what was set up — please review and confirm.`
+        );
+        setTimeout(showCompletion, 1200);
+      }, 400);
+
+    } else {
+      // Next question
+      setTimeout(() => {
+        addBubble('parth', data.question, data.question_num, data.total);
+        updateProgress(data.question_num, data.total);
+      }, 350);
+    }
+
+  } catch(e) {
+    removeTyping();
+    addBubble('parth', '⚠️ Something went wrong. Please try again.');
+  } finally {
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('inp-answer').focus();
+  }
+}
+
+// ── UI helpers ─────────────────────────────────────────────────────────
+function addBubble(who, text, qNum, total) {
+  const msgs = document.getElementById('messages');
+  const wrap = document.createElement('div');
+  wrap.className = `bubble-wrap ${who}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `avatar avatar-${who === 'parth' ? 'parth' : 'guardian'}`;
+  avatar.textContent = who === 'parth' ? '🌟' : '👤';
+
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${who}`;
+
+  const sender = document.createElement('div');
+  sender.className = 'sender';
+  sender.textContent = who === 'parth' ? 'Parth' : 'You';
+  bubble.appendChild(sender);
+
+  const body = document.createElement('div');
+  body.textContent = text;
+  bubble.appendChild(body);
+
+  if (qNum && total) {
+    const tag = document.createElement('div');
+    tag.style.cssText = 'margin-top:8px;font-size:11px;color:var(--muted)';
+    tag.textContent = `Question ${qNum} of ${total}`;
+    bubble.appendChild(tag);
+  }
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(bubble);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+let _typingEl = null;
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap parth';
+  wrap.id = 'typing-indicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar avatar-parth';
+  avatar.textContent = '🌟';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble parth';
+  bubble.innerHTML = `<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>`;
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(bubble);
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+  _typingEl = wrap;
+}
+
+function removeTyping() {
+  if (_typingEl) { _typingEl.remove(); _typingEl = null; }
+}
+
+function updateProgress(qNum, total) {
+  const pct = Math.round(((qNum - 1) / total) * 100);
+  document.getElementById('prog-label').textContent = `Question ${qNum} of ${total}`;
+  document.getElementById('prog-pct').textContent   = pct + '%';
+  document.getElementById('prog-fill').style.width  = pct + '%';
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ── Completion ─────────────────────────────────────────────────────────
+function showCompletion() {
+  document.getElementById('chat-screen').style.display       = 'none';
+  document.getElementById('completion-screen').style.display = 'flex';
+
+  const list = document.getElementById('config-list');
+  list.innerHTML = '';
+
+  if (SUMMARY.length === 0) {
+    list.innerHTML = '<div class="config-item"><div class="config-dot"></div><div>Default configuration applied.</div></div>';
+    return;
+  }
+
+  SUMMARY.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'config-item';
+    el.innerHTML = `<div class="config-dot"></div><div>${escHtml(s.understood)}</div>`;
+    list.appendChild(el);
+  });
+}
+
+async function applyConfig() {
+  const btn = document.getElementById('apply-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Applying…';
+
+  try {
+    const res = await fetch(`/api/onboarding/${SESSION_ID}/apply`, { method: 'POST' });
+    const data = await res.json();
+
+    if (data.error) {
+      alert('Error: ' + data.error);
+      btn.disabled = false;
+      btn.textContent = '✓ Apply & Start Learning';
+      return;
+    }
+
+    btn.style.display = 'none';
+    const msg = document.getElementById('applied-msg');
+    msg.style.display = 'block';
+    msg.textContent = `✓ Parth is configured for ${LEARNER_NAME}. ${data.agents_configured.length} agent profiles written. You can close this window.`;
+
+  } catch(e) {
+    alert('Apply failed: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = '✓ Apply & Start Learning';
+  }
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Focus first field on load
+window.onload = () => document.getElementById('inp-child').focus();
+</script>
+</body>
+</html>

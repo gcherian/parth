@@ -1,0 +1,377 @@
+{
+  "sphere": "Social Sciences & Psychology",
+  "sphere_id": "social_sciences",
+  "sphere_description": "The sphere where humans turned the tools of inquiry on themselves — asking: why do we behave as we do, how do societies work, what causes suffering and flourishing? The most difficult sphere of all, because the observer and the observed are the same.",
+  "thinkers": [
+    {
+      "id": "freud",
+      "name": "Sigmund Freud",
+      "era": "1856–1939",
+      "origin": "Freiberg, Moravia (Czech Republic) / Vienna",
+      "mbti": "INFJ",
+      "key_insight": "The unconscious mind drives behavior. Dreams, slips of the tongue, and neurotic symptoms reveal hidden conflicts that cannot be expressed consciously.",
+      "spark": "Most of his specific theories have been refuted by modern neuroscience and psychology. And yet he completely transformed how Western civilization thinks about the human mind. He is perhaps history's most influential wrong thinker.",
+      "quote": "The mind is like an iceberg: it floats with one-seventh of its bulk above water.",
+      "pascal_moment": "Freud pushed the sphere into the unconscious — the vast hidden portion of the mind that was invisible before him and that, once named, became impossible to ignore.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Slip of the Tongue",
+          "challenge": "A Freudian slip is when you say something you didn't mean to say — and what you said reveals what you were secretly thinking. Pay attention today to any slips of the tongue you hear (in class, at home, on television). Write them down. For each: what might the 'true' thought have been? What does this game teach you about the relationship between what we say and what we think?",
+          "hint": "Classic example: calling your teacher 'mum.' Or saying 'I'd really like to NOT be here tonight' when you meant 'I'd really like to be here.' The slip reveals the hidden wish. But be careful — Freud may have over-interpreted slips. Most are just verbal errors."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Is Psychoanalysis Science?",
+          "challenge": "Karl Popper argued that a theory is scientific only if it is falsifiable — if there is some possible observation that would prove it wrong. Apply this test to Freud's theory: (1) If a patient's neurosis improves under psychoanalysis, Freud says his theory is confirmed. (2) If the patient doesn't improve, Freud says the patient is 'resisting.' Is there ANY observation that would disprove Freud's theory? What does your answer mean for whether psychoanalysis is science?",
+          "hint": "A theory that explains every possible outcome explains nothing. 'Resistance' as an explanation for failure is an unfalsifiable patch — similar to 'the treatment works, but the patient isn't ready.' Modern psychology uses randomized controlled trials: compare therapy group vs. control group. Psychoanalysis has been tested this way — with mixed results."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "What Freud Got Right (and Wrong)",
+          "challenge": "Make a list of Freud's specific claims: (1) unconscious processing, (2) defense mechanisms, (3) childhood experiences shape adult psychology, (4) repression, (5) sexual basis of neurosis, (6) Oedipus complex, (7) dream analysis. For each, evaluate: what does modern cognitive neuroscience, developmental psychology, or clinical psychology say? Distinguish between claims that are refuted, claims that are confirmed in modified form, and claims that are untestable. What is Freud's surviving intellectual legacy?",
+          "hint": "Confirmed (modified): unconscious information processing (cognitive science); childhood attachment shaping later relationships (attachment theory); defense mechanisms (a subset are now supported). Refuted: sexual basis of all neurosis; Oedipus complex as universal. Untestable: id/ego/superego as structural entities. Legacy: the concept of the unconscious, the talking cure, and the idea that symptoms have meaning."
+        }
+      ],
+      "open_question": "Do therapeutic approaches derived from Freud (psychodynamic therapy, attachment-based therapy) work better for some conditions than others — and if so, what does that reveal about the mind?",
+      "sphere_expanded": "Psychoanalysis, Psychology of Unconscious, Developmental Psychology, Cultural Criticism",
+      "connected_thinkers": ["jung", "piaget", "darwin", "nietzsche"]
+    },
+    {
+      "id": "jung",
+      "name": "Carl Jung",
+      "era": "1875–1961",
+      "origin": "Kesswil, Switzerland",
+      "mbti": "INFJ",
+      "key_insight": "The unconscious contains not just personal repressed memories but collective archetypes — universal symbols shared across all human cultures and mythologies.",
+      "spark": "After his break with Freud, he entered a 6-year 'creative illness' — confronting his own unconscious in visions and dreams, drawing mandalas, recording everything. He emerged with the most comprehensive theory of the psyche ever written. He said it was the most important work of his life — and he almost lost his mind doing it.",
+      "quote": "Who looks outside, dreams; who looks inside, awakes.",
+      "pascal_moment": "Jung pushed the sphere inward and downward — into the collective unconscious, the universal substrate of human symbolic life that underlies individual psychology.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Archetypes in Stories",
+          "challenge": "Jung identified universal archetypes — recurring characters that appear in myths and stories across ALL cultures: the Hero, the Shadow (dark side), the Wise Old Man/Woman, the Trickster, the Great Mother, the Self. Find examples of each archetype in: (1) a Bollywood film, (2) a Hollywood film, (3) an Indian myth or folktale, (4) a current political figure. Do the same figures appear across cultures? What does this tell us about human nature?",
+          "hint": "The Trickster is Loki (Norse), Anansi (West African), Krishna in some stories (Indian), Coyote (Native American). The same figure, independently, across all these cultures. Jung said this is because all human minds share the same deep symbolic substrate."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "MBTI and Jung",
+          "challenge": "The Myers-Briggs Type Indicator (MBTI) is based on Jung's psychological types: Introversion/Extraversion, Sensing/Intuition, Thinking/Feeling, Judging/Perceiving. But MBTI was developed by two non-psychologists (Isabel Myers and her mother Katharine Briggs) who interpreted Jung freely. Research: (1) What specifically did Jung say about psychological types? (2) Where did Myers-Briggs diverge from Jung's original theory? (3) What does modern personality science (Big Five, NEO-PI) say about the validity of MBTI vs. Jung's types?",
+          "hint": "Key differences: Jung never proposed four dichotomous axes. He described multiple functions (thinking, feeling, intuition, sensation) as a spectrum with a 'dominant function,' not as binary either/or switches. The Big Five (OCEAN) has much stronger scientific support than MBTI — but is less memorable and less useful for self-reflection."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Collective Unconscious: Nature or Culture?",
+          "challenge": "Jung's collective unconscious contains archetypes that appear independently across all human cultures. There are two explanations: (1) biological (archetypes are encoded in neural structures, similar to language's universal grammar); (2) cultural diffusion (myths spread via trade routes, migration, shared evolutionary pressures). Design an empirical test to distinguish these two explanations. What data would you need? What has anthropology, evolutionary psychology, or comparative mythology discovered?",
+          "hint": "If biological: isolated cultures (no historical contact) should show the same archetypes. Anthropologist Joseph Campbell documented this in The Hero with a Thousand Faces. But critics say Campbell cherry-picked similarities and ignored differences. How do you design an unbiased cross-cultural comparison?"
+        }
+      ],
+      "open_question": "Is the Self (Jung's archetype of wholeness and integration) a real psychological structure — or a mythological projection onto the subjective experience of personal development?",
+      "sphere_expanded": "Analytical Psychology, Comparative Mythology, Personality Theory",
+      "connected_thinkers": ["freud", "piaget", "lao_tzu", "tagore"]
+    },
+    {
+      "id": "piaget",
+      "name": "Jean Piaget",
+      "era": "1896–1980",
+      "origin": "Neuchâtel, Switzerland",
+      "mbti": "INTJ",
+      "key_insight": "Children don't think like smaller adults — they construct knowledge through qualitatively different stages. Cognitive development is not the accumulation of information but a restructuring of mental frameworks.",
+      "spark": "He began his scientific career at 10 by publishing a paper on albino sparrows — without telling anyone he was a child. The natural history museum offered him a job curating their collection. He had to decline — he was in primary school.",
+      "quote": "The principle goal of education is to create men who are capable of doing new things, not simply of repeating what other generations have done.",
+      "pascal_moment": "Piaget pushed the sphere by discovering that the sphere of knowledge itself has a developmental structure — it grows not by addition but by restructuring the entire framework at each stage.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Conservation",
+          "challenge": "Piaget's classic test: pour water from a short wide glass into a tall thin glass while a child watches. Young children (under 7) say there is MORE water in the tall glass. They haven't yet developed 'conservation' — the understanding that the amount doesn't change just because the shape does. Try this with a younger sibling or cousin. What do they say? What does this tell us about how adults and children perceive the world differently?",
+          "hint": "Young children 'center' on one perceptual dimension (the height) and ignore the other (the width). They haven't yet mentally reversible the transformation. Conservation is not 'taught' — it develops as the brain matures. Piaget called this 'preoperational' thought."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Stages and Learning",
+          "challenge": "Piaget's four stages: (1) Sensorimotor (0-2): learning through physical action; (2) Preoperational (2-7): symbolic thinking, egocentrism; (3) Concrete Operational (7-12): logical thinking about concrete objects; (4) Formal Operational (12+): abstract and hypothetical reasoning. Map your own learning of mathematics to these stages: at what age could you: count (sensorimotor), understand number symbols (preoperational), do arithmetic (concrete operational), understand algebra and proof (formal operational)? Did your experience match Piaget's ages?",
+          "hint": "Many adults never fully reach formal operational thinking for all domains. Abstract reasoning is domain-specific — a physicist might reason abstractly about quantum mechanics but concretely about cooking. This is evidence against Piaget's stage model being universal and domain-general."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Constructivism and AI Learning",
+          "challenge": "Piaget's constructivism: knowledge is not transmitted but constructed — the learner builds mental schemas by interacting with the world, experiencing cognitive conflict when schemas fail, and restructuring (accommodation) to resolve the conflict. Compare this to how machine learning builds models: (1) training data provides experience, (2) loss function represents 'conflict' between prediction and reality, (3) gradient descent restructures the model. Is deep learning Piagetian? What elements of genuine cognitive development are missing from neural network training?",
+          "hint": "Missing from neural networks: embodied interaction with the physical world, intrinsic motivation, meta-cognitive awareness of one's own reasoning, social construction of knowledge (Vygotsky's contribution). Also: neural networks can't do 'accommodation' — restructuring the entire framework — they only do 'assimilation' (fitting new data into existing structure) unless the architecture itself changes."
+        }
+      ],
+      "open_question": "Do Piaget's stages represent universal developmental universals — or are they culturally specific, with children in different environments developing cognitive abilities in different sequences?",
+      "sphere_expanded": "Developmental Psychology, Cognitive Science, Education Theory",
+      "connected_thinkers": ["vygotsky", "freud", "dewey", "chomsky"]
+    },
+    {
+      "id": "vygotsky",
+      "name": "Lev Vygotsky",
+      "era": "1896–1934",
+      "origin": "Orsha, Russian Empire (Belarus)",
+      "mbti": "INFJ",
+      "key_insight": "Learning happens in the Zone of Proximal Development — the gap between what a child can do alone and what they can do with guidance. The tool of tools is language.",
+      "spark": "Died at 37 of tuberculosis, leaving an unfinished but revolutionary body of work. His books were banned in the Soviet Union for decades after his death. He left more influence with 10 years of work than most scholars do with 50.",
+      "quote": "What a child can do today with assistance, she will be able to do by herself tomorrow.",
+      "pascal_moment": "Vygotsky pushed the sphere of child development into the social — showing that the sphere doesn't expand from inside out (Piaget) but from outside in: society provides the scaffolding that lifts the learner to their next level.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Your ZPD Right Now",
+          "challenge": "The Zone of Proximal Development (ZPD) is the space between 'I can do this alone' and 'I can do this with help.' Think about something you can almost do: almost solve a type of math problem, almost read a certain kind of text, almost play a piece of music. That's your ZPD. Identify your ZPD in 3 subjects. What specific help would you need to bridge the gap? This is exactly what Parth is trying to identify and fill.",
+          "hint": "The ZPD is not 'too hard' (above your reach even with help) or 'easy' (you can do it alone). It is the productive middle — where learning actually happens. Vygotsky said: good teaching always targets the ZPD, not what the student already knows."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Language and Thought",
+          "challenge": "Vygotsky: language and thought have different origins (animals have thought without language; infants have language-like sounds before conceptual thought) but around age 2, they merge — and from then on, language shapes thought. Test this: think of a complex emotion you have that you cannot name. Now find a word for it (look up 'sonder,' 'hiraeth,' 'hygge,' 'schadenfreude'). Does naming it change the emotion or your experience of it? What does this show about language shaping perception?",
+          "hint": "The Sapir-Whorf hypothesis (strong version): language determines thought. (Weak version): language influences thought. Vygotsky's version: inner speech (subvocal language) is the medium of conscious thought — but thought can also be pre-verbal (images, feelings, spatial intuitions). Where does your experience fall?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Vygotsky and Parth: Designing the ZPD Algorithm",
+          "challenge": "Parth is meant to be a Vygotskian AI tutor — identifying each student's ZPD in each subject and providing exactly the scaffolding needed to bridge it. Design the algorithm conceptually: (1) How does Parth determine what a student can do alone (assessment without testing anxiety)? (2) How does it identify the next achievable step (the 'upper edge' of the ZPD)? (3) What forms of scaffolding can an AI provide that a human tutor cannot — and which can a human provide that AI cannot? (4) How does Parth fade scaffolding as the student grows? Write a 500-word design specification.",
+          "hint": "Vygotsky's concept of 'scaffolding' was actually introduced by Wood, Bruner & Ross (1976) extending his ZPD concept. The key features: contingent (responds to current performance), graduated (starts with maximum help, fades), targeted (at specific difficulties), dialogue-based. Which of these does Parth currently do? Which is hardest to implement?"
+        }
+      ],
+      "open_question": "In a world where children can access AI tutors on-demand — does the social dimension of learning (peer interaction, teacher relationship, community of practice) become MORE important, not less?",
+      "sphere_expanded": "Developmental Psychology, Educational Theory, Sociocultural Cognition",
+      "connected_thinkers": ["piaget", "dewey", "chomsky", "pascal"]
+    },
+    {
+      "id": "chomsky",
+      "name": "Noam Chomsky",
+      "era": "1928–",
+      "origin": "Philadelphia, Pennsylvania, USA",
+      "mbti": "INTJ",
+      "key_insight": "Children are born with a universal grammar — a biological capacity for language. All human languages share deep structural properties because they all emerge from the same cognitive architecture.",
+      "spark": "Simultaneously the most cited living academic (for linguistics) and one of the most prominent political critics of US foreign policy. He holds two apparently separate intellectual identities — language scientist and political dissenter — that he says are connected by a commitment to human freedom.",
+      "quote": "The most effective way to restrict democracy is to transfer decision-making from the public arena to unaccountable institutions.",
+      "pascal_moment": "Chomsky pushed the sphere of linguistics into the biological — revealing that language is not just a cultural tool but a species-specific cognitive organ, as natural and species-specific as echolocation in bats.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Language Organ",
+          "challenge": "All babies babble with all possible sounds at birth. Around 6 months, they narrow down to the sounds of their language — Japanese babies stop distinguishing R and L; English babies stop distinguishing sounds only used in Hindi. This 'pruning' of sound perception happens automatically, without explicit teaching. What does this tell us about whether language is learned or built in? Can you find another biological system that 'prunes' itself based on early experience?",
+          "hint": "Visual system: cats raised with only horizontal stripes cannot see vertical lines (Hubel and Wiesel). Immune system: tolerance to self-antigens is 'learned' in the thymus by pruning reactive T-cells. Both: a rich initial capability is pruned by early experience. Language acquisition seems to use the same biological strategy."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Poverty of the Stimulus",
+          "challenge": "Chomsky's poverty of the stimulus argument: children learn grammatical rules that they have never heard examples of, from input (parental speech) that is too impoverished to infer these rules by simple pattern-matching. Example: children know that 'Is the man who is tall happy?' is correct, not 'Is the man who tall is happy?' — though they've almost never heard either sentence. They apply a structure-dependent rule, not a word-order rule, without being taught it. Design an experiment to test whether children have an innate structure-dependency rule.",
+          "hint": "Test: present children (age 4-5) with a novel complex sentence structure they've never heard. Do they apply structure-dependent operations (referring to the main clause verb) or linear operations (referring to the first verb)? If structure-dependent without experience, it supports innateness. This has been done: children are consistently structure-dependent."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Chomsky vs. LLMs: The Language Debate",
+          "challenge": "Chomsky argued in 2023 that large language models like ChatGPT cannot truly understand language because they only learn statistical patterns — they have no innate grammar, no principled knowledge of what is impossible, no capacity for genuine explanation. They are, he said, 'a poor imitation of human cognition.' Evaluate this argument: (1) What specific linguistic properties does Chomsky say are innate and therefore beyond statistical learning? (2) Are any of these properties actually absent in LLMs — or do they emerge from scale? (3) Does it matter whether LLMs 'understand' language if they are functionally equivalent to understanding?",
+          "hint": "Chomsky's specific claim: LLMs can't distinguish grammatically impossible from highly improbable sentences; they can't explain WHY a sentence is grammatical; they 'know' that all sentences are possible given enough context. Counterargument: GPT-4 has some metalinguistic capacity and can explain grammatical constraints. Is this genuine knowledge or pattern-matched explanation?"
+        }
+      ],
+      "open_question": "Is universal grammar being eroded by language contact and globalization — and if so, does this challenge the claim that it is biologically innate?",
+      "sphere_expanded": "Linguistics, Cognitive Science, Political Philosophy, Philosophy of Language",
+      "connected_thinkers": ["locke", "vygotsky", "wittgenstein", "turing_cs"]
+    },
+    {
+      "id": "weber",
+      "name": "Max Weber",
+      "era": "1864–1920",
+      "origin": "Erfurt, Germany",
+      "mbti": "INTJ",
+      "key_insight": "Ideas and values, not just material conditions, drive historical change. Capitalism emerged from a specific set of religious values (the Protestant ethic). Modern rationalization creates an 'iron cage.'",
+      "spark": "Suffered a severe mental breakdown at 33 that prevented him from working for 5 years. When he returned, he wrote his most enduring work. He died in the 1918 influenza pandemic.",
+      "quote": "Politics is the slow boring of hard boards.",
+      "pascal_moment": "Weber pushed the social sphere by insisting that ideas are causal — not just reflections of material interest. The sphere of values is not epiphenomenal; it drives the sphere of institutions.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Types of Authority",
+          "challenge": "Weber identified three types of authority: (1) Traditional (people obey because 'it has always been this way'), (2) Charismatic (people obey because of the leader's personal magnetism), (3) Rational-legal (people obey because of rules and procedures). Classify: a school principal, a beloved sports captain, a king, a democratically elected prime minister, a viral Instagram influencer. What happens to authority when the charismatic leader dies? What holds rational-legal authority together?",
+          "hint": "Charismatic authority is unstable: it dies with the leader. Routinization of charisma: movements try to institutionalize (make traditional or legal) what was originally personal. Christianity (Jesus's charisma → Church's legal authority); Gandhian movement (Gandhi → Indian Constitution)."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Protestant Ethic",
+          "challenge": "Weber argued: Calvinist Protestantism created capitalism. Calvinists believed that predestination meant God had already decided who was saved — and that worldly success was evidence of being among the elect. So working hard and accumulating wealth became a religious duty. Research: (1) Is Weber's thesis supported by historical evidence? (2) Why did capitalism develop in Protestant Northern Europe rather than Catholic Southern Europe? (3) Does capitalism now reproduce itself without needing the Protestant ethic? Find one critique of Weber's thesis.",
+          "hint": "Critique (Brentano, Tawney, Trevor-Roper): capitalism also developed in Catholic Italy and Jewish communities, which don't fit Weber's model. Counter: Weber said the Protestant ethic was one of several necessary conditions, not the sole cause. The debate continues — is ideology or material infrastructure more causally primary?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Iron Cage and Digital Life",
+          "challenge": "Weber's 'iron cage': modern bureaucratic rationality is so efficient at organizing human life that it becomes a prison — we follow procedures, fill forms, comply with systems, losing spontaneity, meaning, and freedom in the process. Apply this concept to: (1) the algorithm-driven social media feed, (2) the standardized testing system, (3) corporate performance review systems, (4) AI-driven hiring systems. For each: what human values does the bureaucratic/algorithmic system suppress? Is Weber's iron cage unavoidable — or can rational systems be designed to preserve human freedom?",
+          "hint": "Weber was not arguing against rationality — he was noting its unintended consequences. The same rationality that creates antibiotics and GPS creates soul-crushing bureaucracy. His question: can we have the benefits of rationalization without the cage? Many organizational theorists have tried to answer this. Has anyone succeeded?"
+        }
+      ],
+      "open_question": "Is bureaucratic rationalization inevitable as societies become more complex — or is there a form of social organization that is both complex and humanely flexible?",
+      "sphere_expanded": "Sociology, Political Science, Economics of Religion, Organizational Theory",
+      "connected_thinkers": ["durkheim", "marx", "nietzsche", "adam_smith"]
+    },
+    {
+      "id": "durkheim",
+      "name": "Émile Durkheim",
+      "era": "1858–1917",
+      "origin": "Épinal, France",
+      "mbti": "ISTJ",
+      "key_insight": "Social facts are real and irreducible — society is more than the sum of its individuals. Even the most personal acts follow social patterns.",
+      "spark": "Showed that suicide — seemingly the most private and individual act — follows predictable social patterns: Catholics commit suicide less than Protestants; married people less than single people; soldiers less in wartime. Society shapes even death.",
+      "quote": "Man cannot become attached to higher aims and submit to a rule if he sees nothing above him to which he belongs.",
+      "pascal_moment": "Durkheim pushed the sphere by insisting that the social is a level of reality in its own right — with its own laws, irreducible to individual psychology. A new sphere of causal forces became visible.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Social Facts",
+          "challenge": "Durkheim said social facts are real even though you can't touch them: language, customs, laws, collective emotions. You didn't choose to speak your native language — it was 'there' before you and will be there after you. List 5 social facts that shape your life without you choosing them. What would happen if you violated each one? The resistance you'd face IS the social fact making itself visible.",
+          "hint": "Speak the 'wrong' language in class. Dress contrary to your culture's norms. Refuse to greet people in the customary way. The discomfort you feel — and the social pressure you receive — is Durkheim's point: social norms are real forces."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Anomie in Modern Life",
+          "challenge": "Durkheim's concept of anomie: when social norms break down or become contradictory, individuals feel rootless, purposeless, and unmoored — leading to higher rates of suicide, crime, and social disorder. He said industrial capitalism produces anomie by dissolving traditional communities and not replacing them with new collective identities. Map anomie to 3 modern phenomena: social media-driven identity confusion, gig economy workers without community, and rapid urbanization in India. Is anomie increasing or decreasing in modern life?",
+          "hint": "Consider: rates of depression, suicide, and 'deaths of despair' in industrialized countries. But also: new forms of community (online communities, identity movements). Durkheim's anomie is not just 'loneliness' — it is specifically the absence of norms that tell you what to strive for. Does algorithmic content provide norms — or fragment them?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Is Society Real?",
+          "challenge": "Durkheim's methodological holism: social facts are irreducible to individual psychology — studying all the individuals in a society cannot fully explain the social facts that emerge from their interaction. Margaret Thatcher said: 'There is no such thing as society — only individuals and their families.' These are two fundamentally different ontological positions about what is real. Design a study that would provide empirical evidence for one position over the other. What specific predictions does each position make that the other doesn't?",
+          "hint": "Holism predicts: social characteristics (suicide rate, educational achievement, crime rate) correlate with social-level variables (inequality, social capital, collective norms) even after controlling for individual-level variables. Individualism predicts: social patterns fully decompose into individual characteristics (genes, IQ, upbringing). The empirical research mostly supports holism — social-level variables have independent explanatory power."
+        }
+      ],
+      "open_question": "As traditional institutions (family, religion, community) weaken globally — what new forms of collective identity can provide the social solidarity that Durkheim said is necessary for human flourishing?",
+      "sphere_expanded": "Sociology, Religious Studies, Social Statistics, Collective Psychology",
+      "connected_thinkers": ["weber", "marx", "freud", "piaget"]
+    },
+    {
+      "id": "adam_smith",
+      "name": "Adam Smith",
+      "era": "1723–1790",
+      "origin": "Kirkcaldy, Scotland",
+      "mbti": "ENTP",
+      "key_insight": "Markets coordinate self-interest into collective benefit through the 'invisible hand.' Division of labor multiplies productivity far beyond what any planned system could achieve.",
+      "spark": "He is universally invoked by free-market advocates — but The Wealth of Nations contains extensive criticism of monopolies, corporations, landlords, and inherited privilege. He is the most selectively quoted thinker in political history.",
+      "quote": "It is not from the benevolence of the butcher, the brewer, or the baker that we expect our dinner, but from their regard to their own self-interest.",
+      "pascal_moment": "Smith expanded the economic sphere by showing that decentralized self-interest, coordinated by prices, produces order — a spontaneous organization invisible from any single perspective.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Pin Factory",
+          "challenge": "Smith's pin factory: one person making a pin alone can make perhaps 20 per day. Ten people each specializing in one step of the process (drawing the wire, cutting, pointing, head-making, etc.) can make 48,000 per day. That is a 240× productivity gain from specialization. Draw the pin-making process in 10 steps. Now think: what specialization do you rely on daily that you couldn't do yourself? How many specialists does a single cup of tea involve?",
+          "hint": "A cup of tea: tea farmer (India/Sri Lanka), ship captain (transport), dock worker, truck driver, warehouse worker, shop manager, water company employee, electricity company (for the kettle), the family that planted the tea bush... Even the simplest act involves global specialization."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "When the Invisible Hand Fails",
+          "challenge": "Smith's invisible hand says: if every producer and consumer pursues their own interest, prices coordinate to produce social benefit. But the invisible hand fails in specific cases: (1) externalities (pollution — the cost falls on others, not the producer), (2) public goods (national defense — non-excludable, so markets underprovide), (3) information asymmetry (used cars — the seller knows more than the buyer), (4) monopoly power (only one provider). For each: explain why the invisible hand fails and what intervention (if any) could restore efficiency.",
+          "hint": "These are not failures of capitalism per se — they are failures of specific conditions that markets require (clear property rights, competitive markets, complete information, no externalities). When these conditions fail, markets fail. The question is whether government intervention helps more than it hurts — which is empirically contested."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Smith vs. Marx vs. Keynes",
+          "challenge": "Smith (1776): free markets self-regulate through the price mechanism; the division of labor creates prosperity. Marx (1867): capitalism systematically exploits labor; the value of commodities is determined by the labor embedded in them; capitalism will inevitably generate crises and be replaced by socialism. Keynes (1936): markets are not self-regulating; in recessions, the 'animal spirits' of investors collapse, and only government spending can restore full employment. Evaluate each theory against: the 2008 financial crisis, the COVID economic collapse and recovery, and the long-run decline in relative poverty. Which theory has the best predictive track record?",
+          "hint": "2008: Keynes's prescription (fiscal stimulus) was partly applied (bailouts, stimulus packages) and partly prevented (austerity). COVID: massive government intervention (helicopter money, furlough schemes) mostly worked. Long-run poverty decline: Smith's markets, combined with technology, have lifted billions from poverty — but inequality has increased. No single theory wins all three tests."
+        }
+      ],
+      "open_question": "In an economy where AI automates most routine labor, does Smith's insight about the division of labor become a threat (mass unemployment) rather than a source of prosperity — and how do we redesign the economy?",
+      "sphere_expanded": "Economics, Political Economy, Division of Labor, Moral Philosophy",
+      "connected_thinkers": ["keynes", "marx", "mill", "darwin"]
+    },
+    {
+      "id": "keynes",
+      "name": "John Maynard Keynes",
+      "era": "1883–1946",
+      "origin": "Cambridge, England",
+      "mbti": "ENTP",
+      "key_insight": "Markets are not self-regulating — in recessions, falling demand creates a self-fulfilling trap. Government must spend to restart the economy when private investment collapses.",
+      "spark": "His ideas shaped FDR's New Deal, the post-WWII economic boom, and every major economic rescue since. He was also an art collector, a theater impresario, a ballet company chairman, and a speculator who lost and remade two fortunes. He died of a heart attack negotiating post-war economics.",
+      "quote": "In the long run we are all dead.",
+      "pascal_moment": "Keynes pushed the economic sphere by insisting that the short-run reality of unemployment and human suffering is not solved by waiting for long-run market equilibrium. He made the macroeconomy a field of deliberate policy.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Paradox of Thrift",
+          "challenge": "Keynes's Paradox of Thrift: if everyone in an economy saves more (a sensible individual response to hard times), then total spending falls, companies earn less, they fire workers, those workers save less (because they earn nothing), and the economy shrinks. MORE saving causes LESS total savings. This is called a 'fallacy of composition' — what is individually rational is collectively disastrous. Find two other examples of the fallacy of composition in everyday life.",
+          "hint": "Standing on tiptoe to see better at a concert: you see better, but if everyone does it, nobody sees better (and everyone's feet hurt). Fishing more when fish prices rise: you profit, but if all fishermen do it, fish become extinct and all fishermen lose. The tragedy of the commons is the ecological version of the paradox of thrift."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Keynes vs. Hayek",
+          "challenge": "The great 20th century economic debate: Keynes (government must manage aggregate demand in recessions; short-run intervention essential) vs. Hayek (government intervention causes inflation and distorts price signals; the market processes information no central authority can). Both were responding to the Great Depression. Research how each approach was applied during: the Great Depression (1929-39), the 2008 financial crisis, and the COVID-19 economic shock. Which approach worked better, and how do you measure 'better'?",
+          "hint": "1929-39: FDR's New Deal (Keynesian) helped, but WWII spending ended the Depression. 2008: Obama stimulus (Keynesian) + Fed monetary policy; Hayek-influenced European austerity led to longer recessions (Greece, Spain). COVID: massive government intervention (universal Keynesian response); unprecedented speed of recovery. But long-run inflation (2021-24) raised questions about sustained stimulus. The debate continues."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Keynes and Climate Change",
+          "challenge": "'In the long run we are all dead.' Keynes was criticizing economists who said: don't intervene in the short-run recession — the market will self-correct in the long run. His point: the long-run is too far away. But climate change inverts this: the short-run cost of decarbonization (expensive energy, disrupted industries) is real and immediate; the long-run benefit (avoided catastrophe) is diffuse and far away. Construct a 'Keynesian' argument FOR aggressive short-term climate investment — and a 'Hayekian' counter-argument. Then ask: which framework better handles a problem where the long-run IS the point?",
+          "hint": "Keynesian for climate: government investment in renewables creates jobs (multiplier effect), corrects the externality of carbon pollution (market failure), and is necessary because private investment won't happen at the needed scale. Hayekian: carbon tax (not subsidy/regulation) and let the price signal drive innovation. Hayek ACCEPTED government correction of externalities — he opposed command-and-control planning, not market pricing."
+        }
+      ],
+      "open_question": "In a world of zero interest rates and massive government debt, has the economy entered a 'secular stagnation' — and do the standard Keynesian tools still work?",
+      "sphere_expanded": "Macroeconomics, Fiscal Policy, Monetary Theory, Probability Theory",
+      "connected_thinkers": ["adam_smith", "marx", "hayek", "mill"]
+    },
+    {
+      "id": "sen",
+      "name": "Amartya Sen",
+      "era": "1933–",
+      "origin": "Santiniketan, West Bengal, India",
+      "mbti": "INFJ",
+      "key_insight": "Human development means expanding capabilities and freedoms — not just maximizing GDP. Famines don't happen because of food shortages but because of failures of entitlement and democracy.",
+      "spark": "The only person born in undivided Bengal to win the Nobel Prize in Economics. As a child he witnessed the 1943 Bengal famine, which killed 2-3 million people — caused not by food shortage but by wartime inflation and government failure. This shaped his life's work.",
+      "quote": "The freedom to lead the life that one has reason to value.",
+      "pascal_moment": "Sen expanded the economic sphere by insisting that the question 'is this good for the economy?' must be replaced by 'does this expand human capability and freedom?' — and by proving these questions have different answers.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Famines and Freedom",
+          "challenge": "Sen showed that no democratic country has ever had a famine — because elections give voters the power to punish governments that allow starvation. Authoritarian governments don't face this pressure. Research: the 1943 Bengal famine (British colonial rule), the 1959-61 Chinese famine (Mao's Great Leap Forward), the 1984 Ethiopian famine (Derg military government) vs. the 2002 Indian drought (democratic response). Does Sen's claim hold in your research?",
+          "hint": "The 1943 Bengal famine: Churchill's wartime government prioritized military food supplies and Churchill reportedly expressed contempt for Indians. A free press was censored. Amartya Sen's father was a professor in Dhaka — the family was affected. Sen said: had there been democratic accountability and a free press, this would not have happened."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "GDP vs. Human Development",
+          "challenge": "GDP per capita measures average income. The Human Development Index (HDI, created by Mahbub ul Haq and Sen) measures: income + health (life expectancy) + education (literacy + years of schooling). Compare 5 countries: their GDP rank and their HDI rank. Find countries that score much higher on HDI than GDP (good governance, equitable distribution) and much lower (natural resource wealth but poor distribution). What does the difference reveal about the limits of GDP as a measure of human wellbeing?",
+          "hint": "Cuba: low GDP but high HDI (excellent health system, high literacy). Qatar: very high GDP but medium HDI (inequality, migrant worker conditions). Kerala, India: below-average Indian GDP but health and education outcomes rivaling wealthy countries. Rwanda: rising HDI despite low GDP. The divergences reveal policy choices."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Capability Approach and AI",
+          "challenge": "Sen's capability approach: a just society is one that gives every person the real capabilities to live the life they have reason to value — not just the formal rights (which may be meaningless without resources) or just the resources (which may not translate into capability due to disability, discrimination, or social barriers). Apply this framework to evaluating an AI tutoring system like Parth: (1) What capabilities should Parth help students develop? (2) Are formal access to Parth and real capability to benefit from it the same thing? (3) How does caste, gender, language, or disability create gaps between formal access and real capability? (4) What does Sen's framework require of Parth beyond functionality?",
+          "hint": "Formal access: everyone can download Parth. Real capability: requires working device, reliable internet, parental support, confidence to ask questions, language matching, freedom from domestic work during study time. Sen would say: measure Parth's success by whether it expands the REAL capabilities of marginalized students — not just usage statistics."
+        }
+      ],
+      "open_question": "How do we build international institutions (UN, WTO, IMF) that genuinely expand global capabilities and reduce poverty — rather than serving the interests of powerful nations?",
+      "sphere_expanded": "Development Economics, Welfare Theory, Political Philosophy, Social Choice Theory",
+      "connected_thinkers": ["mill", "keynes", "tagore", "gandhi"]
+    }
+  ]
+}

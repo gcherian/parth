@@ -1,0 +1,467 @@
+{
+  "sphere": "mathematics",
+  "version": 2,
+  "description": "Subject-matter puzzles where mathematics is discovered, not delivered. Students construct proofs, find patterns, and encounter the productive shock of genuine mathematical surprise.",
+  "thinkers": [
+    {
+      "id": "euclid",
+      "name": "Euclid",
+      "domain": "Geometry / Axiomatic Proof",
+      "puzzles": [
+        {
+          "id": "euclid_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "The Perfect Triangle",
+          "hook": "Can you draw a perfect equilateral triangle — all sides exactly equal — using only a compass and straightedge, without measuring?",
+          "challenge": "Draw a line segment AB. Open your compass to the full length of AB. Place the compass tip on A and draw a large arc above the line. Without changing the compass width, place the tip on B and draw another arc. Where the two arcs cross, mark point C. Connect A-C and B-C. Measure all three sides. Are they equal? Why must they be, from the construction alone?",
+          "materials": "Compass, ruler (straightedge only, no measuring), pencil, paper",
+          "discover": "All three sides are equal because all three are radii of the same circle radius. The construction guarantees the result by logic — no measuring needed. This is the difference between measuring and proving.",
+          "go_deeper": "Using only this same method, can you construct a regular hexagon? Hint: try marking six points around a circle the same way.",
+          "silent_lesson": "Compass-straightedge construction; axiomatic geometry; proof by construction; Euclid's Elements Book I Proposition 1."
+        },
+        {
+          "id": "euclid_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "proof",
+          "title": "The Angle Sum of Any Triangle",
+          "hook": "The angles of a triangle always add up to 180°. Always. No exceptions. But can you prove it — not by measuring, but by pure reasoning?",
+          "challenge": "Draw any triangle ABC. Draw a line through vertex C parallel to side AB. Label the angles formed at C. Prove that the three interior angles of the triangle must sum to exactly 180° using only: (1) alternate interior angles are equal when lines are parallel, and (2) angles on a straight line sum to 180°. Write your proof in numbered steps, each citing which rule you used.",
+          "materials": "Ruler, pencil, paper",
+          "discover": "The proof works for ANY triangle — not just the one you drew. A geometric fact established by logic applies universally. This is the power of proof over measurement.",
+          "go_deeper": "Draw a triangle on the surface of a ball (globe). Measure its angles. Do they sum to 180°? What does this tell you about Euclid's assumption that parallel lines never meet?",
+          "silent_lesson": "Euclidean proof; parallel postulate; deductive reasoning; generality of proofs; contrast with non-Euclidean geometry."
+        },
+        {
+          "id": "euclid_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Infinitely Many Primes",
+          "hook": "Are there infinitely many prime numbers, or does the list eventually end? Prove it — not by checking, but by showing that assuming a finite list leads to a contradiction.",
+          "challenge": "Assume the complete list of primes is {p₁, p₂, p₃, ..., pₙ} — a finite list. Construct the number N = (p₁ × p₂ × p₃ × ... × pₙ) + 1. Show that N is not divisible by any prime in the list. Conclude. Is N itself prime, or does it just prove something? Write the proof as a formal sequence of steps.",
+          "materials": "Pencil, paper",
+          "discover": "N leaves remainder 1 when divided by every prime in the list — so either N is prime (a new prime not on the list) or N has a prime factor not on the list. Either way, the original list was incomplete. The assumption of finitude leads to contradiction.",
+          "go_deeper": "Use this method to construct new primes beyond {2, 3, 5}: compute (2×3×5)+1 = 31 (prime!), (2×3×5×7)+1 = 211 (prime!), (2×3×5×7×11)+1 = 2311 (prime!). Does it always generate primes?",
+          "silent_lesson": "Euclid's proof of infinite primes; proof by contradiction; constructive proof elements; prime number theory."
+        }
+      ]
+    },
+    {
+      "id": "archimedes",
+      "name": "Archimedes",
+      "domain": "Area / Volume / Approximation",
+      "puzzles": [
+        {
+          "id": "archimedes_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "What Goes In, Must Come Out",
+          "hook": "You can measure the volume of any irregular shape — a rock, a crumpled ball of clay — without any formula. Just water.",
+          "challenge": "Find an irregularly shaped object (a rock, a lump of clay). Try to calculate its volume geometrically — you'll find it's impossible without formulas you don't have. Now fill a measuring cup to exactly 200mL. Submerge the object completely. Read the new water level. Subtract 200mL from the new reading. This is the volume of the object. Confirm by moulding the same clay into a simple shape (cube) and calculating geometrically.",
+          "materials": "Measuring cup, water, irregularly shaped object, clay",
+          "discover": "The water displaced equals the object's volume exactly. No formula needed — just the principle that two objects cannot occupy the same space.",
+          "go_deeper": "Now weigh the object. Divide mass by volume. This is density. How does your rock's density compare to water (1 g/mL)? Would it float or sink in mercury (density 13.6 g/mL)?",
+          "silent_lesson": "Archimedes' principle; displacement measurement; density; indirect measurement of irregular shapes."
+        },
+        {
+          "id": "archimedes_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Trapping Pi",
+          "hook": "A circle's circumference is π times its diameter. But what IS π exactly? Can you calculate it without any calculator — by trapping it between two polygons?",
+          "challenge": "Draw a circle with radius 1cm. Inscribe a regular hexagon (all vertices on the circle). Calculate its perimeter. Circumscribe a regular hexagon (all sides tangent to the circle). Calculate its perimeter. The circle's circumference is between these two. Now do the same with a regular 12-gon. How much tighter is the bound? Predict: what polygon would you need to get π accurate to 2 decimal places?",
+          "materials": "Compass, ruler, protractor, calculator",
+          "discover": "Hexagon gives 3 < π < 3.46. Dodecagon gives 3.105 < π < 3.215. Each doubling of sides tightens the bound. Archimedes used 96-sided polygons to get 3.1408 < π < 3.1429 — remarkably accurate.",
+          "go_deeper": "Using the formula for the perimeter of a regular n-gon (P = 2nr sin(π/n)), calculate the inscribed and circumscribed perimeters for n = 6, 12, 24, 48, 96. Plot the convergence to π.",
+          "silent_lesson": "Method of exhaustion; approximation by polygons; limits; Archimedes' calculation of π; inscribed vs circumscribed."
+        },
+        {
+          "id": "archimedes_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Area Inside a Parabola",
+          "hook": "Long before calculus was invented, one mathematician proved the exact area under a parabolic curve — using only algebra and infinite series. Reconstruct his argument.",
+          "challenge": "Consider the parabola y = x² from x=0 to x=1. Divide this region into n equal vertical strips. For each strip, compute the area of the outer rectangle (using the maximum height in that strip). Sum all strips. This gives an overestimate of the area. Write this sum as a formula in n. Now take the limit as n→∞. Compare to the result for the inner rectangles.",
+          "materials": "Graph paper, pencil, calculator, algebra skills",
+          "discover": "The outer sum = (n+1)(2n+1)/(6n²) → 1/3 as n→∞. The inner sum → 1/3 as well. The area under y=x² from 0 to 1 is exactly 1/3. This is the core of integral calculus — discovered 1900 years before Newton.",
+          "go_deeper": "Archimedes also proved that a sphere's volume is 2/3 of the volume of its circumscribed cylinder. Can you verify this: sphere V = (4/3)πr³, cylinder V = πr²(2r) = 2πr³. Compute the ratio.",
+          "silent_lesson": "Method of exhaustion as precursor to integration; Riemann sums; limits; Archimedes' quadrature of the parabola."
+        }
+      ]
+    },
+    {
+      "id": "fibonacci",
+      "name": "Leonardo Fibonacci",
+      "domain": "Sequences / Patterns in Nature",
+      "puzzles": [
+        {
+          "id": "fibonacci_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "observation",
+          "title": "Nature's Favourite Number",
+          "hook": "Look closely at a pine cone, a sunflower, a pineapple. Count the spirals going one direction, then the other. You'll almost always find two numbers. What's special about them?",
+          "challenge": "Count the spirals on a pinecone (clockwise and counter-clockwise separately). Record both numbers. Do the same for a sunflower head (photograph if needed) and a pineapple. Now write the sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34... Does each number appear? Where in the sequence are your two counts?",
+          "materials": "Pine cone, sunflower or pineapple (or photos), pencil, paper",
+          "discover": "Almost all spiralling plant structures display two consecutive numbers from the same sequence. This is not coincidence — it's the most efficient packing arrangement for growing structures, and it emerges automatically from how plants add new cells.",
+          "go_deeper": "Divide consecutive pairs: 1/1, 2/1, 3/2, 5/3, 8/5, 13/8... Calculate each ratio as a decimal. What number are the ratios approaching?",
+          "silent_lesson": "Fibonacci sequence; phyllotaxis; optimal packing; Golden Ratio as limit."
+        },
+        {
+          "id": "fibonacci_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "pattern",
+          "title": "The Ratio That Won't Quit",
+          "hook": "There is a ratio so special that rectangles with this proportion appear in art, architecture, and shells — and it's defined by a single self-referential property. Can you find it?",
+          "challenge": "A 'golden rectangle' has this property: if you remove the largest square from it, the remaining rectangle has the same proportions as the original. Let the long side be 1 and the short side be x. Set up the equation x/1 = 1/(x+1) ... wait, reconsider the proportions. Let the ratio be φ = long/short. After removing the square, you get a rectangle with ratio 1/(φ-1). Set φ = 1/(φ-1) + 1... actually: φ/1 = 1/(φ-1). Solve for φ. Compare to the sequence ratios you calculated.",
+          "materials": "Pencil, paper, calculator",
+          "discover": "φ = (1+√5)/2 ≈ 1.618. This is the Golden Ratio — the only number equal to 1 + 1/φ. Fibonacci ratios converge to it because φ is the fixed point of the recurrence.",
+          "go_deeper": "Construct a golden rectangle with compass and straightedge. Hint: start with a 1×2 rectangle, find the midpoint of the long side, and use it as a compass pivot.",
+          "silent_lesson": "Golden ratio; algebraic definition; Fibonacci sequence convergence; self-similar rectangles."
+        },
+        {
+          "id": "fibonacci_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Closed Form",
+          "hook": "The Fibonacci sequence requires you to know two previous terms to compute the next. But there's a direct formula that gives the nth Fibonacci number immediately — no iteration needed.",
+          "challenge": "The recurrence Fₙ = Fₙ₋₁ + Fₙ₋₂ has solutions of the form Fₙ = Aφⁿ + Bψⁿ where φ = (1+√5)/2 and ψ = (1-√5)/2. Use initial conditions F₁=1, F₂=1 to solve for A and B. The result is Binet's formula. Verify: compute F₁₀ using the formula and compare to the sequence. Why does this formula always give an integer even though it involves √5?",
+          "materials": "Calculator, pencil, paper, algebra skills",
+          "discover": "Binet's formula: Fₙ = (φⁿ - ψⁿ)/√5. The ψⁿ term is always small (|ψ| < 1), so Fₙ is just φⁿ/√5 rounded to the nearest integer. Two irrational numbers combine to produce an integer — every time.",
+          "go_deeper": "Using Binet's formula, prove that the sum of the first n Fibonacci numbers equals Fₙ₊₂ - 1. Verify for n = 5 (sum = 1+1+2+3+5 = 12 = F₇ - 1 = 13 - 1 ✓).",
+          "silent_lesson": "Closed-form solution via characteristic equation; Binet's formula; irrationals combining to give integers; linear recurrences."
+        }
+      ]
+    },
+    {
+      "id": "euler",
+      "name": "Leonhard Euler",
+      "domain": "Graph Theory / Number Theory / Topology",
+      "puzzles": [
+        {
+          "id": "euler_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Seven Bridges",
+          "hook": "Can you walk through a city crossing each of its seven bridges exactly once and return to your starting point? This seems like a practical question — but the answer turns out to be mathematical.",
+          "challenge": "Draw the map of Königsberg: two banks of a river, two islands, connected by seven bridges (diagram provided or drawn). Try every possible route. Keep track. Can you cross each bridge exactly once? Now: count the number of bridges connected to each landmass (degree). How many landmasses have an odd number of bridges?",
+          "materials": "Paper, pencil, coloured pens for tracking routes",
+          "discover": "You cannot do it — and it's not a matter of trying harder. Every landmass has an odd number of connections, but such a circuit requires at most 2 landmasses with odd degree. The impossibility is a mathematical fact, not a practical difficulty.",
+          "go_deeper": "Design your own map of landmasses and bridges where the tour IS possible (an Eulerian circuit). What rule does it need to satisfy?",
+          "silent_lesson": "Euler's theorem on Eulerian circuits; graph theory; degree of a vertex; topological invariant; mathematical impossibility proofs."
+        },
+        {
+          "id": "euler_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "pattern",
+          "title": "Vertices, Edges, Faces",
+          "hook": "A cube has 8 corners, 12 edges, and 6 faces. A tetrahedron has 4 corners, 6 edges, 4 faces. A dodecahedron has 20 corners, 30 edges, 12 faces. Can you find a number that's the same for ALL of them?",
+          "challenge": "For each of the five Platonic solids (cube, tetrahedron, octahedron, dodecahedron, icosahedron), count V (vertices), E (edges), F (faces). Calculate V - E + F for each. What do you get? Now try for a cylinder (V=0, E=2, F=3 — how you count determines), a torus (a donut shape). What is V - E + F for a donut-shaped polyhedron?",
+          "materials": "Solids (or nets to fold), pencil, paper",
+          "discover": "V - E + F = 2 for every convex polyhedron. For a torus, V - E + F = 0. This number (Euler characteristic) is a topological invariant — it doesn't change when you stretch, compress, or deform the shape, only when you cut or glue.",
+          "go_deeper": "There are only 5 Platonic solids (proved by Euler's formula). Assume V - E + F = 2 and every vertex has degree at least 3 and every face has at least 3 edges. Derive the inequality that limits the number of such solids.",
+          "silent_lesson": "Euler characteristic; V - E + F = 2; topology; topological invariants; classification of polyhedra."
+        },
+        {
+          "id": "euler_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Most Beautiful Equation",
+          "hook": "Five fundamental constants of mathematics — 0, 1, π, e, i — appear together in a single equation of perfect simplicity. Understand why it must be true.",
+          "challenge": "Use Taylor series: eˣ = 1 + x + x²/2! + x³/3! + ... Substitute x = iθ. Separate the real and imaginary parts (recall i² = -1, i³ = -i, i⁴ = 1). Show that the real part is cos θ and the imaginary part is sin θ. Therefore eⁱᶿ = cos θ + i sin θ. Now substitute θ = π. What do you get? Verify that e^(iπ) + 1 = 0.",
+          "materials": "Pencil, paper, Taylor series reference",
+          "discover": "Euler's formula eⁱᶿ = cos θ + i sin θ encodes rotation in the complex plane. At θ = π, a rotation by 180° maps 1 to -1. So eⁱᵖ = -1, and eⁱᵖ + 1 = 0. The equation is a geometric fact about rotation expressed algebraically.",
+          "go_deeper": "Draw the complex plane. Plot the path traced by eⁱᶿ as θ goes from 0 to 2π. What shape do you trace? What is e^(iπ/2)? e^(iπ/4)?",
+          "silent_lesson": "Euler's formula; Taylor series; complex exponential; rotation in complex plane; Euler's identity."
+        }
+      ]
+    },
+    {
+      "id": "gauss",
+      "name": "Carl Friedrich Gauss",
+      "domain": "Number Theory / Statistics / Geometry",
+      "puzzles": [
+        {
+          "id": "gauss_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "pattern",
+          "title": "The Smart Sum",
+          "hook": "If you had to add all the numbers from 1 to 100, you could spend an hour doing it. Or you could find a pattern and do it in 10 seconds. Which would you choose?",
+          "challenge": "Try to add 1+2+3+...+10 by brute force. Time yourself. Now: write 1+2+3+4+5+6+7+8+9+10 on one line, and BELOW it write the same list in reverse: 10+9+8+7+6+5+4+3+2+1. Add each pair of numbers directly above each other. What do you get for each pair? How many pairs? What's the total for BOTH lines? Divide by 2.",
+          "materials": "Paper, pencil",
+          "discover": "Every pair sums to 11. There are 10 pairs. Total = 11×10 = 110. Divide by 2 (counted everything twice): 55. For 1 to n: sum = n(n+1)/2. You can sum any arithmetic sequence in your head.",
+          "go_deeper": "Using the formula n(n+1)/2, calculate the sum 1+2+...+1000 without adding a single pair. Then verify: sum of odd numbers 1+3+5+...+(2n-1) = n². Can you prove this using the same pairing trick?",
+          "silent_lesson": "Arithmetic series; Gauss's pairing trick; closed-form sum; elegant shortcuts vs brute force."
+        },
+        {
+          "id": "gauss_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Bell That Shows Up Everywhere",
+          "hook": "Drop a ball through a series of pegs. Measure how tall each person in your class is. Count random errors in measurements. Three completely different things — and they all produce the same shape. Why?",
+          "challenge": "Collect a continuous measurement from your class (height, handspan, shoe size, or step length). Make a frequency table in equal intervals. Draw a bar chart. What shape appears? Now calculate the mean and standard deviation. Mark mean ± 1 standard deviation on your chart. What fraction of your data falls within this band? Compare to the theoretical 68%.",
+          "materials": "Measuring tape, paper, pencil, class of at least 20 students",
+          "discover": "When many independent random factors combine, the result tends to a bell shape — regardless of what those factors are. This is the Central Limit Theorem: the sum of many random variables becomes predictably distributed.",
+          "go_deeper": "Roll 4 dice and sum the result. Repeat 50 times. Plot the frequency of each total (4–24). What shape appears? Compare to rolling a single die 50 times. Why is the multi-dice distribution more bell-like?",
+          "silent_lesson": "Normal distribution; mean and standard deviation; Central Limit Theorem; why the bell curve appears universally."
+        },
+        {
+          "id": "gauss_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Prime Counting Problem",
+          "hook": "How many prime numbers are there below a million? Below a billion? There is a function that estimates this with remarkable accuracy — and it emerges from a single pattern in the primes.",
+          "challenge": "Count the number of primes below 10, 20, 30, 40, 50, 100 (use a sieve of Eratosthenes). For each limit n, compute π(n)/n (fraction of numbers that are prime) and compare to 1/ln(n). Plot both. How well does 1/ln(n) approximate the prime density? Now estimate π(1000) using this approximation and verify with a prime count.",
+          "materials": "Paper for sieve, calculator, graph paper",
+          "discover": "The density of primes near n is approximately 1/ln(n). So π(n) ≈ n/ln(n). This is Gauss's Prime Number Theorem — discovered empirically at age 15, proved rigorously a century later. Primes thin out precisely as logarithm predicts.",
+          "go_deeper": "Use the more accurate estimate π(n) ≈ Li(n) = ∫₂ⁿ dt/ln(t). For n=100: Li(100) ≈ 30. Actual π(100)=25. How does this compare to n/ln(n)≈21.7?",
+          "silent_lesson": "Prime Number Theorem; prime density; Gauss's conjecture; logarithms and primes; asymptotic estimates."
+        }
+      ]
+    },
+    {
+      "id": "cantor",
+      "name": "Georg Cantor",
+      "domain": "Infinity / Set Theory / Cardinality",
+      "puzzles": [
+        {
+          "id": "cantor_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "The Hotel That Never Fills Up",
+          "hook": "A hotel with infinitely many rooms is completely full. A new guest arrives. Can the manager make room without turning anyone away?",
+          "challenge": "Imagine every room (1, 2, 3, 4...) is occupied. The manager asks each guest to move to the room with double their current number (guest in room 1 → room 2, room 2 → room 4, room 3 → room 6...). Now all odd-numbered rooms are empty. Write out the first 10 moves. How many new guests can now be accommodated?",
+          "materials": "Pencil, paper",
+          "discover": "Infinitely many new guests! Infinity is not a number with fixed size — it can be 'rearranged' in ways finite numbers cannot. All even numbers and all natural numbers are the same 'size' of infinity.",
+          "go_deeper": "Now infinitely many new guests arrive (one bus with infinite seats). Can all of them be accommodated too? Describe the new room assignment rule.",
+          "silent_lesson": "Hilbert's hotel; countable infinity; bijection between infinite sets; size of infinity."
+        },
+        {
+          "id": "cantor_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "proof",
+          "title": "Some Infinities are Bigger",
+          "hook": "Are there more whole numbers or more fractions? More fractions or more real numbers? Not all infinities are the same size.",
+          "challenge": "Part 1 — show fractions and whole numbers are the same size: arrange all positive fractions in a grid (row n = fractions with numerator n). Show a zigzag path that visits every fraction. This gives a counting (a bijection with natural numbers). Part 2 — show real numbers between 0 and 1 cannot be listed: assume you have a complete list of all real numbers between 0 and 1. Construct a new number by making its nth digit different from the nth digit of the nth number on the list. Is this new number on the list?",
+          "materials": "Paper, pencil",
+          "discover": "Part 2: your new number differs from every number on the list at at least one digit — so it's not on the list. But you assumed the list was complete. Contradiction: real numbers cannot be listed. They are a 'bigger' infinity than integers.",
+          "go_deeper": "Cantor called the size of the integers ℵ₀ (aleph-null) and the size of the reals ℵ₁ (or 2^ℵ₀). His 'Continuum Hypothesis' asks: is there an infinity between these two? It was later proved to be undecidable — neither provable nor disprovable in standard mathematics.",
+          "silent_lesson": "Cantor's diagonal argument; countable vs uncountable infinity; bijection; Continuum Hypothesis."
+        },
+        {
+          "id": "cantor_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Power Set is Always Bigger",
+          "hook": "For any set, can you always find a set that's provably bigger — giving you an infinite tower of infinities?",
+          "challenge": "For a set S with n elements, the power set P(S) has 2ⁿ elements. Verify for n=2,3,4. Now prove for infinite sets: assume a function f: S → P(S) that hits every element of P(S) (a surjection). Define T = {x ∈ S : x ∉ f(x)}. Show T is in P(S) but f(a) ≠ T for any a ∈ S. Conclude no such surjection exists, so |P(S)| > |S|.",
+          "materials": "Pencil, paper, set theory notation reference",
+          "discover": "The proof uses self-reference: T is defined by whether elements map to sets containing themselves. No element can map to T, because the definition makes T different from every f(a). This gives ℵ₀ < 2^ℵ₀ < 2^(2^ℵ₀) < ... — an infinite tower of different infinities.",
+          "go_deeper": "This proof is structurally identical to Cantor's diagonal argument and the Halting Problem proof. Identify the exact structural parallel: what plays the role of 'the diagonal,' 'the contradictory element,' and 'the self-referential step' in each proof?",
+          "silent_lesson": "Cantor's theorem; power set; diagonal argument generalised; tower of infinities; self-reference as source of undecidability."
+        }
+      ]
+    },
+    {
+      "id": "ramanujan",
+      "name": "Srinivasa Ramanujan",
+      "domain": "Number Theory / Series / Intuition",
+      "puzzles": [
+        {
+          "id": "ramanujan_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "pattern",
+          "title": "1729 and the Taxicab",
+          "hook": "Most people see 1729 as just a number. One mathematician looked at it and immediately said: 'That's the smallest number expressible as the sum of two cubes in two different ways.' How?",
+          "challenge": "Find all pairs (a, b) where a³ + b³ = 1729, with a, b positive integers and a ≤ b. There are exactly two such pairs. (Hint: 10³ = 1000, 9³ = 729.) Verify both. Now find smaller numbers that are sums of two cubes in at least one way. Is 1729 really the smallest with TWO different pairs?",
+          "materials": "Pencil, paper, calculator",
+          "discover": "1729 = 1³ + 12³ = 9³ + 10³. Numbers with special properties often hide in plain sight — they need someone who sees numbers as living, breathing objects with personality, not just symbols.",
+          "go_deeper": "Find the next 'taxicab number' after 1729 — the smallest number expressible as the sum of two cubes in three different ways. (It's 87539319.)",
+          "silent_lesson": "Hardy-Ramanujan number; taxicab numbers; number theory; playful mathematical curiosity."
+        },
+        {
+          "id": "ramanujan_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "pattern",
+          "title": "The Infinite Fraction",
+          "hook": "Ramanujan wrote down formulas for π that converge impossibly fast — computing 8 decimal places per term. Here's one of the simpler ones. Can you verify it works?",
+          "challenge": "The following series: 1/π = (2√2/9801) × Σ (4k)!(1103 + 26390k) / ((k!)⁴ × 396⁴ᵏ) summing over k = 0, 1, 2... Calculate just the k=0 term: (2√2/9801) × 1103. Take the reciprocal. How many decimal places of π does this single term give you? Compare to π = 3.14159265358979...",
+          "materials": "Calculator, pencil",
+          "discover": "The k=0 term alone gives π correct to 6 decimal places. Each subsequent term adds approximately 8 more digits. This formula was written down by pure intuition — no proof, just a mathematical vision that turned out to be exactly right.",
+          "go_deeper": "Why does such a complicated formula involving √2, 9801, 1103, and 26390 have anything to do with circles? Research what modular forms are and how they connect to these mysterious constants.",
+          "silent_lesson": "Ramanujan's series for π; modular forms; convergence rate; mathematical intuition without formal training."
+        },
+        {
+          "id": "ramanujan_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Partition Function",
+          "hook": "In how many ways can you write 5 as a sum of positive integers (where order doesn't matter)? What about 100? Is there a formula?",
+          "challenge": "Find all partitions of 1, 2, 3, 4, 5 (e.g., partitions of 4: 4, 3+1, 2+2, 2+1+1, 1+1+1+1 — so p(4)=5). Plot p(n) for n=1 to 10. Does the growth look linear, quadratic, or exponential? A key result gives: p(n) ≈ eᵖⁱ√(2n/3) / (4n√3). Calculate this approximation for n=10 (actual: p(10)=42) and n=20 (actual: p(20)=627).",
+          "materials": "Pencil, paper, calculator",
+          "discover": "Partition growth is nearly exponential. The formula involves π and e together — purely from counting combinatorial objects. The connection between π and integer partitions, via complex analysis, was Ramanujan and Hardy's great discovery.",
+          "go_deeper": "Ramanujan noticed modular patterns: p(5k+4) is always divisible by 5; p(7k+5) by 7; p(11k+6) by 11. Verify p(4), p(9), p(14) are divisible by 5. These 'Ramanujan congruences' are still studied today.",
+          "silent_lesson": "Integer partitions; asymptotic formula; circle method; Ramanujan congruences; interplay of combinatorics and complex analysis."
+        }
+      ]
+    },
+    {
+      "id": "godel",
+      "name": "Kurt Gödel",
+      "domain": "Incompleteness / Logic / Truth",
+      "puzzles": [
+        {
+          "id": "godel_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "The Liar",
+          "hook": "This sentence is false. If it's true, it's false. If it's false, it's true. Why can't you decide?",
+          "challenge": "Try to label each sentence TRUE or FALSE: (1) The sky is blue. (2) This sentence has five words. (3) This sentence is false. (4) The next sentence is true. The previous sentence is false. Which ones can you resolve? Which ones loop forever? Write down what goes wrong with each of the unresolvable ones.",
+          "materials": "Pencil, paper",
+          "discover": "Self-referential statements — statements that talk about their own truth — can break the true/false system. The problem isn't that you haven't thought hard enough. It's structural. Some statements can't be given a consistent truth value.",
+          "go_deeper": "Can you write a self-referential sentence that is always TRUE? (Hint: try 'This sentence has more than 3 words.') What makes it different from the Liar?",
+          "silent_lesson": "Self-reference; Liar's paradox; foundation for Gödel's incompleteness; semantic vs syntactic truth."
+        },
+        {
+          "id": "godel_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Numbering the Proof",
+          "hook": "What if every logical statement could be converted into a number — so that reasoning about statements became reasoning about numbers? This is how a mathematician proved that mathematics cannot prove everything.",
+          "challenge": "Assign each letter and symbol a number: A=1, B=2, ... Z=26, + = 27, = 28, 0=29, 1=30, etc. Encode the statement '1+1=2' as a sequence of numbers. Multiply these numbers (or use another unique encoding — prime factorisation works well). You've turned a statement into a single number. Now: could you encode 'THIS NUMBER CANNOT BE PROVED' as a statement? What would it mean if that statement were true? What if it were false?",
+          "materials": "Pencil, paper, calculator",
+          "discover": "If the statement is true, it can't be proved — so the system is incomplete. If it's false, it can be proved but is false — so the system is inconsistent. Every sufficiently powerful formal system must be one or the other. This is Gödel's First Incompleteness Theorem.",
+          "go_deeper": "Gödel numbering converts every proof into a number. This allows the statement 'There is no proof of this statement' to be written in the language of arithmetic itself. Why can't you prove the system's consistency from within the system?",
+          "silent_lesson": "Gödel numbering; self-referential statements in formal systems; First Incompleteness Theorem; limits of formal systems."
+        },
+        {
+          "id": "godel_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "thought_experiment",
+          "title": "True but Unprovable",
+          "hook": "There exist true mathematical statements that can never be proved from any fixed set of axioms. This isn't a gap in our knowledge — it's a permanent, structural feature of mathematics.",
+          "challenge": "Consider these three claims: (A) 'Goldbach's conjecture is true' (every even number > 2 is the sum of two primes). (B) 'Goldbach's conjecture is provable from the standard axioms of arithmetic.' These are logically independent questions. Design an argument for why A could be true even if B is false. Then consider: if a statement G is true but unprovable, and we add G as a new axiom, have we improved mathematics? What happens to statements that were previously undecidable?",
+          "materials": "Pencil, paper",
+          "discover": "Adding true-but-unprovable statements as new axioms produces a stronger system — but the new system has its own unprovable truths. There is no finish line. Mathematics is an open system, not a closed one.",
+          "go_deeper": "The Continuum Hypothesis (is there an infinity between ℵ₀ and 2^ℵ₀?) was proved to be independent of standard set theory — true in some models, false in others. What does 'true' mean for a statement that is independent of the axioms?",
+          "silent_lesson": "Gödel's First and Second Incompleteness Theorems; undecidability; axiomatic systems; mathematical Platonism vs formalism; independence of axioms."
+        }
+      ]
+    },
+    {
+      "id": "riemann",
+      "name": "Bernhard Riemann",
+      "domain": "Geometry / Complex Analysis / The Hypothesis",
+      "puzzles": [
+        {
+          "id": "riemann_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "Geometry on a Ball",
+          "hook": "On flat paper, parallel lines never meet. But what happens to 'parallel' lines drawn on the surface of a ball?",
+          "challenge": "Draw two lines on a basketball or globe that start parallel (same direction, same distance apart) at the equator, pointing north. Follow them to the north pole. Do they stay parallel? Now draw any 'straight' path on the ball (the shortest path between two points — press a string flat against the ball). Measure the angles of a triangle formed by three such paths. Do they add to 180°?",
+          "materials": "Basketball or globe, marker, string, protractor",
+          "discover": "On a sphere, 'parallel' lines meet (at the poles). Triangle angles sum to MORE than 180°. The rules of flat geometry don't apply — a different geometry operates here, one where space itself is curved.",
+          "go_deeper": "A triangle on a sphere has angles that sum to 180° + (area/R²) × (180°/π). Draw triangles of different sizes on your ball and verify this relationship.",
+          "silent_lesson": "Spherical geometry; non-Euclidean geometry; Riemann's generalisation of space; curved surfaces."
+        },
+        {
+          "id": "riemann_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Zeta Pattern",
+          "hook": "The sum 1 + 1/2 + 1/3 + 1/4 + ... grows forever. But 1 + 1/4 + 1/9 + 1/16 + ... converges to exactly π²/6. Why does π appear in a sum of fractions?",
+          "challenge": "Calculate partial sums of 1 + 1/4 + 1/9 + 1/16 + ... for the first 10, 20, 50 terms. How quickly does it approach π²/6 ≈ 1.6449? Now try 1 + 1/16 + 1/81 + 1/256 + ... (1/n⁴). Calculate partial sums. This converges to π⁴/90. What pattern do you see in the relationship between the exponent and the answer involving π?",
+          "materials": "Calculator, paper",
+          "discover": "These sums are values of the Riemann zeta function ζ(s) = Σ 1/nˢ at even integers. That π appears is astonishing — it reveals a deep connection between harmonic analysis and prime numbers that runs through all of mathematics.",
+          "go_deeper": "The zeros of the zeta function are connected to the distribution of prime numbers. What does it mean that ζ(s) = 0? Plot the function for real s > 1 and find approximately where it equals zero in this region.",
+          "silent_lesson": "Riemann zeta function; Basel problem; connection between primes and π; analytic number theory."
+        },
+        {
+          "id": "riemann_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Curvature at Every Point",
+          "hook": "Riemann proved that space itself can have different amounts of curvature at different points — like a lumpy surface rather than a flat sheet or a perfect sphere. This was the mathematical language Einstein needed for general relativity.",
+          "challenge": "On a flat surface, parallel transport a vector around a closed loop — the vector returns unchanged. On a sphere, parallel transport a vector from equator → north pole → equator (different longitude) → equator start: the vector has rotated. The rotation angle equals the enclosed area divided by R². Demonstrate this with a pencil transported on a globe (sketch the path and the final vector direction). Now: what would it mean for space itself to have this property — that carrying a gyroscope around a loop returns it pointing in a different direction?",
+          "materials": "Globe or ball, pencil, string, protractor",
+          "discover": "The rotation depends on enclosed area and curvature — not the specific path. Curvature is a local, measurable property of space. General relativity says gravity IS this curvature: massive objects warp space so that free-falling paths curve toward them.",
+          "go_deeper": "NASA's Gravity Probe B satellite (2004–2011) detected exactly this rotation of gyroscopes in Earth's curved spacetime — 6.6 arcseconds per year. Using your globe result, estimate what enclosed area the satellite would need to sweep out to produce this.",
+          "silent_lesson": "Gaussian curvature; parallel transport; Riemann's metric tensor; connection to general relativity; Gravity Probe B."
+        }
+      ]
+    },
+    {
+      "id": "turing_math",
+      "name": "Alan Turing",
+      "domain": "Computation / Mathematical Foundations",
+      "puzzles": [
+        {
+          "id": "turing_math_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "The Tape Machine",
+          "hook": "A machine that can read one symbol at a time from a tape, write a new symbol, and move left or right — that's it. Can something so simple really compute anything?",
+          "challenge": "Simulate a simple symbol-processing machine on paper. Your tape is a row of cells. Cells contain 0 or 1. Your machine is in one of 3 states (A, B, HALT). Rule table provided: [State A, read 0: write 1, move right, go to B. State A, read 1: write 1, move left, go to B. State B, read 0: write 1, move left, go to A. State B, read 1: write 0, move right, go to HALT.] Start in state A on an all-zeros tape. Execute 10 steps. What is on the tape at the end?",
+          "materials": "Pencil, paper (tape grid), state table",
+          "discover": "A machine with only 3 states and 2 symbols, following 4 rules, can produce complex, unpredictable output. All computation — every program ever written — is equivalent to some Turing machine.",
+          "go_deeper": "Design your own Turing machine that adds 1 to a binary number written on the tape. Test it on the number '0111' (= 7 in binary). Verify the output is '1000' (= 8).",
+          "silent_lesson": "Turing machine; universality; computation as symbol manipulation; Church-Turing thesis."
+        },
+        {
+          "id": "turing_math_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Growth Rate Game",
+          "hook": "Some problems get only slightly harder as they grow. Others become impossibly hard. The difference between these classes is one of the great unsolved questions in mathematics.",
+          "challenge": "Time yourself sorting: 5 cards, 10 cards, 20 cards (using the bubble sort algorithm). Plot time vs number of cards. Now: time finding a name in a sorted phone book of 10, 100, 1000 entries (binary search). Plot both. One grows as n², the other as log n. For n = 1 million, predict how long each takes.",
+          "materials": "Index cards, timer, paper, graph paper",
+          "discover": "Bubble sort at n=1,000,000 takes ~10¹² steps. Binary search takes only 20 steps. The algorithm's growth rate matters enormously — not just the computer's speed. P (problems solvable quickly) vs NP (problems verifiable quickly) is the central open question.",
+          "go_deeper": "The Travelling Salesman Problem: find the shortest route visiting 10 cities. With 10 cities there are 10!/2 = 1.8 million possible routes. With 20 cities? With 100? Why does this matter for encryption and logistics?",
+          "silent_lesson": "Computational complexity; P vs NP; polynomial vs exponential growth; why algorithm choice matters more than hardware."
+        },
+        {
+          "id": "turing_math_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Universal Machine",
+          "hook": "One machine that can simulate any other machine — a universal computer. Prove that such a thing must exist, and find the minimum complexity it requires.",
+          "challenge": "A Universal Machine (UM) takes as input the description of any machine M and an input I, and simulates M running on I. Sketch the three components a Universal Machine needs: (1) a component to read M's description, (2) a component to maintain M's current state, (3) a component to update the tape according to M's rules. Now: the world's smallest known universal machine has 2 states and 3 symbols. Can a 1-state machine be universal? Prove or disprove by considering what a 1-state machine can do.",
+          "materials": "Pencil, paper, Turing machine formalism reference",
+          "discover": "A 1-state machine either halts immediately or loops forever — it cannot do useful computation on arbitrary input. Universality requires at least a minimal memory (states) to distinguish between different contexts. The existence of UTMs means software can be separated from hardware.",
+          "go_deeper": "Every modern computer is a UTM — it runs any program you give it. What does this mean for the relationship between your phone, a laptop, and a supercomputer? They are computationally equivalent — just different speeds.",
+          "silent_lesson": "Universal Turing Machine; hardware-software separation; computability; minimum complexity for universality."
+        }
+      ]
+    }
+  ]
+}

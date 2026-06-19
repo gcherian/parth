@@ -1,0 +1,237 @@
+{
+  "sphere": "chemistry",
+  "version": 2,
+  "description": "Subject-matter puzzles grounded in experiment and investigation. Students discover chemistry through doing — not through being told. The thinker's name never appears in the challenge itself.",
+  "thinkers": [
+    {
+      "id": "lavoisier",
+      "name": "Antoine Lavoisier",
+      "domain": "Conservation of Matter / Combustion",
+      "puzzles": [
+        {
+          "id": "lavoisier_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Vanishing Candle",
+          "hook": "A campfire turns a pile of wood into a handful of ash and some smoke. Where did the rest of the wood go? Did it just disappear?",
+          "challenge": "Weigh a birthday candle on a kitchen scale. Note the exact mass. Light it, let it burn for exactly 3 minutes, then blow it out. Weigh it again. Write down the missing mass. Now put a glass jar over a burning candle — what happens to the flame, and why?",
+          "materials": "Birthday candle, kitchen scale, timer, glass jar",
+          "discover": "The candle loses mass — but it didn't disappear. It turned into invisible gases (carbon dioxide and water vapour) that floated away. Nothing is destroyed; matter only changes form.",
+          "go_deeper": "If you burned the candle inside a sealed glass box placed on a scale, would the total mass of box + candle change? Think carefully before you answer.",
+          "silent_lesson": "Law of Conservation of Mass; combustion as chemical reaction; matter transforms but is never created or destroyed."
+        },
+        {
+          "id": "lavoisier_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "Does Air Weigh Anything?",
+          "hook": "Most people say air weighs 'nothing.' Prove them right or wrong with a scale.",
+          "challenge": "Blow up a balloon as fully as you can. Tie it. Weigh it on a kitchen scale. Then carefully let all the air out and weigh the empty balloon. Calculate the mass of the air inside. Now calculate the volume of the balloon (treat it as a sphere). What is air's density in g/L?",
+          "materials": "Balloon, kitchen scale, ruler or measuring tape, calculator",
+          "discover": "Air has measurable mass — roughly 1.2 grams per litre. The deflated balloon is lighter by the weight of the air. Invisible doesn't mean massless.",
+          "go_deeper": "Carbon dioxide is heavier than air (molecular mass 44 vs air's average ~29). If you could fill the balloon with CO₂ from a baking soda + vinegar reaction, predict how much heavier it would be.",
+          "silent_lesson": "Density of gases; Lavoisier's systematic mass-based experimental method; states of matter."
+        },
+        {
+          "id": "lavoisier_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Oxygen Detective",
+          "hook": "One specific invisible gas in air supports combustion. All the rest do not. How would you design an experiment to prove which gas it is — without any special equipment?",
+          "challenge": "Place candles under glass jars of three different sizes. Light all three simultaneously. Record exactly how long each burns before extinguishing. Calculate the volume of each jar. Plot burn time vs jar volume. What relationship do you find? Formulate a hypothesis about the fraction of air that supports combustion. Test it by predicting burn time for a fourth jar size, then measuring.",
+          "materials": "Three jars of different sizes, candles, timer, ruler, graph paper",
+          "discover": "Larger jar = longer burn, in near-perfect proportion. The fraction of air consumed is constant — roughly 20%. Your timing method independently arrives at the same fraction that precise instruments measure.",
+          "go_deeper": "Before this understanding was established, scientists believed a substance called 'phlogiston' left objects when they burned. What evidence would you need to disprove that theory using only your experiment?",
+          "silent_lesson": "Discovery of oxygen's role in combustion; hypothesis → prediction → test cycle; phlogiston theory replaced by mass-conservation reasoning."
+        }
+      ]
+    },
+    {
+      "id": "dalton",
+      "name": "John Dalton",
+      "domain": "Atomic Theory / Law of Definite Proportions",
+      "puzzles": [
+        {
+          "id": "dalton_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "observation",
+          "title": "The Spreading Dot",
+          "hook": "You mix red and blue paint and get purple — they seem perfectly blended. But is matter really continuous, like water, or made of tiny separate pieces?",
+          "challenge": "Add a single drop of food colouring to a glass of completely still water. Do NOT stir. Watch it every 30 seconds for 5 minutes. Sketch what you see at each interval. Does it spread in a perfectly smooth cloud, or do you notice anything uneven about the edges?",
+          "materials": "Glass of still water, food colouring, pencil, paper",
+          "discover": "The colour spreads in tiny clumps and drifts — not as a perfect smooth gradient. Matter is made of discrete particles bouncing around, not a continuous fluid. The spreading is billions of tiny collisions.",
+          "go_deeper": "Add salt to the water before the drop. Does the spreading speed up or slow down? Why might dissolved particles affect how the colour moves?",
+          "silent_lesson": "Atomic/particle model of matter; diffusion as evidence of discrete particles; Brownian motion concept."
+        },
+        {
+          "id": "dalton_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Fixed Ratio",
+          "hook": "Water is always water — whether it's a raindrop or an ocean. But why? Why doesn't adding more of one ingredient change what you get?",
+          "challenge": "React baking soda (NaHCO₃) with vinegar to produce CO₂ gas. Capture the gas in a balloon. Run three trials: 5g baking soda, 10g, 15g — with excess vinegar each time. Measure the balloon diameter for each. Does gas produced double when baking soda doubles? Plot your data.",
+          "materials": "Baking soda, vinegar, measuring cups, kitchen scale, three identical balloons, ruler",
+          "discover": "Gas production scales proportionally with baking soda — because the ratio of ingredients is fixed by the chemistry, not by you. You can't 'stretch' a molecule by adding more of something.",
+          "go_deeper": "Now repeat with constant baking soda but increasing vinegar. At some point, adding more vinegar stops producing more gas. What does this tell you about which ingredient is 'used up' first?",
+          "silent_lesson": "Law of Definite Proportions; limiting reagent; stoichiometry; atoms combine in fixed integer ratios."
+        },
+        {
+          "id": "dalton_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Crystal Architecture",
+          "hook": "Every salt crystal grown anywhere in the world has the same angle between its faces. Why would a process as random as crystallisation produce such perfect regularity?",
+          "challenge": "Grow salt crystals by evaporating a saturated salt solution slowly (3–5 days). Grow a second set at a warmer temperature for faster evaporation. Examine both under a magnifying glass. Measure the angle of crystal faces with a protractor. Do both sets produce the same angles? Now do the same with Epsom salt (MgSO₄). Compare crystal shapes.",
+          "materials": "Table salt, Epsom salt, hot water, magnifying glass, protractor, shallow dishes",
+          "discover": "Crystal shape is invariant regardless of growth rate or conditions — because the arrangement of atoms is fixed. Fast growth creates imperfect but same-angled crystals. Different salts → different angles → different atomic architectures.",
+          "go_deeper": "If you could measure the density and molar mass of a salt, could you estimate the size of one atom? Set up the calculation.",
+          "silent_lesson": "Atomic structure determines macroscopic properties; crystal lattice; Dalton's atomic theory as explanation of fixed proportions."
+        }
+      ]
+    },
+    {
+      "id": "mendeleev",
+      "name": "Dmitri Mendeleev",
+      "domain": "Periodic Patterns / Prediction from Data",
+      "puzzles": [
+        {
+          "id": "mendeleev_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "pattern",
+          "title": "The Repeating Code",
+          "hook": "Music has a pattern: after 8 notes, the same note repeats — higher, but with the same character. What if elements did the same thing?",
+          "challenge": "Here are simplified properties of the first 18 elements (provided as a table): melting point, reactivity with water (scale 0–5), and whether they conduct electricity (Y/N). Colour-code the reactivity. Do you see any repeating pattern as you go from element 1 to 18? Can you group them into columns of 'similar characters'?",
+          "materials": "Printed element property table (simplified), coloured markers",
+          "discover": "Properties repeat every 8 elements — reactive metals, less reactive, nonreactive gases, back to reactive metals. Nature organises itself into a pattern you can see.",
+          "go_deeper": "Using the pattern, predict whether element 19 would react violently with water, gently, or not at all. Then look it up. Were you right?",
+          "silent_lesson": "Periodicity; periodic law; pattern recognition as scientific tool."
+        },
+        {
+          "id": "mendeleev_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Missing Piece",
+          "hook": "A scientist arranged all known elements by weight and noticed gaps. Instead of skipping them, they wrote in the expected properties of elements that didn't yet exist. Decades later, those elements were discovered — and matched perfectly.",
+          "challenge": "Given a data table of elements in groups (some entries deliberately removed), predict the missing element's: approximate atomic mass, melting point range, density, and whether it's metal or nonmetal. Use the trend in the surrounding elements. Then compare your prediction to the actual element (gallium or germanium).",
+          "materials": "Provided data table with gaps, calculator",
+          "discover": "Patterns are predictive. A good model doesn't just describe existing data — it generates precise predictions about things not yet observed. Your prediction, made from trends alone, can match reality.",
+          "go_deeper": "Mendeleev's prediction for 'eka-silicon' (germanium): density 5.5 g/cm³, melting point 900°C. Actual values: 5.32 g/cm³, 938°C. Calculate his percentage error for each property.",
+          "silent_lesson": "Scientific prediction as validation of theory; eka-elements; periodic table as a predictive model, not just a catalogue."
+        },
+        {
+          "id": "mendeleev_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "design",
+          "title": "The Alien Chemistry",
+          "hook": "The periodic table's structure isn't arbitrary — it emerges directly from how electrons fill shells. Could a different universe, with different physics, have a different but equally logical table?",
+          "challenge": "Design a mini periodic table for an imaginary chemistry with exactly 18 elements. Assign them: atomic masses, whether they bond easily (valence), and whether they're reactive with your invented 'water equivalent.' Organise them into periods and groups based on your rules. Your table must have at least one 'noble gas' equivalent and one set of 'alkali metal' equivalents. Explain the rule that determines period length.",
+          "materials": "Paper, pencil, coloured pens",
+          "discover": "The structure of a periodic table — period lengths, group properties — is forced by the mathematics of electron orbitals. Your alien table will have the same architecture if it follows the same logic. The pattern is universal, not accidental.",
+          "go_deeper": "In our universe, the period lengths are 2, 8, 8, 18, 18... due to orbital capacities (s, p, d, f). What would change if electrons could only occupy 2 states per orbital instead of 2? Redesign the period lengths.",
+          "silent_lesson": "Electron configuration determines periodicity; periodic law as universal principle; quantum mechanics as the foundation of the table."
+        }
+      ]
+    },
+    {
+      "id": "avogadro",
+      "name": "Amedeo Avogadro",
+      "domain": "Molecular Theory / The Mole",
+      "puzzles": [
+        {
+          "id": "avogadro_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "Heavy Air vs Light Air",
+          "hook": "Blow up two identical balloons to exactly the same size — one with your breath, one with gas from a fizzy drink bottle. Do they weigh the same?",
+          "challenge": "Create CO₂ by putting 1 tsp baking soda in a bottle and adding vinegar. Quickly attach a balloon to the bottle neck and let the gas inflate it. Inflate a second identical balloon with your breath to the same size. Weigh both on a kitchen scale. Which is heavier, and by how much?",
+          "materials": "Two identical balloons, small bottle, baking soda, vinegar, kitchen scale",
+          "discover": "Same volume, different weight — the CO₂ balloon is heavier. Same amount of gas particles, but each CO₂ particle is heavier than the mix of particles in air. Equal volumes of gas hold equal numbers of particles.",
+          "go_deeper": "CO₂ has molecular mass 44; air has average molecular mass ~29. Predict the weight ratio of the two balloons. Does your measurement agree?",
+          "silent_lesson": "Avogadro's law: equal volumes of gases at same conditions hold equal numbers of molecules; molecular mass."
+        },
+        {
+          "id": "avogadro_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "pattern",
+          "title": "The Counting Unit",
+          "hook": "A baker doesn't count eggs one by one — they count by the dozen. Chemists don't count atoms one by one either. They use a unit so large it makes atoms countable. But why that specific number?",
+          "challenge": "If 12 grams of carbon contains 6.022 × 10²³ atoms: (1) How many atoms are in 24g of carbon? In 6g? (2) How much does ONE carbon atom weigh in grams? (3) If you stacked 6.022 × 10²³ sheets of paper (each 0.1mm thick), how high would the stack reach? Compare to the distance from Earth to the Sun (150 million km).",
+          "materials": "Calculator",
+          "discover": "One atom weighs about 2 × 10⁻²³ grams — absurdly small. The mole (6.022 × 10²³) is chosen so that atomic mass in grams equals one mole. It makes the arithmetic clean. The stack of paper would reach 6 × 10¹⁸ km — 600 light years.",
+          "go_deeper": "Water has molecular mass 18. How many water molecules are in a 1-litre bottle? How does this compare to the number of stars in the observable universe (~10²⁴)?",
+          "silent_lesson": "Avogadro's number; molar mass; why chemistry uses moles; scale of the atomic world."
+        },
+        {
+          "id": "avogadro_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "experiment",
+          "title": "One Molecule Thin",
+          "hook": "You can estimate the size of a single molecule using a bowl of water, a drop of oil, and the assumption that oil spreads until it's exactly one molecule thick. Try it.",
+          "challenge": "Dissolve 1mL of olive oil in 500mL of petroleum ether. Take 1mL of this solution. Calculate the volume of oil in this sample. Pour it onto a clean water surface in a large tray. Measure the diameter of the circular slick. Assume it spreads to exactly one molecule thickness. Calculate the thickness. This is approximately the size of one oil molecule.",
+          "materials": "Olive oil, petroleum ether (or isopropyl alcohol), large flat tray, water, ruler, dropper",
+          "discover": "Oil molecule diameter ≈ 10⁻⁹ m (1 nanometre). Your measurement, done with kitchen-scale equipment, lands in the right order of magnitude. This is how Rayleigh estimated atomic size in 1890.",
+          "go_deeper": "If your oil molecule is 10⁻⁹ m and your drop volume is known, verify that Avogadro's number is consistent with the number of molecules in your drop (assuming spherical molecules packed in a cubic lattice).",
+          "silent_lesson": "Avogadro's law; molecular size estimation; Langmuir-Blodgett film; order-of-magnitude reasoning."
+        }
+      ]
+    },
+    {
+      "id": "boyle",
+      "name": "Robert Boyle",
+      "domain": "Gas Laws / Pressure and Volume",
+      "puzzles": [
+        {
+          "id": "boyle_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Squishable Marshmallow",
+          "hook": "A marshmallow is mostly air. What happens when you squeeze all that air?",
+          "challenge": "Place a marshmallow inside a large syringe. Block the open end with your finger. Push the plunger inward as far as you can. Watch the marshmallow. Sketch what it looks like when compressed. Then release the plunger. What happens to the marshmallow? Repeat three times.",
+          "materials": "Large syringe, marshmallow",
+          "discover": "Compress the gas inside → marshmallow shrinks (air bubbles compress). Release → marshmallow returns to original size. Pressure and volume are a seesaw: push pressure up, volume goes down.",
+          "go_deeper": "What would happen to the marshmallow if you put it inside a vacuum jar and pumped out the air? Predict, then try if a vacuum jar is available.",
+          "silent_lesson": "Boyle's Law; inverse relationship between pressure and volume; gas compressibility."
+        },
+        {
+          "id": "boyle_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Pressure-Volume Graph",
+          "hook": "You push on trapped air and it pushes back. But is there an exact mathematical rule for how hard it pushes?",
+          "challenge": "Block the end of a large syringe. Record the volume at rest. Stack books on the plunger and record volume vs number of books for at least 5 data points. Plot volume (y-axis) vs pressure (approximate: number of books, y-axis). What shape is the curve? Now plot 1/volume vs pressure. What shape is that?",
+          "materials": "Large syringe, stack of books with similar weight, ruler, graph paper",
+          "discover": "Volume vs pressure is a curve (hyperbola). 1/Volume vs pressure is a straight line through the origin. This means P × V = constant — double the pressure, exactly half the volume.",
+          "go_deeper": "Calculate P × V for each data point. Is it truly constant? What sources of error might cause it to deviate?",
+          "silent_lesson": "Boyle's Law (PV = k); inverse proportionality; graphing nonlinear relationships; linearization."
+        },
+        {
+          "id": "boyle_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "design",
+          "title": "The Diving Bell Engineer",
+          "hook": "Engineers designing submarines and diving equipment must predict exactly how air volume changes at depth — a wrong calculation costs lives. Can you make that prediction and then test it?",
+          "challenge": "Design a simple 'diving bell': an inverted cup sealed with clay except for an opening at the bottom. Trap a measured volume of air inside. Predict: at 50cm depth in water (pressure ≈ 1.05 atm), what volume will the air shrink to? Use the gas pressure law (PV = constant). Now lower your bell into a bucket of water to that depth. Measure the actual air volume by observing where the water line is inside the cup. Compare predicted to measured.",
+          "materials": "Plastic cup, clay, ruler, deep bucket of water, permanent marker",
+          "discover": "Your prediction and measurement should agree within ~5%. Engineering from first principles works. The equation isn't just an approximation — it's reliable enough to build life-support systems on.",
+          "go_deeper": "Scuba divers must exhale continuously while ascending. Using Boyle's Law, explain what happens to a lungful of air breathed at 10m depth as the diver ascends to the surface (pressure halves). What happens if they hold their breath?",
+          "silent_lesson": "Boyle's Law applied to engineering; decompression sickness; predictive power of physical law; experimental verification of theory."
+        }
+      ]
+    }
+  ]
+}

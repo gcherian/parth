@@ -1,0 +1,467 @@
+{
+  "sphere": "arts_interdisciplinary",
+  "version": 2,
+  "description": "Subject-matter puzzles for thinkers who crossed the boundary between arts, science, and philosophy. These puzzles show students that the boundary itself is artificial — and that the deepest insights often live at the crossings.",
+  "thinkers": [
+    {
+      "id": "da_vinci",
+      "name": "Leonardo da Vinci",
+      "domain": "Observation / Engineering / Anatomy / Art",
+      "puzzles": [
+        {
+          "id": "da_vinci_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "observation",
+          "title": "Draw What You See, Not What You Know",
+          "hook": "Most people draw a hand from memory — and get it wrong. A careful observer draws what is actually there — and gets it right. Which are you?",
+          "challenge": "Draw your non-dominant hand twice: (A) from memory, without looking at it. (B) from direct observation, looking closely at every curve, wrinkle, and proportion for at least 5 minutes. Compare both drawings to your actual hand. Which finger is actually longest? Where does the knuckle actually appear relative to the fingernail? How many creases are at each joint?",
+          "materials": "Paper, pencil",
+          "discover": "The observation drawing will be dramatically more accurate. Your memory stores a simplified concept of 'hand' — the observation forces you to see what is actually there. The gap between the two drawings shows you how much you were 'drawing from memory' even when you thought you were drawing from life.",
+          "go_deeper": "Now draw a leaf, a shoe, or a piece of crumpled paper using 10 minutes of close observation. Then draw the same object from memory immediately after. How much more accurate is the observation drawing?",
+          "silent_lesson": "Primary observation vs prior schema; da Vinci's notebooks as direct observation; the difference between seeing and knowing."
+        },
+        {
+          "id": "da_vinci_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Mechanics of a Wing",
+          "hook": "Birds have flown for 150 million years. Humans have flown for 120. What took so long — and what changed when we finally figured it out?",
+          "challenge": "Study a bird wing (diagram or real feather). Identify: the curve (cambered aerofoil), the layering of feathers (overlapping for smooth flow), and the articulation points (where it bends). Now build a simple aerofoil from card: flat card vs curved (humped) card. Hold each in front of a fan and feel the lift. Which produces more upward force? Measure by attaching a thread and observing deflection angle.",
+          "materials": "Card stock, fan, thread, tape, feather (optional)",
+          "discover": "The curved aerofoil produces measurably more lift. Air moves faster over the curved upper surface (longer path), creating lower pressure on top. The bird's wing is an engineering solution refined over millions of years — every feather overlap, every wing articulation, serves aerodynamic function.",
+          "go_deeper": "Da Vinci designed ornithopters (machines that flap like birds) but they couldn't be powered by humans. Why? Calculate the power-to-weight ratio of a bird vs a human muscle system.",
+          "silent_lesson": "Aerofoil; Bernoulli's principle; biomimicry; da Vinci's ornithopter designs; why human-powered flapping failed."
+        },
+        {
+          "id": "da_vinci_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Universal Proportions",
+          "hook": "Da Vinci's Vitruvian Man depicts precise proportions he claimed to be universal across human bodies. Can you verify or refute this claim with data?",
+          "challenge": "Test 8 Vitruvian proportions on yourself and 10 classmates: (1) height = arm span, (2) face height = 1/10 height, (3) foot length = 1/7 height, (4) navel height = golden ratio × height, (5) head height = 1/8 height, (6) forearm = 1/4 height, (7) shoulder width = 1/4 height, (8) hand length = 1/10 height. For each, calculate mean ratio and standard deviation across your 10 subjects. Which ratios are most consistent? Which show most variation?",
+          "materials": "Measuring tape, calculator, pencil, 10 willing subjects",
+          "discover": "Some ratios are remarkably consistent (arm span ≈ height, foot ≈ 1/7 height). Others vary substantially by sex, age, and ancestry. The Vitruvian Man is an ideal, not a universal fact — it encodes a specific male body of a specific type. Beauty standards encoded as mathematics.",
+          "go_deeper": "Forensic anthropologists use skeletal proportions to estimate height, sex, and ancestry from bones. Which of your measured ratios are most reliable for forensic identification? Compare to published forensic tables.",
+          "silent_lesson": "Human body proportions; statistical variation; ideal vs universal; da Vinci's scientific method; connection to art and forensics."
+        }
+      ]
+    },
+    {
+      "id": "bach",
+      "name": "Johann Sebastian Bach",
+      "domain": "Mathematical Structure in Music / Counterpoint",
+      "puzzles": [
+        {
+          "id": "bach_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Mathematics of Harmony",
+          "hook": "When two notes sound 'harmonious' together, their frequencies have a simple ratio. When they sound 'dissonant,' the ratio is complicated. Can you hear mathematics?",
+          "challenge": "Using any instrument (or a keyboard app): play note pairs and judge each as PLEASANT or HARSH. Test: C+C (same note), C+G (fifth), C+F (fourth), C+E (major third), C+B (major seventh), C+C# (semitone). Then measure the frequencies (use a tuner app) and calculate the ratio for each pair. Is there a pattern — do pleasant pairs have simpler ratios?",
+          "materials": "Keyboard or instrument (or keyboard app on phone), tuner app, paper",
+          "discover": "Octave = 2:1, perfect fifth = 3:2, perfect fourth = 4:3, major third = 5:4. These simple integer ratios produce the consonances. Complex ratios (like C+B = 15:8) produce dissonance. The ear detects mathematical simplicity as beauty — this is why music theory and mathematics share deep structure.",
+          "go_deeper": "Pythagoras noticed this first. Starting from the note C, go up by perfect fifths (×3/2 ratio) 12 times. Do you arrive back at C? Calculate. Why do you not land exactly back — and how did Bach's 'Well-Tempered Clavier' solve this problem?",
+          "silent_lesson": "Harmonic ratios; Pythagorean tuning; equal temperament; why mathematical ratios produce consonance."
+        },
+        {
+          "id": "bach_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "construction",
+          "title": "The Mirror Fugue",
+          "hook": "Bach composed pieces that can be played backward, upside-down, and in mirror image — and still work as music. How?",
+          "challenge": "Take the Minuet in G (sheet music provided). Perform these transformations on the first 4 bars: (1) Retrograde (play the notes in reverse order). (2) Inversion (flip up and down — each step that went up by a note now goes down by the same amount). (3) Retrograde-inversion (both simultaneously). Hum each result. Do they still sound musical? Now examine: what property must a melodic line have for these transformations to produce a harmonically consistent result?",
+          "materials": "Sheet music of Bach Minuet, pencil for notation",
+          "discover": "Not every melody survives all four transformations. Bach carefully designed his themes so that transformations produce valid melodies that work against the original. This requires thinking in pitch-time space simultaneously — a mathematician's approach to composition.",
+          "go_deeper": "A canon is a melody that can be played against a time-delayed copy of itself (like a round). Write 4 bars of melody and test: if you start a second voice 1 bar later, do they harmonise at every beat? What rules about intervals must your melody follow?",
+          "silent_lesson": "Retrograde; inversion; contrapuntal technique; symmetry in music; Bach's mathematical approach to composition; fugue structure."
+        },
+        {
+          "id": "bach_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Well-Tempered Solution",
+          "hook": "Before 1722, most keyboard instruments could play in only a few keys before sounding horribly out of tune. Bach's Well-Tempered Clavier demonstrated that one tuning system could play in all 24 keys equally well. What compromise did this require?",
+          "challenge": "The Pythagorean comma: going up 12 perfect fifths (ratio 3:2 each) gives (3/2)¹² = 129.75, but 7 octaves (ratio 2:1 each) gives 2⁷ = 128. The comma is 129.75/128 = 1.014 — slightly larger than 1. In equal temperament, the perfect fifth is slightly flattened to (2)^(7/12) ≈ 1.4983 (vs pure 1.5000). Calculate: (1) how many cents sharp is a pure fifth vs equal temperament fifth? (2) If you tune a piano with pure fifths all the way around, by how many cents does the final C differ from the starting C?',",
+          "materials": "Calculator, logarithm reference (cents = 1200 × log₂(ratio))",
+          "discover": "Each equal-tempered fifth is ~2 cents flat. After 12 fifths, the error accumulates to ~24 cents — almost a quarter-tone. Bach's solution: distribute the error evenly across all 12 fifths so no key is perfectly in tune but all keys are equally slightly out of tune. A mathematical compromise that enabled all of tonal music.",
+          "go_deeper": "Some contemporary pianists advocate for 'well-tempered' (not equal-tempered) tuning — where different keys have slightly different emotional characters. Record a simple piece in equal temperament (use software) and in Pythagorean temperament. Can you hear the difference?",
+          "silent_lesson": "Pythagorean comma; equal temperament; logarithmic pitch; mathematical compromise in tuning; why Bach's WTC was revolutionary."
+        }
+      ]
+    },
+    {
+      "id": "shakespeare",
+      "name": "William Shakespeare",
+      "domain": "Character / Language / Psychological Complexity",
+      "puzzles": [
+        {
+          "id": "shakespeare_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Words That Weren't There",
+          "hook": "Many words you use every day — 'bedroom,' 'lonely,' 'generous,' 'gossip,' 'fashionable,' 'bedroom' — were invented or first recorded by one playwright. What does it mean to invent a word?",
+          "challenge": "Look up 10 words a single playwright is credited with first using (list provided: bedroom, lonely, cold-blooded, generous, puke, eyeball, bedroom, addiction, bedroom). For each word: (1) what did it mean originally? (2) what does it mean now? (3) how do you think it spread from a play to everyday speech? Now try to invent a word for a concept that doesn't yet have a name. Circulate it among classmates for a week. How far does it spread?",
+          "materials": "Etymology reference, pencil, classmates for the spread experiment",
+          "discover": "Words spread when they name something people already experience but lacked a name for. Shakespeare invented words not randomly but to express specific dramatic needs — psychological states, social dynamics, physical actions. The survival of a word depends on the need it meets.",
+          "go_deeper": "Shakespeare's total vocabulary is estimated at 28,000 words — approximately double the average educated person's active vocabulary. What does vocabulary size allow you to express that smaller vocabulary cannot?",
+          "silent_lesson": "Language innovation; etymology; how words enter common usage; Shakespeare's linguistic legacy; vocabulary and expressivity."
+        },
+        {
+          "id": "shakespeare_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Character in Contradiction",
+          "hook": "A character who is consistently good or consistently evil is boring. A character who wants contradictory things simultaneously is real. How do you build a person on the page?",
+          "challenge": "Analyse Hamlet: list 5 contradictions in his character (e.g., claims to love Ophelia, yet rejects her; wants to avenge his father, yet delays repeatedly; thinks too much, acts too little). For each contradiction: (1) what does he say? (2) what does he do? (3) what might explain the gap between saying and doing? Now: design a character for a short story with 3 such contradictions. Write one scene where all three contradictions are visible simultaneously.",
+          "materials": "Hamlet text (Act 1–3 excerpts), pencil",
+          "discover": "Psychological realism requires contradiction — because real people want contradictory things and behave inconsistently. Shakespeare's characters feel real because they are inconsistent in consistent ways: Hamlet always overthinks, even his overthinking.",
+          "go_deeper": "Aristotle argued characters must be consistent. Shakespeare violated this rule deliberately. Which approach creates more psychologically accurate characters? Compare a scene from Aristotelian drama to a Shakespearean monologue.",
+          "silent_lesson": "Psychological complexity in character; contradiction as realism; Hamlet's character structure; narrative vs dramatic character."
+        },
+        {
+          "id": "shakespeare_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Iambic Argument",
+          "hook": "Shakespeare's blank verse (iambic pentameter — da-DUM da-DUM da-DUM da-DUM da-DUM) sounds natural in English. But when a character under emotional stress speaks, the metre breaks. The breaks are the psychology.",
+          "challenge": "Scan three speeches from different plays (provided): (1) mark each syllable as stressed (/) or unstressed (u). (2) Identify where lines deviate from perfect iambic pentameter (feminine endings, pyrrhic feet, spondees, mid-line breaks). (3) Correlate every deviation with the character's emotional state at that moment. Do deviations increase during heightened emotion?',",
+          "materials": "Provided speech texts, pencil for scansion marks",
+          "discover": "Shakespeare uses metrical regularity to convey composure and metrical deviation to signal psychological disruption — often in the same speech. The form is the content. A perfectly regular line in a moment of supposed grief is suspicious; a broken line in a supposedly calm speech signals suppressed feeling.",
+          "go_deeper": "Sonnets 18 and 130 both describe beauty but with radically different metre and diction. Analyse both. Shakespeare deliberately breaks the conventional sonnet praise in 130 — how does the metrical choice reflect the argument?",
+          "silent_lesson": "Iambic pentameter; metrical variation as psychological signal; form and content; close reading; Shakespeare's prosody."
+        }
+      ]
+    },
+    {
+      "id": "goethe",
+      "name": "Johann Wolfgang von Goethe",
+      "domain": "Colour Theory / Morphology / Art-Science Bridge",
+      "puzzles": [
+        {
+          "id": "goethe_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "Afterimages and the Eye",
+          "hook": "Stare at a red circle for 30 seconds, then look at a white wall. You see a green circle. Stare at yellow, see violet. Your eye is creating colours that aren't there. Why?",
+          "challenge": "Stare at a bold red shape on white paper for exactly 30 seconds without blinking. Then quickly look at a blank white wall. Sketch the colour and shape you see. Repeat with: blue (expect orange afterimage), yellow (expect violet), green (expect red). Record each complementary pair. Now: mix each complementary pair of pigments. What do you get?",
+          "materials": "Coloured paper shapes, blank white wall or paper",
+          "discover": "Your eye has three types of colour receptors. Staring at red fatigues the red-sensitive receptors, so when you look at white (which contains all colours), the red response is weak — you see the opposite of red, which is cyan-green. Complementary colours are physiologically defined by receptor fatigue.",
+          "go_deeper": "Goethe argued that Newton's white-light-as-all-colours theory was wrong and that colour arises at the boundary between light and darkness. He was wrong on the physics but right on the phenomenology: colour perception is as much about the eye as about the light. Where does perception end and physics begin?",
+          "silent_lesson": "Afterimage; complementary colours; receptor fatigue; opponent-process theory; Goethe's colour theory vs Newton's."
+        },
+        {
+          "id": "goethe_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Leaf as Theme and Variation",
+          "hook": "Goethe claimed that all plant organs — leaf, sepal, petal, stamen — are variations on a single fundamental form (the Urpflanze). Is this just poetry, or can you see it?",
+          "challenge": "Collect: a regular leaf, a sepal (green petal base), a petal, a stamen (cut flower to see), and a seed coat. Draw each at the same scale. Measure: length, width, symmetry, venation pattern, attachment type. Calculate width/length ratio for each. Now: arrange them in sequence from leaf → sepal → petal → stamen. What changes systematically? What remains constant?",
+          "materials": "Fresh flower with all parts accessible (lily works well), ruler, pencil, magnifying glass",
+          "discover": "Width/length ratio tends to decrease from leaf (broad) to stamen (narrow). Bilateral symmetry often persists. Venation patterns echo across organs. The organs are variations on a theme — not identical, but related through a transformable pattern. This is homology, the basis of comparative anatomy.",
+          "go_deeper": "In animals, the same principle applies: your arm, a bat's wing, a whale's flipper, and a horse's leg all have the same bones (humerus, radius, ulna, carpals, phalanges) modified for different functions. This is called homologous structures. Connect to Darwin's tree of life.',",
+          "silent_lesson": "Urpflanze; homologous structures; morphology; Goethe's theory of metamorphosis; connection to evolutionary biology."
+        },
+        {
+          "id": "goethe_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Two Ways of Knowing",
+          "hook": "Goethe believed that scientific and aesthetic knowledge are not opposites but complementary — that rigorous attention to phenomena is the foundation of both. Can science and art ask the same question?",
+          "challenge": "Choose one natural phenomenon (e.g., the structure of a spiral shell, the growth of a crystal, the pattern of cracks in dried mud, the branching of a tree). Investigate it using two methods simultaneously: (A) scientific: measure, quantify, hypothesise mechanism, compare to mathematical models. (B) aesthetic: draw, describe using metaphor, consider emotional response, find analogues in art and music. Write a double-column analysis. Where do the two methods agree? Where do they produce genuinely different insights?",
+          "materials": "The natural phenomenon, measuring tools, art materials, pencil",
+          "discover": "The scientific method reveals structure invisible to casual observation. The aesthetic method reveals qualities (texture, tension, character) that measurement misses. Neither is complete alone. Goethe's point: both are forms of rigorous attention, differing in what they attend to and what questions they ask.",
+          "go_deeper": "The golden spiral appears in nautilus shells, sunflower seed patterns, and galaxy arms. Is this a mathematical necessity, a biological optimum, or aesthetic coincidence? Investigate all three explanations and evaluate their evidence.',",
+          "silent_lesson": "Goethe's Naturphilosophie; two epistemologies; quantitative vs qualitative knowing; science-art interface; complementarity of methods."
+        }
+      ]
+    },
+    {
+      "id": "tagore",
+      "name": "Rabindranath Tagore",
+      "domain": "Education / Creativity / Nature / Unity of Knowledge",
+      "puzzles": [
+        {
+          "id": "tagore_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Learning Without Walls",
+          "hook": "Most learning happens inside a room. But some of the things that matter most — weather, ecosystems, geometry in nature, social dynamics — can only really be understood outside one. What can you learn from 30 minutes outside that you cannot learn from 30 minutes inside?",
+          "challenge": "Spend 30 minutes outdoors with only paper and pencil. Record: 5 things you observe that require explanation (why is the shadow that shape? why do birds gather there?), 3 things that connect to something you studied in school (geometry in a spider web, physics in water flow, biology in a bird's behaviour), 1 thing you have no category for at all. Compare your list with a classmate who stayed inside. Which list is longer? Which questions are harder?",
+          "materials": "Paper, pencil, outdoor space",
+          "discover": "Outside observation produces questions that indoor study rarely generates — because real phenomena are messy, complex, and don't wait for you to understand them. Tagore's Shantiniketan was built on the idea that education should happen where life happens, not separate from it.",
+          "go_deeper": "Tagore argued that facts without connection to life are 'dead knowledge.' Identify one thing you know from school that you have never encountered in real life. Design a way to connect that knowledge to a real-world experience.",
+          "silent_lesson": "Tagore's educational philosophy; experiential learning; observation as curriculum; Shantiniketan model; living vs dead knowledge."
+        },
+        {
+          "id": "tagore_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Unity of Arts and Sciences",
+          "hook": "Tagore studied science, wrote poetry, composed music, painted, and philosophised — and argued that dividing these into separate boxes distorts each one. What happens when you bring them together?",
+          "challenge": "Choose one phenomenon from science (e.g., light scattering causes blue sky, trees breathe through leaves, waves interfere). Create four representations of it: (1) a scientific explanation (mechanism), (2) a poem (30 words), (3) a diagram or visual artwork, (4) a metaphor connecting it to human experience. Now: which representation communicates most effectively to a child? To a scientist? To an artist? To someone who knows nothing about the phenomenon?",
+          "materials": "Pencil, coloured pencils, paper",
+          "discover": "Each representation reveals different aspects of the same phenomenon. The poem captures what can't be diagrammed; the diagram reveals what words obscure; the metaphor builds bridges to existing knowledge. None is complete alone. Understanding multiplies when you can translate between representations.",
+          "go_deeper": "Tagore believed creativity and critical thinking are the same capacity expressed differently. Design a single activity that simultaneously requires both — where you cannot be creative without thinking rigorously, and cannot think rigorously without being creative.",
+          "silent_lesson": "Multiple representations of knowledge; Tagore's integrated curriculum; arts-science unity; creativity as cognitive process."
+        },
+        {
+          "id": "tagore_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Where Do I End and the World Begins?",
+          "hook": "Tagore's poetry, philosophy, and educational vision all circle around one question: where does the individual self end and the larger whole — nature, society, cosmos — begin? Is this a poetic question or a scientific one?",
+          "challenge": "Investigate the self-world boundary from three angles: (1) Biological: your body exchanges ~2kg of matter with the environment daily (food, water, air). How much of 'you' is actually environment, cycling through? Calculate your approximate matter turnover per year. (2) Cognitive: psychologists find the 'self' is partly constructed from social comparison and mirroring. Design a 5-minute experiment to test this in your classroom. (3) Philosophical: read the essay 'My School' (excerpt provided). Where does the author draw the self-world boundary, and on what basis?",
+          "materials": "Calculator for biological portion, pencil, Tagore essay excerpt",
+          "discover": "The biological self is a temporary pattern in flowing matter. The cognitive self is partly constructed from social feedback. The philosophical self, in Tagore's view, expands through connection rather than contracting through isolation. All three boundaries are porous and dynamic.",
+          "go_deeper": "Tagore and Einstein met in 1930 and debated whether reality is independent of human observation. Einstein said yes; Tagore said no (reality is relational). Quantum mechanics later showed that measurement affects quantum states. Whose position does this support?",
+          "silent_lesson": "Self-world boundary; matter cycling; social construction of self; Tagore-Einstein debate; quantum measurement; relational ontology."
+        }
+      ]
+    },
+    {
+      "id": "beethoven",
+      "name": "Ludwig van Beethoven",
+      "domain": "Structure and Emotion in Music / Sonata Form",
+      "puzzles": [
+        {
+          "id": "beethoven_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Tension and Release",
+          "hook": "All music moves between tension and release — moments of instability that resolve into stability. Can you feel the physics of music?",
+          "challenge": "Listen to the first minute of the Fifth Symphony (da-da-da-DUM motif). Every time you feel tension (unresolved, wanting more), tap your left hand. Every time you feel release (arrived, stable), tap your right. Count taps of each type. Now: try to play or sing the motif da-da-da-DUM, stopping before the final DUM. Wait 3 seconds. How does the unfinished phrase feel? Play the DUM. What changes physically in your body?",
+          "materials": "Recording (phone or laptop), paper for counting",
+          "discover": "Tension and release are measurable physiological responses — muscles change, breathing shifts. Music is not just emotional but physical. The Beethoven motif creates tension by being harmonically unresolved; the resolution is a return to stability. The composer controls your nervous system.",
+          "go_deeper": "Beethoven's Fifth is built almost entirely from one 4-note motif. Count how many times the da-da-da-DUM pattern appears in the first minute (exact, varied, inverted, augmented). How does so much variety emerge from so little material?",
+          "silent_lesson": "Tension and resolution in music; harmonic instability; motif development; physical response to music; Beethoven's compositional economy."
+        },
+        {
+          "id": "beethoven_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Architecture of Sonata Form",
+          "hook": "A symphony movement has the structure of a story: introduction, conflict, development, return, resolution. This isn't a metaphor — it's the actual structure of sonata form, codified in music theory.",
+          "challenge": "Listen to the first movement of a symphony (recording provided — choose the 1st or 5th). Follow the score or written guide (provided) and identify the sections: Exposition (two themes stated), Development (themes broken apart, combined, distorted), Recapitulation (themes return, transformed). Mark the start time of each section. In the Development, count: how many different keys does the music pass through? How does each theme sound different when it returns in the Recapitulation?",
+          "materials": "Recording, structural guide or score, paper, timer",
+          "discover": "The sonata is a dramatic argument: state an idea, challenge it, return changed. The themes that seemed stable at the start sound different when they return — because the journey of the development has transformed how we hear them. Music can have an arc of meaning without words.",
+          "go_deeper": "Compare the emotional journey of sonata form to the structure of a scientific paper: introduction (state the problem), methods (development section — test from all angles), results and discussion (recapitulation — what have we learned from the challenge?). Is the structural parallel coincidental?",
+          "silent_lesson": "Sonata form; exposition, development, recapitulation; musical narrative; form as container of meaning; comparison with scientific argument structure."
+        },
+        {
+          "id": "beethoven_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Composing Deaf",
+          "hook": "Beethoven composed most of his greatest works after becoming deaf. He could not hear the sound — he was working entirely in musical imagination. What does this tell us about what music is?",
+          "challenge": "Investigate three possible explanations for how deaf composition is possible: (1) Inner hearing: experienced musicians can accurately imagine sounds they have heard. Test this — hum a melody you know, then play it, comparing accuracy. (2) Physical-structural: music can be composed as pure mathematical structure without reference to sound (as Bach's Art of Fugue was conceived). Analyse the opening of the Ninth Symphony (score provided) purely as pitch relationships without listening. (3) Tactile: the composer reputedly felt vibrations through the piano. Research the physics of how this works.',",
+          "materials": "Beethoven Ninth score (opening bars), piano or keyboard, research sources",
+          "discover": "All three mechanisms are real and were likely used simultaneously. More fundamentally: music exists in multiple forms simultaneously — as organised sound, as mathematical structure, as physical vibration, as mental representation. Beethoven's deafness reveals that these are separable. He worked in the structure-layer.",
+          "go_deeper": "Evelyn Glennie is a world-class concert percussionist who has been deaf since age 12. Find her TED Talk on hearing with the whole body. Describe the physical mechanisms she uses and connect them to what Beethoven might have experienced.",
+          "silent_lesson": "Inner hearing; music as mathematical structure vs as sound; separability of music's layers; neuroplasticity; Beethoven's late style."
+        }
+      ]
+    },
+    {
+      "id": "picasso",
+      "name": "Pablo Picasso",
+      "domain": "Visual Perception / Cubism / Representation",
+      "puzzles": [
+        {
+          "id": "picasso_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "All Views at Once",
+          "hook": "A photograph shows one view at one moment. But what if you could show all views of an object simultaneously — front, side, top, and back — in one image? What would you need to distort to do it?",
+          "challenge": "Draw a simple object (a cup, a shoe, a phone) in three ways: (1) conventional side view, (2) front view, (3) a 'cubist' version — show front, side, and top simultaneously in one image by tilting and overlapping the different views. Allow distortions. Now: look at the painting 'Weeping Woman' (printed copy provided). Identify which parts of the face show: front view, profile, three-quarter view. Map each to a region of the drawing.',",
+          "materials": "Paper, pencil, printed Picasso image",
+          "discover": "Showing multiple viewpoints simultaneously requires accepting distortion — a face cannot be simultaneously front-on and profile without distortion. But the distortion creates more information than a single view: you understand the three-dimensional object more completely than any single photograph could convey.",
+          "go_deeper": "X-ray images show internal structure that visual inspection cannot. Ultrasounds show different information again. In what sense is cubism applying the same logic — revealing information not available in a single viewpoint?",
+          "silent_lesson": "Cubism; multiple simultaneous viewpoints; representation vs reality; information in different perspectives; why conventional representation is itself a convention."
+        },
+        {
+          "id": "picasso_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Grammar of Visual Space",
+          "hook": "Perspective (things farther away appear smaller) is not how your eyes actually work — it's a convention developed in 15th century Florence and then taught as 'how to draw correctly.' Other cultures used completely different conventions. Who is right?",
+          "challenge": "Test three spatial representations: (1) Linear perspective (standard Western): draw a street vanishing to a horizon point. (2) Reverse perspective (Byzantine/icon tradition): objects closer are drawn smaller, not larger. Draw the same street. (3) Axonometric projection (Chinese scroll painting): parallel lines stay parallel rather than converging. Draw the same street. For each: what information is preserved? What is distorted or lost? Which is most 'accurate' — and what does 'accurate' mean for a flat image of a 3D space?',",
+          "materials": "Paper, ruler, pencil",
+          "discover": "Each system preserves different information: linear perspective preserves apparent size relationships; axonometric preserves true sizes; reverse perspective preserves hierarchy. No single system is 'correct' — each is a convention that encodes different priorities about what matters in a representation.",
+          "go_deeper": "Computer graphics uses different projection systems for different purposes (orthographic vs perspective vs isometric). When would you use each? Connect to the different artistic traditions you examined.',",
+          "silent_lesson": "Perspective as convention; axonometric projection; representation systems; what 'accurate' means for visual information; cultural conventions in art."
+        },
+        {
+          "id": "picasso_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "When Art Changes Perception",
+          "hook": "After Cubism became influential, some artists claimed they could no longer see a face without seeing it as multiple simultaneous planes. Did Picasso change not just art but human perception?",
+          "challenge": "Design a study to test whether visual training changes perception. Step 1: Show participants 20 photographs of objects and ask them to sketch each from memory. Step 2: Train half the participants (experimental group) by having them practice cubist drawing for 30 minutes. Step 3: Show participants 20 new photographs and again ask for sketches. Analyse: did the cubist-trained group include more simultaneous viewpoints in their sketches? Did their verbal descriptions of the objects change?',",
+          "materials": "Photographs, paper, pencil, timer",
+          "discover": "Even 30 minutes of practice with a new representational mode can shift how people depict objects. This suggests visual representation is a learnable cognitive skill that actively shapes perception — not a passive record of what the eye sees.",
+          "go_deeper": "The Müller-Lyer illusion (two lines of equal length look different lengths due to arrow heads) persists even after you know the lines are equal. Other illusions fade with training. What determines whether visual learning can overcome a perceptual convention?",
+          "silent_lesson": "Perceptual learning; representation and perception; visual cognition; top-down vs bottom-up processing; art as cognitive training."
+        }
+      ]
+    },
+    {
+      "id": "frege",
+      "name": "Gottlob Frege",
+      "domain": "Logic / Language / Meaning / Foundations of Mathematics",
+      "puzzles": [
+        {
+          "id": "frege_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Sense and Reference",
+          "hook": "The Morning Star and the Evening Star both refer to the planet Venus. But these two names feel different — one describes Venus in the morning, one in the evening. How can two different descriptions refer to exactly the same thing?",
+          "challenge": "Find three more examples of this pattern (two names for the same thing that feel different): (1) a person's name and their nickname, (2) a city's local name and its international name, (3) a scientific name and a common name for the same animal. For each: write down what the first name 'brings to mind' vs what the second name 'brings to mind.' Even though they point to the same thing, do they create different thoughts?',",
+          "materials": "Paper, pencil, reference book (optional)",
+          "discover": "The meaning (sense) is different from the reference (the thing pointed at). 'Morning Star' and 'Evening Star' point to the same object but have different senses — different associated descriptions and mental images. Learning they both refer to Venus is genuinely informative, which it wouldn't be if sense and reference were the same.",
+          "go_deeper": "In logic: '2+2' and '4' both refer to the same number. But '2+2=4' is informative and '4=4' is trivially true. What is the difference? This is Frege's puzzle about identity statements.",
+          "silent_lesson": "Frege's sense-reference distinction; meaning vs denotation; why identity statements are informative; foundations of philosophy of language."
+        },
+        {
+          "id": "frege_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Logic as Notation",
+          "hook": "Natural language is full of ambiguity. 'Every student likes some teacher' could mean all students share one teacher they like, or each student individually likes some teacher (possibly different ones). Can you build a language that removes all ambiguity?",
+          "challenge": "Translate each ambiguous English sentence into formal logic notation: use ∀ (for all), ∃ (there exists), → (if-then), ∧ (and), ∨ (or), ¬ (not). Sentence 1: 'Every person loves some person.' Sentence 2: 'No student passed every exam.' Sentence 3: 'Some politician who everyone trusts has never lied.' For each: give the two (or more) logically distinct readings in formal notation. Check: do the two readings have different truth conditions?',",
+          "materials": "Pencil, paper, logic notation reference",
+          "discover": "Formal notation forces you to choose — you cannot be ambiguous about quantifier scope. The process of formalisation reveals that natural language tolerates ambiguities that precise thought cannot. This is Frege's central insight: language hides logical structure that only notation can reveal.",
+          "go_deeper": "The sentence 'The king of France is bald' is neither true nor false (there is no king of France). Does this break classical logic? Frege's solution involves 'presupposition failure' — the sentence presupposes something false. Find two other sentences that fail in this way.",
+          "silent_lesson": "Frege's predicate logic; quantifier scope; logical form vs grammatical form; ambiguity in natural language; presupposition."
+        },
+        {
+          "id": "frege_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Numbers as Objects",
+          "hook": "What IS the number 5? It's not any particular set of five things — it's something all sets of five things have in common. But where does it exist? Frege's answer: define it from pure logic.",
+          "challenge": "A logicist definition of number: the number 0 is the extension of the concept 'not identical to itself' (nothing is not identical to itself). The number 1 is the extension of the concept 'identical to 0.' The number 2 is the extension of 'identical to 0 or identical to 1.' Continue: define 3, 4, 5 in this style. Now: verify that your definitions satisfy the Peano axioms: (1) 0 is a natural number, (2) every natural number has a successor, (3) no two numbers have the same successor, (4) 0 is not the successor of any number, (5) if a property holds for 0 and for the successor of every number it holds for, it holds for all natural numbers.',",
+          "materials": "Pencil, paper, set theory notation reference",
+          "discover": "Numbers can be defined purely from the concept of identity and extension — no counting, no intuition required. This was Frege's logicist programme: reduce all mathematics to logic. Russell found a contradiction in it (Russell's paradox), which broke Frege's system — but the project sparked 20th century foundations of mathematics.",
+          "go_deeper": "Russell's paradox: define R = the set of all sets that don't contain themselves. Does R contain itself? Both answers lead to contradiction. Frege learned of this paradox from Russell's letter while his second volume was at the printer — and had to add a hasty appendix acknowledging his system was broken. What does this episode show about the relationship between mathematical intuition and formal proof?",
+          "silent_lesson": "Frege's logicism; definition of numbers from logic; Peano axioms; Russell's paradox; foundations of mathematics."
+        }
+      ]
+    },
+    {
+      "id": "michelangelo",
+      "name": "Michelangelo",
+      "domain": "Anatomy / Proportion / Material Thinking",
+      "puzzles": [
+        {
+          "id": "michelangelo_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "The Sculpture Inside",
+          "hook": "Michelangelo said the sculpture already exists inside the marble — the sculptor just removes what doesn't belong. Is this just a metaphor, or a method?",
+          "challenge": "Take a bar of soap. Without a plan, remove material bit by bit (use a plastic knife or coin). Let the shape emerge from what you remove, not from a pre-planned design. After 10 minutes: what did you make? Now: take a second bar of soap. This time, plan the final shape (sketch it first). Remove material deliberately toward that plan. Which process was harder? Which gave a more interesting result?',",
+          "materials": "Two bars of soap, plastic knife or old coin for carving",
+          "discover": "Both processes are real methods. Subtractive design (removing material) is fundamentally different from additive design (building up). In marble, mistakes are permanent — every cut commits you. This forces different thinking from drawing or clay modelling.",
+          "go_deeper": "Modern 3D printing is additive: material is deposited layer by layer. CNC milling is subtractive: material is removed. Compare the two approaches for: accuracy, material waste, ability to make interior cavities, time. Which would Michelangelo have preferred?",
+          "silent_lesson": "Subtractive vs additive making; material thinking; constraints as creative force; embodied cognition in craft."
+        },
+        {
+          "id": "michelangelo_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Anatomy of a Pose",
+          "hook": "Michelangelo dissected human corpses to understand the body beneath the skin. Every muscle he drew is accurate not because it looked right, but because he knew what was there. What's the difference?",
+          "challenge": "Observe a classmate holding three different poses: relaxed, lifting something heavy, reaching up. For each pose: (1) sketch the external form, (2) try to identify which muscles are engaged (feel your own muscles during the same pose), (3) explain why the body takes that specific shape as a mechanical result of which muscles contract. Compare your muscular analysis to an anatomy diagram.",
+          "materials": "Paper, pencil, anatomy reference, a willing classmate",
+          "discover": "The body's surface shape in any pose is determined by the underlying muscle engagement. Drawing from anatomy knowledge produces different results than drawing from observation alone — you can draw what is true even when it's obscured by clothing or shadow.",
+          "go_deeper": "In Michelangelo's David, the statue's pose is contrapposto (weight shifted to one leg, hip and shoulder tilted opposite ways). Analyse the muscular mechanics: which muscles contract to maintain this position? Why does it look more natural than a symmetrical standing pose?",
+          "silent_lesson": "Anatomy as foundation of figure drawing; contrapposto; muscle mechanics; structural knowledge enabling artistic accuracy."
+        },
+        {
+          "id": "michelangelo_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Sistine Ceiling as a Programme",
+          "hook": "The Sistine Chapel ceiling took 4 years and contains 300+ figures. It is not a random collection of beautiful paintings — it is a coherent intellectual programme. Can you decode its structure?",
+          "challenge": "Study the layout of the ceiling (schematic provided). Identify the three narrative zones: (1) central panels (Genesis narrative), (2) surrounding prophets and sibyls, (3) corner pendentives (salvation scenes). For each zone: what is the theological claim? Who is represented and why? How does the visual hierarchy (size, position, light direction) reinforce the intellectual hierarchy? Now: identify one iconographic choice that contradicts the conventional religious programme of the time (hint: look at the Sibyls — pagan prophetesses on a Christian ceiling).',",
+          "materials": "Schematic of Sistine ceiling, pencil",
+          "discover": "Michelangelo included pagan sibyls alongside Hebrew prophets — a humanist statement that truth exists outside of one religious tradition. The ceiling is simultaneously orthodox (Genesis narrative) and heterodox (equal authority of pagan and Hebrew prophecy). Art as coded intellectual statement.",
+          "go_deeper": "The figure of God in 'Creation of Adam' has been analysed as anatomically depicting a human brain in cross-section (the mantle, angels, and God's shape match neurological anatomy). If intentional, what does Michelangelo say about the relationship between God and the human mind?",
+          "silent_lesson": "Iconographic programme; visual hierarchy as intellectual statement; Renaissance humanism; heterodox inclusion in religious art; art as philosophy."
+        }
+      ]
+    },
+    {
+      "id": "hildegard",
+      "name": "Hildegard von Bingen",
+      "domain": "Music / Medicine / Vision / Interdisciplinary Synthesis",
+      "puzzles": [
+        {
+          "id": "hildegard_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Music as Medicine",
+          "hook": "For centuries, healers believed music could cure physical illness. Modern research shows music changes heart rate, blood pressure, and stress hormones. Is this magic, or mechanism?",
+          "challenge": "Measure your resting pulse (30 seconds, multiply by 2). Listen to 3 minutes of: (1) Hildegard's plainchant (slow, monophonic, no percussion), (2) fast popular music with strong beat, (3) silence. Measure pulse after each. Record. Also: rate your anxiety level (1–10) after each. What differences do you find? Can music reliably change a physiological measure?',",
+          "materials": "Recordings (phone), timer, pencil",
+          "discover": "Music reliably affects heart rate and self-reported anxiety. Slow, predictable music (like plainchant) lowers both; fast, unpredictable music raises heart rate. The mechanism is the autonomic nervous system — music activates the same pathways as environmental sounds. This is not belief; it is physiology.",
+          "go_deeper": "Hildegard also identified specific plants as medicinal. Research: lavender (promotes relaxation, shown by cortisol studies); ginger (antiemetic, mechanism via 5-HT3 receptor antagonism). How many of her herbal prescriptions have been validated by modern pharmacology?",
+          "silent_lesson": "Music and physiology; autonomic nervous system; evidence for traditional medicine; sound as physical phenomenon affecting biology."
+        },
+        {
+          "id": "hildegard_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Visionary's Description",
+          "hook": "Hildegard described vivid visions of light, colours, and forms — and wrote about them with precise, consistent detail for 60 years. Modern neurologists believe she may have been describing migraine aura. Can you evaluate this hypothesis?",
+          "challenge": "Read Hildegard's description of her vision (excerpt provided): 'The light I see is not spatial... I do not hear it with my ears... I behold it in my spirit, with my eyes wide open.' Now read the clinical description of visual migraine aura: 'Scintillating scotoma — a crescent of flickering lights expanding across the visual field, then leaving a blind spot.' Compare: which features match? Which don't? What would you need to know to confirm or refute the migraine hypothesis? What alternative explanations exist?',",
+          "materials": "Provided excerpts, pencil",
+          "discover": "The comparison is suggestive but not definitive. Migraine aura typically lasts 20–60 minutes; Hildegard's visions lasted hours. Migraine aura is purely visual; her visions were multimodal (light, sound, physical sensation). A neurological explanation may be partially correct without fully explaining the phenomenon.",
+          "go_deeper": "Oliver Sacks discussed Hildegard in 'Migraine' (1970). He argued that many mystical experiences across cultures may have neurological correlates — but that this does not diminish their significance. Evaluate: does a neurological explanation make the experience 'less real'?",
+          "silent_lesson": "Neurological vs mystical explanation; migraine aura; scientific hypothesis evaluation; evidence quality; reductionism and meaning."
+        },
+        {
+          "id": "hildegard_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Synthesising Across Domains",
+          "hook": "Hildegard wrote authoritative texts on theology, medicine, natural history, music theory, and biography — all in the same century, as a woman in medieval Europe. Her synthesis was not an accident. What cognitive and social structures made it possible?",
+          "challenge": "Map Hildegard's four main works onto a knowledge network: Scivias (theology/visions), Physica (natural science/medicine), Causae et Curae (medicine/psychology), Symphonia (music/poetry). For each work: (1) what disciplines does it draw on? (2) what disciplines does it influence? Draw the connections as a directed graph. Now: identify three claims in her scientific writing that connect to her theology (e.g., her view that illness is connected to sin — the humoral-moral connection). Evaluate: is this connection a weakness (confusing categories) or a strength (systems thinking)?',",
+          "materials": "Paper, pencil, excerpts from Hildegard's works (provided)",
+          "discover": "Her cross-domain synthesis was enabled by the medieval intellectual framework (theology as the master science integrating all others) rather than despite it. The integration is both limitation (the framework forces connections that may not exist) and strength (it produces hypotheses that discipline-specific thinking misses).",
+          "go_deeper": "Modern interdisciplinary research (e.g., neuroaesthetics, behavioural economics, evolutionary psychology) explicitly crosses domain boundaries. Compare Hildegard's synthesis method to a modern interdisciplinary field. What is gained and lost in each era's approach to synthesis?",
+          "silent_lesson": "Interdisciplinary synthesis; knowledge domains as social constructs; medieval intellectual framework; systems thinking; comparison to modern interdisciplinarity."
+        }
+      ]
+    }
+  ]
+}

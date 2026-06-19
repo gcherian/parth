@@ -1,0 +1,237 @@
+{
+  "sphere": "astronomy_cosmology",
+  "version": 2,
+  "description": "Subject-matter puzzles grounded in observation, calculation, and model-building. Students discover how we know what we know about the cosmos — not through authority, but through measurement.",
+  "thinkers": [
+    {
+      "id": "copernicus",
+      "name": "Nicolaus Copernicus",
+      "domain": "Heliocentrism / Orbital Geometry",
+      "puzzles": [
+        {
+          "id": "copernicus_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "observation",
+          "title": "The Backward Planet",
+          "hook": "Watch the sky for a week and you'll notice that most stars move together — but a few wander, and sometimes appear to go backward. How can a planet go backward?",
+          "challenge": "Use a flashlight as the Sun and two balls as Earth and Mars. Orbit both around the flashlight (Earth closer in, faster). Every 30 seconds, stop and mark where Mars appears against the 'background' (the far wall). What pattern do you trace? Does Mars ever appear to reverse direction from Earth's point of view?",
+          "materials": "Flashlight, two balls of different sizes, large open room",
+          "discover": "When Earth 'overtakes' Mars on the inside lane, Mars appears to go backward — like a slow car you pass on a highway appears to move backward even though it's still going forward. The reversal is an illusion created by Earth's motion.",
+          "go_deeper": "Ancient astronomers needed complicated extra-circles (epicycles) to explain this illusion without knowing Earth moves. How many epicycles do you think they needed per planet?",
+          "silent_lesson": "Retrograde motion as geometric illusion; heliocentric model elegantly explains what geocentric model required complex machinery to explain; Occam's razor."
+        },
+        {
+          "id": "copernicus_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Parallax Ruler",
+          "hook": "Close one eye, hold up your finger, and look at something far away. Open that eye, close the other — your finger seems to jump. This jump is how we measure distances to stars. But why did it take centuries to measure stellar parallax?",
+          "challenge": "Hold up a pencil 30cm from your face. Without moving your head, alternate closing left and right eyes. Measure the angular shift against a far background (estimate the angle in degrees). Now move the pencil to 60cm. Measure the shift. Now 120cm. Plot distance vs shift angle. What is the relationship? Extrapolate: at what distance would the shift become smaller than 1 arcminute (1/60 of a degree)?",
+          "materials": "Pencil, ruler, protractor, distant wall with marks",
+          "discover": "Parallax angle halves every time distance doubles — an inverse relationship. The nearest star has a parallax of 0.77 arcseconds. To measure that, you need precision instruments and the full width of Earth's orbit (300 million km) as your baseline.",
+          "go_deeper": "Proxima Centauri has a parallax of 0.77 arcseconds. Using p (arcsec) = 1/d (parsecs), calculate its distance in parsecs. Convert to light years (1 parsec = 3.26 ly). Convert to km.",
+          "silent_lesson": "Stellar parallax; distance measurement; why heliocentric model's testable prediction took 300 years to confirm; inverse relationship."
+        },
+        {
+          "id": "copernicus_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Orbital Speed Rule",
+          "hook": "Planets closer to the Sun move faster. Is this a coincidence, or does it follow a precise mathematical law derivable from first principles?",
+          "challenge": "Given the orbital period T and distance a from the Sun for each planet (data provided), calculate orbital speed v = 2πa/T for each. Plot v vs a. What relationship do you see? Now try plotting v vs 1/√a. What happens? Derive the relationship algebraically from the condition that gravitational force = centripetal force (F = GMm/a² = mv²/a). Solve for v.",
+          "materials": "Provided planetary data table, calculator, graph paper",
+          "discover": "v = √(GM/a) — orbital speed scales as the inverse square root of distance. It's not a coincidence; it's a consequence of gravity. The equation predicts every planet's speed from first principles.",
+          "go_deeper": "Earth's orbital speed is ~30 km/s. If Earth's orbit suddenly increased to twice its current radius (without changing its speed), would it remain in orbit, fly away, or fall inward? Use energy conservation to decide.",
+          "silent_lesson": "Orbital mechanics; Kepler's third law as emergent from Newtonian gravity; circular orbit derivation."
+        }
+      ]
+    },
+    {
+      "id": "kepler",
+      "name": "Johannes Kepler",
+      "domain": "Planetary Motion / Ellipses",
+      "puzzles": [
+        {
+          "id": "kepler_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "The Two-Centre Shape",
+          "hook": "A circle has one centre. But what shape has TWO centres — and what happens when you move them closer or farther apart?",
+          "challenge": "Push two thumbtacks into cardboard 10 cm apart. Loop a 25cm piece of string around both tacks. Keeping the string taut with a pencil, trace the complete shape. Now move the tacks 6 cm apart and repeat. Now 2 cm apart. Draw all three shapes. What do you notice as the tacks get closer?",
+          "materials": "Cardboard, two thumbtacks, 25cm string, pencil",
+          "discover": "As the two centres get closer, the ellipse becomes more circular. When both tacks are at the same point, it becomes a perfect circle. An ellipse is a stretched circle with two focal points — and planets orbit with the Sun at one focus.",
+          "go_deeper": "Earth's orbit has its two foci only 5 million km apart — so it's almost circular. Mars's foci are 42 million km apart. Draw both ellipses to scale on the same sheet.",
+          "silent_lesson": "Kepler's first law; ellipse as geometric shape; foci; eccentricity."
+        },
+        {
+          "id": "kepler_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Fast Near, Slow Far",
+          "hook": "A planet doesn't move at constant speed around its orbit — it's fastest when closest to the Sun and slowest when farthest. But something does stay constant. Can you find it?",
+          "challenge": "Draw an ellipse with the Sun at one focus. Divide the orbit into 6 equal time intervals (equal arcs along the orbit). The rule: the planet sweeps equal areas in equal times. For each interval, draw the triangle from Sun to the start and end of the arc. Cut these triangles out of paper. Are they equal in area? Now compare arc lengths — which is longest?",
+          "materials": "Large paper, pencil, scissors, protractor",
+          "discover": "The triangles are equal in area. But the arcs near the Sun are much longer — the planet is moving fast. Near aphelion (farthest point), arcs are short — the planet is slow. Area stays constant; speed does not.",
+          "go_deeper": "This equal-area rule is actually conservation of angular momentum in disguise. What does angular momentum mean physically — and why would it be conserved during an orbit?",
+          "silent_lesson": "Kepler's second law; conservation of angular momentum; equal areas in equal times."
+        },
+        {
+          "id": "kepler_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "pattern",
+          "title": "The Harmony of the Worlds",
+          "hook": "A planetary law so precise and universal that it works for every planet, every moon, every satellite — and can be derived from a single equation. Find it.",
+          "challenge": "For each planet, calculate P² and a³ (where P = orbital period in Earth years, a = semi-major axis in AU). Fill a table. What pattern do you see? Now try this for the four Galilean moons of Jupiter (data provided). Does the same law hold within a completely different orbital system?",
+          "materials": "Provided planetary and moon data, calculator",
+          "discover": "P²/a³ = 1 for every planet (around the Sun) and every moon (around Jupiter, with a different constant). The ratio is constant within any system bound by the same central mass. This law is universal.",
+          "go_deeper": "Using P²/a³ = constant and the fact that the constant = 4π²/(GM), calculate the mass of Jupiter from the orbital data of its moons. Compare to the known value (1.9 × 10²⁷ kg).",
+          "silent_lesson": "Kepler's third law; P² ∝ a³; derivation from Newton's law of gravitation; using moons to weigh planets."
+        }
+      ]
+    },
+    {
+      "id": "hubble",
+      "name": "Edwin Hubble",
+      "domain": "Expanding Universe / Galaxy Motion",
+      "puzzles": [
+        {
+          "id": "hubble_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "experiment",
+          "title": "The Raisin Bread Universe",
+          "hook": "Imagine every galaxy is a raisin in a rising loaf of bread. As the bread expands, every raisin moves away from every other raisin — with no raisin at the 'centre.' Can you test this?",
+          "challenge": "Partially inflate a balloon. Use a marker to put 10 dots on it. Measure the distance between 5 specific pairs of dots. Inflate the balloon more. Measure the same pairs again. Which pairs moved the farthest? Were they the pairs that were already farthest apart, or the closest?",
+          "materials": "Balloon, marker, ruler",
+          "discover": "Pairs that were farther apart moved more. The expansion is proportional to distance — farther apart means faster separation. And there is no 'centre' dot that everything moves away from. Every dot sees all others receding.",
+          "go_deeper": "If you know how fast the dots are moving apart and how far apart they are now, can you calculate when they were all at the same point? Try it with your measured data.",
+          "silent_lesson": "Hubble's Law; expanding universe; no preferred centre; Big Bang extrapolation."
+        },
+        {
+          "id": "hubble_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "experiment",
+          "title": "The Siren and the Shift",
+          "hook": "A fire truck's siren sounds higher as it approaches and lower as it leaves. Light does the same thing — and this is how we know galaxies are speeding away from us.",
+          "challenge": "Have a partner swing a phone playing a steady tone in a slow circle on a string (radius ~50cm, period ~2 seconds). Stand 3 metres away. Record the audio on your own phone for 10 seconds. Play back the recording and count the rises and falls in pitch. Now: if sound travels at 340 m/s, and the pitch shifted by about 5%, how fast was the phone moving?",
+          "materials": "Two phones, string, quiet room",
+          "discover": "Doppler shift (Δf/f) = v/c for slow speeds. A 5% frequency shift means the source moved at 5% of the wave's speed. Astronomers use the same calculation with light waves to measure galaxy recession speeds — except the 'speed' is the speed of light.",
+          "go_deeper": "The hydrogen emission line (656nm) from a galaxy is measured at 670nm. Calculate the galaxy's recession speed. Is it moving toward or away from us?",
+          "silent_lesson": "Doppler effect; redshift; measuring velocity through wave frequency shift; spectroscopy."
+        },
+        {
+          "id": "hubble_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Weighing the Age of the Universe",
+          "hook": "A straight-line graph through a scatter plot of galaxy data contains the age of the universe. Find it.",
+          "challenge": "Given a table of 10 galaxies with their distances (in Mpc) and recession velocities (in km/s), plot velocity vs distance. Fit a straight line through the origin. The slope is the expansion constant H₀ (km/s/Mpc). Calculate age = 1/H₀ (convert to years using 1 Mpc = 3.086 × 10¹⁹ km, 1 year = 3.156 × 10⁷ s). What age do you get? Compare to the accepted value of 13.8 billion years.",
+          "materials": "Provided galaxy data table, graph paper, calculator",
+          "discover": "Your line's slope gives ~70 km/s/Mpc. Inverting and converting gives ~14 billion years — remarkably close to the true age, derived from a simple scatter plot. The slope of a graph contains the history of the cosmos.",
+          "go_deeper": "Different methods of measuring H₀ give slightly different answers — some get 67, others get 73. This 'Hubble tension' is one of the biggest unresolved problems in cosmology. What might cause the discrepancy?",
+          "silent_lesson": "Hubble's Law (v = H₀d); Hubble constant; age of universe; observational cosmology; current unsolved problem in physics."
+        }
+      ]
+    },
+    {
+      "id": "sagan",
+      "name": "Carl Sagan",
+      "domain": "Cosmic Scale / Scientific Literacy / Astrobiology",
+      "puzzles": [
+        {
+          "id": "sagan_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "Your Cosmic Address",
+          "hook": "You know your home address. But where do you live in the universe?",
+          "challenge": "Write your full cosmic address in nested layers: House → Street → City → Country → Continent → Earth → Solar System → Milky Way Galaxy → Local Group → Observable Universe. For each level, estimate the size in km (use a reference book or teacher guidance). How many times bigger is each level than the previous?",
+          "materials": "Paper, pencil, reference book (optional)",
+          "discover": "Each layer is roughly 10,000× larger than the previous one. The observable universe is 9 × 10²³ km across. You are a genuinely tiny thing in a genuinely large place — and yet you're the part that's aware of it.",
+          "go_deeper": "If the entire observable universe were shrunk to the size of a 1-metre room, how big would Earth be? How big would a human be?",
+          "silent_lesson": "Cosmic scales; powers of ten; hierarchy of structures in the universe; scientific humility."
+        },
+        {
+          "id": "sagan_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Civilisation Equation",
+          "hook": "How many intelligent civilisations exist in our galaxy right now? You can actually estimate this — it just requires multiplying several uncertain numbers together.",
+          "challenge": "Look up the Drake Equation terms: R* (star formation rate), fₚ (fraction with planets), nₑ (habitable planets per star), fₗ (life arises), fᵢ (intelligence evolves), fᶜ (detectable signals), L (civilisation lifetime). Assign your own estimates for each term. Calculate N (number of communicating civilisations). Now use very pessimistic values. Very optimistic. What range do you get?",
+          "materials": "Paper, calculator, reference for Drake Equation terms",
+          "discover": "The uncertainty spans from N ≈ 0 to N ≈ millions. This isn't a failure of the equation — it maps exactly what we don't know. Each uncertain term is a research agenda.",
+          "go_deeper": "The Fermi Paradox: if N is large, where is everyone? Propose three mutually exclusive hypotheses that would explain the silence. Which do you find most compelling?",
+          "silent_lesson": "Drake equation; probabilistic reasoning; Fermi estimation; astrobiology; the Fermi paradox as open question."
+        },
+        {
+          "id": "sagan_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "thought_experiment",
+          "title": "The Pale Blue Dot",
+          "hook": "A photograph taken from 6 billion kilometres away showed Earth as a speck of dust in a sunbeam — a pale blue dot. What does that image actually imply?",
+          "challenge": "Read the Pale Blue Dot passage (excerpt provided). Identify every distinct claim. Classify each claim as: (A) empirical fact, (B) logical inference from facts, (C) aesthetic observation, or (D) philosophical value judgement. Which category has the most claims? Write a rigorous counter-argument to the passage's most powerful claim. Then write a response to your own counter-argument.",
+          "materials": "Passage excerpt, pencil",
+          "discover": "Science generates facts; it doesn't automatically generate values. The same image supports wildly different conclusions depending on one's prior beliefs. Sagan's passage moves fluidly between fact and philosophy — which is powerful, but also requires careful reading.",
+          "go_deeper": "Write your own 'Pale Blue Dot' paragraph, but from the perspective of an observer on a planet in the Andromeda galaxy looking at our Local Group. What would they see? What conclusions might they draw?",
+          "silent_lesson": "Science-philosophy interface; empirical claims vs value claims; critical reading of scientific texts; Sagan's role as science communicator."
+        }
+      ]
+    },
+    {
+      "id": "chandrasekhar",
+      "name": "Subrahmanyan Chandrasekhar",
+      "domain": "Stellar Evolution / Quantum Astrophysics",
+      "puzzles": [
+        {
+          "id": "chandrasekhar_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "The Tug of War in Every Star",
+          "hook": "Every star is fighting itself — one force tries to make it collapse inward, another pushes outward. Which force wins determines whether the star becomes a glowing dot, or something far stranger.",
+          "challenge": "Stack 10 books in a pile. Your hand underneath pushes up (like gas pressure). The books push down (like gravity). Add more books. At some point, your hand can't support them. Draw a diagram showing this tug of war. Now: what if 'your hand' gets tired (fuel runs out)? What happens for a small pile vs a massive pile?",
+          "materials": "Books, paper for diagram",
+          "discover": "Small star: pressure weakens but quantum effects hold the star up as a white dwarf. Massive star: gravity wins completely and the star collapses — potentially to a point. The outcome depends entirely on total mass.",
+          "go_deeper": "The tipping-point mass (about 1.4 times the Sun's mass) was calculated mathematically by a 19-year-old on a ship voyage. What kind of mathematics would you need to find this number?",
+          "silent_lesson": "Stellar evolution; Chandrasekhar limit; electron degeneracy pressure vs gravity; black holes as extreme gravity."
+        },
+        {
+          "id": "chandrasekhar_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Density of Collapsed Stars",
+          "hook": "A white dwarf packs a Sun's worth of mass into a sphere the size of Earth. How does that density compare to anything you know?",
+          "challenge": "Calculate the density of: (1) water (1,000 kg/m³), (2) iron (7,874 kg/m³), (3) a white dwarf (mass = 2 × 10³⁰ kg, radius = 6.4 × 10⁶ m), (4) a neutron star (mass = 2.8 × 10³⁰ kg, radius = 10,000 m). For each: how much would 1 cm³ weigh in kg? Which is densest? By how many times?",
+          "materials": "Calculator",
+          "discover": "White dwarf: ~10⁹ kg/m³ (a teaspoon weighs ~5 tonnes). Neutron star: ~10¹⁷ kg/m³ (a teaspoon weighs ~500 million tonnes). These densities require quantum physics to explain — ordinary physics cannot prevent such collapse.",
+          "go_deeper": "At neutron star densities, protons and electrons are crushed into neutrons. Why does nuclear material resist compression? What quantum principle prevents further collapse — and at what mass does even that fail?",
+          "silent_lesson": "Stellar densities; electron degeneracy pressure; neutron degeneracy; quantum mechanics applied to astrophysics."
+        },
+        {
+          "id": "chandrasekhar_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Mass Limit",
+          "hook": "A 19-year-old calculated — on a ship to England — the exact mass above which a star must collapse. He derived it purely from quantum mechanics and gravity, with no free parameters. Can you follow his logic?",
+          "challenge": "Set up the balance: electron degeneracy pressure P_deg ∝ (N/V)^(5/3) must balance gravitational pressure P_grav ∝ GM²/R⁴. Given that N ∝ M/mₚ and V ∝ R³, express both pressures in terms of M and R. Find the condition where they balance. Solve for M. Show that M is a constant (independent of R). Compare to 1.4 solar masses.",
+          "materials": "Physics constants table (G, ℏ, mₑ, mₚ, c), calculator, algebra skills",
+          "discover": "The limit M_Ch = (ℏc/G)^(3/2) / mₚ² emerges from fundamental constants alone. No tuning. If M > M_Ch, no pressure can ever balance gravity. This is a prediction of pure mathematics confirmed by observation.",
+          "go_deeper": "The British astrophysics establishment publicly mocked this result for a decade. What does this episode reveal about how scientific communities handle results that challenge existing consensus?",
+          "silent_lesson": "Chandrasekhar limit derivation; electron degeneracy pressure; quantum mechanics + general relativity; history of science and institutional resistance."
+        }
+      ]
+    }
+  ]
+}

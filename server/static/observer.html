@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth — Learning Intelligence Platform</title>
+<style>
+  :root {
+    --bg:        #07090f;
+    --surface:   #0e1117;
+    --surface2:  #141720;
+    --border:    #1e2333;
+    --text:      #e2e8f0;
+    --muted:     #5a6380;
+    --accent:    #6366f1;
+
+    /* Kernel colours */
+    --trust:     #dc2626;
+    --identity:  #7c3aed;
+    --learning:  #2563eb;
+
+    /* Cluster colours */
+    --affect:    #ef4444;
+    --cognition: #6366f1;
+    --linguistic:#10b981;
+    --context:   #f59e0b;
+    --pedagogy:  #8b5cf6;
+
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red:   #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'SF Pro Display','Segoe UI',system-ui,sans-serif;
+    font-size: 13px; height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+
+  /* ── Header ────────────────────────────────────────────────── */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px; border-bottom: 1px solid var(--border);
+    background: var(--surface); flex-shrink: 0;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-badge {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg,#6366f1,#8b5cf6);
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .logo-name { font-size: 15px; font-weight: 700; color: #fff; }
+  .logo-tag  { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .header-right { display: flex; gap: 8px; align-items: center; }
+  .hpill {
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    border: 1px solid; display: flex; align-items: center; gap: 5px;
+  }
+  .hpill-live  { color: var(--green); border-color: var(--green); }
+  .hpill-trust { color: var(--trust);    border-color: var(--trust); }
+  .hpill-id    { color: var(--identity); border-color: var(--identity); }
+  .hpill-learn { color: var(--learning); border-color: var(--learning); }
+  .pulse { width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+    animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+
+  /* ── Layout ────────────────────────────────────────────────── */
+  .layout {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    flex: 1; overflow: hidden;
+  }
+
+  /* ══ LEFT PANEL ════════════════════════════════════════════ */
+  .chat-panel {
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--surface);
+  }
+  .chat-panel-hdr {
+    padding: 10px 14px; border-bottom: 1px solid var(--border);
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .7px; flex-shrink: 0;
+  }
+
+  /* Persona cards */
+  .persona-bar {
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0;
+  }
+  .persona-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 10px; cursor: pointer;
+    color: var(--text); font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; gap: 5px;
+    transition: border-color .2s, background .2s;
+  }
+  .persona-btn:hover  { border-color: var(--muted); }
+  .persona-btn.active { border-color: var(--accent); background: rgba(99,102,241,.12); }
+  .persona-emotion {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* Scenario buttons */
+  .scenario-bar {
+    padding: 6px 10px; border-bottom: 1px solid var(--border);
+    display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0;
+  }
+  .scenario-lbl {
+    font-size: 9px; color: var(--muted); font-weight: 700;
+    text-transform: uppercase; letter-spacing: .6px; align-self: center; margin-right: 3px;
+  }
+  .scenario-btn {
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 9px; cursor: pointer;
+    color: var(--muted); font-size: 10px; font-weight: 600;
+    transition: all .15s;
+  }
+  .scenario-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Messages */
+  .messages {
+    flex: 1; overflow-y: auto; padding: 12px 10px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .msg { padding: 8px 11px; border-radius: 10px; font-size: 12px; line-height: 1.6; max-width: 100%; }
+  .msg-parth { background: var(--surface2); border: 1px solid var(--border); align-self: flex-start; }
+  .msg-user  { background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3); align-self: flex-end; }
+  .msg-label { font-size: 10px; font-weight: 700; margin-bottom: 3px; opacity: .7; }
+  .typing { display: flex; gap: 4px; padding: 2px 0; }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--muted);
+    animation: bounce .9s infinite;
+  }
+  .typing span:nth-child(2){animation-delay:.2s}
+  .typing span:nth-child(3){animation-delay:.4s}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+  /* Chat input */
+  .chat-input-row {
+    display: flex; gap: 6px; padding: 8px 10px;
+    border-top: 1px solid var(--border); flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; color: var(--text);
+    font-size: 12px; resize: none; min-height: 38px; max-height: 80px;
+    font-family: inherit; line-height: 1.4;
+  }
+  .chat-input:focus { outline: none; border-color: var(--accent); }
+  .send-btn {
+    background: var(--accent); border: none; border-radius: 8px;
+    width: 38px; color: #fff; font-size: 16px; cursor: pointer;
+    flex-shrink: 0; transition: opacity .15s;
+  }
+  .send-btn:disabled { opacity: .4; cursor: default; }
+
+  /* ══ RIGHT PANEL ════════════════════════════════════════════ */
+  .obs-panel {
+    display: flex; flex-direction: column; overflow: hidden; background: var(--bg);
+  }
+  .obs-tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    background: var(--surface); flex-shrink: 0;
+  }
+  .tab-btn {
+    padding: 10px 16px; background: none; border: none;
+    color: var(--muted); font-size: 11px; font-weight: 600; cursor: pointer;
+    border-bottom: 2px solid transparent; transition: all .15s;
+  }
+  .tab-btn:hover  { color: var(--text); }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+  .tab-content { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+  .tab-content.active { display: flex; }
+
+  /* ══ TAB 1: ARCHITECTURE ══════════════════════════════════ */
+  .arch-panel {
+    flex: 1; overflow-y: auto; padding: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  /* Kernel rows */
+  .kernel-row {
+    border-radius: 10px; border: 1px solid; padding: 10px 12px;
+    transition: box-shadow .3s;
+  }
+  .kernel-hdr {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  }
+  .kernel-icon { font-size: 16px; }
+  .kernel-name { font-size: 12px; font-weight: 700; }
+  .kernel-tag  { font-size: 10px; color: var(--muted); margin-left: auto; }
+  .kernel-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .kernel-pill {
+    font-size: 10px; padding: 3px 8px; border-radius: 5px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    color: var(--muted);
+  }
+
+  .kernel-trust    { border-color: rgba(220,38,38,.4);  background: rgba(220,38,38,.04); }
+  .kernel-identity { border-color: rgba(124,58,237,.4); background: rgba(124,58,237,.04); }
+  .kernel-learning { border-color: rgba(37,99,235,.4);  background: rgba(37,99,235,.04); }
+
+  .kernel-trust    .kernel-name { color: var(--trust); }
+  .kernel-identity .kernel-name { color: #a78bfa; }
+  .kernel-learning .kernel-name { color: #60a5fa; }
+
+  /* Cluster grid */
+  .cluster-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin-top: 8px;
+  }
+  .cluster-card {
+    border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface); padding: 9px 10px;
+    transition: border-color .3s, background .3s, box-shadow .3s;
+    cursor: default;
+  }
+  .cluster-card.fired {
+    animation: cluster-fire .6s ease-out;
+  }
+  .cluster-card.active-cluster {
+    border-color: currentColor; box-shadow: 0 0 12px rgba(0,0,0,.5);
+  }
+  @keyframes cluster-fire {
+    0%  { filter: brightness(2); transform: scale(1.02); }
+    100%{ filter: brightness(1); transform: scale(1); }
+  }
+  .cluster-hdr { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .cluster-icon { font-size: 14px; }
+  .cluster-name { font-size: 11px; font-weight: 700; }
+  .cluster-agents {
+    font-size: 9px; color: var(--muted); line-height: 1.7;
+  }
+  .cluster-events {
+    display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; min-height: 18px;
+  }
+  .cluster-event-tag {
+    font-size: 9px; padding: 1px 5px; border-radius: 3px;
+    background: rgba(255,255,255,.06); color: var(--muted); border: 1px solid transparent;
+  }
+  .cluster-event-tag.fired {
+    border-color: currentColor; font-weight: 700;
+  }
+
+  /* Event flow arrows between clusters */
+  .flow-row {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 9px; color: var(--muted); padding: 3px 2px;
+    flex-wrap: wrap;
+  }
+  .flow-arrow { color: var(--border); font-size: 11px; }
+  .flow-event {
+    padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border);
+    font-weight: 600; transition: all .3s;
+  }
+  .flow-event.active {
+    border-color: var(--amber); color: var(--amber);
+    background: rgba(245,158,11,.1);
+    animation: event-glow .5s ease-out;
+  }
+  @keyframes event-glow {
+    0%  { box-shadow: 0 0 8px var(--amber); }
+    100%{ box-shadow: none; }
+  }
+
+  /* ══ TAB 2: LIVE INTELLIGENCE ══════════════════════════════ */
+  .intel-panel { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Signal strip */
+  .signal-strip {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 8px 10px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; flex-shrink: 0;
+  }
+  .signal-chip {
+    font-size: 10px; padding: 3px 9px; border-radius: 20px;
+    border: 1px solid var(--border); display: flex; align-items: center; gap: 4px;
+    background: var(--surface2);
+  }
+  .sig-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+  /* Cluster status row */
+  .cluster-status-row {
+    display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0;
+  }
+  .cstat {
+    flex: 1; min-width: 80px; padding: 7px 9px; border-radius: 7px;
+    background: var(--surface); border: 1px solid var(--border);
+    transition: border-color .3s;
+  }
+  .cstat.has-events { border-color: currentColor; }
+  .cstat-name { font-size: 9px; font-weight: 700; margin-bottom: 2px; }
+  .cstat-count { font-size: 18px; font-weight: 800; }
+  .cstat-label { font-size: 9px; color: var(--muted); }
+
+  /* Narrative */
+  .narrative-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .narrative-title {
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px;
+  }
+  .narrative-line {
+    font-size: 12px; line-height: 1.7; color: var(--text);
+    padding: 4px 0; border-left: 2px solid var(--border);
+    padding-left: 10px; margin-bottom: 4px;
+  }
+  .narrative-line.cluster-line { border-left-color: currentColor; }
+  .narrative-empty {
+    color: var(--muted); font-size: 12px; text-align: center; padding: 20px;
+  }
+
+  /* Agent detail rows */
+  .agent-detail-section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .agent-detail-hdr {
+    padding: 7px 12px; background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .6px;
+  }
+  .agent-row {
+    display: flex; gap: 8px; align-items: flex-start;
+    padding: 7px 12px; border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .agent-row:last-child { border-bottom: none; }
+  .agent-row.has-emit { border-left: 3px solid var(--amber); }
+  .agent-row.has-read-only { border-left: 3px solid transparent; }
+  .agent-ico { font-size: 13px; flex-shrink: 0; width: 18px; text-align: center; }
+  .agent-body { flex: 1; min-width: 0; }
+  .agent-nm  { font-weight: 600; font-size: 11px; color: var(--text); }
+  .agent-rd  { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+  .agent-emit-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+  .emit-t {
+    font-size: 9px; padding: 1px 6px; border-radius: 3px;
+    background: rgba(245,158,11,.15); color: var(--amber); font-weight: 600;
+  }
+
+  /* ══ TAB 3: LLM CONTEXT ════════════════════════════════════ */
+  .ctx-panel { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .ctx-block {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .ctx-block-lbl {
+    padding: 7px 12px; border-bottom: 1px solid var(--border);
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ctx-text {
+    padding: 10px 12px; font-size: 11px; line-height: 1.8;
+    color: #cbd5e1; white-space: pre-wrap; word-break: break-word;
+    max-height: 380px; overflow-y: auto;
+  }
+  .ctx-empty {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 12px;
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; grid-template-rows: 45vh 55vh; }
+    .chat-panel { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  /* ── Cognitive Lens tab ─────────────────────────────────────── */
+  .lens-section {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .lens-section-title {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .lens-narrative {
+    font-size: 12px; line-height: 1.6; color: var(--text);
+    border-left: 3px solid var(--accent); padding-left: 10px;
+  }
+  .lens-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .lens-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px;
+  }
+  .lens-card-lbl { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+  .lens-card-val { font-size: 13px; font-weight: 700; }
+  .lens-pill {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 600; margin: 2px;
+  }
+  .lens-pill-strong  { background: #10b98120; color: #10b981; }
+  .lens-pill-weak    { background: #ef444420; color: #ef4444; }
+  .lens-pill-zpd     { background: #6366f120; color: #6366f1; }
+  .lens-pill-misc    { background: #f59e0b20; color: #f59e0b; }
+  .lens-flag {
+    font-size: 11px; padding: 6px 8px; border-radius: 5px;
+    background: #f59e0b12; border-left: 3px solid #f59e0b;
+    color: var(--text); line-height: 1.5;
+  }
+  .lens-traj-accelerating { color: #10b981; }
+  .lens-traj-plateauing   { color: #f59e0b; }
+  .lens-traj-declining    { color: #ef4444; }
+  .lens-traj-insufficient_data { color: var(--muted); }
+
+  .lens-sel-btn {
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all .15s;
+  }
+  .lens-sel-btn:hover  { color: var(--text); border-color: var(--accent); }
+  .lens-sel-btn.active { color: var(--text); border-color: var(--accent); background: #6366f115; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge">🧠</div>
+    <div>
+      <div class="logo-name">Parth — Learning Intelligence Platform</div>
+      <div class="logo-tag">3 Kernels · 5 Clusters · 15 Specialist Agents · Real-Time Child Model</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="hpill hpill-live"><span class="pulse"></span> Live</div>
+    <div class="hpill hpill-trust">🛡️ Trust</div>
+    <div class="hpill hpill-id">🧬 Identity</div>
+    <div class="hpill hpill-learn">📚 Learning</div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ══ LEFT: CHAT ══════════════════════════════════════════ -->
+  <div class="chat-panel">
+    <div class="chat-panel-hdr">Chat as a student</div>
+
+    <div class="persona-bar" id="persona-bar"><!-- built by JS --></div>
+
+    <div class="scenario-bar">
+      <span class="scenario-lbl">Demo →</span>
+      <button class="scenario-btn" onclick="quickSend('I give up, this is too hard, I can\'t do physics at all')">😤 Frustration</button>
+      <button class="scenario-btn" onclick="quickSend('oh wow that\'s amazing! so photosynthesis is basically solar panels for plants?')">🌟 Curiosity</button>
+      <button class="scenario-btn" onclick="quickSend('yeh photosynthesis kya hai mujhe samajh nahi aaya')">🌐 Hinglish</button>
+      <button class="scenario-btn" onclick="quickSend('obviously I know this already, friction is just gravity right?')">⚡ Misconception</button>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="msg msg-parth">
+        <div class="msg-label">🌟 Parth</div>
+        Select a student above, then tap a demo scenario — or type your own message. All 15 agents observe every interaction in real time.
+      </div>
+    </div>
+
+    <div id="typing-row" style="display:none; padding:6px 10px;">
+      <div class="msg msg-parth" style="padding:8px 12px;">
+        <div class="typing"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chat-input" placeholder="Type a message…" rows="1"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT: OBSERVATORY ══════════════════════════════════ -->
+  <div class="obs-panel">
+    <div class="obs-tabs">
+      <button class="tab-btn active" onclick="switchTab('arch',this)">🏗️ Architecture</button>
+      <button class="tab-btn" onclick="switchTab('intel',this)">⚡ Live Intelligence</button>
+      <button class="tab-btn" onclick="switchTab('ctx',this)">📄 LLM Context</button>
+      <button class="tab-btn" onclick="switchTab('lens',this);loadLens()">🔬 Cognitive Lens</button>
+    </div>
+
+    <!-- ── Tab 1: Architecture ─────────────────────────────── -->
+    <div class="tab-content active" id="tab-arch">
+      <div class="arch-panel" id="arch-panel"><!-- built by JS --></div>
+    </div>
+
+    <!-- ── Tab 2: Live Intelligence ───────────────────────── -->
+    <div class="tab-content" id="tab-intel">
+      <div class="intel-panel">
+        <div class="signal-strip" id="signal-strip">
+          <span style="color:var(--muted);font-size:11px">Send a message to see the intelligence cascade</span>
+        </div>
+        <div class="cluster-status-row" id="cluster-status-row"><!-- built by JS --></div>
+        <div class="narrative-box">
+          <div class="narrative-title">What just happened</div>
+          <div id="narrative-body">
+            <div class="narrative-empty">The agents are watching — send a message to see them fire</div>
+          </div>
+        </div>
+        <div class="agent-detail-section">
+          <div class="agent-detail-hdr">Agent Detail — per-agent read context &amp; emitted events</div>
+          <div id="agent-detail-list">
+            <div class="agent-row"><div style="padding:10px;color:var(--muted)">No trace yet</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tab 3: LLM Context ─────────────────────────────── -->
+    <div class="tab-content" id="tab-ctx">
+      <div class="ctx-panel" id="ctx-panel">
+        <div class="ctx-empty">Send a message to see the assembled LLM context</div>
+      </div>
+    </div>
+
+    <!-- ── Tab 4: Developmental Lenses ───────────────────── -->
+    <div class="tab-content" id="tab-lens">
+      <div style="padding:12px 14px;overflow-y:auto;height:100%;display:flex;flex-direction:column;gap:10px">
+
+        <!-- Lens selector + compute button -->
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap">
+          <div id="lens-selector" style="display:flex;gap:4px;flex-wrap:wrap">
+            <button class="lens-sel-btn active" data-lens="cognitive"   onclick="selectLens('cognitive',this)">🧠 Cognitive</button>
+            <button class="lens-sel-btn"         data-lens="affect"      onclick="selectLens('affect',this)">❤️ Affect</button>
+            <button class="lens-sel-btn"         data-lens="psychological" onclick="selectLens('psychological',this)">🔮 Psychological</button>
+            <button class="lens-sel-btn"         data-lens="contextual"  onclick="selectLens('contextual',this)">🏠 Contextual</button>
+            <button class="lens-sel-btn"         data-lens="relational"  onclick="selectLens('relational',this)">🤝 Relational</button>
+          </div>
+          <button id="lens-run-btn" onclick="runLens()"
+            style="margin-left:auto;padding:5px 14px;background:var(--accent);color:#fff;border:none;
+                   border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0">
+            ▶ Compute
+          </button>
+          <a href="/onboarding" target="_blank"
+            style="padding:5px 12px;border:1px solid var(--border);color:var(--muted);
+                   border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;flex-shrink:0">
+            ⚙️ BMAD Setup
+          </a>
+        </div>
+
+        <div id="lens-subtitle" style="color:var(--muted);font-size:11px;flex-shrink:0">
+          Longitudinal portrait synthesised from 30 days of micro-agent state
+        </div>
+
+        <div id="lens-panel" style="flex:1;overflow-y:auto">
+          <div style="color:var(--muted);font-size:12px;padding:20px 0">
+            Select a lens then click "Compute" — or load a cached portrait.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ────────────────────────────────────────────────────────────────────
+// DATA DEFINITIONS
+// ────────────────────────────────────────────────────────────────────
+
+const CLUSTERS = [
+  {
+    id: "affect",
+    label: "Affect & Motivation",
+    icon: "❤️",
+    color: "#ef4444",
+    agents: [
+      { name:"emotion_compass",      icon:"🧭", label:"Emotion Compass" },
+      { name:"belief_coach",         icon:"💪", label:"Belief Coach" },
+      { name:"challenge_calibrator", icon:"⚖️", label:"Challenge Calibrator" },
+      { name:"humor_delight_guide",  icon:"😄", label:"Humor & Delight" },
+    ],
+    emits: ["distress.detected","engagement.high","curiosity.active","confidence.bias","difficulty.adjust","delight.approved"],
+    reads: [],
+    desc: "Emotion, self-efficacy, productive struggle, safe levity",
+  },
+  {
+    id: "cognition",
+    label: "Knowledge & Cognition",
+    icon: "🧠",
+    color: "#6366f1",
+    agents: [
+      { name:"mastery_tracker",         icon:"📊", label:"Mastery Tracker" },
+      { name:"misconception_hunter",    icon:"🎯", label:"Misconception Hunter" },
+      { name:"curriculum_cartographer", icon:"🗺️", label:"Curriculum Cartographer" },
+      { name:"memory_keeper",           icon:"🧩", label:"Memory Keeper" },
+    ],
+    emits: ["concept.weak","misconception.active"],
+    reads: [],
+    desc: "BKT mastery, misconception mapping, SM-2 spaced retrieval",
+  },
+  {
+    id: "linguistic",
+    label: "Linguistic & Cultural",
+    icon: "🌐",
+    color: "#10b981",
+    agents: [
+      { name:"language_bridge", icon:"🌐", label:"Language Bridge" },
+      { name:"register_tuner",  icon:"🎚️", label:"Register Tuner" },
+      { name:"transfer_weaver", icon:"🌉", label:"Transfer Weaver" },
+    ],
+    emits: ["lang.preference","register.profile","analogy.suggested"],
+    reads: [],
+    desc: "Code-switching policy, tone register, analogy anchors",
+  },
+  {
+    id: "context",
+    label: "Context & Relationships",
+    icon: "🏠",
+    color: "#f59e0b",
+    agents: [
+      { name:"family_alliance",      icon:"🏠", label:"Family Alliance" },
+      { name:"rhythm_time_steward",  icon:"⏰", label:"Rhythm Steward" },
+      { name:"inquiry_alchemist",    icon:"🔮", label:"Inquiry Alchemist" },
+    ],
+    emits: [],
+    reads: ["distress.detected"],
+    desc: "Consent-gated caregiver context, pacing, SEL repair",
+  },
+  {
+    id: "pedagogy",
+    label: "Pedagogy & Preference",
+    icon: "🎯",
+    color: "#8b5cf6",
+    agents: [
+      { name:"pattern_creation_guide", icon:"🌀", label:"Pattern Guide" },
+    ],
+    emits: [],
+    reads: ["curiosity.active"],
+    desc: "Wonder questions, cross-domain patterns, NGSS crosscutting",
+  },
+];
+
+const CLUSTER_MAP = Object.fromEntries(CLUSTERS.map(c => [c.id, c]));
+
+// Which cluster does each agent belong to?
+const AGENT_CLUSTER = {};
+CLUSTERS.forEach(c => c.agents.forEach(a => { AGENT_CLUSTER[a.name] = c.id; }));
+
+const AGENT_META = {};
+CLUSTERS.forEach(c => c.agents.forEach(a => { AGENT_META[a.name] = { icon: a.icon, label: a.label, cluster: c.id }; }));
+
+// Key inter-cluster event flows for visualisation
+const EVENT_FLOWS = [
+  { event:"distress.detected", from:"affect",   to:["affect","context"] },
+  { event:"engagement.high",   from:"affect",   to:["affect"] },
+  { event:"curiosity.active",  from:"affect",   to:["pedagogy"] },
+  { event:"concept.weak",      from:"cognition",to:["affect"] },
+  { event:"misconception.active",from:"cognition",to:["cognition"] },
+  { event:"lang.preference",   from:"linguistic",to:["linguistic"] },
+  { event:"confidence.bias",   from:"affect",   to:["affect"] },
+  { event:"difficulty.adjust", from:"affect",   to:["affect"] },
+  { event:"analogy.suggested", from:"linguistic",to:["linguistic"] },
+];
+
+const PERSONAS = [
+  { id:"arjun_s8",    name:"Arjun",    grade:8,  subject:"Science",     emoji:"🏏", color:"#f97316" },
+  { id:"sneha_s6",    name:"Sneha",    grade:6,  subject:"Science",     emoji:"🌸", color:"#ec4899" },
+  { id:"dev_s10",     name:"Dev",      grade:10, subject:"Mathematics", emoji:"🎮", color:"#22c55e" },
+  { id:"meera_s7",    name:"Meera",    grade:7,  subject:"Mathematics", emoji:"📐", color:"#a855f7" },
+  { id:"rishi_s9",    name:"Rishi",    grade:9,  subject:"Science",     emoji:"🌌", color:"#3b82f6" },
+  { id:"priya_s5",    name:"Priya",    grade:5,  subject:"Mathematics", emoji:"🌺", color:"#f43f5e" },
+  { id:"rohan_s7",    name:"Rohan",    grade:7,  subject:"Science",     emoji:"⚡", color:"#eab308" },
+  { id:"ananya_s9",   name:"Ananya",   grade:9,  subject:"History",     emoji:"📚", color:"#06b6d4" },
+  { id:"kabir_s6",    name:"Kabir",    grade:6,  subject:"Mathematics", emoji:"🎵", color:"#8b5cf6" },
+  { id:"ishaan_s8",   name:"Ishaan",   grade:8,  subject:"Geography",   emoji:"🌍", color:"#10b981" },
+  { id:"pooja_s10",   name:"Pooja",    grade:10, subject:"Chemistry",   emoji:"🔬", color:"#e879f9" },
+  { id:"aarav_s7",    name:"Aarav",    grade:7,  subject:"Mathematics", emoji:"🧮", color:"#fb923c" },
+  { id:"diya_s6",     name:"Diya",     grade:6,  subject:"Science",     emoji:"✨", color:"#34d399" },
+  { id:"vikram_s9",   name:"Vikram",   grade:9,  subject:"Physics",     emoji:"🚀", color:"#60a5fa" },
+  { id:"nisha_s8",    name:"Nisha",    grade:8,  subject:"Biology",     emoji:"🌿", color:"#f472b6" },
+];
+
+const EMOTION_COLOR = {
+  frustrated:"#ef4444", anxious:"#f97316", distressed:"#ef4444",
+  confused:"#f59e0b", curious:"#10b981", excited:"#22c55e",
+  amazed:"#6366f1", bored:"#6b7280", neutral:"#6b7280", disengaged:"#6b7280",
+};
+
+let currentPersona = PERSONAS[0];
+let chatHistory    = [];
+let lastTrace      = null;
+let personaEmotions = {}; // learner_id → latest emotion
+
+// ────────────────────────────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────────────────────────────
+function init() {
+  buildPersonaBar();
+  buildArchPanel();
+  buildClusterStatusRow();
+  setupInput();
+  selectPersona(PERSONAS[0]);
+}
+
+// ────────────────────────────────────────────────────────────────────
+// PERSONA BAR
+// ────────────────────────────────────────────────────────────────────
+function buildPersonaBar() {
+  const bar = document.getElementById('persona-bar');
+  bar.innerHTML = PERSONAS.map(p => `
+    <button class="persona-btn" id="pb-${p.id}" onclick="selectPersona(PERSONAS.find(x=>x.id==='${p.id}'))">
+      <span class="persona-emotion" id="pe-${p.id}" style="background:var(--muted)"></span>
+      ${p.emoji} ${p.name}
+      <span style="color:var(--muted);font-weight:400;font-size:10px">G${p.grade}</span>
+    </button>
+  `).join('');
+}
+
+function setPersonaEmotionDot(learner_id, emotion) {
+  const dot = document.getElementById(`pe-${learner_id}`);
+  if (dot) dot.style.background = EMOTION_COLOR[emotion] || '#6b7280';
+}
+
+async function loadPersonaEmotions() {
+  for (const p of PERSONAS) {
+    try {
+      const r = await fetch(`/api/trace/${p.id}/latest`);
+      const t = await r.json();
+      if (t && t.emotion) {
+        personaEmotions[p.id] = t.emotion;
+        setPersonaEmotionDot(p.id, t.emotion);
+      }
+    } catch(_) {}
+  }
+}
+
+function selectPersona(p) {
+  currentPersona = p;
+  chatHistory = [];
+  document.querySelectorAll('.persona-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`pb-${p.id}`);
+  if (btn) btn.classList.add('active');
+
+  // Clear chat
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML = `
+    <div class="msg msg-parth">
+      <div class="msg-label">🌟 Parth</div>
+      Hello ${p.emoji} <strong>${p.name}</strong>! Grade ${p.grade} ${p.subject} — what's on your mind?
+    </div>
+  `;
+
+  // Clear stale panels immediately — don't leave previous learner's data visible
+  const sigEl = document.getElementById('signal-strip');
+  if (sigEl) sigEl.innerHTML = `<span style="color:var(--muted);font-size:11px">Send a message to see the intelligence cascade</span>`;
+  const ctxEl = document.getElementById('ctx-panel');
+  if (ctxEl) ctxEl.innerHTML = '<div class="ctx-empty">Send a message to see the assembled LLM context</div>';
+  const lensEl = document.getElementById('lens-panel');
+  if (lensEl) lensEl.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:12px 0">Click "Compute Now" to load ${p.name}'s cognitive portrait.</div>`;
+  lastTrace = null;
+
+  refreshTrace();
+}
+
+// ────────────────────────────────────────────────────────────────────
+// ARCHITECTURE TAB
+// ────────────────────────────────────────────────────────────────────
+function buildArchPanel() {
+  const panel = document.getElementById('arch-panel');
+  // Kernels are nested decorators. Each layer wraps the one inside it and annotates
+  // KernelContext with more fields before passing control inward. The LLM only fires
+  // once everything has annotated the context. Post-generation: the outermost (Trust)
+  // re-wraps the response to verify and log.
+  panel.innerHTML = `
+    <!-- Decorator pattern: outermost = Trust, innermost = LLM call -->
+    <div style="font-size:10px;color:var(--muted);margin-bottom:6px;font-style:italic">
+      Request → [Trust wraps [Identity wraps [Learning wraps → LLM → unwrap]]] → Response
+      &nbsp;·&nbsp; decorator pattern: each kernel annotates KernelContext before passing inward
+    </div>
+
+    <!-- Trust Kernel — outermost decorator -->
+    <div class="kernel-row kernel-trust">
+      <div class="kernel-hdr">
+        <span class="kernel-icon">🛡️</span>
+        <span class="kernel-name">Trust Kernel</span>
+        <span class="kernel-tag">Outermost layer · vetoes before &amp; after · appends: moderation_ok · distress_detected · audit_id</span>
+      </div>
+      <div class="kernel-pills">
+        <span class="kernel-pill">Content Safety — regex + ML pattern match on input</span>
+        <span class="kernel-pill">Distress Override — veto + crisis response if detected</span>
+        <span class="kernel-pill">Consent Gateway — checks guardian_links before any write</span>
+        <span class="kernel-pill">Rate Limiter — per-learner request cap</span>
+        <span class="kernel-pill">Audit Outbox — append-only event log, every interaction</span>
+        <span class="kernel-pill">Post-gen re-check — same patterns on Parth's output</span>
+      </div>
+    </div>
+
+    <!-- Identity Kernel — middle decorator -->
+    <div class="kernel-row kernel-identity" style="margin-left:14px">
+      <div class="kernel-hdr">
+        <span class="kernel-icon">🧬</span>
+        <span class="kernel-name">Identity Kernel</span>
+        <span class="kernel-tag">Persistent across sessions · appends: psyche_profile · belief_bias · curiosity_threads · language_ratio</span>
+      </div>
+      <div class="kernel-pills">
+        <span class="kernel-pill">Psyche Profile — growth mindset index, anxiety level, depth preference</span>
+        <span class="kernel-pill">Belief Coach — Dweck model; tracks over/under-confidence across sessions</span>
+        <span class="kernel-pill">Curiosity Threads — open wonder questions persisted between sessions</span>
+        <span class="kernel-pill">Family Alliance — consent-gated caregiver context (guardian can write)</span>
+        <span class="kernel-pill">Chronological Rhythm — peak focus window, fatigue signal</span>
+      </div>
+    </div>
+
+    <!-- Learning Kernel — innermost decorator before the LLM call -->
+    <div class="kernel-row kernel-learning" style="margin-left:28px">
+      <div class="kernel-hdr">
+        <span class="kernel-icon">📚</span>
+        <span class="kernel-name">Learning Kernel</span>
+        <span class="kernel-tag">Per-interaction · 15 agents · 5 clusters · event bus · appends: affect_state · mastery_map · misconceptions · analogies · register</span>
+      </div>
+      <div class="cluster-grid" id="cluster-grid">
+        ${CLUSTERS.map(c => `
+          <div class="cluster-card" id="cc-${c.id}" style="color:${c.color}">
+            <div class="cluster-hdr">
+              <span class="cluster-icon">${c.icon}</span>
+              <span class="cluster-name" style="color:${c.color}">${c.label}</span>
+            </div>
+            <div class="cluster-agents">
+              ${c.agents.map(a => `${a.icon} ${a.label}`).join('<br>')}
+            </div>
+            <div class="cluster-events" id="ce-${c.id}">
+              ${c.emits.map(e => `<span class="cluster-event-tag" id="cet-${e.replace(/\./g,'-')}" style="color:${c.color}">${e}</span>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="flow-row" style="margin-top:10px;">
+        <span style="font-weight:700;color:var(--muted)">Inter-cluster event cascade:</span>
+        ${[...new Set(EVENT_FLOWS.map(f=>f.event))].map(e =>
+          `<span class="flow-event" id="fe-${e.replace(/\./g,'-')}">${e}</span>`
+        ).join(' <span class="flow-arrow">→</span> ')}
+      </div>
+    </div>
+
+    <!-- LLM call sits at the centre — receives fully decorated context -->
+    <div style="margin-left:42px; margin-top:6px; padding:7px 12px; border:1px dashed #2563eb40; border-radius:7px; font-size:10px; color:#3b82f6;">
+      ⚡ <strong style="color:#6366f1">LLM call</strong> — receives assembled KernelContext (all three layers' annotations merged into system prompt) · responds · Trust re-wraps output
+    </div>
+  `;
+}
+
+function buildClusterStatusRow() {
+  const row = document.getElementById('cluster-status-row');
+  row.innerHTML = CLUSTERS.map(c => `
+    <div class="cstat" id="cst-${c.id}" style="color:${c.color}">
+      <div class="cstat-name" style="color:${c.color}">${c.icon} ${c.label.split(' ')[0]}</div>
+      <div class="cstat-count" id="cst-cnt-${c.id}">—</div>
+      <div class="cstat-label">events emitted</div>
+    </div>
+  `).join('');
+}
+
+// ────────────────────────────────────────────────────────────────────
+// CHAT
+// ────────────────────────────────────────────────────────────────────
+function setupInput() {
+  const inp = document.getElementById('chat-input');
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+  inp.addEventListener('input', () => {
+    inp.style.height = '38px';
+    inp.style.height = Math.min(inp.scrollHeight, 80) + 'px';
+  });
+}
+
+function quickSend(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const inp  = document.getElementById('chat-input');
+  const text = inp.value.trim();
+  if (!text) return;
+
+  inp.value = '';
+  inp.style.height = '38px';
+  appendBubble('user', text);
+  chatHistory.push({ role:'user', content:text });
+
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('typing-row').style.display = 'block';
+  scrollMessages();
+
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: text,
+        learner_id: currentPersona.id,
+        learner_name: currentPersona.name,
+        subject: currentPersona.subject,
+        grade: currentPersona.grade,
+        history: chatHistory.slice(-8),
+      }),
+    });
+    const data = await res.json();
+    document.getElementById('typing-row').style.display = 'none';
+    if (data.response) {
+      appendBubble('parth', data.response);
+      chatHistory.push({ role:'assistant', content: data.response });
+    }
+    await refreshTrace();
+    loadPersonaEmotions();
+  } catch (err) {
+    document.getElementById('typing-row').style.display = 'none';
+    appendBubble('parth', '⚠ Connection error — check the server.');
+  }
+  document.getElementById('send-btn').disabled = false;
+}
+
+function appendBubble(role, text) {
+  const msgs = document.getElementById('messages');
+  const div  = document.createElement('div');
+  div.className = `msg msg-${role === 'user' ? 'user' : 'parth'}`;
+  if (role === 'parth') {
+    div.innerHTML = `<div class="msg-label">🌟 Parth</div>${escHtml(text)}`;
+  } else {
+    const p = currentPersona;
+    div.innerHTML = `<div class="msg-label" style="color:${p.color}">${p.emoji} ${p.name}</div>${escHtml(text)}`;
+  }
+  msgs.appendChild(div);
+  scrollMessages();
+}
+
+function scrollMessages() {
+  const m = document.getElementById('messages');
+  setTimeout(() => { m.scrollTop = m.scrollHeight; }, 60);
+}
+
+// ────────────────────────────────────────────────────────────────────
+// TRACE REFRESH
+// ────────────────────────────────────────────────────────────────────
+async function refreshTrace() {
+  try {
+    const res   = await fetch(`/api/trace/${currentPersona.id}/latest`);
+    const trace = await res.json();
+    if (!trace || !trace.dispatch_trace) return;
+    lastTrace = trace;
+    renderArchActive(trace);
+    renderIntelligence(trace);
+    renderContext(trace);
+  } catch(_) {}
+}
+
+// ── Architecture tab: highlight active clusters & events ──────────
+function renderArchActive(trace) {
+  const events = trace.agent_signals?.events || {};
+
+  // Reset all cluster cards
+  CLUSTERS.forEach(c => {
+    const card = document.getElementById(`cc-${c.id}`);
+    if (card) { card.classList.remove('fired','active-cluster'); }
+    c.emits.forEach(e => {
+      const tag = document.getElementById(`cet-${e.replace(/\./g,'-')}`);
+      if (tag) tag.classList.remove('fired');
+    });
+  });
+
+  // Reset ALL flow events (not just current ones — previous trace may have fired different events)
+  EVENT_FLOWS.forEach(f => {
+    const el = document.getElementById(`fe-${f.event.replace(/\./g,'-')}`);
+    if (el) el.classList.remove('active');
+  });
+
+  // Determine which clusters fired
+  const clusterFired = new Set();
+  const clusterEvents = {};
+  trace.dispatch_trace.forEach(t => {
+    if (t.skipped || !t.emitted) return;
+    Object.keys(t.emitted).forEach(evt => {
+      const cid = whichClusterEmits(evt);
+      if (cid) { clusterFired.add(cid); clusterEvents[cid] = (clusterEvents[cid]||[]); clusterEvents[cid].push(evt); }
+    });
+  });
+
+  // Also highlight clusters that had context to read
+  trace.read_trace?.forEach(r => {
+    if (r.read) {
+      const cid = AGENT_CLUSTER[r.agent];
+      if (cid) clusterFired.add(cid);
+    }
+  });
+
+  // Animate clusters
+  clusterFired.forEach(cid => {
+    const card = document.getElementById(`cc-${cid}`);
+    if (card) { card.classList.add('fired','active-cluster'); }
+  });
+
+  // Highlight event tags on cluster cards
+  Object.entries(events).forEach(([evt, _]) => {
+    const tagId = `cet-${evt.replace(/\./g,'-')}`;
+    const tag   = document.getElementById(tagId);
+    if (tag) tag.classList.add('fired');
+
+    const flowEl = document.getElementById(`fe-${evt.replace(/\./g,'-')}`);
+    if (flowEl) flowEl.classList.add('active');
+  });
+}
+
+function whichClusterEmits(event) {
+  for (const c of CLUSTERS) {
+    if (c.emits.includes(event)) return c.id;
+  }
+  return null;
+}
+
+// ── Intelligence tab ───────────────────────────────────────────────
+function renderIntelligence(trace) {
+  const { dispatch_trace, read_trace, agent_signals, emotion, engagement } = trace;
+  const events  = agent_signals?.events || {};
+  const readMap = Object.fromEntries((read_trace||[]).map(r => [r.agent, r.read]));
+
+  // Signal strip
+  const sigs = agent_signals || {};
+  const sigEl = document.getElementById('signal-strip');
+  const langLabel = sigs.language_ratio >= 0.7 ? 'English' : (sigs.language_ratio >= 0.4 ? 'Mixed' : 'Hindi');
+  sigEl.innerHTML = [
+    { label:`Emotion: ${sigs.emotion||emotion||'—'}`, color: EMOTION_COLOR[sigs.emotion||emotion]||'#6b7280' },
+    { label:`Engagement: ${(sigs.engagement||engagement||5).toFixed(1)}/10`, color:'#6366f1' },
+    { label:`Language: ${langLabel}`, color:'#10b981' },
+    { label:`Concepts: ${(sigs.concepts||[]).join(', ')||'—'}`, color:'#8b5cf6' },
+    ...Object.keys(events).map(k => ({ label: k, color:'#f59e0b' })),
+  ].map(s => `
+    <div class="signal-chip">
+      <span class="sig-dot" style="background:${s.color}"></span>
+      ${escHtml(s.label)}
+    </div>
+  `).join('');
+
+  // Cluster status cards
+  CLUSTERS.forEach(c => {
+    const cnt = dispatch_trace.filter(t =>
+      !t.skipped && t.emitted && Object.keys(t.emitted).some(e => c.emits.includes(e))
+    ).length;
+    const cntEl = document.getElementById(`cst-cnt-${c.id}`);
+    const cstEl = document.getElementById(`cst-${c.id}`);
+    if (cntEl) cntEl.textContent = cnt || '—';
+    if (cstEl) { cstEl.classList.toggle('has-events', cnt > 0); }
+  });
+
+  // Narrative
+  renderNarrative(trace, events, readMap);
+
+  // Agent detail list
+  const listEl = document.getElementById('agent-detail-list');
+  const rows = [];
+  dispatch_trace.forEach(t => {
+    if (t.skipped) return;
+    const meta    = AGENT_META[t.agent] || { icon:'🤖', label:t.agent };
+    const readTxt = readMap[t.agent] || '';
+    const hasEmit = Object.keys(t.emitted||{}).length > 0;
+    if (!readTxt && !hasEmit && !t.error) return;
+
+    rows.push(`
+      <div class="agent-row ${hasEmit?'has-emit':'has-read-only'}">
+        <div class="agent-ico">${meta.icon}</div>
+        <div class="agent-body">
+          <div class="agent-nm">${meta.label||t.agent}</div>
+          ${readTxt ? `<div class="agent-rd">${escHtml(readTxt.slice(0,160))}${readTxt.length>160?'…':''}</div>` : ''}
+          ${hasEmit ? `<div class="agent-emit-tags">
+            ${Object.entries(t.emitted).map(([k,v])=>`<span class="emit-t">↑ ${escHtml(k)} = ${escHtml(String(v))}</span>`).join('')}
+          </div>` : ''}
+          ${t.error ? `<div style="font-size:10px;color:var(--red);margin-top:3px">⚠ ${escHtml(t.error)}</div>` : ''}
+        </div>
+      </div>
+    `);
+  });
+  listEl.innerHTML = rows.length ? rows.join('') : '<div class="agent-row"><div style="padding:10px;color:var(--muted)">No agent activity recorded</div></div>';
+}
+
+function renderNarrative(trace, events, readMap) {
+  const el   = document.getElementById('narrative-body');
+  const sigs = trace.agent_signals || {};
+  const em   = sigs.emotion || trace.emotion || 'neutral';
+  const eng  = (sigs.engagement || trace.engagement || 5).toFixed(1);
+  const p    = currentPersona;
+  const lines = [];
+
+  // Opening
+  lines.push(`<div class="narrative-line">${p.emoji} <strong>${p.name}</strong> sent a message — all 15 agents observed simultaneously.</div>`);
+
+  // Trust kernel
+  lines.push(`<div class="narrative-line" style="border-left-color:#dc2626">🛡️ <strong>Trust Kernel</strong> — content checked, consent verified, interaction logged to audit trail.</div>`);
+
+  // Identity kernel
+  const growth = trace.read_trace?.find(r => r.agent==='belief_coach')?.read || '';
+  if (growth) {
+    lines.push(`<div class="narrative-line" style="border-left-color:#7c3aed">🧬 <strong>Identity Kernel</strong> — ${escHtml(growth.slice(0,100))}${growth.length>100?'…':''}</div>`);
+  }
+
+  // Per-cluster
+  const clusterNarrative = {
+    affect: () => {
+      const parts = [`❤️ <strong>Affect & Motivation</strong> — emotion detected: <strong>${em}</strong>, engagement ${eng}/10.`];
+      if (events['distress.detected'])  parts.push(' 🔴 Distress active — humor suspended, difficulty reduced.');
+      if (events['engagement.high'])    parts.push(' 🟢 High engagement — raising challenge level.');
+      if (events['curiosity.active'])   parts.push(' 🌱 Curiosity detected — wonder question queued.');
+      if (events['confidence.bias']==='over')   parts.push(' ⚠️ Over-confidence flagged — misconception check triggered.');
+      if (events['confidence.bias']==='under')  parts.push(' 💙 Under-confidence — extra validation needed.');
+      return parts.join('');
+    },
+    cognition: () => {
+      const weak = trace.read_trace?.find(r=>r.agent==='mastery_tracker')?.read || '';
+      const misc = trace.read_trace?.find(r=>r.agent==='misconception_hunter')?.read || '';
+      const parts = [`🧠 <strong>Knowledge & Cognition</strong>`];
+      if (weak)  parts.push(` — ${escHtml(weak.slice(0,80))}`);
+      if (events['concept.weak'])         parts.push('. Weak concept flagged → scaffolding boost.');
+      if (events['misconception.active']) parts.push('. Active misconception → remediation hint injected into prompt.');
+      return parts.join('');
+    },
+    linguistic: () => {
+      const lang = events['lang.preference'] || 'english';
+      const reg  = trace.read_trace?.find(r=>r.agent==='register_tuner')?.read || '';
+      return `🌐 <strong>Linguistic & Cultural</strong> — language: <strong>${lang}</strong>. ${reg ? escHtml(reg.slice(0,80)) : 'Register calibrated.'}`;
+    },
+    context: () => {
+      const rhythm = trace.read_trace?.find(r=>r.agent==='rhythm_time_steward')?.read || '';
+      const inq    = trace.read_trace?.find(r=>r.agent==='inquiry_alchemist')?.read || '';
+      const parts = [`🏠 <strong>Context & Relationships</strong>`];
+      if (rhythm) parts.push(` — ${escHtml(rhythm.slice(0,80))}`);
+      if (inq)    parts.push(`. ${escHtml(inq.slice(0,80))}`);
+      return parts.join('');
+    },
+    pedagogy: () => {
+      const pat = trace.read_trace?.find(r=>r.agent==='pattern_creation_guide')?.read || '';
+      return `🎯 <strong>Pedagogy & Preference</strong> — ${pat ? escHtml(pat.slice(0,100)) : 'No open wonder questions yet.'}`;
+    },
+  };
+
+  CLUSTERS.forEach(c => {
+    const fn  = clusterNarrative[c.id];
+    const txt = fn ? fn() : '';
+    if (txt) {
+      lines.push(`<div class="narrative-line cluster-line" style="border-left-color:${c.color}">${txt}</div>`);
+    }
+  });
+
+  // Closing
+  lines.push(`<div class="narrative-line" style="border-left-color:var(--muted)">✍️ Assembled context injected into LLM prompt — Parth responded.</div>`);
+
+  el.innerHTML = lines.join('');
+}
+
+// ── Context tab ────────────────────────────────────────────────────
+function renderContext(trace) {
+  const panel = document.getElementById('ctx-panel');
+  const ctx   = trace.context_assembled || '';
+  const sigs  = trace.agent_signals || {};
+
+  if (!ctx) {
+    panel.innerHTML = '<div class="ctx-empty">No context assembled yet</div>';
+    return;
+  }
+
+  panel.innerHTML = `
+    <div class="ctx-block">
+      <div class="ctx-block-lbl">📤 Assembled Learner Context → injected into LLM system prompt</div>
+      <div class="ctx-text">${escHtml(ctx)}</div>
+    </div>
+    <div class="ctx-block">
+      <div class="ctx-block-lbl">📡 Agent Signals (post-generation)</div>
+      <div class="ctx-text">${escHtml(JSON.stringify(sigs, null, 2))}</div>
+    </div>
+  `;
+}
+
+// ────────────────────────────────────────────────────────────────────
+// DEVELOPMENTAL LENSES TAB
+// ────────────────────────────────────────────────────────────────────
+let currentLens = 'cognitive';
+
+const LENS_META = {
+  cognitive:     { label: 'Cognitive',     icon: '🧠', subtitle: 'Mastery landscape, misconceptions, fluency vs depth — 30-day academic trajectory' },
+  affect:        { label: 'Affect',        icon: '❤️', subtitle: 'Emotional arc, distress patterns, delight triggers — what moves this child' },
+  psychological: { label: 'Psychological', icon: '🔮', subtitle: 'Mindset, anxiety, calibration, MBTI proxy — who this child is as a learner' },
+  contextual:    { label: 'Contextual',    icon: '🏠', subtitle: 'Language, schedule, home environment, analogy preferences — the world around the learner' },
+  relational:    { label: 'Relational',    icon: '🤝', subtitle: 'Curiosity threads, persistence, learner identity, relationship with Parth' },
+};
+
+function selectLens(name, btn) {
+  currentLens = name;
+  document.querySelectorAll('.lens-sel-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const meta = LENS_META[name] || {};
+  document.getElementById('lens-subtitle').textContent = meta.subtitle || '';
+  loadLens();
+}
+
+async function loadLens() {
+  const panel = document.getElementById('lens-panel');
+  panel.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:12px 0">Loading ${currentLens} portrait…</div>`;
+  try {
+    const res  = await fetch(`/api/lens/${currentLens}/${currentPersona.id}`);
+    const data = await res.json();
+    if (!data.portrait) {
+      panel.innerHTML = `
+        <div style="color:var(--muted);font-size:12px;padding:12px 0">
+          No ${currentLens} portrait yet for ${currentPersona.name}.<br>
+          Click <strong>Compute</strong> to run this lens.
+        </div>`;
+      return;
+    }
+    renderLens(data.portrait);
+  } catch(e) {
+    panel.innerHTML = `<div style="color:#ef4444;font-size:12px">Error: ${e.message}</div>`;
+  }
+}
+
+async function runLens() {
+  const btn   = document.getElementById('lens-run-btn');
+  const panel = document.getElementById('lens-panel');
+  btn.disabled    = true;
+  btn.textContent = '⏳ Computing…';
+  const meta = LENS_META[currentLens] || {};
+  panel.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:12px 0">Running ${meta.icon || ''} ${meta.label || currentLens} lens — reading 30 days of state, generating narrative…</div>`;
+  try {
+    const res  = await fetch(`/api/lens/${currentLens}/${currentPersona.id}/run`, { method: 'POST' });
+    const data = await res.json();
+    if (data.detail) {
+      panel.innerHTML = `<div style="color:#f59e0b;font-size:12px">⚠️ ${escHtml(data.detail)}</div>`;
+      return;
+    }
+    renderLens(data.portrait);
+  } catch(e) {
+    panel.innerHTML = `<div style="color:#ef4444;font-size:12px">Compute failed: ${e.message}</div>`;
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = '▶ Compute';
+  }
+}
+
+function renderLens(p) {
+  const panel = document.getElementById('lens-panel');
+  if (!p) { panel.innerHTML = '<div style="color:var(--muted)">No data</div>'; return; }
+
+  const meta     = LENS_META[currentLens] || {};
+  const computed = p.computed_at ? new Date(p.computed_at).toLocaleString() : '';
+  const flags    = (p.bmad_flags||[]).map(f => `<div class="lens-flag">⚑ ${escHtml(f)}</div>`).join('');
+
+  // Narrative is common to all lenses
+  let html = `
+    <div class="lens-section">
+      <div class="lens-section-title">${meta.icon||''} ${meta.label||currentLens} Portrait — ${escHtml(currentPersona.name)} · ${computed}</div>
+      <div class="lens-narrative">${escHtml(p.narrative || '—')}</div>
+    </div>`;
+
+  // ── Cognitive-specific ──────────────────────────────────────────
+  if (currentLens === 'cognitive') {
+    const pillList = (items, cls, fn) =>
+      (items||[]).length ? items.map(i=>`<span class="lens-pill ${cls}">${escHtml(fn(i))}</span>`).join('')
+                         : `<span style="color:var(--muted);font-size:11px">none</span>`;
+    const trajClass = `lens-traj-${p.trajectory||'insufficient_data'}`;
+    const trajLabel = {accelerating:'▲ Accelerating',plateauing:'→ Plateauing',declining:'▼ Declining',insufficient_data:'— Insufficient data'}[p.trajectory]||p.trajectory;
+    html += `
+    <div class="lens-grid">
+      <div class="lens-card"><div class="lens-card-lbl">Trajectory</div><div class="lens-card-val ${trajClass}">${trajLabel}</div></div>
+      <div class="lens-card"><div class="lens-card-lbl">Concepts seen</div><div class="lens-card-val">${p.total_concepts_seen||0} <span style="font-size:10px;color:var(--muted);font-weight:400">(${(p.strong_concepts||[]).length} strong / ${(p.weak_concepts||[]).length} weak)</span></div></div>
+      <div class="lens-card"><div class="lens-card-lbl">Fluency / Depth</div><div class="lens-card-val" style="font-size:11px">${escHtml((p.fluency_depth||{}).assessment||'—')}</div></div>
+      <div class="lens-card"><div class="lens-card-lbl">ZPD Target</div><div class="lens-card-val">${p.zpd_target?`<span class="lens-pill lens-pill-zpd">${escHtml(p.zpd_target)}</span>`:'<span style="color:var(--muted);font-size:11px">—</span>'}</div></div>
+      <div class="lens-card"><div class="lens-card-lbl">Retention half-life</div><div class="lens-card-val">${(p.retention||{}).half_life_days!=null?p.retention.half_life_days+' days':'<span style="color:var(--muted);font-size:11px">unknown</span>'}</div></div>
+      <div class="lens-card"><div class="lens-card-lbl">Avg mastery</div><div class="lens-card-val">${((p.mastery_growth_rate||0)*100).toFixed(0)}%</div></div>
+    </div>
+    <div class="lens-section"><div class="lens-section-title">Strong concepts</div><div>${pillList(p.strong_concepts,'lens-pill-strong',c=>`${c.concept_id} ${(c.p_mastery*100).toFixed(0)}%`)}</div></div>
+    <div class="lens-section"><div class="lens-section-title">Weak / developing</div><div>${pillList(p.weak_concepts,'lens-pill-weak',c=>`${c.concept_id} ${(c.p_mastery*100).toFixed(0)}%`)}</div></div>
+    <div class="lens-section"><div class="lens-section-title">Confirmed misconceptions</div><div>${pillList(p.confirmed_misconceptions,'lens-pill-misc',m=>`${m.concept_id} ×${m.evidence_count}`)}</div></div>`;
+  }
+
+  // ── Generic key→value grid for all other lenses ─────────────────
+  else {
+    const SKIP = new Set(['learner_id','computed_at','period_days','narrative','bmad_flags']);
+    const entries = Object.entries(p).filter(([k]) => !SKIP.has(k));
+    if (entries.length) {
+      html += `<div class="lens-grid">`;
+      entries.forEach(([k, v]) => {
+        let display = v;
+        if (v === null || v === undefined) display = '—';
+        else if (typeof v === 'boolean')   display = v ? 'Yes' : 'No';
+        else if (typeof v === 'number')    display = v % 1 !== 0 ? v.toFixed(2) : v;
+        else if (Array.isArray(v))         display = v.length ? v.slice(0,3).map(x=>typeof x==='object'?JSON.stringify(x):x).join(', ')+(v.length>3?'…':'') : '—';
+        else if (typeof v === 'object')    display = Object.entries(v).slice(0,2).map(([a,b])=>`${a}: ${b}`).join(' · ') || '—';
+        const label = k.replace(/_/g,' ').replace(/\b\w/g, l=>l.toUpperCase());
+        html += `<div class="lens-card"><div class="lens-card-lbl">${escHtml(label)}</div><div class="lens-card-val" style="font-size:11px">${escHtml(String(display))}</div></div>`;
+      });
+      html += `</div>`;
+    }
+  }
+
+  // BMAD flags — common to all lenses
+  if (flags) {
+    html += `<div class="lens-section"><div class="lens-section-title">BMAD Flags — signals for the build team</div><div style="display:flex;flex-direction:column;gap:5px">${flags}</div></div>`;
+  }
+
+  panel.innerHTML = html;
+}
+
+// ────────────────────────────────────────────────────────────────────
+// TABS & UTILS
+// ────────────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Auto-poll every 6s
+setInterval(() => { if (lastTrace !== null) refreshTrace(); }, 6000);
+
+// SSE for immediate update on interaction
+const sse = new EventSource('/monitor/stream');
+sse.onmessage = async e => {
+  try {
+    const d = JSON.parse(e.data);
+    if (d.type === 'interaction' && d.learner_id === currentPersona.id) {
+      await refreshTrace();
+      setPersonaEmotionDot(d.learner_id, d.emotion || 'neutral');
+    }
+  } catch(_) {}
+};
+sse.onerror = () => {};
+
+// Boot
+init();
+loadPersonaEmotions();
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+venv/
+.venv/
+*.env
+.env.local
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V7
+.Trashes
+
+# Chroma vector DB (large binary files)
+server/data/chroma/
+
+# Logs
+server/data/logs/
+
+# NCERT PDFs (large, not source)
+server/data/ncert/
+
+# Flutter
+app/build/
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/*.iml
+app/android/.gradle/
+app/android/local.properties
+app/android/app/debug/
+app/android/app/release/
+app/android/captures/
+app/ios/Flutter/App.framework
+app/ios/Flutter/Flutter.framework
+app/ios/Flutter/flutter_assets/
+app/ios/Pods/
+app/ios/.symlinks/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

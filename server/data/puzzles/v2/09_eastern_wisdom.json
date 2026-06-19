@@ -1,0 +1,467 @@
+{
+  "sphere": "eastern_wisdom",
+  "version": 2,
+  "description": "Subject-matter puzzles rooted in the mathematical, scientific, and philosophical discoveries of Indian, Chinese, Persian, and Arab thinkers. These discoveries shaped global knowledge; these puzzles return them to the students whose civilisations produced them.",
+  "thinkers": [
+    {
+      "id": "aryabhata",
+      "name": "Aryabhata",
+      "domain": "Mathematics / Astronomy / Place Value",
+      "puzzles": [
+        {
+          "id": "aryabhata_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "pattern",
+          "title": "The Power of Zero",
+          "hook": "Before one numeral was invented, you needed different symbols for 7, 70, 700, and 7000. After it, you needed only the digit 7 and its position. What is that numeral — and why does position matter?",
+          "challenge": "Try to do 347 + 289 using Roman numerals (CCCXLVII + CCLXXXIX). How many steps does it take? Now do the same in base-10 place value. Count steps. Now remove all zeros from your number system — you can only write 1–9. How would you write 100? 1000? 10,000? Why does each of these require a new symbol without zero?",
+          "materials": "Pencil, paper, Roman numeral reference",
+          "discover": "Without zero as a placeholder, you need infinitely many symbols. With zero and place value, nine symbols (plus zero) express any number. This is why arithmetic became mechanical and teachable — the system carries information in position, not in symbol complexity.",
+          "go_deeper": "Aryabhata described zero not as a placeholder but as a number with its own properties. What happens when you multiply any number by zero? Divide by zero? Why does division by zero cause problems that multiplication doesn't?",
+          "silent_lesson": "Place value system; zero as placeholder and number; positional notation; why the Indian numeral system replaced Roman numerals globally."
+        },
+        {
+          "id": "aryabhata_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Rotating Earth",
+          "hook": "In 499 CE, a mathematician in Pataliputra wrote that the Earth rotates on its axis — and calculated the length of the day and the circumference of the Earth. Can you verify his reasoning?",
+          "challenge": "The ancient astronomer's approach: if stars appear to move across the sky, either the stars orbit Earth or Earth rotates. The astronomer argued Earth rotates because it is simpler. Verify the calculated value of Earth's circumference (39,968 km; actual is 40,075 km — within 0.2%). Using the same method: observe a star's position at sunset. Observe again after 6 hours. Calculate how much of the sky it has moved (in degrees). Use this to calculate Earth's full rotational period.",
+          "materials": "Clear sky at night, compass, angle measurement tool (or use a protractor pointed at the horizon)",
+          "discover": "Stars appear to move ~15° per hour — 360° in 24 hours. Earth completes one rotation in 23 hours 56 minutes (not exactly 24). Aryabhata had this essentially correct 1,500 years ago, using only mathematics and careful observation.",
+          "go_deeper": "Aryabhata also calculated the length of the sidereal year as 365 days, 6 hours, 12 minutes, 30 seconds. The actual value is 365 days, 6 hours, 9 minutes, 9 seconds. Calculate his percentage error.",
+          "silent_lesson": "Heliocentric inference from observation; Earth's rotation period; Aryabhata's astronomical accuracy; trigonometry applied to astronomy."
+        },
+        {
+          "id": "aryabhata_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Sine Table",
+          "hook": "Aryabhata constructed a table of half-chord values (equivalent to our sine function) accurate to 4 decimal places — using only a single recursion formula and no calculus. Reconstruct his method.",
+          "challenge": "The following recursion formula was used to build a sine table: h(n) = h(n-1) + [h(1) - (h(1)+h(2)+...+h(n-1))/h(1)] where h(1) = sin(3.75°) × R for circle of radius R=3438. Using the first value h(1) = 225 (corresponding to sin 3.75° ≈ 0.06540), compute h(2) through h(8) (corresponding to sin 7.5°, 11.25°, ..., 30°). Compare your computed values to actual sine values × 3438. How accurate is this recursion?",
+          "materials": "Calculator, pencil, paper",
+          "discover": "Aryabhata's recursion is accurate to within 1 part in 3000. He derived this without analytic geometry or calculus — purely through geometric reasoning about the circle. His table was the foundation for Arabic and later European trigonometry.",
+          "go_deeper": "Aryabhata's recursion is essentially a second-order difference equation. Rewrite it in modern notation: Δ²h(n) = -h(n)/h(1). This is the discrete version of the differential equation d²y/dx² = -y (whose solution is the sine function). What does this connection tell you?",
+          "silent_lesson": "Aryabhata's sine table; difference equations as precursor to differential equations; trigonometry etymology (Arabic jiba from Sanskrit jya-ardha); history of mathematics."
+        }
+      ]
+    },
+    {
+      "id": "brahmagupta",
+      "name": "Brahmagupta",
+      "domain": "Algebra / Negative Numbers / Zero",
+      "puzzles": [
+        {
+          "id": "brahmagupta_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Numbers Below Zero",
+          "hook": "If I have 5 rupees and spend 8, I don't have nothing — I have a debt of 3. Can a number represent a debt? What happens when you add a debt to a fortune?",
+          "challenge": "Model debts and fortunes: +5 = five rupees, -3 = debt of three rupees. Work out: (1) Fortune 5, Debt 3: what do you have? (2) Fortune 3, Fortune 5: total? (3) Debt 4, Debt 3: total debt? (4) Fortune 5, Debt 7: what happens? (5) Debt 3 × Debt 3: why does debt × debt = fortune? (Hint: if your debt is cancelled three times, you have a net fortune.) Write these rules for arithmetic with negative numbers in your own words.",
+          "materials": "Pencil, paper, token money",
+          "discover": "Negative numbers are not 'less than nothing' — they represent a direction (debt, below zero, leftward, below freezing). Adding a negative is subtracting. Multiplying two negatives gives a positive because reversing direction twice returns to the original direction.",
+          "go_deeper": "Plot a number line from -10 to +10. Plot the function y = x² for all integer x from -5 to +5. What do you notice? Why does squaring always give a non-negative result?",
+          "silent_lesson": "Negative numbers; rules for arithmetic with negatives; Brahmagupta's Brahmasphutasiddhanta; debt as mathematical model."
+        },
+        {
+          "id": "brahmagupta_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "proof",
+          "title": "The Zero Rules",
+          "hook": "In 628 CE, a mathematician wrote down the first complete set of rules for calculating with zero. Most rules work perfectly — but one rule creates a problem that mathematicians still argue about.",
+          "challenge": "Verify the following rules for calculating with zero: (1) A + 0 = A for any A. (2) A - 0 = A. (3) A × 0 = 0. (4) 0 × 0 = 0. (5) 0/A = 0 (for A ≠ 0). (6) 0/0 = 0 (a 7th-century claim — now known to be problematic). For rule 6, show why 0/0 cannot be assigned any consistent value: if 0/0 = k, then 0 = k × 0 = 0 (true for any k). So 0/0 could be 1, 2, or 100 simultaneously. Why is this a problem?",
+          "materials": "Pencil, paper",
+          "discover": "Every rule works except 0/0. Division by zero is undefined — not because it's difficult but because any value would be simultaneously consistent, making the concept meaningless. This is why calculators show 'ERROR' rather than an answer.",
+          "go_deeper": "In limits (calculus), expressions like 0/0 can be assigned meaningful values in context. The limit of sin(x)/x as x→0 equals 1. But 0/0 itself is still undefined. What is the difference between a limit and a value at a point?",
+          "silent_lesson": "Rules for zero; undefined vs indeterminate; Brahmagupta's contribution; division by zero; limits as workaround."
+        },
+        {
+          "id": "brahmagupta_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Pell Equation",
+          "hook": "Find a whole number solution to x² - 92y² = 1. This looks simple. The smallest solution has x and y in the hundreds — and Brahmagupta found a general method to solve it in the 7th century CE.",
+          "challenge": "The chakravala (cyclic) method for solving x² - Ny² = 1: (1) Find two pairs (a₁, b₁, k₁) and (a₂, b₂, k₂) where a² - Nb² = k. (2) Compose them: new a = (a₁a₂ + Nb₁b₂), new b = (a₁b₂ + a₂b₁), new k = k₁k₂. (3) If k = 1, you're done. (4) Otherwise, reduce k by choosing m such that (a + bm)/k is an integer. Apply for N=2: start with 1² - 2×1² = -1. Compose with itself: new a = (1+2) = 3, new b = (1+1) = 2, new k = (-1)×(-1) = 1. Verify: 3² - 2×2² = 9 - 8 = 1. Now solve for N=3.',",
+          "materials": "Pencil, paper, calculator",
+          "discover": "Pell's equation always has infinitely many solutions (for non-square N). Brahmagupta's chakravala is equivalent to the Euclidean algorithm on surds — a genuine algorithmic breakthrough not rediscovered in Europe until Lagrange in 1768.",
+          "go_deeper": "For N=61, the smallest solution is x = 1,766,319,049, y = 226,153,980. Verify that x² - 61y² = 1 using modular arithmetic. Why is this remarkable given 7th century computational resources?",
+          "silent_lesson": "Pell equation; chakravala algorithm; Diophantine equations; number theory; Brahmagupta's mathematical legacy."
+        }
+      ]
+    },
+    {
+      "id": "al_khwarizmi",
+      "name": "Muhammad ibn Musa al-Khwarizmi",
+      "domain": "Algebra / Algorithms / Systematic Problem Solving",
+      "puzzles": [
+        {
+          "id": "al_khwarizmi_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Unknown Number",
+          "hook": "A number, when tripled and then increased by 6, equals 21. What is the number? Al-Khwarizmi taught the world to solve this — systematically, step by step, for any similar problem.",
+          "challenge": "Solve these using al-jabr (restoration) and al-muqabala (balancing): whatever you add to one side, add to the other. (1) x + 5 = 12. (2) 2x = 14. (3) 3x + 6 = 21. (4) x/2 - 3 = 7. Write each step explicitly. Now create your own riddle of the same form and exchange with a partner. Solve each other's riddle using the same method.",
+          "materials": "Pencil, paper",
+          "discover": "The steps are the same regardless of the specific numbers — isolate the unknown by doing the same operation to both sides. This is what 'algebra' literally means: from 'al-jabr' (restoring what was removed). The algorithm is the concept.",
+          "go_deeper": "Al-Khwarizmi also gave his name to the word 'algorithm.' Write out the exact steps of your solution as an algorithm (numbered steps, each precise enough for a machine to follow). Count the steps.",
+          "silent_lesson": "Algebra as systematic method; al-jabr and al-muqabala; linear equations; concept of algorithm from al-Khwarizmi's name."
+        },
+        {
+          "id": "al_khwarizmi_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "proof",
+          "title": "Completing the Square",
+          "hook": "Al-Khwarizmi solved quadratic equations geometrically — by literally completing a square. Can you do the same?",
+          "challenge": "Solve x² + 10x = 39 using the geometric completing-the-square method: (1) Draw a square of side x. (2) Attach rectangles of width 5 and height x to two sides. (3) Complete the large square by adding a 5×5 corner. (4) The large square has side (x+5). Its area = x² + 10x + 25 = 39 + 25 = 64. So x + 5 = 8, x = 3. Verify: 3² + 10×3 = 9 + 30 = 39. Now apply the same geometric method to x² + 6x = 27.",
+          "materials": "Graph paper, pencil, ruler, scissors",
+          "discover": "Completing the square is literal — you complete a geometric square. The algebraic formula (x = (-b ± √(b²-4ac))/2a) is the same process, just written symbolically. The geometry is the algebra; the algebra is the geometry.",
+          "go_deeper": "Derive the quadratic formula by completing the square algebraically for ax² + bx + c = 0. Each step corresponds to a step in al-Khwarizmi's geometric procedure. Map them.",
+          "silent_lesson": "Completing the square; geometric algebra; quadratic equations; derivation of quadratic formula; al-Khwarizmi's Kitab al-mukhtasar."
+        },
+        {
+          "id": "al_khwarizmi_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Number System He Transmitted",
+          "hook": "Al-Khwarizmi's book on Indian arithmetic introduced the Hindu-Arabic numeral system to the Islamic world — and, through Latin translation, to Europe. Trace the mathematical power this transmission created.",
+          "challenge": "Compare computational capacity before and after place-value arithmetic: (1) Calculate 4,792 × 387 using Roman numerals. (2) Calculate the same in Hindu-Arabic numerals. (3) Calculate the compound interest on 1,000 dirham at 5% for 10 years in Roman numerals. (4) Calculate the same with Hindu-Arabic numerals and exponents. Quantify: how many steps does each system require? What mathematics becomes possible in one system but not the other?",
+          "materials": "Roman numeral reference, pencil, calculator for verification",
+          "discover": "Compound interest, polynomial equations, and calculus become tractable with place-value notation and near-impossible without it. The adoption of Hindu-Arabic numerals was not just a convenience — it was a capability change that made modern science and commerce possible.",
+          "go_deeper": "Al-Khwarizmi's work was translated into Latin in the 12th century by Adelard of Bath. The translation began: 'Dixit algoritmi...' (Thus speaks al-Khwarizmi). Trace how the word 'algorithm' entered English from this phrase.",
+          "silent_lesson": "Transmission of knowledge between civilisations; Hindu-Arabic numerals; place value enabling mathematics; etymology of 'algebra' and 'algorithm.'"
+        }
+      ]
+    },
+    {
+      "id": "ibn_sina",
+      "name": "Ibn Sina (Avicenna)",
+      "domain": "Medicine / Logic / Philosophy of Mind",
+      "puzzles": [
+        {
+          "id": "ibn_sina_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Four Causes of Illness",
+          "hook": "When you get sick, what could have caused it? Ibn Sina taught that understanding disease requires asking multiple types of 'why' question at once.",
+          "challenge": "Take one illness (a cold, fever, or stomach ache). Investigate it from four angles: (1) What happened physically in the body? (2) What external factor triggered it? (3) Who is more and less vulnerable, and why? (4) What will happen if untreated vs treated? For each angle, list 3 things you know, 3 things you don't know, and 1 question you'd want answered.",
+          "materials": "Paper, pencil",
+          "discover": "Each angle reveals different knowledge and requires different expertise. No single cause explains everything — understanding disease requires combining physical, environmental, individual, and prognostic knowledge simultaneously.",
+          "go_deeper": "Ibn Sina distinguished between 'necessary' and 'contributing' causes. For a cold: breathing cold air is a contributing cause; a weakened immune system is a necessary precondition. Map these for your illness. What could be changed to prevent it?",
+          "silent_lesson": "Multi-causal analysis; Ibn Sina's Canon of Medicine; necessary vs sufficient cause; holistic approach to diagnosis."
+        },
+        {
+          "id": "ibn_sina_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "thought_experiment",
+          "title": "The Flying Man",
+          "hook": "Imagine you are created fully formed, floating in space — no sight, no touch, no sound, no smell. You cannot feel your own body. Do you still exist? Do you still have a sense of 'I'?",
+          "challenge": "Ibn Sina's Flying Man thought experiment: a person is created in the air, unable to sense anything including their own body. What could this person know? (1) Do they know they exist? (2) Do they know they have a body? (3) What is the minimum requirement for self-awareness? Write your answers. Now test: try sitting very still for 5 minutes with eyes closed, arms floating. What do you feel? What would vanish if you lost all sensation?",
+          "materials": "Quiet space, timer, pencil for reflection",
+          "discover": "Most participants report they can still feel their existence — a sense of 'I' — even without body sensation. This suggests self-awareness may be separable from physical sensation. This prefigures Descartes' cogito by 600 years.",
+          "go_deeper": "Where is the self located? Ibn Sina said it is not in any specific organ. Neuroscience now studies the 'default mode network' — brain regions active when you think about yourself. Does this finding support or challenge Ibn Sina's intuition?",
+          "silent_lesson": "Flying Man argument; consciousness and body; self-awareness as distinct from sensation; precursor to Descartes; mind-body problem."
+        },
+        {
+          "id": "ibn_sina_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Canon and Clinical Method",
+          "hook": "Ibn Sina's Canon of Medicine standardised clinical investigation — how to study diseases, test treatments, and generalise from cases. His rules for drug testing anticipate the modern clinical trial.",
+          "challenge": "Ibn Sina's 7 rules for testing drugs (from Canon, Book I): (1) must be free from acquired quality, (2) must be tested on simple diseases, (3) must be tested in two opposite diseases, (4) must match the quality of the disease, (5) must observe time of action, (6) effect must be consistent, (7) test on human subjects. Map these to modern RCT (Randomised Controlled Trial) design: randomisation, blinding, control group, inclusion/exclusion criteria, power calculation, ITT analysis. Which rules correspond to which modern elements?",
+          "materials": "Pencil, paper, modern RCT design reference",
+          "discover": "Ibn Sina's rules anticipate nearly every core principle of modern clinical trials — written in 1025 CE. The only missing elements are randomisation (17th century) and statistical significance (20th century). His systematic methodology was centuries ahead of European practice.",
+          "go_deeper": "Rule 3 (test on two opposite diseases) is subtler than it appears. In modern terms, this prevents confusion between a drug that genuinely helps condition A and one that merely treats a symptom that both conditions A and B share. Find a modern example where this distinction mattered.",
+          "silent_lesson": "Ibn Sina's Canon; clinical methodology; drug testing rules; precursor to RCT; history of evidence-based medicine."
+        }
+      ]
+    },
+    {
+      "id": "chanakya",
+      "name": "Chanakya (Kautilya)",
+      "domain": "Strategy / Statecraft / Systems Thinking",
+      "puzzles": [
+        {
+          "id": "chanakya_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "game",
+          "title": "The Circle of Kings",
+          "hook": "Your neighbour is your natural enemy. Your neighbour's neighbour is your natural ally. This simple rule — called the Mandala Theory — describes how kings should form alliances. Does it work?",
+          "challenge": "Draw 9 kingdoms in a circle, numbered 1–9. Kingdom 5 is you (the player). Colour your natural enemies (your immediate neighbours) red, and your natural allies (their neighbours) green. Now: Kingdom 3 attacks Kingdom 2. You are allied with 3 (natural ally's enemy = your enemy). Do you help Kingdom 3 or Kingdom 2? Trace the alliances for 5 such attacks. Does the Mandala pattern always give a clear answer?",
+          "materials": "Paper, coloured pencils",
+          "discover": "The Mandala Theory gives clear answers in simple cases but breaks down when alliances are transitive (ally's ally's ally...). Complex geopolitics requires knowing not just who is whose neighbour but the strength, timing, and goals of each actor — exactly what Chanakya's Arthashastra analyzes.",
+          "go_deeper": "Draw a modern map (South Asia, Middle East, or Europe). Apply the Mandala Theory. How well does it predict actual alliance patterns?",
+          "silent_lesson": "Mandala theory; game theory in political alliances; transitivity problems; Chanakya's Arthashastra; geopolitical strategy."
+        },
+        {
+          "id": "chanakya_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Spy's Economy",
+          "hook": "Chanakya argued that a king who doesn't understand his economy will lose his kingdom. He described economic management in extraordinary detail — price controls, taxation principles, trade routes, and anti-corruption measures. Can you evaluate one principle?",
+          "challenge": "Chanakya's principle on taxation: 'Just as a bee extracts honey from flowers without destroying them, a king should extract taxes from his subjects without destroying their capacity to produce.' Model this as an economics problem: plot total tax revenue vs tax rate (Laffer curve). At 0% tax, revenue = 0. At 100% tax, revenue = 0 (nobody works). What tax rate maximises revenue? At what point does the tax 'destroy the flower'? Estimate from the shape of the curve.",
+          "materials": "Graph paper, pencil",
+          "discover": "The Laffer curve peaks somewhere between 0% and 100% — typically argued to be around 50–70% for income tax, lower for other taxes. Chanakya's principle anticipates this: excessive taxation destroys the productive base. The optimal rate depends on what people do when taxed heavily.",
+          "go_deeper": "Chanakya also specified different tax rates for different sectors (agriculture, trade, manufacturing). Why might optimal tax rates differ across sectors? What economic principle determines this?",
+          "silent_lesson": "Laffer curve; optimal taxation; Arthashastra economic principles; 4th century BCE as precursor to modern public finance."
+        },
+        {
+          "id": "chanakya_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Seven Elements of the State",
+          "hook": "Chanakya identified seven elements whose strength determines a state's stability: the ruler, the ministers, the territory, the treasury, the army, the allies, and the fortification. Can this framework predict the stability of modern states?",
+          "challenge": "Apply Chanakya's seven-element analysis to three contemporary states (e.g., India, a fragile state, a very stable state). For each element, assign a score 1–5 based on publicly available data (governance index, GDP, military strength, alliance strength, geographic defensibility, institutional quality). Calculate a weighted composite score. Do your scores predict observed stability? Which element is most correlated with stability across your three cases?",
+          "materials": "Research sources (World Bank, Freedom House, SIPRI), pencil, paper",
+          "discover": "The framework is more than historical curiosity — it captures the multi-dimensional nature of state capacity. States that score high on treasury and low on minister quality (corruption) often have the worst outcomes. The framework is a systems model of political stability.",
+          "go_deeper": "Chanakya argued that the treasury is the root of all elements — without revenue, nothing else is possible. In modern terminology, this is fiscal capacity. Research how fiscal capacity correlates with state capacity across 50 countries.",
+          "silent_lesson": "Arthashastra's state model; systems thinking in political science; state capacity; institutional quality; ancient strategic analysis applied to contemporary data."
+        }
+      ]
+    },
+    {
+      "id": "nagarjuna",
+      "name": "Nagarjuna",
+      "domain": "Logic / Middle Way / Emptiness",
+      "puzzles": [
+        {
+          "id": "nagarjuna_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "What Makes a Thing What It Is?",
+          "hook": "The Ship of Theseus: if you replace every plank in a ship one by one, is it still the same ship? What if you used the old planks to build a second ship?",
+          "challenge": "Apply the Ship of Theseus question to three things: (1) your school (every teacher and student changes each year), (2) a river (every water molecule has moved downstream), (3) yourself (most of your cells are replaced over years). For each: what makes it 'the same' thing over time? Is it the material, the structure, the function, the name, or something else? Can you find any property that remains truly constant?",
+          "materials": "Paper, pencil",
+          "discover": "Every candidate for 'identity' turns out to depend on something else — material depends on pattern, pattern depends on function, function depends on relations to other things. This is emptiness (sunyata): things lack independent, self-sufficient existence. They exist only in relation.",
+          "go_deeper": "Nagarjuna argued that even emptiness is empty — it doesn't have fixed independent existence. What would it mean for emptiness itself to be empty? Is this a paradox, or a profound logical consistency?",
+          "silent_lesson": "Sunyata (emptiness); dependent origination; identity over time; Ship of Theseus; Nagarjuna's Mulamadhyamakakarika."
+        },
+        {
+          "id": "nagarjuna_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Logic of Neither",
+          "hook": "Classical logic has two options: A is true, or A is false. No middle ground. Nagarjuna proposed four possibilities: true, false, both, neither. When would 'neither' be the right answer?",
+          "challenge": "Evaluate these claims as TRUE, FALSE, BOTH, or NEITHER: (1) This sentence is false. (2) The colour halfway between red and green is both red and green. (3) Before the Big Bang, space existed. (4) This action was morally right. (5) Motion exists. For each, justify your choice. Where does 'neither' apply because the question doesn't make sense? Where does 'both' apply because two descriptions are simultaneously valid?",
+          "materials": "Paper, pencil",
+          "discover": "Some questions have no true answer because they presuppose a framework that breaks down at the edges (like asking what's north of the north pole). 'Neither' is not a cop-out — it's the logically precise answer when the question itself is malformed.",
+          "go_deeper": "Modern logic has explored paraconsistent logic (allows both T and F) and intuitionistic logic (rejects the law of excluded middle). Look up the law of excluded middle. Nagarjuna's four-valued logic predates these by 1800 years. Are they equivalent?",
+          "silent_lesson": "Catushkoti (four-valued logic); law of excluded middle; paraconsistent logic; questions that presuppose invalid frameworks; Middle Way in logic."
+        },
+        {
+          "id": "nagarjuna_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Motion and Emptiness",
+          "hook": "Nagarjuna argued that motion is incoherent — not because things don't move, but because our concept of motion, when examined precisely, leads to paradox. Reconstruct his argument.",
+          "challenge": "A 2nd-century Buddhist philosopher's argument on motion: a thing that is moving is not in its starting position (already left) and not yet in its ending position (not yet arrived). So where is it while it's moving? If it's in an intermediate position, then in that position it is either starting or ending or in motion again — leading to infinite regress or a third state that cannot be named. Evaluate this argument: (1) is it valid? (2) is it sound? (3) how does calculus resolve the paradox (instantaneous velocity = dx/dt)? (4) does calculus fully answer this challenge, or does it restate the problem in mathematical language?",
+          "materials": "Pencil, paper, calculus reference",
+          "discover": "Calculus defines velocity at an instant as the limit of average velocity — it doesn't locate 'the moving thing' at a point. Nagarjuna's argument reveals that motion is a relational, process concept — not a property of an object at a moment. Calculus captures the process but doesn't eliminate the philosophical puzzle.",
+          "go_deeper": "Zeno's paradoxes (Achilles and the tortoise) are structurally similar. Compare Nagarjuna's argument on motion to Zeno's. Both predate calculus by ~2000 years. What is the relationship between these Eastern and Western formulations of the same problem?",
+          "silent_lesson": "Nagarjuna's argument on motion; Zeno's paradoxes; calculus as partial resolution; limits; process vs substance ontology."
+        }
+      ]
+    },
+    {
+      "id": "ibn_rushd",
+      "name": "Ibn Rushd (Averroes)",
+      "domain": "Reason / Philosophy of Science / Commentaries",
+      "puzzles": [
+        {
+          "id": "ibn_rushd_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "What Reason Can Do",
+          "hook": "Some questions can be answered by thinking alone (logic). Some require observation (science). Some require neither — they depend on authority or faith. Can you sort them?",
+          "challenge": "Classify 15 questions into: (A) answerable by reason alone (math, logic), (B) answerable by observation and experiment (science), (C) not answerable by either (values, faith, aesthetics). Questions: What is 2+2? Is the Earth round? Does God exist? Which flavour is best? Is stealing wrong? How many moons does Mars have? What is beauty? What is justice? Is time travel possible? When will the Sun burn out? Who is the greatest cricketer? Does the universe have a beginning?",
+          "materials": "Paper, pencil",
+          "discover": "The categories blur at the edges (is 'is stealing wrong?' a factual question about consequences, or a values question?). Ibn Rushd's insight: reason has proper domains, and applying it outside those domains generates confusion. Applying faith inside reason's domain does the same.",
+          "go_deeper": "Ibn Rushd argued that apparent contradictions between reason and faith are caused by incorrect interpretation of religious texts — not by actual conflict. What method would he use to resolve a contradiction? How does this compare to Galileo's approach 300 years later?",
+          "silent_lesson": "Ibn Rushd's double truth; domains of reason and faith; demarcation of science; his role in transmitting Aristotle to Europe."
+        },
+        {
+          "id": "ibn_rushd_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Eye and Light",
+          "hook": "For centuries, European scholars believed sight worked because the eye EMITS rays that touch objects. Ibn Rushd (following Ibn al-Haytham) proved it works the other way — light travels FROM objects TO the eye. How would you prove which direction is correct?",
+          "challenge": "Design two experiments that distinguish the emission theory from the reception theory: (1) Why can't you see in total darkness if eyes emit rays? (2) Why does it take time to adapt to darkness if eyes emit? (3) What does the pinhole camera (light enters a small hole and forms an image inside) tell us about direction? Run experiments (1) and (3). Write the conclusion forced by your results.',",
+          "materials": "Dark room, pinhole camera (shoebox with pinhole), candle",
+          "discover": "Emission theory predicts you should be able to see in total darkness (your eyes emit the rays). Reception theory predicts you need light entering the eye. Observation settles it instantly. The pinhole camera makes the geometry of reception visible.",
+          "go_deeper": "The pinhole camera inverts the image (upside down). This happens because light travels in straight lines. Draw a diagram showing why straight-line travel from a lit scene through a pinhole produces an inverted image.",
+          "silent_lesson": "Intromission vs emission theory of vision; Ibn al-Haytham's optics; light travels from objects to eye; how empirical evidence resolves theoretical debate."
+        },
+        {
+          "id": "ibn_rushd_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Commentary Tradition",
+          "hook": "For 500 years, the primary access European scholars had to Aristotle's philosophy was through Ibn Rushd's Arabic commentaries translated into Latin. How does commentary transmit — and transform — knowledge?",
+          "challenge": "Take a short original text (excerpt from Aristotle's Physics on motion, provided). Write your own commentary on it: (1) explain what Aristotle meant in modern language, (2) identify what was correct, (3) identify what was incorrect, (4) identify what was correct but incomplete, (5) add what modern physics would say. Compare your commentary to Ibn Rushd's actual commentary (excerpt provided). Where do you agree? Disagree? What does each commentary reveal about its own historical context?",
+          "materials": "Provided Aristotle excerpt, provided Ibn Rushd commentary excerpt, pencil",
+          "discover": "Commentary is not passive transmission — it is active interpretation. Ibn Rushd corrected Aristotle's errors, extended his method, and preserved the core argument. His commentaries shaped what 'Aristotle' meant in medieval Europe — which was not identical to the original Greek.",
+          "go_deeper": "Thomas Aquinas (13th century) wrote extensive commentaries on Ibn Rushd's commentaries on Aristotle. Map the chain of transmission: Aristotle (4th century BCE) → Arabic translation (9th century CE) → Ibn Rushd's commentary (12th century) → Latin translation (13th century) → Aquinas. What was gained and lost at each step?",
+          "silent_lesson": "Ibn Rushd's role in transmitting Greek philosophy; commentary as transformation; history of Islamic Golden Age; knowledge transmission across civilisations."
+        }
+      ]
+    },
+    {
+      "id": "confucius",
+      "name": "Confucius",
+      "domain": "Ethics / Learning / Relationships / Social Order",
+      "puzzles": [
+        {
+          "id": "confucius_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Golden Rule Test",
+          "hook": "Almost every major ethical tradition has one rule in common: treat others as you would want to be treated. But does this rule actually work in practice?",
+          "challenge": "Test the Golden Rule in three situations: (1) you divide a snack between yourself and a partner. Would you give them the same portion you keep? (2) You notice someone is confused in a game. Would you want to be helped if you were confused? Would you help them? (3) Someone makes a mistake. Would you want your mistakes pointed out privately or publicly? Apply the same to how you respond. In each case, did the Golden Rule guide you to a better action than you would have taken without it?',",
+          "materials": "Snack for sharing, pencil for recording",
+          "discover": "The Golden Rule works well when other people have similar preferences to you — but breaks down when preferences differ. What if the other person WANTS to be corrected publicly (and you don't)? The rule requires knowing the other person, not just projecting your preferences.',",
+          "go_deeper": "Confucius said: 'Do not impose on others what you do not want for yourself.' This is the negative version. How does this differ from the positive version ('do to others what you want done to you')? In which cases does the negative version work better?",
+          "silent_lesson": "Golden Rule (shu); negative vs positive formulation; limits of preference projection; empathy as cognitive vs emotional.',"
+        },
+        {
+          "id": "confucius_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Five Relationships",
+          "hook": "Confucius identified five relationships that structure social life, each with specific duties and expectations. But are these duties symmetrical or one-directional — and should they be?",
+          "challenge": "The five Confucian relationships: ruler-subject, parent-child, husband-wife, elder-younger, friend-friend. For each relationship: (1) list 3 duties of each party according to Confucian tradition, (2) identify which duties are currently encoded in law in India (child protection, elder care laws, etc.), (3) identify which have changed dramatically in the past 50 years, (4) identify which you think should change further. Justify your evaluation.",
+          "materials": "Pencil, paper, optional reference on Confucian ethics",
+          "discover": "Confucian relationships are not one-directional — each party has duties. The ruler must be benevolent; the parent must care and educate; the elder must guide. But the traditional asymmetry (subject obeys ruler, child obeys parent) has been challenged by rights-based frameworks where mutual duties must be backed by mutual accountability.",
+          "go_deeper": "Confucius emphasised that social order requires individuals who cultivate virtue (junzi / superior person). What virtues does this require? Design a virtue curriculum for your school using Confucian principles.",
+          "silent_lesson": "Five Confucian relationships; relational ethics; reciprocal duties; comparison with rights-based ethics; contemporary relevance."
+        },
+        {
+          "id": "confucius_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Rectification of Names",
+          "hook": "Confucius said: 'If names are not correct, language will not accord with truth. If language does not accord with truth, affairs cannot be accomplished.' What happens when words lose their precise meanings?",
+          "challenge": "Choose three words that have undergone significant meaning drift in your lifetime: 'secular,' 'liberal,' 'development,' 'rights,' or any others you choose. For each: (1) document the precise original meaning, (2) document 3 current usages that differ from the original, (3) identify what consequences flow from the ambiguity (policy confusion, political manipulation, sincere misunderstanding), (4) propose a 'rectified' usage. Evaluate: is this philosopher right that language precision is the foundation of good governance?',",
+          "materials": "Dictionary (historical and current), examples from newspapers or speeches, pencil",
+          "discover": "Language drift is not accidental — interested parties often deliberately stretch or narrow words to serve arguments. The rectification of names is a political and epistemological project. Wittgenstein made a similar argument: many philosophical problems are language problems in disguise.",
+          "go_deeper": "Legal systems deal with this problem by defining terms precisely in statutes. Find the legal definition of one of your chosen words in Indian law and compare it to common usage. Does legal precision solve Confucius's problem?",
+          "silent_lesson": "Zhengming (rectification of names); semantic drift; language precision and governance; comparison with Wittgenstein; legal vs ordinary language."
+        }
+      ]
+    },
+    {
+      "id": "laozi",
+      "name": "Laozi",
+      "domain": "Tao / Natural Systems / Paradox / Wu Wei",
+      "puzzles": [
+        {
+          "id": "laozi_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Water Always Wins",
+          "hook": "Water is the softest thing you can touch. Rock is the hardest. Yet water carves canyons through rock. How?",
+          "challenge": "Observe: drip water onto a piece of chalk (or sandstone, or a sugar cube) from 15cm height. Drip once per second for 5 minutes. Sketch what happens to the surface. Calculate: at this rate, how many drops per hour? How might millions of years of this process carve the Grand Canyon? Now: try to carve the chalk with your fingernail. Which removes more material — your nail or the water drops?",
+          "materials": "Chalk or sugar cube, dropper or cup with small hole, timer, pencil",
+          "discover": "Patient, gentle, consistent force outworks direct hard force because water fills every crack, carries material away, and never tires. This is wu wei (effortless action) — not passivity, but the most effective path that works with the nature of the system rather than against it.",
+          "go_deeper": "Find three examples from nature, sport, or engineering where working with the grain of a system is more effective than fighting against it (water flowing around obstacles, judo using an opponent's weight, aerodynamic design).',",
+          "silent_lesson": "Wu wei; natural systems; effortless action; Laozi's Tao Te Ching; patience and consistency as strategy."
+        },
+        {
+          "id": "laozi_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "thought_experiment",
+          "title": "The Useful Empty",
+          "hook": "A wheel is useful because of the empty space around the axle. A cup is useful because of the empty space inside. A room is useful because of the empty space within. What does this tell us about what makes things valuable?",
+          "challenge": "Design three objects that are valuable primarily because of what is NOT there (empty space, absent element, negative space). For each: (1) describe the object, (2) identify what is absent and why the absence is functional, (3) calculate what fraction of the object is 'absence.' Now apply this principle to: (A) a musical rest (silence in music), (B) a pause in speech, (C) negative space in a painting. What does 'useful emptiness' mean in each context?',",
+          "materials": "Paper, pencil, ruler",
+          "discover": "Function often comes from structure around emptiness — the vessel's value is in what it contains, not in the clay walls. Laozi's point: the complementarity of being and non-being is not poetic mysticism; it's structural analysis. Design thinking explicitly uses 'negative space.'",
+          "go_deeper": "In mathematics, zero and infinity are both 'absent' in different ways (nothing, unbounded). In physics, vacuum is not empty — it has energy (the Casimir effect). Does Laozi's principle extend to these cases?",
+          "silent_lesson": "Usefulness of emptiness; wu (non-being); negative space in design; Tao Te Ching chapter 11; paradox as insight method."
+        },
+        {
+          "id": "laozi_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Tao of Complex Systems",
+          "hook": "Laozi described a world that governs itself — where trying to control it too tightly creates disorder. Modern complexity science describes the same phenomenon. Can you connect them?",
+          "challenge": "Model a self-organising system using Conway's Game of Life (cellular automaton): simple rules, complex outcomes. Run three experiments: (1) start from total order (all cells off), (2) start from total chaos (random cells), (3) start from a specific structured pattern. Observe which produces the most interesting, stable, self-sustaining patterns. Then: read excerpts from the Tao Te Ching (chapters 17, 57, 81 — on governing by non-interference). Map each passage to a property of the cellular automaton system.',",
+          "materials": "Graph paper for manual Game of Life, or online simulation, pencil, Tao Te Ching excerpts",
+          "discover": "Total order and total chaos both produce simple, dead outcomes. The edge between order and chaos — complex adaptive systems — is where interesting self-organisation emerges. This is the Tao: not a fixed thing but the process of self-ordering that requires the right conditions and minimal interference.",
+          "go_deeper": "Stuart Kauffman's 'edge of chaos' theory of complexity argues that maximum adaptability and self-organisation occur at the boundary between order and chaos. Compare his theory to Laozi's conception of the Tao. Where do they agree? Where do they diverge?",
+          "silent_lesson": "Wu wei and complex systems; self-organisation; edge of chaos; Tao as dynamic process; Game of Life; Kauffman's NK model."
+        }
+      ]
+    },
+    {
+      "id": "varahamihira",
+      "name": "Varahamihira",
+      "domain": "Combinatorics / Astronomy / Natural Cycles",
+      "puzzles": [
+        {
+          "id": "varahamihira_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "pattern",
+          "title": "Mixing Perfumes",
+          "hook": "An ancient perfumer had 4 fragrant ingredients — sandalwood, rose, jasmine, and camphor. How many different two-ingredient blends could they make? What if they had 5 ingredients?",
+          "challenge": "List every possible pair you can make from these 4 ingredients: sandalwood, rose, jasmine, camphor. Remember — a blend of sandalwood + rose is the same as rose + sandalwood, so count it only once. How many did you find? Now add a 5th ingredient: vetiver. List all the new pairs that include vetiver. How many pairs are there in total with 5 ingredients? Can you see a shortcut — a pattern that lets you find the answer without listing everything? Bonus: from the same 5 ingredients, how many 3-ingredient blends are possible?",
+          "materials": "Pencil, paper",
+          "discover": "With 4 ingredients you get 6 pairs; with 5 you get 10; with 6 you would get 15. Each time you add one ingredient, the number of new pairs equals the number of ingredients already there. The totals — 1, 3, 6, 10, 15, 21 … — are the triangular numbers, and they sit along a diagonal of a famous number triangle. For 3-ingredient blends from 5, the answer is 10.",
+          "go_deeper": "Varahamihira listed all combinations of 4 perfume ingredients taken 1, 2, 3, and 4 at a time in his 6th-century encyclopaedia Brihatsamhita — obtaining 4, 6, 4, and 1, which add up to 16. Notice anything about those numbers? What pattern connects them?",
+          "silent_lesson": "Combinatorics; combinations without repetition C(n,k); triangular numbers; Pascal's triangle diagonal; systematic counting."
+        },
+        {
+          "id": "varahamihira_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "observation",
+          "title": "The Sun's Wandering Sunrise",
+          "hook": "The sun rises in the east — but is it always exactly due east? Pick a fixed landmark on your eastern horizon and watch carefully for a month.",
+          "challenge": "Each week for four weeks, note the exact point on the eastern horizon where the sun rises. Use a fixed landmark (a wall corner, a tree, a distant rooftop) as your reference and sketch or photograph the position. Mark each week's sunrise point on a simple horizon diagram. Does the position shift? In which direction — north or south? How many degrees does it shift per week (estimate using your fist held at arm's length as roughly 10°)? Using only your observations, work out which half of the year you are in — is the sun moving toward its northernmost point or away from it? Predict the date of the next turning point.",
+          "materials": "Compass, pencil and paper (or camera), fixed outdoor landmark with clear eastern view",
+          "discover": "The sun's sunrise position drifts along the horizon throughout the year — northward from the December solstice to the June solstice, then southward back again. Ancient Indian astronomers called the northward journey uttarayana and the southward journey dakshinayana. The turning points are the solstices. By tracking just four weekly positions you can identify which journey the sun is on and estimate when it will reverse.",
+          "go_deeper": "Varahamihira's Panchasiddhantika compiled five astronomical systems and recorded precise solstice and equinox timings. If the sun shifts about 23.5° between its extreme north and extreme south positions, and this takes roughly 182 days, how many degrees does it shift per day? How accurately could ancient observers — using only a horizon landmark — detect this daily shift?",
+          "silent_lesson": "Solar declination; solstices and equinoxes; uttarayana and dakshinayana; observational astronomy; inferring cycles from systematic measurement."
+        },
+        {
+          "id": "varahamihira_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Triangle Before Pascal",
+          "hook": "A number triangle built by adding adjacent entries appears in Indian mathematical texts compiled centuries before a 17th-century French mathematician gave it his name. Build it yourself, derive the formula hidden inside it, and use both to solve a perfumer's large-scale problem.",
+          "challenge": "Part 1 — Build the triangle. Start with 1 at the top. Each subsequent row begins and ends with 1; every interior entry is the sum of the two entries directly above it. Construct rows 0 through 8. Label each entry C(n,k) where n is the row number (starting at 0) and k is the position in that row (starting at 0). Part 2 — Derive the formula. Notice that C(5,2) = 10 and 5!/(2!×3!) = 10. Verify the formula C(n,k) = n! / (k! × (n−k)!) for at least six entries from different rows. Part 3 — The perfumer's problem. An attar-maker has 10 base ingredients and wants to create every possible 4-ingredient blend. Use the formula to calculate how many blends exist. Would it have been practical to list them all by hand?",
+          "materials": "Pencil, paper, calculator (for factorials)",
+          "discover": "C(10,4) = 10!/(4!×6!) = 210. Writing out all 210 blends individually would take a skilled scribe the better part of a day; the formula gives the answer in seconds. The same triangle that encodes combinatorics also contains the binomial coefficients, powers of 2 along the row sums, and Fibonacci numbers along the shallow diagonals — a single structure holding many patterns simultaneously.",
+          "go_deeper": "The combinatorial triangle appears in Varahamihira's Brihatsamhita (6th century CE) for counting perfume combinations, in Pingala's Chandahshastra (c. 3rd century BCE) for counting poetic metres, and in Halayudha's commentary (10th century CE) — all predating Pascal (1654) by centuries. Identify which row of the triangle solves the following: in how many ways can a cricket team of 11 be chosen from a squad of 15? Write a single formula and evaluate it.",
+          "silent_lesson": "Pascal's triangle (Meru-prastaara in Indian tradition); binomial coefficients; C(n,k) formula; combinatorics in historical context; factorial notation."
+        }
+      ]
+    }
+  ]
+}
