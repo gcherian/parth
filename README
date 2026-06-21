@@ -1,1 +1,23 @@
-Welcome  Home Claude!
+ ---
+  Server (FastAPI + Python)
+
+  cd /Volumes/Seagate/Parth/server
+  source venv/bin/activate         # activate virtual env
+  uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  Or without --reload for production-style:
+  uvicorn main:app --host 0.0.0.0 --port 8000
+  
+  Prerequisites: Ollama must be running locally (default model: gemma3:12b). Optionally set ANTHROPIC_API_KEY for Krishna Oracle.
+
+  ---
+  Client (Flutter)
+  
+  cd /Volumes/Seagate/Parth/app
+  flutter pub get          # first time only
+  flutter run              # picks a connected device/emulator
+
+  For a specific target:
+  flutter run -d chrome    # web
+  flutter run -d macos     # desktop
+  flutter run -d <device>  # mobile — list with: flutter devices
