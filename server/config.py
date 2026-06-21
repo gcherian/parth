@@ -7,13 +7,18 @@ the application reads env at import time so a restart picks up changes.
 Environment variables:
   DATABASE_URL        Postgres DSN (default: local dev)
   OLLAMA_URL          Ollama base URL (default: localhost:11434)
-  DEFAULT_MODEL       Primary LLM for Parth responses
-  FAST_MODEL          Lightweight LLM for quick tasks
-  ANTHROPIC_API_KEY   Enables Krishna Oracle (Claude) — optional
+  DEFAULT_MODEL       Primary LLM for Parth responses (Ollama backend only)
+  FAST_MODEL          Lightweight LLM for quick tasks (Ollama backend only)
+  ANTHROPIC_API_KEY   Required for cloud; enables Krishna Oracle + tutor on Anthropic backend
+  TUTOR_BACKEND       "auto" | "anthropic" | "ollama"  (default: "auto")
+                      auto → uses Anthropic if ANTHROPIC_API_KEY is set, else Ollama
+  TUTOR_MODEL         Claude model ID for tutor responses (default: claude-haiku-4-5-20251001)
   KRISHNA_MODEL       Claude model ID for pedagogical guidance
   KRISHNA_INTERVAL    Interactions between Krishna consultations
   RATE_LIMIT          Requests per minute per IP
   AGENT_TRACE_HISTORY Interactions kept in the in-memory observer cache
+  DATA_DIR            Path to persistent data (ChromaDB, etc.). Default: ~/.parth
+  MAX_HISTORY_TURNS   Chat turns included in prompt context (default: 16)
 """
 import os
 import socket
@@ -29,9 +34,13 @@ class Config:
     DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "gemma3:12b")
     FAST_MODEL    = os.getenv("FAST_MODEL",    "llama3.2:latest")
 
-    # ── Krishna Oracle (Anthropic frontier model for background guidance) ─────
-    # Set ANTHROPIC_API_KEY in environment to enable.
-    # If absent, Krishna is silently disabled; Parth works normally without it.
+    # ── Tutor backend — Anthropic (cloud) or Ollama (local) ──────────────────
+    # "auto": uses Anthropic if ANTHROPIC_API_KEY is present, else falls back to Ollama.
+    # Set TUTOR_BACKEND=ollama to force local inference even when the key is set.
+    TUTOR_BACKEND: str = os.getenv("TUTOR_BACKEND", "auto")
+    TUTOR_MODEL:   str = os.getenv("TUTOR_MODEL",   "claude-haiku-4-5-20251001")
+
+    # ── Anthropic (Krishna Oracle + optional tutor backend) ───────────────────
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
     KRISHNA_MODEL:     str = os.getenv("KRISHNA_MODEL",     "claude-haiku-4-5-20251001")
     KRISHNA_INTERVAL:  int = int(os.getenv("KRISHNA_INTERVAL", "10"))
@@ -40,7 +49,19 @@ class Config:
     AGENT_TRACE_HISTORY = int(os.getenv("AGENT_TRACE_HISTORY", "10"))
 
     # ── Local data directory ──────────────────────────────────────────────────
-    DATA_DIR = Path.home() / ".parth"
+    DATA_DIR = Path(os.getenv("DATA_DIR", str(Path.home() / ".parth")))
+
+    # ── Prompt context ────────────────────────────────────────────────────────
+    MAX_HISTORY_TURNS: int = int(os.getenv("MAX_HISTORY_TURNS", "16"))
+
+    @classmethod
+    def use_anthropic_tutor(cls) -> bool:
+        """True when the tutor should call Anthropic instead of Ollama."""
+        if cls.TUTOR_BACKEND == "anthropic":
+            return True
+        if cls.TUTOR_BACKEND == "ollama":
+            return False
+        return bool(cls.ANTHROPIC_API_KEY)  # "auto"
 
     # ── Agent thresholds (research-grounded; adjust via env for A/B tests) ───
     # Mastery: BKT posterior above which a concept is considered "strong"

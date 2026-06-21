@@ -77,17 +77,23 @@ class ChatNotifier extends StateNotifier<ChatState> {
     state = state.copyWith(messages: msgs);
   }
 
-  // Default — local server on same WiFi.
-  // Change in Settings screen if IP changes.
-  static const _defaultServerUrl = 'http://100.125.214.119:8000';
+  // Production URL injected at build time via --dart-define=PARTH_SERVER_URL=https://...
+  // Falls back to empty string; user configures in Settings on first launch.
+  static const _builtInServerUrl =
+      String.fromEnvironment('PARTH_SERVER_URL', defaultValue: '');
 
   Future<void> _loadServerUrl() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString('server_url') ?? '';
-    // Discard stale Cloudflare tunnel URLs — they change every restart
-    final url = (saved.isEmpty || saved.contains('trycloudflare.com'))
-        ? _defaultServerUrl
-        : saved;
+    // Discard stale tunnel URLs; prefer built-in production URL when nothing saved.
+    String url;
+    if (saved.isNotEmpty && !saved.contains('trycloudflare.com') && !saved.contains('100.125')) {
+      url = saved;
+    } else if (_builtInServerUrl.isNotEmpty) {
+      url = _builtInServerUrl;
+    } else {
+      url = saved.contains('trycloudflare.com') || saved.contains('100.125') ? '' : saved;
+    }
     if (url != saved) await prefs.setString('server_url', url);
     state = state.copyWith(serverUrl: url);
   }
