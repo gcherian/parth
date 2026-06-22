@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_theme.dart';
 import 'home_screen.dart';
 import 'onboarding_screen.dart';
+import 'puzzle_onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,10 +37,21 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     if (!mounted) return;
     final prefs = await SharedPreferences.getInstance();
     final hasOnboarded = prefs.getBool('onboarded') ?? false;
+    final coldStartDone = prefs.getBool('cold_start_done') ?? false;
     if (!mounted) return;
+
+    Widget dest;
+    if (!hasOnboarded) {
+      dest = const OnboardingScreen();
+    } else if (!coldStartDone) {
+      dest = const PuzzleOnboardingScreen();
+    } else {
+      dest = const HomeScreen();
+    }
+
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (_, __, ___) => hasOnboarded ? const HomeScreen() : const OnboardingScreen(),
+        pageBuilder: (_, __, ___) => dest,
         transitionsBuilder: (_, anim, __, child) =>
             FadeTransition(opacity: anim, child: child),
         transitionDuration: const Duration(milliseconds: 400),
