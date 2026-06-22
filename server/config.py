@@ -54,6 +54,13 @@ class Config:
     # ── Prompt context ────────────────────────────────────────────────────────
     MAX_HISTORY_TURNS: int = int(os.getenv("MAX_HISTORY_TURNS", "16"))
 
+    # ── Security ──────────────────────────────────────────────────────────────
+    # App API key — all app endpoints require X-Parth-Key: <key>.
+    # If empty (default), auth is skipped (local dev mode). ALWAYS set in prod.
+    PARTH_API_KEY: str = os.getenv("PARTH_API_KEY", "")
+    # Admin key — for monitor, observer, playground, graph etc.
+    ADMIN_KEY: str = os.getenv("ADMIN_KEY", "")
+
     @classmethod
     def use_anthropic_tutor(cls) -> bool:
         """True when the tutor should call Anthropic instead of Ollama."""

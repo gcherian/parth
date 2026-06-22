@@ -8,6 +8,11 @@ primary_region = "bom"   # Mumbai — closest to Indian pilot users
   PORT = "8000"
   TUTOR_BACKEND = "anthropic"
   DATA_DIR = "/data"
+  # Secrets — set via `fly secrets set` (never commit actual values here):
+  #   fly secrets set ANTHROPIC_API_KEY=sk-ant-...
+  #   fly secrets set DATABASE_URL=postgresql://...
+  #   fly secrets set PARTH_API_KEY=$(openssl rand -hex 32)
+  #   fly secrets set ADMIN_KEY=$(openssl rand -hex 32)
 
 # Mount a persistent volume for ChromaDB so NCERT RAG survives deploys
 [[mounts]]

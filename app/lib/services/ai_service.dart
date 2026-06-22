@@ -7,6 +7,10 @@ import 'package:http/http.dart' as http;
 import '../models/message.dart';
 
 class AiService {
+  // App API key — injected at build time via --dart-define=PARTH_API_KEY=...
+  static const _appKey =
+      String.fromEnvironment('PARTH_API_KEY', defaultValue: '');
+
   // ── Local Parth server (primary) ───────────────────────────────────────────
   Future<String> sendToLocal({
     required String serverUrl,
@@ -31,7 +35,10 @@ class AiService {
       final response = await http
           .post(
             Uri.parse('$base/chat'),
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+              'Content-Type': 'application/json',
+              if (_appKey.isNotEmpty) 'X-Parth-Key': _appKey,
+            },
             body: jsonEncode({
               'message': userMessage,
               'history': historyJson,

@@ -6,10 +6,21 @@ import 'package:http/http.dart' as http;
 import '../models/puzzle.dart';
 
 class PuzzleService {
+  static const _appKey =
+      String.fromEnvironment('PARTH_API_KEY', defaultValue: '');
+
   String _base(String serverUrl) {
     final url = serverUrl.trim();
     return url.endsWith('/') ? url.substring(0, url.length - 1) : url;
   }
+
+  Map<String, String> get _headers => {
+        'Content-Type': 'application/json',
+        if (_appKey.isNotEmpty) 'X-Parth-Key': _appKey,
+      };
+
+  Map<String, String> get _getHeaders =>
+      _appKey.isNotEmpty ? {'X-Parth-Key': _appKey} : {};
 
   Future<ColdStartProbe> nextPuzzle({
     required String learnerId,
@@ -17,7 +28,10 @@ class PuzzleService {
     required String serverUrl,
   }) async {
     final r = await http
-        .get(Uri.parse('${_base(serverUrl)}/puzzle/next/$learnerId?grade=$grade'))
+        .get(
+          Uri.parse('${_base(serverUrl)}/puzzle/next/$learnerId?grade=$grade'),
+          headers: _getHeaders,
+        )
         .timeout(const Duration(seconds: 25));
     if (r.statusCode != 200) {
       throw Exception('Server returned ${r.statusCode}');
@@ -41,7 +55,7 @@ class PuzzleService {
     await http
         .post(
           Uri.parse('${_base(serverUrl)}/puzzle/respond'),
-          headers: {'Content-Type': 'application/json'},
+          headers: _headers,
           body: jsonEncode({
             'learner_id': learnerId,
             'puzzle_id': puzzleId,
@@ -59,7 +73,10 @@ class PuzzleService {
     required String serverUrl,
   }) async {
     final r = await http
-        .get(Uri.parse('${_base(serverUrl)}/puzzle/portrait/$learnerId'))
+        .get(
+          Uri.parse('${_base(serverUrl)}/puzzle/portrait/$learnerId'),
+          headers: _getHeaders,
+        )
         .timeout(const Duration(seconds: 15));
     if (r.statusCode != 200) {
       throw Exception('Server returned ${r.statusCode}');

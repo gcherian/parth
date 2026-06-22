@@ -1,6 +1,7 @@
 import asyncio
 import json as _json
 import logging
+import re
 import time
 import uuid
 from collections import defaultdict
@@ -9,9 +10,9 @@ from datetime import datetime
 import httpx
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from config import Config
 from foundation.db import get_pool, apply_schema, close_pool
@@ -77,8 +78,71 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*", "X-Parth-Key", "X-Admin-Key"],
 )
+
+# ── Input sanitization ────────────────────────────────────────────────────────
+_CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _sanitize(s: str, max_len: int = 200) -> str:
+    """Strip control characters and trim to max_len."""
+    return _CTRL_RE.sub(" ", s).strip()[:max_len]
+
+
+# ── Auth middleware ───────────────────────────────────────────────────────────
+# Admin-gated paths: require X-Admin-Key header or ?admin_key= query param.
+_ADMIN_EXACT = frozenset({
+    "/monitor", "/demo", "/mirror", "/graph", "/models",
+    "/playground", "/observer", "/onboarding",
+})
+_ADMIN_PREFIXES = ("/monitor/", "/graph/", "/api/trace/")
+
+
+def _is_admin_path(path: str) -> bool:
+    return path in _ADMIN_EXACT or path.startswith(_ADMIN_PREFIXES)
+
+
+# Public paths: no auth required.
+_PUBLIC_EXACT = frozenset({"/", "/health", "/docs", "/openapi.json", "/redoc"})
+
+
+@app.middleware("http")
+async def auth_middleware(request: Request, call_next):
+    path = request.url.path
+
+    # Static assets are always public (admin UIs load from /static/).
+    if path.startswith("/static/"):
+        return await call_next(request)
+
+    # Fully public — Fly.io health checks, API docs.
+    if path in _PUBLIC_EXACT:
+        return await call_next(request)
+
+    # Admin-only endpoints.
+    if _is_admin_path(path):
+        if Config.ADMIN_KEY:
+            key = (
+                request.headers.get("X-Admin-Key")
+                or request.query_params.get("admin_key", "")
+            )
+            if key != Config.ADMIN_KEY:
+                return JSONResponse(
+                    {"detail": "Admin access required"},
+                    status_code=401,
+                )
+        return await call_next(request)
+
+    # All other app endpoints — require X-Parth-Key when configured.
+    if Config.PARTH_API_KEY:
+        key = request.headers.get("X-Parth-Key", "")
+        if key != Config.PARTH_API_KEY:
+            return JSONResponse(
+                {"detail": "Invalid or missing API key"},
+                status_code=401,
+            )
+
+    return await call_next(request)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -115,19 +179,19 @@ def rate_limit(request: Request):
 
 # ── Request / Response models ─────────────────────────────────────────────────
 class Message(BaseModel):
-    role: str
-    content: str
+    role: str = Field(..., max_length=20)
+    content: str = Field(..., max_length=5000)
 
 
 class ChatRequest(BaseModel):
-    message: str
-    history: list[Message] = []
-    subject: str = "General"
-    grade: int = 6
-    learner_id: str = "anonymous"
-    learner_name: str = ""
-    model: str | None = None
-    request_id: str | None = None  # client can supply for idempotency
+    message: str = Field(..., max_length=2000)
+    history: list[Message] = Field(default=[], max_length=20)
+    subject: str = Field(default="General", max_length=100)
+    grade: int = Field(default=6, ge=1, le=12)
+    learner_id: str = Field(default="anonymous", max_length=100)
+    learner_name: str = Field(default="", max_length=100)
+    model: str | None = Field(default=None, max_length=100)
+    request_id: str | None = Field(default=None, max_length=100)
 
 
 class ChatResponse(BaseModel):
@@ -139,9 +203,12 @@ class ChatResponse(BaseModel):
 
 # ── Consent grant request model ───────────────────────────────────────────────
 class ConsentGrantRequest(BaseModel):
-    guardian_id: str
-    child_id: str
-    scopes: list[str] = ["ai_interaction", "learner_data", "progress_report"]
+    guardian_id: str = Field(..., max_length=100)
+    child_id: str = Field(..., max_length=100)
+    scopes: list[str] = Field(
+        default=["ai_interaction", "learner_data", "progress_report"],
+        max_length=10,
+    )
 
 
 # ── Chat endpoint ─────────────────────────────────────────────────────────────
@@ -190,12 +257,13 @@ async def chat(
         raise HTTPException(status_code=503, detail=str(e))
 
     # ── Agent trace cache (for observer page) ─────────────────────────────
+    safe_name = _sanitize(req.learner_name, max_len=100)
     agent_trace = result.get("_agent_trace", {})
     if agent_trace:
         entry = {
             "ts":           datetime.utcnow().isoformat(),
             "learner_id":   req.learner_id,
-            "learner_name": req.learner_name or "",
+            "learner_name": safe_name,
             "message":      req.message[:200],
             "response":     result["response"][:300],
             "model":        result["model"],
@@ -213,7 +281,7 @@ async def chat(
         "type":         "interaction",
         "ts":           datetime.utcnow().isoformat(),
         "learner_id":   req.learner_id,
-        "learner_name": req.learner_name or "",
+        "learner_name": safe_name,
         "subject":      req.subject,
         "grade":        req.grade,
         "model":        result["model"],
@@ -235,7 +303,7 @@ async def chat(
 
 # ── Consent grant endpoint ───────────────────────────────────────────────────
 @app.post("/consent/grant")
-async def consent_grant(req: ConsentGrantRequest):
+async def consent_grant(req: ConsentGrantRequest, _: None = Depends(rate_limit)):
     """
     Guardian grants consent for a child.
     Body: {"guardian_id": str, "child_id": str, "scopes": [...]}
@@ -363,12 +431,12 @@ async def erase_learner(learner_id: str):
 # ── Puzzle engine endpoints ──────────────────────────────────────────────────
 
 class PuzzleResponseRequest(BaseModel):
-    learner_id: str
-    puzzle_id: str
-    response: str
-    time_seconds: int = 0
+    learner_id: str = Field(..., max_length=100)
+    puzzle_id: str = Field(..., max_length=100)
+    response: str = Field(..., max_length=2000)
+    time_seconds: int = Field(default=0, ge=0, le=3600)
     reached_deeper: bool = False
-    grade: int = 6
+    grade: int = Field(default=6, ge=1, le=12)
 
 
 @app.get("/puzzle/next/{learner_id}")
@@ -602,14 +670,17 @@ async def monitor_stats():
 # ── Health check ──────────────────────────────────────────────────────────────
 @app.get("/health")
 async def health():
-    try:
-        async with httpx.AsyncClient(timeout=4) as client:
-            r = await client.get(f"{Config.OLLAMA_URL}/api/tags")
-            models = [m["name"] for m in r.json().get("models", [])]
-        ollama_ok = True
-    except Exception:
-        models = []
-        ollama_ok = False
+    # Tutor backend liveness
+    tutor_ok = False
+    if Config.use_anthropic_tutor():
+        tutor_ok = bool(Config.ANTHROPIC_API_KEY)
+    else:
+        try:
+            async with httpx.AsyncClient(timeout=4) as client:
+                await client.get(f"{Config.OLLAMA_URL}/api/tags")
+            tutor_ok = True
+        except Exception:
+            tutor_ok = False
 
     pool = await get_pool()
     try:
@@ -625,17 +696,14 @@ async def health():
     except Exception:
         rag_chunks = 0
 
+    # Minimal public response — no IPs, no internal model names.
     return {
-        "status": "ok" if (ollama_ok and pg_ok) else "degraded",
+        "status": "ok" if (tutor_ok and pg_ok) else "degraded",
         "version": "4.0.0",
-        "ollama": ollama_ok,
+        "tutor_backend": "anthropic" if Config.use_anthropic_tutor() else "ollama",
+        "tutor": tutor_ok,
         "postgres": pg_ok,
-        "default_model": Config.DEFAULT_MODEL,
-        "fast_model": Config.FAST_MODEL,
-        "available_models": models,
         "rag_chunks": rag_chunks,
-        "modules": list(_module_registry.keys()),
-        "server_ip": Config.local_ip(),
         "timestamp": datetime.utcnow().isoformat(),
     }
 
@@ -644,6 +712,12 @@ async def health():
 @app.get("/demo")
 async def demo_ui():
     return FileResponse("static/demo.html")
+
+
+# ── Magic Mirror Demo (portrait live build) ───────────────────────────────────
+@app.get("/mirror")
+async def mirror_ui():
+    return FileResponse("static/portrait_demo.html")
 
 
 # ── Knowledge Graph UI & API ─────────────────────────────────────────────────
@@ -744,14 +818,14 @@ from modules.shared_world.chat import generate_response as _world_generate
 
 
 class WorldArriveRequest(BaseModel):
-    learner_id: str
-    location_id: str
+    learner_id: str = Field(..., max_length=100)
+    location_id: str = Field(..., max_length=100)
 
 
 class WorldChatRequest(BaseModel):
-    learner_id: str
-    location_id: str
-    message: str
+    learner_id: str = Field(..., max_length=100)
+    location_id: str = Field(..., max_length=100)
+    message: str = Field(..., max_length=2000)
 
 
 _PRESENCE_TTL = "10 minutes"
@@ -1005,13 +1079,13 @@ async def onboarding_ui():
 
 
 class OnboardingStartRequest(BaseModel):
-    learner_id:    str
-    learner_name:  str
-    guardian_name: str
+    learner_id:    str = Field(..., max_length=100)
+    learner_name:  str = Field(..., max_length=100)
+    guardian_name: str = Field(..., max_length=100)
 
 
 class OnboardingAnswerRequest(BaseModel):
-    text: str
+    text: str = Field(..., max_length=2000)
 
 
 @app.post("/api/onboarding/start")
@@ -1113,16 +1187,9 @@ async def run_lens(lens_name: str, learner_id: str, period_days: int = 30):
 # ── Root ──────────────────────────────────────────────────────────────────────
 @app.get("/")
 async def root():
-    ip = Config.local_ip()
     return {
         "name": "Parth AI Server",
         "version": "4.0.0",
-        "endpoints": {
-            "chat":    f"POST http://{ip}:{Config.PORT}/chat",
-            "health":  f"GET  http://{ip}:{Config.PORT}/health",
-            "learner": f"GET  http://{ip}:{Config.PORT}/learner/{{id}}",
-            "erase":   f"DELETE http://{ip}:{Config.PORT}/learner/{{id}}",
-            "alerts":  f"GET  http://{ip}:{Config.PORT}/parent/{{id}}/alerts",
-            "docs":    f"GET  http://{ip}:{Config.PORT}/docs",
-        },
+        "health": "/health",
+        "docs": "/docs",
     }
