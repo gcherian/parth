@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Parth World</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg:     #0d1117;
+  --card:   #161b22;
+  --border: #21262d;
+  --text:   #e6edf3;
+  --muted:  #6e7681;
+  --saffron:#f97316;
+}
+
+html, body {
+  height: 100%; width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* ── Screen transitions ── */
+.screen { position: absolute; inset: 0; overflow-y: auto; display: none; flex-direction: column; }
+.screen.active { display: flex; }
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ── Shared header ── */
+.top-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px 12px;
+  background: #0b0e13;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: sticky; top: 0; z-index: 10;
+}
+.top-bar .avatar { font-size: 1.5rem; }
+.top-bar .title { flex: 1; font-size: 1rem; font-weight: 700; }
+.top-bar .sub { font-size: 0.72rem; color: var(--muted); }
+.top-bar .btn-sm {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 12px; font-size: 0.78rem; font-weight: 600;
+  background: transparent; color: var(--muted); cursor: pointer;
+}
+.top-bar .btn-sm:active { opacity: 0.6; }
+
+/* ── SCREEN 1: Passport ── */
+#screen-passport { background: var(--bg); }
+.passport-hero {
+  padding: 28px 20px 16px;
+  text-align: center;
+}
+.passport-hero h1 { font-size: 1.6rem; font-weight: 800; }
+.passport-hero p  { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
+
+.student-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 8px 16px 24px;
+}
+.student-grid .last-center { grid-column: 1 / -1; max-width: 180px; margin: 0 auto; width: 100%; }
+
+.student-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 16px 18px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s, box-shadow 0.2s;
+  text-align: center;
+  -webkit-user-select: none;
+}
+.student-card:active { transform: scale(0.96); }
+.student-card .s-emoji { font-size: 2.4rem; margin-bottom: 8px; }
+.student-card .s-name { font-size: 1rem; font-weight: 700; }
+.student-card .s-meta { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+.student-card .s-tag  { font-size: 0.68rem; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+
+/* ── SCREEN 2: World Map ── */
+#screen-world { background: var(--bg); }
+.world-greeting {
+  padding: 20px 18px 10px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.world-greeting strong { color: var(--text); font-size: 1rem; }
+
+.location-list {
+  padding: 4px 14px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loc-card {
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+.loc-card:active { transform: scale(0.98); }
+.loc-card.has-group {
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 0 24px rgba(255,255,255,0.06);
+  animation: pulse-border 2.5s infinite;
+}
+@keyframes pulse-border {
+  0%,100% { box-shadow: 0 0 18px rgba(255,255,255,0.05); }
+  50%      { box-shadow: 0 0 32px rgba(255,255,255,0.13); }
+}
+
+.loc-emoji { font-size: 2.2rem; margin-bottom: 8px; display: block; }
+.loc-name  { font-size: 1.05rem; font-weight: 800; }
+.loc-tag   { font-size: 0.78rem; opacity: 0.7; margin-top: 4px; }
+.loc-depth { font-size: 0.68rem; opacity: 0.5; margin-top: 6px; }
+
+.loc-presence {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  display: flex; align-items: center; gap: 4px;
+}
+.loc-presence .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: blink 1.4s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── SCREEN 3: Location ── */
+#screen-location {
+  background: var(--bg);
+  display: none;
+  flex-direction: column;
+}
+#screen-location.active { display: flex; }
+
+.loc-header {
+  padding: 14px 16px 12px;
+  flex-shrink: 0;
+  position: sticky; top: 0; z-index: 10;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 6px;
+  background: inherit;
+}
+.loc-header-row1 { display: flex; align-items: center; gap: 8px; }
+.loc-header-name { flex: 1; font-size: 1rem; font-weight: 800; }
+.loc-header .leave-btn {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 5px 12px; font-size: 0.75rem; font-weight: 600;
+  background: transparent; color: var(--muted); cursor: pointer;
+}
+
+.presence-strip {
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap;
+}
+.presence-chip {
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 3px 9px 3px 6px;
+  font-size: 0.72rem;
+  animation: fadeIn 0.3s;
+}
+.presence-chip .dot { width: 5px; height: 5px; border-radius: 50%; animation: blink 1.4s infinite; }
+
+.group-banner {
+  display: none;
+  background: linear-gradient(90deg, #7c3aed22, #1d4ed822, #059669  22);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  text-align: center;
+  color: rgba(255,255,255,0.75);
+  margin: 0 14px 2px;
+  animation: fadeIn 0.4s;
+}
+.group-banner.show { display: block; }
+
+/* Chat area */
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bubble {
+  max-width: 82%;
+  padding: 10px 13px;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.bubble.parth {
+  align-self: flex-start;
+  background: #1e2535;
+  border: 1px solid #2d3a50;
+  border-radius: 4px 14px 14px 14px;
+}
+.bubble.child {
+  align-self: flex-end;
+  background: var(--saffron);
+  color: #fff;
+  border-radius: 14px 4px 14px 14px;
+}
+.bubble.other {
+  align-self: flex-start;
+  border-radius: 4px 14px 14px 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.bubble.system-msg {
+  align-self: center;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.74rem;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+}
+
+.bubble-meta {
+  font-size: 0.68rem;
+  opacity: 0.55;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.typing-indicator {
+  align-self: flex-start;
+  background: #1e2535;
+  border: 1px solid #2d3a50;
+  border-radius: 4px 14px 14px 14px;
+  padding: 10px 16px;
+  display: flex; gap: 5px; align-items: center;
+}
+.typing-indicator span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #64748b;
+  animation: bounce 1.2s infinite;
+}
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,60%,100%{transform:none} 30%{transform:translateY(-5px)} }
+
+/* Wonder hook card */
+.wonder-card {
+  margin: 0 14px 2px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.65);
+  font-style: italic;
+  flex-shrink: 0;
+}
+
+/* Input bar */
+.input-bar {
+  padding: 10px 12px 14px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 8px;
+  flex-shrink: 0;
+  background: var(--bg);
+}
+.input-bar input {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 10px 16px;
+  color: var(--text);
+  font-size: 0.9rem;
+  outline: none;
+}
+.input-bar input:focus { border-color: #334155; }
+.input-bar input::placeholder { color: var(--muted); }
+.input-bar button {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--saffron);
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.input-bar button:disabled { opacity: 0.4; }
+.input-bar button:active { opacity: 0.75; }
+
+/* Depth bar */
+.depth-bar {
+  padding: 8px 16px 2px;
+  display: flex; gap: 4px; align-items: center;
+  overflow-x: auto; scrollbar-width: none;
+  flex-shrink: 0;
+}
+.depth-bar::-webkit-scrollbar { display: none; }
+.depth-pip {
+  flex-shrink: 0;
+  padding: 4px 11px;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.depth-pip.active { color: #fff; border-color: transparent; }
+.depth-pip:active { opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1 — Passport (who are you?)
+     ══════════════════════════════════════ -->
+<div id="screen-passport" class="screen active fade-in">
+  <div class="passport-hero">
+    <h1>Parth World 🌍</h1>
+    <p>Choose a student to explore as</p>
+  </div>
+  <div class="student-grid" id="student-grid"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2 — World Map
+     ══════════════════════════════════════ -->
+<div id="screen-world" class="screen">
+  <div class="top-bar">
+    <span class="avatar" id="w-avatar"></span>
+    <div>
+      <div class="title" id="w-name"></div>
+      <div class="sub" id="w-meta"></div>
+    </div>
+    <button class="btn-sm" onclick="logout()">← Switch</button>
+  </div>
+  <div class="world-greeting">
+    <strong>Where will you explore today?</strong><br>
+    <span id="world-sub">Choose a location to begin</span>
+  </div>
+  <div class="location-list" id="location-list"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 3 — Location (the deep dive)
+     ══════════════════════════════════════ -->
+<div id="screen-location" class="screen">
+  <div class="loc-header" id="loc-header">
+    <div class="loc-header-row1">
+      <span id="loc-emoji" style="font-size:1.4rem"></span>
+      <span class="loc-header-name" id="loc-name"></span>
+      <button class="leave-btn" onclick="leaveLocation()">Leave</button>
+    </div>
+    <div class="presence-strip" id="presence-strip"></div>
+  </div>
+
+  <div class="group-banner" id="group-banner">
+    ✨ Group discovery session active — Parth is now bridging your knowledge!
+  </div>
+
+  <div class="wonder-card" id="wonder-card"></div>
+
+  <div class="depth-bar" id="depth-bar"></div>
+
+  <div class="chat-area" id="chat-area"></div>
+
+  <div class="input-bar">
+    <input type="text" id="chat-input"
+           placeholder="Ask about this place…"
+           autocomplete="off" autocorrect="off" spellcheck="false">
+    <button id="send-btn" onclick="sendMessage()">↑</button>
+  </div>
+</div>
+
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════════════════════
+const STUDENTS = [
+  { id:'arjun_s8',  name:'Arjun',  grade:8,  subject:'Science',     emoji:'🏏', color:'#f97316', tagline:'Cricket-obsessed. Thinks physics is obvious. Gets wonderfully corrected.' },
+  { id:'sneha_s6',  name:'Sneha',  grade:6,  subject:'Science',     emoji:'🌸', color:'#ec4899', tagline:'Shy and Hindi-dominant. Has sudden brilliant breakthroughs.' },
+  { id:'dev_s10',   name:'Dev',    grade:10, subject:'Mathematics', emoji:'🎮', color:'#22c55e', tagline:'Everything is a game mechanic. Gets bored unless challenged hard.' },
+  { id:'meera_s7',  name:'Meera',  grade:7,  subject:'Mathematics', emoji:'📐', color:'#a855f7', tagline:'Says she gives up — then has the breakthrough. Every time.' },
+  { id:'rishi_s9',  name:'Rishi',  grade:9,  subject:'Science',     emoji:'🌌', color:'#3b82f6', tagline:'Finds the same pattern in DNA, computers, and galaxies.' },
+];
+const STUDENT_MAP = Object.fromEntries(STUDENTS.map(s => [s.id, s]));
+
+let me = null;                // current student
+let currentLoc = null;        // current location data
+let presenceList = [];        // who else is here
+let messages = [];            // local message array
+let pollTimer = null;
+let lastMsgId = 0;
+let depthIndex = 0;
+let sending = false;
+
+function show(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(screenId);
+  el.classList.add('active', 'fade-in');
+  setTimeout(() => el.classList.remove('fade-in'), 400);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Screen 1 — Build passport grid
+// ═══════════════════════════════════════════════════════════════
+function buildPassport() {
+  const grid = document.getElementById('student-grid');
+  grid.innerHTML = '';
+  STUDENTS.forEach((s, i) => {
+    const isLast = i === STUDENTS.length - 1;
+    const wrap = isLast ? '<div class="last-center">' : '';
+    const endWrap = isLast ? '</div>' : '';
+    const card = document.createElement(isLast ? 'div' : 'div');
+    if (isLast) card.className = 'last-center';
+    const inner = document.createElement('div');
+    inner.className = 'student-card';
+    inner.style.borderColor = s.color + '44';
+    inner.innerHTML = `
+      <div class="s-emoji">${s.emoji}</div>
+      <div class="s-name">${s.name}</div>
+      <div class="s-meta">Grade ${s.grade} · ${s.subject}</div>
+      <div class="s-tag">${s.tagline}</div>`;
+    inner.onclick = () => selectStudent(s);
+    if (isLast) { card.appendChild(inner); grid.appendChild(card); }
+    else grid.appendChild(inner);
+  });
+}
+
+function selectStudent(s) {
+  me = s;
+  document.getElementById('w-avatar').textContent = s.emoji;
+  document.getElementById('w-name').textContent = s.name;
+  document.getElementById('w-meta').textContent = `Grade ${s.grade} · ${s.subject}`;
+  show('screen-world');
+  loadWorldMap();
+}
+
+function logout() {
+  if (currentLoc) leaveLocationSilent();
+  me = null; currentLoc = null; presenceList = [];
+  stopPoll();
+  show('screen-passport');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Screen 2 — World map with live presence
+// ═══════════════════════════════════════════════════════════════
+async function loadWorldMap() {
+  const list = document.getElementById('location-list');
+  list.innerHTML = '<div style="padding:20px;color:#6e7681;text-align:center">Loading worlds…</div>';
+  try {
+    const locs = await fetch('/world/locations').then(r => r.json());
+    renderWorldMap(locs);
+  } catch(e) {
+    list.innerHTML = '<div style="padding:20px;color:#ef4444">Could not reach server</div>';
+  }
+}
+
+function renderWorldMap(locs) {
+  const list = document.getElementById('location-list');
+  list.innerHTML = '';
+  locs.forEach(loc => {
+    const card = document.createElement('div');
+    card.className = 'loc-card' + (loc.present_count > 0 ? ' has-group' : '');
+    card.id = `loc-card-${loc.id}`;
+    card.style.background = `linear-gradient(135deg, ${loc.bg_from}, ${loc.bg_to || '#0d1117'})`;
+
+    const presenceHtml = loc.present_count > 0
+      ? `<div class="loc-presence"><div class="dot"></div>${loc.present_count} here</div>`
+      : `<div class="loc-presence" style="opacity:0.4">👤 solo</div>`;
+
+    const firstDepth = loc.depth_levels?.[0] || 'Entry';
+    const lastDepth  = loc.depth_levels?.[loc.depth_levels.length-1] || 'Deep';
+
+    card.innerHTML = `
+      ${presenceHtml}
+      <div class="loc-emoji">${loc.emoji}</div>
+      <div class="loc-name">${loc.name}</div>
+      <div class="loc-tag">${loc.tagline}</div>
+      <div class="loc-depth">${firstDepth} → ${lastDepth}</div>`;
+    card.onclick = () => enterLocation(loc.id);
+    list.appendChild(card);
+  });
+}
+
+// Refresh world map presence every 8s while on screen
+function startWorldPoll() {
+  stopPoll();
+  pollTimer = setInterval(async () => {
+    if (!document.getElementById('screen-world').classList.contains('active')) return;
+    try {
+      const locs = await fetch('/world/locations').then(r => r.json());
+      locs.forEach(loc => {
+        const card = document.getElementById(`loc-card-${loc.id}`);
+        if (!card) return;
+        const chip = card.querySelector('.loc-presence');
+        if (chip) {
+          chip.innerHTML = loc.present_count > 0
+            ? `<div class="dot"></div>${loc.present_count} here`
+            : '<span style="opacity:0.4">👤 solo</span>';
+        }
+        card.classList.toggle('has-group', loc.present_count > 0);
+      });
+    } catch(_) {}
+  }, 8000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Screen 3 — Enter location
+// ═══════════════════════════════════════════════════════════════
+async function enterLocation(locId) {
+  show('screen-location');
+  document.getElementById('chat-area').innerHTML = '';
+  document.getElementById('group-banner').classList.remove('show');
+  messages = [];
+
+  try {
+    const data = await fetch('/world/arrive', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ learner_id: me.id, location_id: locId }),
+    }).then(r => r.json());
+
+    currentLoc = data.location;
+    presenceList = data.present || [];
+
+    // Header
+    const loc = data.location;
+    document.getElementById('loc-emoji').textContent = loc.emoji;
+    document.getElementById('loc-name').textContent  = loc.name;
+    document.getElementById('wonder-card').textContent = '✨ ' + loc.wonder_hook;
+    document.getElementById('screen-location').style.background =
+      `linear-gradient(to bottom, #0d1117, #0d1117)`;
+    document.getElementById('loc-header').style.background =
+      `linear-gradient(180deg, #0d1117, #0d1117)`;
+
+    buildDepthBar(loc.depth_levels);
+    renderPresence(presenceList);
+    updateGroupBanner(presenceList);
+
+    // Render existing messages
+    if (data.messages && data.messages.length > 0) {
+      data.messages.forEach(m => appendBubble(m));
+    } else {
+      // First visitor — show opener
+      appendBubble({ role:'parth', content: loc.solo_opener, learner_id:'parth', learner_name:'Parth' });
+    }
+
+    document.getElementById('chat-input').placeholder =
+      presenceList.length > 1 ? 'Explore together…' : 'Ask about this place…';
+
+    stopPoll();
+    pollTimer = setInterval(pollPresence, 4000);
+    document.getElementById('chat-input').focus();
+
+  } catch(e) {
+    appendSystemMsg('Could not enter location — check server connection');
+  }
+}
+
+function leaveLocation() {
+  leaveLocationSilent();
+  show('screen-world');
+  loadWorldMap();
+  startWorldPoll();
+}
+
+function leaveLocationSilent() {
+  if (!currentLoc || !me) return;
+  fetch('/world/depart', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ learner_id: me.id, location_id: currentLoc.id }),
+  }).catch(()=>{});
+  stopPoll();
+  currentLoc = null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Depth bar
+// ═══════════════════════════════════════════════════════════════
+function buildDepthBar(levels) {
+  const bar = document.getElementById('depth-bar');
+  bar.innerHTML = '';
+  (levels || []).forEach((lvl, i) => {
+    const pip = document.createElement('div');
+    pip.className = 'depth-pip' + (i === 0 ? ' active' : '');
+    pip.textContent = lvl;
+    pip.onclick = () => {
+      document.querySelectorAll('.depth-pip').forEach(p => p.classList.remove('active'));
+      pip.classList.add('active');
+      depthIndex = i;
+      const hint = `[Tell me about the ${lvl} level of ${currentLoc.name}]`;
+      sendAutoMessage(hint);
+    };
+    bar.appendChild(pip);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Presence
+// ═══════════════════════════════════════════════════════════════
+function renderPresence(present) {
+  const strip = document.getElementById('presence-strip');
+  strip.innerHTML = '';
+  const others = present.filter(p => p.learner_id !== me.id);
+  if (others.length === 0) {
+    const chip = document.createElement('div');
+    chip.className = 'presence-chip';
+    chip.innerHTML = `<span style="font-size:0.65rem;opacity:0.5">Solo exploration</span>`;
+    strip.appendChild(chip);
+    return;
+  }
+  others.forEach(p => {
+    const chip = document.createElement('div');
+    chip.className = 'presence-chip';
+    chip.innerHTML = `
+      <div class="dot" style="background:${p.color || '#22c55e'}"></div>
+      ${p.emoji || '👤'} ${p.learner_name}`;
+    strip.appendChild(chip);
+  });
+}
+
+function updateGroupBanner(present) {
+  const others = present.filter(p => p.learner_id !== me.id);
+  const banner = document.getElementById('group-banner');
+  banner.classList.toggle('show', others.length > 0);
+  if (others.length > 0) {
+    const names = others.map(p => p.learner_name).join(' & ');
+    banner.textContent = `✨ ${names} ${others.length === 1 ? 'is' : 'are'} here — group discovery session!`;
+  }
+  document.getElementById('chat-input').placeholder =
+    others.length > 0 ? 'Explore together…' : 'Ask about this place…';
+}
+
+async function pollPresence() {
+  if (!currentLoc) return;
+  try {
+    const data = await fetch(`/world/presence/${currentLoc.id}`).then(r => r.json());
+    const prev = presenceList.map(p => p.learner_id).sort().join(',');
+    const next = (data.present || []).map(p => p.learner_id).sort().join(',');
+
+    if (prev !== next) {
+      const newOthers = (data.present || []).filter(
+        p => p.learner_id !== me.id && !presenceList.find(q => q.learner_id === p.learner_id)
+      );
+      newOthers.forEach(p => {
+        appendSystemMsg(`${p.emoji || '👤'} ${p.learner_name} just arrived!`);
+      });
+      presenceList = data.present || [];
+      renderPresence(presenceList);
+      updateGroupBanner(presenceList);
+    }
+
+    // Sync new messages from others
+    if (data.recent_messages && data.recent_messages.length > 0) {
+      const lastKnown = messages[messages.length - 1];
+      data.recent_messages.forEach(m => {
+        if (m.learner_id !== me.id && (!lastKnown || m.created_at > lastKnown.created_at)) {
+          const alreadyShown = messages.find(x => x.created_at === m.created_at && x.learner_id === m.learner_id);
+          if (!alreadyShown) appendBubble(m);
+        }
+      });
+    }
+  } catch(_) {}
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Chat
+// ═══════════════════════════════════════════════════════════════
+function appendBubble(m) {
+  messages.push(m);
+  const area = document.getElementById('chat-area');
+
+  if (m.role === 'parth') {
+    const div = document.createElement('div');
+    div.className = 'bubble parth';
+    div.innerHTML = `<div class="bubble-meta" style="color:#818cf8">Parth</div>${escHtml(m.content)}`;
+    area.appendChild(div);
+  } else if (m.learner_id === me?.id) {
+    const div = document.createElement('div');
+    div.className = 'bubble child';
+    div.style.background = me.color;
+    div.innerHTML = `<div class="bubble-meta">${me.emoji} You</div>${escHtml(m.content)}`;
+    area.appendChild(div);
+  } else {
+    const s = STUDENT_MAP[m.learner_id] || { emoji:'👤', color:'#64748b', name: m.learner_name };
+    const div = document.createElement('div');
+    div.className = 'bubble other';
+    div.style.background = s.color + '18';
+    div.style.borderColor = s.color + '44';
+    div.innerHTML = `<div class="bubble-meta" style="color:${s.color}">${s.emoji} ${m.learner_name}</div>${escHtml(m.content)}`;
+    area.appendChild(div);
+  }
+  area.scrollTop = area.scrollHeight;
+}
+
+function appendSystemMsg(txt) {
+  const area = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = 'bubble system-msg';
+  div.textContent = txt;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text  = input.value.trim();
+  if (!text || sending || !currentLoc) return;
+  input.value = '';
+  await _doSend(text);
+}
+
+async function sendAutoMessage(text) {
+  if (sending || !currentLoc) return;
+  await _doSend(text);
+}
+
+async function _doSend(text) {
+  sending = true;
+  document.getElementById('send-btn').disabled = true;
+
+  appendBubble({ role:'child', learner_id: me.id, learner_name: me.name, content: text });
+
+  const typing = document.createElement('div');
+  typing.className = 'typing-indicator';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  document.getElementById('chat-area').appendChild(typing);
+  document.getElementById('chat-area').scrollTop = 99999;
+
+  try {
+    const res = await fetch('/world/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        learner_id:  me.id,
+        location_id: currentLoc.id,
+        message:     text,
+      }),
+    });
+    typing.remove();
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    appendBubble({ role:'parth', learner_id:'parth', learner_name:'Parth', content: data.response });
+    presenceList = data.present || presenceList;
+    renderPresence(presenceList);
+    updateGroupBanner(presenceList);
+  } catch(e) {
+    typing.remove();
+    appendSystemMsg('⚠ Server error — try again');
+  }
+
+  sending = false;
+  document.getElementById('send-btn').disabled = false;
+}
+
+// Enter key sends
+document.getElementById('chat-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') sendMessage();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// Utilities
+// ═══════════════════════════════════════════════════════════════
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>');
+}
+
+function stopPoll() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+}
+
+// Depart cleanly on page close
+window.addEventListener('beforeunload', leaveLocationSilent);
+
+// ═══════════════════════════════════════════════════════════════
+// Init
+// ═══════════════════════════════════════════════════════════════
+buildPassport();
+</script>
+</body>
+</html>

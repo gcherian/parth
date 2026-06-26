@@ -1,0 +1,927 @@
+{
+  "sphere": "philosophy_logic",
+  "version": 2,
+  "description": "Subject-matter puzzles where students do philosophy — argue, test, discover contradictions, design thought experiments, and encounter genuine logical problems. No thinker's name appears in the challenge itself.",
+  "thinkers": [
+    {
+      "id": "socrates",
+      "name": "Socrates",
+      "domain": "Critical Thinking / Socratic Method / Self-Knowledge",
+      "puzzles": [
+        {
+          "id": "socrates_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Five Whys",
+          "hook": "Every rule in your school was invented by someone. They had a reason. But do YOU know the reason? And does the reason have a reason?",
+          "challenge": "Pick any school rule (no running in the corridor, uniform required, no phones in class). Ask 'Why?' five times — each time getting a genuine answer before asking again. Record every answer. What do you find at the bottom of the chain? Is it a reasoned principle, or just 'that's how it's always been'?",
+          "materials": "Paper, pencil",
+          "discover": "Every rule either rests on a value you can examine (safety, fairness, learning) or on habit that nobody has questioned. When you reach a bedrock value, ask whether the rule actually serves it. Often it doesn't — or there's a better way to serve the same value.",
+          "go_deeper": "Find a rule where the 'why' chain leads to a contradictory value (a rule that claims to promote fairness but actually undermines it). Present the contradiction and propose a revision.",
+          "silent_lesson": "Socratic method; difference between habit and reasoned belief; questioning assumptions; epistemic humility."
+        },
+        {
+          "id": "socrates_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Define It Precisely",
+          "hook": "You use the word 'fair' every day. But what does 'fair' actually mean? Try to define it precisely enough that no one could apply it wrongly.",
+          "challenge": "Attempt to define 'fair' in a single precise sentence. Then: generate 5 scenarios and test whether your definition gives the right answer for each. If any scenario gives a wrong answer, revise your definition. Repeat until you have a definition that handles all 5 cases — or conclude it's impossible. Now do the same for: 'game,' 'knowledge,' 'friend.' Record every failed definition attempt.",
+          "materials": "Paper, pencil",
+          "discover": "Concepts that seem obvious resist precise definition. Every definition either excludes clear cases ('fair distribution ignores special needs') or includes wrong cases ('fair = equal ignores effort'). This is not a failure of thinking — it reveals that concepts are complex, contextual, and contested.",
+          "go_deeper": "Wittgenstein argued that some concepts don't have necessary and sufficient conditions — they have 'family resemblances' (like faces in a family). Apply this idea to 'game': list the games you know and find any single feature all of them share.",
+          "silent_lesson": "Definition and its limits; Socratic elenchus; necessary and sufficient conditions; family resemblance; why precision matters in argument."
+        },
+        {
+          "id": "socrates_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Examined Life",
+          "hook": "Most people hold contradictory beliefs simultaneously without noticing. The examined life systematically finds these contradictions. Can you find them in your own beliefs?",
+          "challenge": "Write down 20 beliefs you hold (about fairness, success, identity, politics, relationships). Test each pair for logical consistency: does believing A prevent you from believing B? Find at least 3 pairs of contradictory beliefs in your own list. For each contradiction: (1) identify what principle would resolve it, (2) decide which belief you would abandon, (3) explain why.",
+          "materials": "Paper, pencil",
+          "discover": "Contradictions in beliefs are normal — they reveal where genuine difficult questions live. Finding them is not a failure but a starting point. The response is not to panic but to examine which belief is better supported, and to find or construct a position that resolves the tension.",
+          "go_deeper": "Cognitive dissonance theory (psychology): people feel discomfort when they hold contradictory beliefs and resolve it by changing beliefs or justifying both. Design a study to test whether people resolve contradictions by examining their logic or by rationalization.",
+          "silent_lesson": "Consistency in beliefs; self-examination; principle of non-contradiction; cognitive dissonance; philosophical methodology."
+        }
+      ]
+    },
+    {
+      "id": "plato",
+      "name": "Plato",
+      "domain": "Forms / Ideals / Perception vs Reality",
+      "puzzles": [
+        {
+          "id": "plato_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Perfect Circle",
+          "hook": "Draw a circle as perfectly as you can. Is it perfect? Now draw one with a compass. Is that perfect? What would a truly perfect circle be?",
+          "challenge": "Draw 5 circles: (1) freehand, (2) tracing a coin, (3) with a compass, (4) printed from a computer, (5) described mathematically (all points equidistant from a centre). Measure the roundness of each. Can you ever achieve a truly perfect circle physically? What is the relationship between the mathematical description and any physical circle you draw?",
+          "materials": "Paper, pencil, coin, compass, ruler, calculator for checking",
+          "discover": "No physical circle is perfect — the drawn line has width, atoms are finite, the surface is not perfectly flat. Yet the mathematical concept of a perfect circle is clear and precise. Where does this perfect concept exist? Only in minds? Or independently?",
+          "go_deeper": "Plato argued that all physical triangles are imperfect copies of the Form of Triangle — which exists independently in an abstract realm. What would it mean for the Form to 'exist' if it has no location, weight, or time?",
+          "silent_lesson": "Plato's theory of Forms; abstract vs concrete; mathematical ideals vs physical approximations; the existence of mathematical objects."
+        },
+        {
+          "id": "plato_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "thought_experiment",
+          "title": "The Shadow Show",
+          "hook": "Imagine people chained in a cave since birth, facing a wall. Shadows of objects pass on the wall — and they take shadows for reality. If one prisoner escapes and sees the sunlight, what happens when they return?",
+          "challenge": "Analyse the cave thought experiment by mapping each element to a real equivalent: (1) the prisoners → (2) the shadows → (3) the objects that cast shadows → (4) the fire → (5) the sunlight → (6) the returning prisoner. Now: identify one domain in your own life where you might be watching shadows (a cultural assumption, media narrative, or inherited belief) rather than the objects themselves. How would you know the difference?",
+          "materials": "Paper, pencil",
+          "discover": "The cave maps onto: prisoners = people accepting inherited beliefs, shadows = representations/media/appearances, objects = reality behind appearances, fire = cultural frameworks, sunlight = philosophical/scientific reasoning. The painful part: people who return with real knowledge are often mocked or disbelieved.",
+          "go_deeper": "A modern cave: people raised on filtered social media see a curated reality. Design an experiment to test whether social media exposure changes people's beliefs about how common certain events are (this is called 'cultivation theory').",
+          "silent_lesson": "Allegory of the Cave; appearance vs reality; epistemological humility; return of the philosopher; why truth can be unwelcome."
+        },
+        {
+          "id": "plato_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Mathematical Realism",
+          "hook": "Mathematicians say they 'discover' rather than 'invent' mathematics. The Mandelbrot set existed before anyone computed it. Does mathematics exist independently of human minds?",
+          "challenge": "Construct the argument for mathematical realism: (1) mathematical truths seem necessary and universal ('2+2=4' seems true in all possible worlds), (2) mathematical structures were discovered, not invented (complex numbers existed before they were written), (3) mathematics applies to physical reality with 'unreasonable effectiveness' (Wigner). Construct the counter-argument (anti-realism): mathematics is a human symbolic system. Evaluate: which position better explains the 'unreasonable effectiveness of mathematics in describing physical reality'?",
+          "materials": "Paper, pencil, philosophy of mathematics reference (optional)",
+          "discover": "Both positions face serious problems. Realism must explain where abstract objects exist and how we know them. Anti-realism must explain why our symbolic system matches physical reality so precisely (why does imaginary number i appear in quantum mechanics?). This is an open question in philosophy of mathematics.",
+          "go_deeper": "Gödel believed in mathematical realism — that he had a quasi-perceptual faculty of mathematical intuition that allowed direct access to abstract mathematical objects. Is this position coherent? How could such 'access' work?",
+          "silent_lesson": "Platonism in mathematics; mathematical realism vs nominalism; unreasonable effectiveness; discovery vs invention; Gödel and mathematical intuition."
+        }
+      ]
+    },
+    {
+      "id": "aristotle",
+      "name": "Aristotle",
+      "domain": "Logic / Classification / Causation",
+      "puzzles": [
+        {
+          "id": "aristotle_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Sorting Machine",
+          "hook": "If you had to organise all living things in the world — millions of species — where would you start? What features matter most?",
+          "challenge": "Collect 20 images of organisms (animals, plants, fungi, bacteria). Without any guidance, sort them into groups. Explain your principle of grouping. Now: re-sort using a different principle. And a third time. Compare the three systems: (1) which produces the most internally consistent groups? (2) which would be most useful for prediction? (3) which seems to reflect nature most accurately?",
+          "materials": "Printed or drawn organism images, paper, pencil",
+          "discover": "Different sorting principles produce different groups — appearance-based groupings often conflict with function-based or ancestry-based groupings. The best classification system is one that allows prediction: knowing an organism's group should let you predict its other properties.",
+          "go_deeper": "Aristotle sorted animals by: has blood/doesn't have blood; lives in water/land/air; number of feet. Modern biology sorts by: evolutionary ancestry (phylogeny). Where do these two systems agree? Where do they dramatically disagree (e.g., whales)?",
+          "silent_lesson": "Classification principles; Aristotle's biological classification; predictive vs descriptive taxonomy; contrast with phylogenetic taxonomy."
+        },
+        {
+          "id": "aristotle_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Syllogism Machine",
+          "hook": "A valid argument guarantees true conclusions from true premises — even about things you've never seen. Can you build a machine for truth?",
+          "challenge": "Test syllogism validity: (1) All mammals are warm-blooded. All whales are mammals. Therefore: all whales are warm-blooded. (2) All rich people are happy. Some politicians are rich. Therefore: some politicians are happy. (3) All flying things have wings. Some fish fly. Therefore: some fish have wings. For each: is the argument VALID (conclusion follows from premises)? Is it SOUND (premises are also true)? Now construct one valid-but-unsound argument and one invalid argument that happens to have a true conclusion.",
+          "materials": "Paper, pencil",
+          "discover": "Validity (logical structure) and soundness (truth of premises) are different. A valid argument with false premises gives no guarantee of truth. An invalid argument may occasionally produce true conclusions by accident. Logic guarantees conclusions only if premises are guaranteed.",
+          "go_deeper": "Construct a syllogism that is valid and sound, and then find an additional premise that, when added, makes the argument invalid. What does this show about the relationship between adding information and argument quality?",
+          "silent_lesson": "Syllogism; validity vs soundness; necessary vs contingent truth; Aristotle's logic; limitations of deductive reasoning."
+        },
+        {
+          "id": "aristotle_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Four Causes of Anything",
+          "hook": "Why does a table exist? Aristotle gave four different answers — and all four are correct. Understanding something fully means answering all four.",
+          "challenge": "Choose a phenomenon (a thunderstorm, a bridge, a cancer cell, a musical performance). Apply all four causes: (1) Material cause: what is it made of? (2) Formal cause: what pattern/structure defines it? (3) Efficient cause: what produced it? (4) Final cause: what is it for? Now: compare your four-cause analysis to a modern scientific explanation. Which causes does modern science prioritise? Which does it avoid or reframe? What is lost by focusing only on efficient and material causes?",
+          "materials": "Paper, pencil",
+          "discover": "Modern science primarily uses efficient and material causes (mechanism). Final cause (teleology) is considered unscientific — but biology constantly uses functional language ('the heart is for pumping blood'). Final causes describe what things do, not what produces them. Both descriptions are necessary for full understanding.",
+          "go_deeper": "Daniel Dennett argues that 'function' in biology is really shorthand for 'what natural selection designed this for' — a disguised efficient cause. Evaluate this: does this fully replace final causation, or does something important still get missed?",
+          "silent_lesson": "Aristotle's four causes; teleology vs mechanism; modern science's preference for efficient causes; biological function; reductionism and its limits."
+        }
+      ]
+    },
+    {
+      "id": "descartes",
+      "name": "René Descartes",
+      "domain": "Doubt / Certainty / Mind and Body",
+      "puzzles": [
+        {
+          "id": "descartes_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "What Can You Be Certain Of?",
+          "hook": "You've been wrong before about things you were sure of. How many things can you truly, absolutely know — where being wrong is impossible?",
+          "challenge": "Write a list of 15 things you 'know.' For each, apply the doubt test: could you be wrong about this? Could you be dreaming? Could your senses be deceiving you? Mark each: Certain / Probably true / Might be wrong / Definitely could be wrong. How many items are in the 'Certain' column? What makes those items different from the rest?",
+          "materials": "Paper, pencil",
+          "discover": "Most things reduce to 'probably true.' Very few things are logically impossible to doubt. The one thing that cannot be doubted: the fact that you are doubting — because doubting IS thinking, and thinking requires a thinker. You must exist to be doing the doubting.",
+          "go_deeper": "Does 'I think, therefore I am' prove that you have a body? Does it prove that other people exist? What else can be rebuilt from this single certain foundation — and what cannot?",
+          "silent_lesson": "Cartesian doubt; cogito ergo sum; foundationalism in epistemology; the limits of scepticism."
+        },
+        {
+          "id": "descartes_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "thought_experiment",
+          "title": "The Mind-Body Problem",
+          "hook": "Your body is physical — measurable, locatable, made of atoms. Your thought 'I am happy' is not in any specific place and has no mass. How do two such different things interact?",
+          "challenge": "Consider three theories: (1) Dualism: mind and body are genuinely different substances that causally interact. (2) Physicalism: mental events are nothing but physical events in the brain. (3) Epiphenomenalism: mental events are caused by physical events but cause nothing (your free will is an illusion). For each: (a) what would be evidence FOR it? (b) what would be evidence AGAINST it? (c) what does it imply for free will, moral responsibility, and personal identity?",
+          "materials": "Paper, pencil",
+          "discover": "Each theory faces a serious objection: dualism can't explain HOW non-physical mind moves physical body; physicalism struggles with subjective experience (qualia); epiphenomenalism makes free will incoherent. There is no consensus — this is one of the deepest open problems in philosophy.",
+          "go_deeper": "The 'hard problem of consciousness' (Chalmers): even if we explained all brain function perfectly, would we have explained why there is 'something it is like' to be a conscious being? Design a thought experiment to test whether the hard problem is real.",
+          "silent_lesson": "Mind-body problem; Cartesian dualism; physicalism; epiphenomenalism; qualia; hard problem of consciousness."
+        },
+        {
+          "id": "descartes_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Method Applied",
+          "hook": "Descartes' method — doubt everything until you find what cannot be doubted, then rebuild knowledge on that foundation — is a philosophical method that can be applied to any field. Apply it to one.",
+          "challenge": "Choose a scientific domain (medicine, economics, psychology). Apply the Cartesian method: (1) identify the fundamental assumptions of the field (its 'axioms'), (2) apply systematic doubt to each: could this assumption be wrong? What evidence could overthrow it? (3) identify the assumptions that survive doubt (cannot be coherently denied). (4) propose what the field would look like rebuilt from only the surviving assumptions. Write a 500-word analysis.",
+          "materials": "Pencil, paper, reference material for chosen domain",
+          "discover": "Every field has hidden assumptions that practitioners rarely examine. Applying systematic doubt reveals which are foundational and which are contingent conventions. The rebuilt field may look different — or reveal that some current practices have no foundation.",
+          "go_deeper": "Descartes rebuilt knowledge on the cogito and the existence of God. Modern philosophy largely rejects the God step. What is the modern equivalent of a foundationalist project — and what are its problems?",
+          "silent_lesson": "Cartesian method; foundationalism; axiomatic approach to knowledge; systematic doubt; applied philosophy."
+        }
+      ]
+    },
+    {
+      "id": "hume",
+      "name": "David Hume",
+      "domain": "Causation / Induction / Empiricism",
+      "puzzles": [
+        {
+          "id": "hume_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Does the Sun Always Rise?",
+          "hook": "The Sun has risen every morning of your life. Will it definitely rise tomorrow?",
+          "challenge": "List 10 things you believe will happen tomorrow because they always have (sun rises, gravity works, water flows downhill). For each: is your reason for believing it (1) logic — it would be self-contradictory if it didn't happen, or (2) past experience — it has always happened before? Can past experience alone guarantee future events? Could you be wrong?",
+          "materials": "Paper, pencil",
+          "discover": "None of these are logically necessary — it is conceivable (though not practically expected) that the Sun could fail to rise. Your belief is based entirely on past experience, not on logical necessity. Hume's insight: we cannot rationally justify induction (past → future) — yet we use it for everything.",
+          "go_deeper": "Could a perfectly rational being, with no past experience, predict that fire burns? What would it take for such a being to form the concept of causation? What does this suggest about where causal knowledge comes from?",
+          "silent_lesson": "Problem of induction; Hume's fork (relations of ideas vs matters of fact); custom and habit vs reason; limits of empiricism."
+        },
+        {
+          "id": "hume_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Cause or Correlation?",
+          "hook": "You see event A, then event B, repeatedly. Do you know A causes B? Or do you only see sequence?",
+          "challenge": "For each pair, identify whether it is likely causal or merely correlational — and explain how you would test it: (1) Ice cream sales and drowning rates both rise in summer. (2) Countries with more TV sets have lower birth rates. (3) Students who eat breakfast score higher on tests. (4) People who carry lighters are more likely to develop lung cancer. (5) Morning alarm rings, then you wake up. Design the 'definitive test' for one pair.",
+          "materials": "Paper, pencil",
+          "discover": "Hume argued we never directly perceive causation — only constant conjunction (A always followed by B). The 'necessary connection' we feel is a psychological habit, not a fact about the world. Modern science uses controlled experiments and randomisation to distinguish causation from correlation.",
+          "go_deeper": "The Bradford Hill criteria (1965) list 9 conditions for inferring causation in medicine (strength, consistency, specificity, temporality, biological gradient, plausibility, coherence, experiment, analogy). Apply all 9 to pair (5) above. Does alarm-ringing cause waking?",
+          "silent_lesson": "Causation vs correlation; Hume on causation; constant conjunction; confounding variables; Bradford Hill criteria."
+        },
+        {
+          "id": "hume_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Is and Ought",
+          "hook": "From facts about how people behave, scientists try to derive conclusions about how they should behave. But can you logically derive an 'ought' from an 'is'?",
+          "challenge": "Analyse 10 common ethical arguments. For each, identify the IS statements (empirical facts) and the OUGHT statements (value conclusions). Then: is the move from IS to OUGHT logically valid — or is there a hidden premise doing the work? Example: 'Humans evolved to cooperate (IS) → therefore cooperation is good (OUGHT).' What hidden premise is needed to make this valid? Is that premise itself justified?",
+          "materials": "Paper, pencil, 10 ethical argument examples (from news, textbooks, or generated)",
+          "discover": "Every IS-to-OUGHT argument requires a hidden evaluative premise ('what is natural is good'; 'what benefits the species is right'; 'what God commands is right'). The IS-OUGHT gap cannot be bridged by logic alone. Values must be introduced explicitly, not smuggled in through hidden premises.",
+          "go_deeper": "Naturalistic fallacy (Moore): defining 'good' in naturalistic terms (pleasure, preference, flourishing) commits a logical error. Evaluate: does this argument prove that ethics cannot be grounded in natural facts? Or does it only show that 'good' cannot be analytically defined as a natural property?",
+          "silent_lesson": "Hume's guillotine (is-ought gap); naturalistic fallacy; hidden evaluative premises; foundations of ethics; moral non-naturalism."
+        }
+      ]
+    },
+    {
+      "id": "kant",
+      "name": "Immanuel Kant",
+      "domain": "Ethics / Duty / Categorical Imperative",
+      "puzzles": [
+        {
+          "id": "kant_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Would Everyone Following This Rule Be Good?",
+          "hook": "Before acting, ask: what if everyone acted this way? Some actions become obviously wrong when universalised. Others become obvious duties.",
+          "challenge": "Apply the universalisability test to 10 actions: littering, lying to avoid getting in trouble, keeping a promise even when inconvenient, stealing when you need something, cutting in a queue, helping a stranger who has fallen. For each: imagine everyone always did this. What world results? Is that world better or worse than one where nobody did it? Are there actions where the result is contradictory (the action becomes self-defeating if universalised)?",
+          "materials": "Paper, pencil",
+          "discover": "Lying cannot be universalised — if everyone lied when convenient, the concept of truth-telling would collapse and lies would stop working. Breaking promises similarly. Some actions become self-defeating when universalised — and this reveals they are wrong.",
+          "go_deeper": "Find an action where universalising it seems fine in small doses but catastrophic at scale (driving, having one child, taking a sick day). What does this reveal about the limits of the universalisability test?",
+          "silent_lesson": "Categorical imperative; universalisability test; formula of universal law; self-defeating actions when universalised; contrast with consequentialism."
+        },
+        {
+          "id": "kant_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Persons as Ends",
+          "hook": "Using a person purely as a tool — without regard for their own goals and dignity — is always wrong, even if it produces good outcomes. Can you find the cases where this principle conflicts with common sense?",
+          "challenge": "Analyse the following scenarios using the principle 'never treat persons merely as means': (1) using a patient's medical data without consent to develop a cure that saves thousands, (2) lying to a friend for their own good, (3) a utilitarian argues we should sacrifice one person to save five. For each: (a) identify how the person is being used as a means, (b) is there any way to achieve the goal while respecting their autonomy? (c) if not, what does the principle say you must do?",
+          "materials": "Paper, pencil",
+          "discover": "Kant says you must not violate the person even for good outcomes. This conflicts powerfully with utilitarian intuitions. The tension reveals a genuine moral dilemma — and both positions have compelling arguments. The fact that smart people disagree is evidence that the dilemma is real, not a failure of reasoning.",
+          "go_deeper": "Does Kant's principle apply to future persons? Can you treat an unborn future person merely as a means (e.g., by polluting the environment they will inherit)? How does Kant's framework handle obligations to future generations?",
+          "silent_lesson": "Formula of humanity; persons as ends; Kantian deontology vs consequentialism; trolley problem family of cases; obligations to future persons."
+        },
+        {
+          "id": "kant_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Synthetic A Priori",
+          "hook": "Some knowledge is known through experience (a posteriori) and some through reason alone (a priori). Kant argued there is a third kind — synthetic a priori — knowledge that is both necessarily true AND extends beyond mere definitions. Find examples.",
+          "challenge": "Classify each statement as: (A) analytic a priori (true by definition: 'all bachelors are unmarried'), (B) synthetic a posteriori (true but requires experience: 'water boils at 100°C'), or (C) synthetic a priori (a claimed third category — knowledge both necessarily true and extending beyond mere definitions): '7+5=12', 'every event has a cause', 'space has exactly 3 dimensions', 'the sum of triangle angles is 180°'. Justify each classification. Then: assess whether category C is real. Could any of these be false?",
+          "materials": "Paper, pencil",
+          "discover": "'Every event has a cause' looks like it could be false (quantum indeterminacy challenges it). '7+5=12' might be analytic (some argue addition is just definitional). Space having 3 dimensions was undermined by Einstein (4D spacetime). Kant's third category was more fragile than he thought.",
+          "go_deeper": "Non-Euclidean geometry showed that '180° in a triangle' is true in Euclidean space but not on curved surfaces. Does this mean Kant's spatial intuitions were wrong, or that he was right that our spatial intuition is Euclidean (even if the world isn't)?",
+          "silent_lesson": "Analytic/synthetic distinction; a priori/a posteriori; synthetic a priori; Kant's Copernican revolution in epistemology; how mathematics and science relate to experience."
+        }
+      ]
+    },
+    {
+      "id": "wittgenstein",
+      "name": "Ludwig Wittgenstein",
+      "domain": "Language / Meaning / Language Games",
+      "puzzles": [
+        {
+          "id": "wittgenstein_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "What Does This Word Mean?",
+          "hook": "Can you explain what 'red' means without pointing at something red? Can you explain what 'above' means without using the word 'above' or pointing?",
+          "challenge": "Try to define each word without pointing to examples or using the word itself: red, round, smooth, bitter, lonely, justice. For each: write your definition. Then test it: does it correctly exclude non-examples? Does it include everything it should? Which words were hardest to define without ostension (pointing)?",
+          "materials": "Paper, pencil",
+          "discover": "Some words get their meaning primarily through pointing and shared practice — not through other words. Meaning is not always a definition; it's often use in context. This is Wittgenstein's key insight: the meaning of a word is its use in the language game.",
+          "go_deeper": "Imagine trying to teach a completely isolated person the word 'pain.' They cannot feel your pain. They cannot point to it. They can only observe your behaviour. Can pain be defined without shared experience? What does this suggest about private language?",
+          "silent_lesson": "Meaning as use; ostensive definition and its limits; language games; private language argument; Wittgenstein's later philosophy."
+        },
+        {
+          "id": "wittgenstein_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Game Without Rules",
+          "hook": "You think you know what a 'game' is. But what feature do ALL games share — and only games?",
+          "challenge": "List 20 games (chess, cricket, solitaire, tag, war, a child's pretend game, a lottery, a video game, an Olympic event, a word game). Find one feature that ALL of them share. For each proposed feature, find a game that lacks it. Complete the table: Feature / Games that have it / Games that lack it. How many features can you find that are shared by ALL 20 games? What pattern do you notice?",
+          "materials": "Paper, pencil",
+          "discover": "No single feature is shared by all games: competition (solitaire lacks it), rules (improvised children's games lack fixed rules), entertainment (training exercises feel like games but aren't for fun). Games share a family resemblance — overlapping features, not a common essence. Concepts can work without necessary and sufficient conditions.",
+          "go_deeper": "If there is no essence to 'game,' could someone add chess to the Olympics even though chess has no physical activity? What decides what counts as a member of a category when there are no necessary conditions? Who has the authority?",
+          "silent_lesson": "Family resemblance; Wittgenstein's Philosophical Investigations §66–67; meaning without essence; concept flexibility; authority over category membership."
+        },
+        {
+          "id": "wittgenstein_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Limits of Language",
+          "hook": "Wittgenstein's early work concluded: 'Whereof one cannot speak, thereof one must be silent.' But later he thought this was itself confused. What can language express — and where does it fail?",
+          "challenge": "Attempt to express each of the following in precise language: (1) the smell of freshly cut grass, (2) the feeling of a melody being in a major vs minor key, (3) what you mean when you say 'this is beautiful,' (4) the exact moment a collection of grains becomes a 'heap' (the Sorites paradox), (5) the experience of seeing red. For each: write your best linguistic description. Then: identify what the description fails to capture. Is the failure avoidable — or is it structural?",
+          "materials": "Paper, pencil",
+          "discover": "Some content resists linguistic expression — qualia, aesthetic experience, vague predicates. The Sorites paradox (a heap remains a heap when you remove one grain — but then a single grain is a heap) shows that vague predicates create genuine paradoxes, not just linguistic sloppiness.",
+          "go_deeper": "Wittgenstein later argued that philosophical problems arise when 'language goes on holiday' — we take words out of their normal context and generate puzzles that aren't real problems. Apply this diagnosis to the mind-body problem: is it a real problem or a linguistic confusion?",
+          "silent_lesson": "Limits of language; qualia and ineffability; Sorites paradox; Tractatus vs later Wittgenstein; philosophical problems as language problems."
+        }
+      ]
+    },
+    {
+      "id": "russell",
+      "name": "Bertrand Russell",
+      "domain": "Logic / Paradox / Epistemology",
+      "puzzles": [
+        {
+          "id": "russell_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Set That Contains Itself",
+          "hook": "A library catalogue lists all the books in the library. Should it list itself? What if you made a list of all lists that do NOT list themselves?",
+          "challenge": "Consider this: a barber in a village shaves exactly those men who do not shave themselves. Does the barber shave himself? Work through both possibilities: if he does shave himself → then he doesn't (since he only shaves those who don't shave themselves). If he doesn't shave himself → then he does (since he shaves all who don't). Write the contradiction. Is this a puzzle about an impossible barber — or something deeper?",
+          "materials": "Paper, pencil",
+          "discover": "The barber cannot exist — the description creates a logical impossibility. Similarly, 'the set of all sets that don't contain themselves' cannot exist without contradiction. This is not just a puzzle — it shows that naively allowing all 'collections' to be sets leads to logical collapse.",
+          "go_deeper": "Russell's paradox broke Frege's logical system for founding mathematics. Set theory was rebuilt with restrictions (no set can contain itself). How does limiting what counts as a 'set' solve the paradox? What is the cost?",
+          "silent_lesson": "Russell's paradox; self-reference as source of paradox; set theory restrictions; Frege's crisis; naive set theory vs axiomatic set theory."
+        },
+        {
+          "id": "russell_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Knowledge By Acquaintance and Description",
+          "hook": "You know who the Prime Minister of India is — but do you KNOW them? You know what pain feels like — but could you describe it to someone who has never felt it?",
+          "challenge": "Classify each of these as knowledge by acquaintance (direct experience) or knowledge by description (knowing facts about): (1) the colour red, (2) the current population of India, (3) what it feels like to fall, (4) the solution to 2+2, (5) what it is like to be a bat (Nagel's question), (6) who wrote the Indian constitution. For each: could you have one type without the other? Which type is more fundamental?",
+          "materials": "Paper, pencil",
+          "discover": "Acquaintance is direct: experiencing red is different from knowing red's wavelength. Description can convey enormous factual knowledge without acquaintance. Some things may only be known by acquaintance (qualia). Some things can only be described (abstract entities). Both types are necessary for full understanding.",
+          "go_deeper": "Mary the colour scientist (Jackson's knowledge argument): Mary knows everything scientific about colour vision but has lived in a black-and-white room. When she first sees red, does she learn something new? If yes, does this prove that physical knowledge doesn't capture everything?",
+          "silent_lesson": "Knowledge by acquaintance vs description; qualia; Mary's room thought experiment; physicalism challenge; Russell's epistemology."
+        },
+        {
+          "id": "russell_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "Theory of Definite Descriptions",
+          "hook": "'The present King of France is bald.' Is this true, false, or meaningless? The answer depends on what 'the' means — and solving it required a revolution in logic.",
+          "challenge": "Consider this logical analysis of 'The F is G': (1) there is at least one F, (2) there is at most one F, (3) whatever is F is G. Translate 'The present King of France is bald' into this three-part form. Now: what is the truth value of the sentence (France has no king)? On this analysis: condition (1) fails → the conjunction is false. Compare to Frege's view: the sentence has no truth value (presupposition failure). Design a test case that distinguishes these two analyses.",
+          "materials": "Logic notation reference, pencil, paper",
+          "discover": "Russell's analysis makes 'the King of France is bald' FALSE (because the existential claim fails), while Frege's analysis makes it NEITHER TRUE NOR FALSE (presupposition failure). The test case: does 'the King of France is NOT bald' have the same truth value? Russell: also false. Frege: also neither. Russell's analysis generates different negations than intuition expects.",
+          "go_deeper": "Apply Russell's theory of descriptions to: 'Pegasus flies.' On Russell's analysis, this should be false (Pegasus doesn't exist). But does saying 'Pegasus doesn't exist' commit you to treating Pegasus as if it exists? How does Russell avoid this paradox?",
+          "silent_lesson": "Russell's theory of definite descriptions; quantifier scope; Frege vs Russell on presupposition; existential claims; logical form vs grammatical form."
+        }
+      ]
+    },
+    {
+      "id": "nietzsche",
+      "name": "Friedrich Nietzsche",
+      "domain": "Values / Genealogy / Will to Power",
+      "puzzles": [
+        {
+          "id": "nietzsche_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Where Did This Value Come From?",
+          "hook": "You believe that being humble is good. But where did that belief come from? Did you choose it, or was it given to you?",
+          "challenge": "Pick 5 values you believe in (honesty, hard work, humility, obedience, fairness, bravery). For each: (1) where did you first learn this was good? (2) who benefits when you follow it? (3) who taught it to you — and did it benefit them? (4) can you imagine a society where the opposite was considered good? Write your inventory.",
+          "materials": "Paper, pencil",
+          "discover": "Most values were instilled without your consent — by family, school, religion, culture. Many values that seem universal have served specific interests at specific historical moments. This doesn't automatically make them wrong — but it means they should be examined, not merely inherited.",
+          "go_deeper": "Find a value that was once universally praised but is now considered wrong (or vice versa). Map its history: what changed? Who drove the change? Was the change progress or loss?",
+          "silent_lesson": "Genealogy of morals; values as historically contingent; questioning inherited values; revaluation of values; Nietzsche's perspectivism."
+        },
+        {
+          "id": "nietzsche_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Master and Slave Morality",
+          "hook": "Nietzsche argued that there are two fundamentally different kinds of morality: one created by those with power, and one created as a response by those without power. Can you find both in action today?",
+          "challenge": "Master morality: the powerful define 'good' as what they value (strength, nobility, excellence). Slave morality: the powerless invert this, defining 'good' as meekness, equality, compassion, and condemning the strong as 'evil.' Find 3 modern examples of each type of moral reasoning in: (1) politics (strong vs rights-based rhetoric), (2) sports culture (winning vs fair play), (3) workplace culture (excellence vs collaboration). For each: who benefits from each moral framework?",
+          "materials": "Paper, pencil, current news examples",
+          "discover": "Both frameworks are visible in every culture simultaneously — often in conflict. Master morality appears in competitive, achievement-based cultures. Slave morality appears in rights-based, egalitarian frameworks. Nietzsche's analysis is descriptive, not prescriptive — he is diagnosing, not endorsing either.",
+          "go_deeper": "Nietzsche was not advocating for master morality — he was critiquing all inherited morality and proposing that individuals create their own values. What would it mean to genuinely create your own values, rather than just choosing from existing options?",
+          "silent_lesson": "Master and slave morality; genealogy of values; power and moral frameworks; beyond good and evil; Nietzsche's affirmative project."
+        },
+        {
+          "id": "nietzsche_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "thought_experiment",
+          "title": "The Eternal Return",
+          "hook": "Imagine that your life will repeat, exactly as it has been, for eternity — every joy, every mistake, every boredom, every moment. How does this change what you should do?",
+          "challenge": "The eternal recurrence test: take a significant decision you're facing. Run it through: (1) If this decision and its consequences repeated forever, would you still make it? (2) If not, what would you change? (3) What principles would you need to live by to make your choices survivable under eternal repetition? Write a 'life policy' of 5 principles that would pass the eternal return test. Now: evaluate each principle using also the Kantian universalisability test. Where do the two tests agree? Where do they differ?",
+          "materials": "Paper, pencil",
+          "discover": "The eternal return is a thought experiment for integrity — your choice is only truly yours if you would affirm it even without the escape of 'just this once.' It reveals choices made from weakness (hoping to not repeat them) vs choices made from genuine affirmation.",
+          "go_deeper": "Nietzsche called the person who could genuinely affirm the eternal return the Übermensch (overperson) — one who has created their own values and affirms life absolutely. Is this a coherent ideal? What would it require psychologically? Is it compatible with empathy for others?",
+          "silent_lesson": "Eternal recurrence; amor fati; integrity test; Nietzsche's affirmative ethics; comparison with Kantian ethics; Übermensch ideal."
+        }
+      ]
+    },
+    {
+      "id": "locke",
+      "name": "John Locke",
+      "domain": "Knowledge / Rights / Social Contract",
+      "puzzles": [
+        {
+          "id": "locke_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "thought_experiment",
+          "title": "What Would You Know?",
+          "hook": "Imagine you were born with no senses, no memories, no language — a blank slate. What would you know? What could you know?",
+          "challenge": "List 10 things you 'know.' For each, identify the original source: (1) direct sensory experience, (2) taught by someone else, (3) worked out by reasoning from (1) or (2), (4) other. Is any knowledge possible from source (4) — without any experience at all? Could you know 2+2=4 without ever counting anything?",
+          "materials": "Paper, pencil",
+          "discover": "Most knowledge traces back to experience — either directly (sensory) or indirectly (taught, which ultimately came from someone's experience). Mathematics may seem like an exception — but did you understand addition before you had counted physical objects? Experience seems to be the source of even apparently abstract knowledge.",
+          "go_deeper": "Innate knowledge debate: Chomsky argues children are born with a language acquisition device — a built-in grammar structure that allows them to learn any human language from minimal input. Is this a case of knowledge that is not derived from experience? Or is the structure innate but the content still learned?",
+          "silent_lesson": "Tabula rasa; empiricism vs rationalism; sources of knowledge; Locke vs Descartes on innate ideas; Chomsky's innateness hypothesis."
+        },
+        {
+          "id": "locke_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Property and Labour",
+          "hook": "You find an empty field. You clear it, till it, and grow food. Who owns the field? Locke had a clear answer — but it has serious implications.",
+          "challenge": "Apply the labour theory of property to 5 scenarios: (1) you find and cultivate unclaimed land, (2) you write an original novel, (3) you train an AI model using others' data, (4) a corporation mines minerals from public land, (5) your employer owns your creative output because they paid you. For each: does the theory give the person who laboured ownership? If so, does the result seem fair? Find the cases where the theory gives counterintuitive results.',",
+          "materials": "Paper, pencil",
+          "discover": "The labour theory of property gives strong rights to those who work — but has problems: it seems to allow unlimited accumulation, ignores prior occupants, and doesn't clearly handle collective labour. The 'Lockean proviso' (enough and as good for others) is designed to limit accumulation — but it's rarely enforced.",
+          "go_deeper": "Indigenous peoples often had cultivated relationships with land for thousands of years without formal ownership. How does Locke's theory treat this — and what are the political implications? Was Locke's theory designed with colonial appropriation in mind?",
+          "silent_lesson": "Locke's labour theory of property; Lockean proviso; limits of the theory; intellectual property; colonial implications."
+        },
+        {
+          "id": "locke_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Toleration and Its Limits",
+          "hook": "Locke wrote the first systematic defence of religious toleration — but he excluded atheists and Catholics from the toleration he advocated. What principle actually underlies toleration — and does it have limits?",
+          "challenge": "Reconstruct the following argument for toleration: (1) the state cannot save souls (only genuine belief can), (2) coerced belief is not genuine belief, (3) therefore state coercion in matters of belief is both ineffective and unjust, (4) religious diversity doesn't threaten civil peace (only actions do). Evaluate each premise. Now: identify two positions that this argument would exclude from toleration and explain why, on its own principles, it would exclude them. Are those exclusions consistent with the argument?',",
+          "materials": "Paper, pencil, Locke's Letter Concerning Toleration (excerpt)",
+          "discover": "Locke excluded atheists (he thought they couldn't keep oaths, undermining social trust) and Catholics (he thought papal authority was incompatible with civil loyalty). Both exclusions contradict his own argument — they exclude based on political threat, not on the logic of toleration. This reveals the limit: toleration has always had a line, and the debate is always about where the line is.",
+          "go_deeper": "Modern liberal toleration faces the same problem: should hate speech be tolerated? Should intolerant groups be tolerated? Karl Popper's 'paradox of tolerance': unlimited toleration must include the tolerance of intolerance — which eventually destroys toleration. Design a principled response to the paradox.",
+          "silent_lesson": "Locke's letter on toleration; limits of toleration; Popper's paradox; liberal tolerance; consistency of principle."
+        }
+      ]
+    },
+    {
+      "id": "mill",
+      "name": "John Stuart Mill",
+      "domain": "Utilitarianism / Liberty / Evidence",
+      "puzzles": [
+        {
+          "id": "mill_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Happiness Calculator",
+          "hook": "What if you could calculate which action produces the most happiness — and that calculation told you what to do? Would that be enough to make something right?",
+          "challenge": "Apply the utilitarian calculation to 5 decisions: (1) spend your pocket money on yourself or donate it, (2) tell a friend an uncomfortable truth or a comfortable lie, (3) a school changes a rule that benefits most students but harms a few, (4) extend cricket practice but some students miss homework, (5) celebrate one student's success publicly. For each: estimate total happiness gained and lost. Does the calculation give a clear answer? Does the answer feel right?",
+          "materials": "Paper, pencil",
+          "discover": "Utilitarian calculation often gives clear answers — but sometimes the clear answer feels wrong (sacrificing a few for many raises objections about rights). The calculation also requires comparing different people's experiences of happiness — which may not be commensurable.",
+          "go_deeper": "Mill distinguished higher pleasures (intellectual, aesthetic) from lower pleasures (physical). He said a dissatisfied Socrates is better than a satisfied fool. How would you calculate which pleasure is 'higher'? Who decides?",
+          "silent_lesson": "Utilitarianism; greatest happiness principle; cardinal vs ordinal utility; objections to utilitarianism; higher vs lower pleasures."
+        },
+        {
+          "id": "mill_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Harm Principle",
+          "hook": "Mill argued that the only legitimate reason to restrict a person's freedom is to prevent harm to others. Not harm to themselves. Not offending others. Not violating norms. Only harm to others.",
+          "challenge": "Apply the harm principle to classify each restriction as: LEGITIMATE (prevents harm to others), NOT LEGITIMATE (paternalistic or moralistic), or UNCERTAIN. (1) Seat belt laws, (2) drug prohibition, (3) noise regulations, (4) building codes, (5) mandatory vaccination, (6) age restrictions on alcohol, (7) hate speech laws, (8) laws against suicide. For each uncertain case, identify what information would resolve your classification.',",
+          "materials": "Paper, pencil",
+          "discover": "Many laws restrict self-harming behaviour (seat belts, drug prohibition) — Mill would call these illegitimate. But vaccination harms others if not universal (herd immunity), making it legitimate. Hate speech may harm through psychological effects — which makes it uncertain. The harm principle is a clear standard that produces contested applications.",
+          "go_deeper": "Mill also argued for absolute freedom of expression — even false or harmful speech — because (1) the false view might contain partial truth, (2) the true view becomes a 'dead dogma' if never challenged, (3) refuting error requires engaging it. Evaluate argument (3) in the context of vaccine misinformation.",
+          "silent_lesson": "Harm principle; liberty vs paternalism; Mill's free speech argument; four reasons for free speech; applying principles to cases."
+        },
+        {
+          "id": "mill_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Proof of Utilitarianism",
+          "hook": "Mill attempted to 'prove' that happiness is the only ultimate good. His proof has been called one of the most famous logical fallacies in philosophy. Find it.",
+          "challenge": "Consider the following proof that happiness is the only ultimate good: (1) Each person's happiness is good to that person. (2) Therefore the general happiness is good to the aggregate of persons. Identify the logical move from premise to conclusion. Is (2) a valid inference from (1)? (Now consider: each person sees only their own side — does each person see all sides? Each person's money is theirs — does everyone's money belong to everyone?) Now: construct the best possible version of this argument that avoids this fallacy. What additional premises would make it valid?',",
+          "materials": "Paper, pencil, logic reference",
+          "discover": "The fallacy is a composition error: what is true of each part is not necessarily true of the whole. 'Each person's happiness is good to that person' does not entail 'the aggregate of happiness is good to the aggregate.' Mill conflates 'A is good for A' with 'A's good is part of the general good.' The additional premise needed: each person's happiness has equal weight for a neutral observer.",
+          "go_deeper": "G.E. Moore (another utilitarian) argued that only 'ideal' goods (truth, beauty, friendship) matter intrinsically — not pleasure. Evaluate: is there anything wrong with the idea that happiness alone is intrinsically good?",
+          "silent_lesson": "Composition fallacy; Mill's proof of utilitarianism; logical reconstruction; G.E. Moore's ideal utilitarianism; what makes something intrinsically good."
+        }
+      ]
+    },
+    {
+      "id": "marx",
+      "name": "Karl Marx",
+      "domain": "Class / Capital / Historical Materialism",
+      "puzzles": [
+        {
+          "id": "marx_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "Where Does Value Come From?",
+          "hook": "A shirt costs ₹500 in a shop. The person who made it was paid ₹50. The shop owner paid ₹200 for it. The cotton farmer was paid ₹20 for materials. Where did the remaining money go, and who created the value?",
+          "challenge": "Trace the production chain of one item you own (pencil, phone, shoe): identify everyone who contributed labour to its production. Estimate what fraction of the final price each person received. Map the flow of value. Now: who ended up with money they didn't directly 'create' through their own labour? What role did that person play?",
+          "materials": "Paper, pencil, calculator",
+          "discover": "Value flows through production chains. Those who own the means of production receive a share larger than their direct labour contribution. This is not automatically exploitation — but tracing it reveals who gets what and why, which is often invisible.",
+          "go_deeper": "A robot that produces the same shirt with no human labour — who owns the value it produces? How does automation change the relationship between labour and value?",
+          "silent_lesson": "Labour theory of value; surplus value; means of production; production chains; wealth distribution."
+        },
+        {
+          "id": "marx_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Dialectic in History",
+          "hook": "Marx argued that history moves through conflicts between opposing forces — each conflict producing a new social arrangement that contains the seeds of the next conflict.",
+          "challenge": "Apply the dialectical schema (thesis → antithesis → synthesis) to three historical transitions: (1) feudalism → capitalism → ? (2) craft production → industrial production → ? (3) colonialism → independence → ? For each: identify the thesis (stable social arrangement), the antithesis (the contradiction that destabilises it), and the synthesis (the new arrangement that emerges — which contains new contradictions). Predict what the next stage of each might be.',",
+          "materials": "Paper, pencil, history reference",
+          "discover": "The dialectical schema is a useful analytical tool — even if you reject Marxist conclusions. It asks: what internal contradictions destabilise this arrangement? What new arrangement emerges from the conflict? History does seem to have a pattern of social systems containing seeds of their own transformation.",
+          "go_deeper": "Marx predicted capitalism would collapse through its own contradictions (falling rate of profit, increasing inequality, periodic crises). Test this prediction: has inequality increased in the past 50 years? Have crises increased? What would Marx say about current global capitalism?",
+          "silent_lesson": "Dialectical materialism; thesis-antithesis-synthesis; historical materialism; class struggle; testing Marxist predictions."
+        },
+        {
+          "id": "marx_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Alienation and Its Alternatives",
+          "hook": "Marx argued that capitalism alienates workers from their labour (they produce things they don't own), from the product (they never see it completed), from other workers (they compete instead of cooperate), and from their human potential. Can you measure alienation?",
+          "challenge": "Design a survey instrument to measure the four dimensions of alienation in a workplace or school. For each dimension, write 3 survey items (Likert scale 1–5). Pilot your survey on 10 people (students in different school activities, or workers in different job types). Analyse: which contexts produce highest alienation scores? Which produce lowest? Is alienation consistently correlated with type of work, level of autonomy, or sense of purpose?',",
+          "materials": "Survey form, 10 participants, calculator",
+          "discover": "Alienation is measurable. Research consistently finds that autonomy, meaning, and completion are associated with lower alienation — regardless of income level. This supports Marx's diagnosis while suggesting the remedy may not require overthrowing capitalism: redesigning work conditions can reduce alienation within existing systems.",
+          "go_deeper": "Compare alienation scores for: an assembly line task (repetitive, no completion), a project-based task (from idea to finished product), and a pure service task (direct human interaction). Do the results match Marx's predictions about which types of work are most alienating?",
+          "silent_lesson": "Four dimensions of alienation; operationalising philosophical concepts; measuring alienation; workplace autonomy and meaning; Marx's critique applied."
+        }
+      ]
+    },
+    {
+      "id": "popper",
+      "name": "Karl Popper",
+      "domain": "Falsifiability / Scientific Method / Open Society",
+      "puzzles": [
+        {
+          "id": "popper_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Unfalsifiable Claim",
+          "hook": "Some claims are designed to explain everything — including any evidence against them. These claims are powerful but dangerous. Can you recognise them?",
+          "challenge": "Test these claims for falsifiability: (1) 'All copper conducts electricity' — what observation would prove it false? (2) 'Everything happens for a reason' — what observation would prove it false? (3) 'Astrology influences personality, but only in subtle ways we can't always measure' — what would disprove this? (4) 'Evolution is guided by an invisible force' — what would disprove this? (5) 'This medicine works, but only if you believe in it' — what would disprove this?',",
+          "materials": "Paper, pencil",
+          "discover": "Falsifiable claims make specific predictions that could be wrong. Unfalsifiable claims explain everything — including the absence of expected evidence. This makes them feel powerful but actually renders them empty: they can never be tested, refined, or disproved. A claim that explains everything explains nothing.",
+          "go_deeper": "Is falsifiability the right criterion for science? String theory makes predictions but at energies we may never achieve. Is it science? Intelligent design argues its predictions are unfalsifiable in principle. Does this make it non-science, or just untestable?",
+          "silent_lesson": "Falsifiability; Popper's demarcation criterion; pseudoscience; what distinguishes science from non-science; limits of falsificationism."
+        },
+        {
+          "id": "popper_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Critical Test",
+          "hook": "A thousand confirming instances cannot prove a theory. One refuting instance can falsify it. All swans are white — until you find a black one. How does science actually progress?",
+          "challenge": "For each theory, design the most powerful possible test — not one that would confirm it, but one that could decisively refute it: (1) 'Students who sleep 8 hours before an exam perform better,' (2) 'Exercise reduces anxiety,' (3) 'Listening to music while studying improves retention,' (4) 'Children learn language mainly by imitation.' For each: specify what result would conclusively falsify the theory, not just weaken it. What is the difference between a weak test and a strong one?",
+          "materials": "Paper, pencil",
+          "discover": "Strong tests are designed to fail — they put the theory in the most dangerous position. A theory that survives severe testing is more credible than one that has only been confirmed in easy cases. Scientists should seek to refute their own theories, not confirm them.",
+          "go_deeper": "Confirmation bias: people spontaneously seek confirming evidence and overlook disconfirming evidence. Design a study to measure confirmation bias in your class: give half the students a hypothesis to 'test' (confirming framing) and half a hypothesis to 'challenge' (disconfirming framing). Compare the evidence they collect.",
+          "silent_lesson": "Falsificationism in practice; severe tests; confirmation bias; asymmetry between confirmation and falsification; Popper vs Kuhn on science."
+        },
+        {
+          "id": "popper_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Open Society",
+          "hook": "Popper argued that the greatest danger in politics is 'historicism' — the belief that history has a predetermined direction and that we can know what it is. Those who claim to know history's direction feel licensed to use any means to get there.",
+          "challenge": "Test the following anti-historicist thesis against three historical examples: the greatest danger in politics is 'historicism' — the belief that history has a predetermined direction and that we can know what it is. Those who claim to know history's direction feel licensed to use any means to get there. The three cases: (1) Marxist parties that justified short-term repression for long-term communist utopia, (2) nationalist movements that justified violence for historical 'destiny,' (3) neoliberal economists who justified disruption for 'inevitable' market forces. For each: (a) what historical claim was made? (b) what actions were justified by it? (c) were the historical predictions correct? (d) what were the consequences of acting on wrong predictions?',",
+          "materials": "Paper, pencil, history reference",
+          "discover": "In all three cases, confident predictions about history's direction were used to justify harmful actions — and the predictions were frequently wrong. Popper's principle of 'piecemeal social engineering' (small experiments with reversible consequences) appears more resilient than revolutionary plans based on certain historical predictions.",
+          "go_deeper": "Popper's 'paradox of tolerance' revisited: an open society must limit those who would use openness to destroy it. Where is the line? Can you design a political system that is both open and self-defending?",
+          "silent_lesson": "Historicism; piecemeal social engineering; open vs closed society; Popper's political philosophy; prediction failure and its consequences."
+        }
+      ]
+    },
+    {
+      "id": "rawls",
+      "name": "John Rawls",
+      "domain": "Justice / Fairness / Veil of Ignorance",
+      "puzzles": [
+        {
+          "id": "rawls_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "game",
+          "title": "Design a Fair Rule",
+          "hook": "You have to design the rules for dividing a cake — but you don't know which piece you'll get. How does not knowing your piece change the rules you choose?",
+          "challenge": "Round 1: design rules for dividing 10 sweets between 5 students. You know you will be student #1 and get the first pick. Round 2: design the rules again — but you don't know which student you'll be. Compare your two sets of rules. Which is more generous to the weakest student? Which allows the most unequal distribution?",
+          "materials": "10 tokens (sweets, coins), paper for rules",
+          "discover": "When you know your position, you design rules that benefit that position. When you don't know your position, you design rules that protect the worst-off — because you might be them. Not knowing your identity forces impartiality.",
+          "go_deeper": "Rawls' difference principle: inequalities are only just if they benefit the least-advantaged members. Design a school grading system that satisfies this principle. What would it look like compared to a standard grading system?",
+          "silent_lesson": "Veil of ignorance; original position; difference principle; fairness through impartiality; Rawls vs utilitarianism."
+        },
+        {
+          "id": "rawls_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "design",
+          "title": "Design a Just School",
+          "hook": "If you didn't know whether you'd be born talented, wealthy, healthy, or struggling — what school system would you design?",
+          "challenge": "Design a school system using this method: imagine you will attend this school but don't know your: socioeconomic background, natural talents, health status, or family stability. Choose your policies for: (1) how funding is distributed between schools, (2) how teachers are allocated, (3) how grades and advancement work, (4) what support systems exist. Compare your design to the current Indian school system. Where does the current system satisfy the fairness principles your design embodies? Where does it fail?",
+          "materials": "Paper, pencil",
+          "discover": "A Rawlsian school system concentrates resources on the most disadvantaged students — opposite to how prestige schools actually work. The difference reveals a genuine conflict between meritocracy (reward talent and effort) and Rawlsian justice (protect the least advantaged from disadvantages they didn't choose).",
+          "go_deeper": "Rawls argued that natural talents are 'morally arbitrary' — you didn't earn them, so you don't deserve the benefits they produce. Evaluate: do you agree? If talents are morally arbitrary, what follows for inheritance, elite colleges, and competitive sports?",
+          "silent_lesson": "Rawlsian justice; difference principle applied; meritocracy vs luck egalitarianism; moral arbitrariness of talent; redistributive principles."
+        },
+        {
+          "id": "rawls_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Justice Across Generations",
+          "hook": "Rawls' framework applies within a generation. But we are making decisions today that will shape the lives of people born in 2100. Do we owe them justice? How would they be represented behind the veil of ignorance?",
+          "challenge": "Extend the veil-of-ignorance approach to intergenerational justice: (1) imagine you don't know what generation you'll be born into. What rules would you choose? (2) Consider a 'just savings principle' — each generation must save enough for the next. Calculate: if each generation must transfer 10% of GDP to the next, what does this imply for current Indian climate policy, deficit spending, and resource extraction? (3) Identify one specific policy decision where intergenerational justice conflicts with current-generation interests. How would a philosopher using this framework resolve it?',",
+          "materials": "Calculator, climate data (research), pencil",
+          "discover": "Intergenerational justice requires significant transfers to future people who cannot vote or negotiate. Climate change is the clearest case: current generations impose costs on future generations who had no say. A Rawlsian analysis would strongly support aggressive climate action.",
+          "go_deeper": "Nozick's libertarian critique: justice is about not violating rights, not about distributing resources according to any pattern. How would Nozick evaluate our obligations to future generations? Is his position more or less demanding than Rawls'?",
+          "silent_lesson": "Intergenerational justice; just savings principle; climate ethics; Rawls vs Nozick; obligations to future persons."
+        }
+      ]
+    },
+    {
+      "id": "sartre",
+      "name": "Jean-Paul Sartre",
+      "domain": "Existentialism / Freedom / Bad Faith",
+      "puzzles": [
+        {
+          "id": "sartre_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Free Choice",
+          "hook": "List 10 things you 'have to' do today. How many of them are truly forced — and how many are choices you're making because of other choices you've already made?",
+          "challenge": "For each of your 10 'have to' items: trace the chain. 'I have to go to school' → why? → 'because my parents would be angry' → why does that matter? → 'because I love them and don't want to hurt them' → that's a choice. Map every 'have to' to an underlying value that you have chosen (or accepted). Which items are genuinely forced (consequences too severe to bear)? Which are choices disguised as necessities?",
+          "materials": "Paper, pencil",
+          "discover": "Most 'have to' items are choices — you could refuse, but you choose not to, for reasons that reflect your values. Very few things are truly forced in the sense of having no alternative. Recognising this is uncomfortable — it restores responsibility — but also liberating.",
+          "go_deeper": "Sartre calls pretending you have no choice 'bad faith' — lying to yourself about your freedom. Find an example from your own life where you used 'I have to' when 'I am choosing to' would be more accurate. What does it feel like to re-state it honestly?",
+          "silent_lesson": "Radical freedom; bad faith; responsibility; existence precedes essence; Sartrean existentialism."
+        },
+        {
+          "id": "sartre_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Existence Before Essence",
+          "hook": "A hammer exists to hammer — its purpose precedes its existence (the carpenter had it in mind before making it). Does a human being have a built-in purpose? Or do you create your own?",
+          "challenge": "Compare three accounts of human purpose: (1) Religious essentialism: human beings are created with a purpose given by God or nature. (2) Biological essentialism: human beings exist to reproduce and survive (evolutionary 'purpose'). (3) Existentialism: there is no pre-given purpose; you create your own. For each account: (a) what does it say about the source of moral obligations? (b) what happens to people who fail to live up to the 'essence'? (c) what does it imply for living an authentic life?',",
+          "materials": "Paper, pencil",
+          "discover": "Each account has radically different implications for ethics, identity, and how we judge 'failure.' Existentialism is the most demanding: if you create your own purpose, you are entirely responsible for what you do with freedom. There is no external blueprint to blame for failure.",
+          "go_deeper": "Simone de Beauvoir applied existentialism to gender: 'One is not born a woman; one becomes one.' Is gender identity essence (given) or existence (created through choices and social interactions)? What implications follow for gender transitions and social norms?",
+          "silent_lesson": "Existence precedes essence; authenticity; self-creation; critique of essentialism; Sartrean ethics."
+        },
+        {
+          "id": "sartre_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Look and the Other",
+          "hook": "When someone looks at you, your experience of yourself changes — you suddenly see yourself as an object in their world, not just as the subject of your own. This 'look of the other' is the foundation of shame, pride, and social identity.",
+          "challenge": "Investigate the phenomenology of the look: (1) Stage the experience: ask a partner to simply stare at you without speaking for 60 seconds. Describe exactly what changes in your self-experience. (2) Map the transition: before the look (you are pure subject, experiencing the world), during the look (you experience yourself as an object), after (you can reclaim subjecthood). (3) Analyse: how does the social self (the self as seen by others) differ from the private self? Can you distinguish them in your own experience?',",
+          "materials": "A partner, quiet space, paper for reflection",
+          "discover": "The look genuinely changes self-experience — most people report a contraction, a self-consciousness, an awareness of their appearance as perceived. This is not just social embarrassment; it reveals that the self is partially constituted by the perspectives of others. This has implications for shame, conformity, and the social construction of identity.",
+          "go_deeper": "Sartre argued that 'hell is other people' — the look of others permanently threatens our freedom by objectifying us. But de Beauvoir argued that freedom is only possible through relationship with others. Evaluate which position better describes your own experience.",
+          "silent_lesson": "Sartre's phenomenology of the look; being-for-others; shame and pride; social constitution of self; Sartre vs de Beauvoir on intersubjectivity."
+        }
+      ]
+    },
+    {
+      "id": "camus",
+      "name": "Albert Camus",
+      "domain": "Absurdism / Revolt / Meaning",
+      "puzzles": [
+        {
+          "id": "camus_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Repeated Task",
+          "hook": "Find a task you must do repeatedly — and that has no end. What is your relationship with it?",
+          "challenge": "Identify 3 recurring tasks in your life (cleaning your desk, a daily chore, a practice routine). For each: (1) rate how meaningful it feels (1–5), (2) rate how frustrating the repetition is (1–5), (3) describe the moment between finishing one repetition and starting the next — what happens in your mind? (4) imagine you could choose never to do it again — would you? Why? Now: what would your approach be if you decided to embrace the repetition rather than endure it?",
+          "materials": "Paper, pencil",
+          "discover": "The absurd is the collision between our need for meaning and the universe's indifference to providing it. Repetitive tasks make this visible. The two escapes Camus rejects: suicide (physical or philosophical — just accepting meaninglessness without revolt) and false meaning (religion, ideology). The third way: revolt — continuing with clear eyes and full commitment.",
+          "go_deeper": "Camus wrote: 'We must imagine Sisyphus happy.' Sisyphus is condemned to roll a rock up a hill for eternity, with it rolling down each time. What would it mean to be happy in this condition? Is Camus recommending pretending to be happy, or something else?",
+          "silent_lesson": "Absurdism; revolt vs suicide vs philosophical suicide; Sisyphus; acceptance without illusion; meaning creation."
+        },
+        {
+          "id": "camus_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Three Responses to Absurdity",
+          "hook": "If life has no inherent meaning, there are three possible responses: kill yourself (physical suicide), adopt an ideology that provides false meaning (philosophical suicide), or revolt — live with full awareness of the absurdity and refuse to accept it.",
+          "challenge": "Classify 10 historical and contemporary responses to meaninglessness as: (A) physical suicide, (B) philosophical suicide (religion, nationalism, ideology, consumerism, constant distraction), (C) absurdist revolt. Examples to classify: extreme sports, religious conversion, political fanaticism, art creation, meditation, workaholism, parenthood, philosophy, seeking fame. Justify each classification. Is 'philosophical suicide' always bad?',",
+          "materials": "Paper, pencil",
+          "discover": "Most responses to meaninglessness are some form of philosophical suicide — adopting a system that provides meaning without demanding confrontation with the absurd. This is not necessarily wrong. But Camus argues it lacks honesty. Revolt — living with full clarity about the absence of inherent meaning while refusing to be paralysed — is rarer and harder.",
+          "go_deeper": "Existentialists (Sartre) argue you can create meaning through choices. Camus argues this is philosophical suicide unless you maintain full awareness that the meaning is created, not found. What is the difference between these two positions? Is it a real difference?",
+          "silent_lesson": "Three responses to absurdity; philosophical suicide; revolt; absurd hero; Camus vs Sartre on meaning."
+        },
+        {
+          "id": "camus_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Rebel and Political Violence",
+          "hook": "Camus argued that all political violence — even revolutionary violence in the service of justice — requires a philosophical justification that it can never fully have. He broke with Sartre over this. Who was right?",
+          "challenge": "Two philosophers famously disagreed on political violence (1952). Position A: revolutionary violence is justified by historical necessity if the cause is just. Position B: all murder is unjustified; the revolutionary who kills for the future betrays the present. Evaluate both positions against two historical cases: (1) the French Resistance (killing German occupiers), (2) the Algerian FLN independence movement (killing French settlers). For each case: does Position A's justification hold? Does Position B's prohibition hold?',",
+          "materials": "History reference, paper, pencil",
+          "discover": "Both positions face counterexamples. Camus's absolute prohibition on killing seems to prevent self-defence. Sartre's historical necessity justification seems to license any atrocity if the cause is sufficiently important. The debate reveals the genuine difficulty of political ethics: there may be no clean answer.",
+          "go_deeper": "Camus proposed: the 'rebel' is always positioned against both the executioner (state power) and the terrorism of revolution. The rebel says 'no' to both. Is there a coherent political position that satisfies this double refusal? Design one.',",
+          "silent_lesson": "Political ethics; revolutionary violence; just war theory; Camus vs Sartre; limits of historical justification; absurdist political philosophy."
+        }
+      ]
+    },
+    {
+      "id": "de_beauvoir",
+      "name": "Simone de Beauvoir",
+      "domain": "Feminism / The Other / Situated Freedom",
+      "puzzles": [
+        {
+          "id": "de_beauvoir_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "What Roles Did You Choose?",
+          "hook": "You are a student, a child, perhaps a sibling, a friend. Some of these roles you were born into. Some you chose. Do they define you — or do you define them?",
+          "challenge": "List all the roles you currently play. For each: (1) did you choose it or were you born into it? (2) what does the role require of you (behaviours, attitudes)? (3) what would happen if you refused one of the role's requirements? (4) is there any part of you that exists entirely outside of your roles? Now: find one expectation in any role that you never chose and never agreed to — but follow anyway. What holds you to it?",
+          "materials": "Paper, pencil",
+          "discover": "Roles precede individual choice — you were born into most of them. Some role requirements are enforced by serious consequences (legal, social). Others are enforced by habit, shame, or social pressure alone. Identifying the difference reveals where genuine freedom exists.",
+          "go_deeper": "de Beauvoir argued that women in her time lived an 'immanent' existence (defined by their roles as wife, mother, daughter) rather than 'transcendent' existence (self-defining, outward-directed, creative). Find an equivalent constraint that applies to any group (gender, caste, age) in your context today.",
+          "silent_lesson": "Social roles; immanence vs transcendence; situated freedom; de Beauvoir's existential feminism; critique of role assignment."
+        },
+        {
+          "id": "de_beauvoir_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "One Is Not Born a Woman",
+          "hook": "'One is not born, but rather becomes, a woman.' This is one of the most quoted sentences in feminist philosophy. What does it mean — and how would you test it?",
+          "challenge": "If femininity is constructed rather than innate, we should find: (1) significant variation in what 'womanly' behaviour means across cultures, (2) the construction happening through social processes we can observe, (3) the construction being maintained by sanctions (punishment for violations). Research evidence for each: find two cultures with different expectations for women's behaviour. Identify one social process that teaches femininity (toys, language, clothing norms, media). Find one example of a sanction for gender norm violation.',",
+          "materials": "Research access (internet or library), paper, pencil",
+          "discover": "All three types of evidence are available. Gender norms vary significantly across cultures and historical periods (Amazonian societies, Hijra traditions, gender roles in ancient Egypt). This variation is evidence against biological determinism. The construction happens through visible mechanisms (media representation, toy marketing, language). Sanctions are often subtle (social disapproval) but sometimes formal (dress codes, laws).",
+          "go_deeper": "Butler's performativity theory: gender is not a state (what you are) but a performance (what you do). Does this mean you can simply choose to perform a different gender? What would it mean to perform gender badly? What are the limits of performance theory?",
+          "silent_lesson": "Social construction of gender; de Beauvoir's becoming; performativity; cultural variation as evidence; Butler's extension of de Beauvoir."
+        },
+        {
+          "id": "de_beauvoir_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Ethics of Ambiguity",
+          "hook": "de Beauvoir argued that freedom is not just an individual achievement — your freedom is intertwined with the freedom of others. You cannot be fully free in a world where others are oppressed.",
+          "challenge": "Reconstruct the following argument: (1) existentialist premise: freedom is the highest value. (2) Humans are social: your freedom is exercised in a world shared with others. (3) Oppression reduces the possibilities for others' freedom. (4) Therefore, choosing genuine freedom requires working against oppression. Evaluate this argument: is premise (4) validly inferred from (1)–(3)? Could someone accept (1)–(3) and still not be committed to (4)? Design a thought experiment that tests the inference.',",
+          "materials": "Paper, pencil",
+          "discover": "The inference from individual freedom to social obligation requires an additional premise: that the quality of your own freedom depends on the freedom available to others in your shared world. This is a significant claim — and one that de Beauvoir argues through the concept of 'ambiguity': we are simultaneously individual and social beings, and pretending otherwise is bad faith.",
+          "go_deeper": "Compare de Beauvoir's argument to Rawls' veil of ignorance: both arrive at obligations to the less-advantaged, but through very different routes. Rawls uses self-interest under uncertainty; de Beauvoir uses existential interdependence. Which argument is more compelling? Which is more action-guiding?",
+          "silent_lesson": "Ethics of ambiguity; freedom and social responsibility; oppression as limiting freedom; de Beauvoir's political ethics; comparison with Rawls."
+        }
+      ]
+    },
+    {
+      "id": "spinoza",
+      "name": "Baruch Spinoza",
+      "domain": "Ethics / Pantheism / Reason and Emotion",
+      "puzzles": [
+        {
+          "id": "spinoza_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "investigation",
+          "title": "The Emotion Map",
+          "hook": "You feel angry. But what exactly caused the anger? And does understanding the cause change the feeling?",
+          "challenge": "Choose one strong emotion you've felt recently (anger, jealousy, pride, fear). Map it completely: (1) what triggered it (immediate cause), (2) what belief made you interpret the trigger as threatening/desirable, (3) what would have to change for you to interpret the same event differently, (4) after mapping it, does the emotion feel different? Test the following claim: 'An emotion that is clearly understood ceases to be a passion' — does understanding reduce intensity?",
+          "materials": "Paper, pencil",
+          "discover": "Emotions are typically caused by beliefs about the world, not just by events. Changing the belief changes the emotional response. Understanding an emotion — its cause, its structure, its purpose — often does reduce its compulsive quality, though rarely eliminates it entirely. Reason doesn't kill emotion; it transforms it.",
+          "go_deeper": "Cognitive Behavioural Therapy (CBT) is based on exactly this insight: thoughts cause emotions, and changing thought patterns changes emotional responses. Design a simple intervention to test this: identify a recurring anxious thought, challenge it with counter-evidence, and track whether anxiety reduces.",
+          "silent_lesson": "Spinoza's conatus; emotions as rational responses to beliefs; reason and emotion; cognitive restructuring; connection to CBT."
+        },
+        {
+          "id": "spinoza_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "Geometric Ethics",
+          "hook": "Spinoza wrote his Ethics in the form of a geometry textbook — starting with definitions and axioms, proving propositions, drawing corollaries. Can ethics be as rigorous as mathematics?",
+          "challenge": "Start from the following axiom: 'Whatever is, either exists in itself or in something else.' Add: 'What is conceived in itself is caused by itself (substance); what is conceived in something else is caused by something else (mode).' Derive: if God is the only substance (self-caused), then everything else (minds, bodies, emotions) exists in God as modes. Write the derivation as numbered steps. Now: find one premise in the derivation that you think is false or unjustified. What follows if you substitute a different premise?',",
+          "materials": "Paper, pencil, Spinoza's Ethics Part I (excerpt)",
+          "discover": "Spinoza's system is internally consistent — if you grant his definitions, the conclusions follow. The key is whether to grant the definitions. This reveals that geometric proofs in philosophy only generate certainty within the system — the foundation (axioms, definitions) is not itself provable by geometry.",
+          "go_deeper": "Spinoza concluded from this that free will is an illusion — everything follows necessarily from God/Nature. Does this conclusion follow from his premises? If determinism is true, what changes about moral responsibility?",
+          "silent_lesson": "Spinoza's geometric method; axioms and their role; determinism from monism; pantheism; limits of deductive philosophy."
+        },
+        {
+          "id": "spinoza_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "Freedom as Understanding",
+          "hook": "Spinoza's counterintuitive claim: true freedom is not the absence of determination, but clear understanding of the causes that determine you. Can understanding what drives you make you more free?",
+          "challenge": "Apply the concept of freedom-as-understanding to one domain: (1) Choose a recurring behaviour you want to change (a habit, reaction pattern, or choice). (2) Map its complete causal structure: biological drives, past conditioning, current triggers, social reinforcement. (3) Identify which causes you can modify by understanding them. (4) Distinguish: causes you are driven by blindly vs causes you endorse once understood. (5) Define what it would mean to be 'free' with respect to this behaviour, if freedom consists in clear understanding of the causes that determine you.',",
+          "materials": "Paper, pencil",
+          "discover": "Understanding doesn't remove determination but does change your relationship to it. A habitual behaviour understood in all its causes can be either affirmed (you endorse it) or reframed (you see it differently and its pull weakens). This is neither Sartrean radical freedom nor hard determinism — it's a third position.",
+          "go_deeper": "Compare Spinoza's freedom-as-understanding to Hegel's concept of freedom as 'being with oneself in the other' (recognising yourself in social institutions). Both reject the libertarian concept of freedom as absence of causation. Which account is more coherent? Which is more useful?",
+          "silent_lesson": "Spinoza's concept of freedom; determinism and responsibility; self-knowledge as liberation; comparison with Sartrean and Hegelian freedom."
+        }
+      ]
+    },
+    {
+      "id": "leibniz",
+      "name": "Gottfried Wilhelm Leibniz",
+      "domain": "Binary Arithmetic / Calculus / Monads",
+      "puzzles": [
+        {
+          "id": "leibniz_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "pattern",
+          "title": "The Two-Digit World",
+          "hook": "What if you could write every number in the world using only two symbols: 0 and 1? Computers do exactly this — and the pattern hiding inside it is beautiful.",
+          "challenge": "Convert the numbers 1 through 16 into binary using the repeated-halving method: divide by 2, record the remainder (0 or 1), divide again, record again — keep going until you reach 0, then read the remainders bottom-up. Fill a table: decimal | binary. Now look at the patterns: what happens to the binary representation each time you double a number? What pattern do you see in the units column (0,1,0,1,...)? The twos column? The fours column? Try adding 3 + 5 in binary: what rule makes binary addition work?",
+          "materials": "Paper, pencil, ruler to draw the table",
+          "discover": "Every column in binary counts 0,1,0,1 — but at different speeds: the units column flips every step, the twos column every two steps, the fours column every four steps. Doubling a number just shifts all digits one place left (add a 0 on the right). Binary addition follows a single rule: 1+1 carries to the next column, exactly like decimal carrying — but with only two digits instead of ten.",
+          "go_deeper": "Write the numbers 0–7 in binary, then examine each adjacent pair: how many bits differ between consecutive numbers? You have discovered the Gray code — a sequence where adjacent numbers differ in exactly one binary digit. Where might this be useful? Hint: think about a dial that turns and what goes wrong if two bits change at once.",
+          "silent_lesson": "Positional notation; base-2 arithmetic; place value; binary addition and carrying; the universality of positional systems."
+        },
+        {
+          "id": "leibniz_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Speeding-Up Curve",
+          "hook": "A ball rolls down a ramp. At each second you measure how far it has travelled. The distances keep changing — but is there a number that captures exactly how fast it is moving at any single instant?",
+          "challenge": "Use this table of a moving object: time (s) = 0, 1, 2, 3, 4, 5; distance (m) = 0, 1, 4, 9, 16, 25. Compute the average speed across each 1-second interval (distance gained ÷ time elapsed). Plot time vs average speed and notice the pattern. Now estimate the speed at exactly t = 2 s by shrinking the interval: t=2 to t=3, then t=2 to t=2.5, then t=2 to t=2.1, then t=2 to t=2.01. What value do the average speeds approach? Can you state a rule: if distance = t², what is the speed at any time t?",
+          "materials": "Paper, pencil, calculator",
+          "discover": "As the time interval shrinks toward zero, the average speed approaches a precise limit — 2t at any time t. You have found the derivative without being told its name. The rate of change of t² is exactly 2t at every instant. The key insight is the limit: not what happens at a single instant (which gives 0/0), but what value the ratio approaches as the interval becomes arbitrarily small.",
+          "go_deeper": "Try the same process for distance = t³: compute average speeds across shrinking intervals near t = 2 and t = 3. What rule do you find? Can you conjecture a general rule for tⁿ? Check whether distance = t⁴ follows the same pattern.",
+          "silent_lesson": "The derivative as a limit; average vs instantaneous rate of change; the power rule discovered empirically; limit concept; tangent as limiting secant."
+        },
+        {
+          "id": "leibniz_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Product Rule from First Principles",
+          "hook": "Two quantities are each changing. Their product is also changing — but at what rate? The answer is not simply the product of the two rates. Derive the exact rule.",
+          "challenge": "Let f and g be two functions of x. The product is P(x) = f(x)·g(x). Use the limit definition of the derivative to find P'(x): (1) Write P(x+h) − P(x) = f(x+h)·g(x+h) − f(x)·g(x). (2) Add and subtract f(x+h)·g(x) inside the expression. (3) Factor into two groups. (4) Divide by h and take the limit as h→0. (5) State the result. Now write the same result in both d/dx notation (d/dx[f·g] = ...) and in prime notation (fg)' = f'g + fg'. Finally, interpret each term geometrically: if f and g are the two sides of a rectangle whose area is P = f·g, what does each term in the rule represent?",
+          "materials": "Pencil, paper, algebra reference",
+          "discover": "The product rule d/dx[f·g] = f'g + fg' has a clean geometric meaning: the rate of growth of a rectangle's area equals (rate of growth of width × current height) + (current width × rate of growth of height). Both terms are needed because both sides are changing simultaneously. The algebraic derivation makes this precise via the limit; Leibniz's notation d/dx[fg] = g·df/dx + f·dg/dx makes the symmetry visible in a way that prime notation hides.",
+          "go_deeper": "Using the product rule, derive the quotient rule d/dx[f/g] by writing f/g = f·(g⁻¹) and applying the product rule together with the chain rule for g⁻¹. Then derive the power rule for negative integers: d/dx[x⁻ⁿ] = −n·x⁻ⁿ⁻¹. At each step identify which rule you are applying and why.",
+          "silent_lesson": "Limit definition of the derivative; product rule; Leibniz notation vs prime notation; geometric interpretation of differentiation rules; proof structure in calculus."
+        }
+      ]
+    },
+    {
+      "id": "hobbes",
+      "name": "Thomas Hobbes",
+      "domain": "Social Contract / Nature of Power / Leviathan",
+      "puzzles": [
+        {
+          "id": "hobbes_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "game",
+          "title": "The No-Rules Room",
+          "hook": "Your classroom has always had rules. What would happen if — just for five minutes — there were none at all? Would things get better, or worse?",
+          "challenge": "Round 1 — No rules: students are told there are no rules for 3 minutes. Record everything that happens — who takes what, whether anyone can work, what conflicts arise, whether anyone feels unsafe. Round 2 — Minimal rules: the class agrees on the three most essential rules and runs for another 3 minutes. Compare: (1) What was possible in Round 1 that became impossible in Round 2? (2) What was impossible in Round 1 that became possible in Round 2? (3) Which round felt safer? Which felt freer? Write your observations honestly — both rounds should reflect what actually happened, not what you expected.",
+          "materials": "Classroom space, paper and pencil for recording observations",
+          "discover": "Without rules, stronger or louder individuals tend to dominate; others cannot guarantee safety or access. With minimal agreed rules, everyone gains something — even those who lose some freedom gain security and predictability. The trade is real: give up unlimited freedom, gain reliable protection. Neither round is obviously better — the interesting question is which costs are worth which gains.",
+          "go_deeper": "Not all rules are equally important. Rank your Round 2 rules by asking: which rule, if broken just once, causes the most damage? Which can be broken occasionally without collapse? Rules that protect safety tend to rank higher than rules about fairness or procedure. What does this ordering reveal about what rules are fundamentally for?",
+          "silent_lesson": "State of nature; social contract as trade of freedom for security; rule of law; the difference between freedom and security; why individuals voluntarily accept constraints."
+        },
+        {
+          "id": "hobbes_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "design",
+          "title": "Rules for the Stranded Five",
+          "hook": "Five people are stranded on an island with limited food and no outside help. They could cooperate — or fight. You have to design the minimal set of rules that makes cooperation possible.",
+          "challenge": "Situation: 5 people, one food source producing enough for 3 people per day, indefinitely. Without rules: each person is equally capable of taking all the food by force, but fighting wastes energy and risks injury. Your task: design a minimal rule-set (no more than 5 rules) that (1) keeps all five people alive long-term, (2) can be enforced without outside authority, (3) gives each person a reason to comply rather than defect. For each rule state: who enforces it, and what the penalty for violation is. Then identify which rules are self-enforcing (compliance is in everyone's interest regardless of others) and which require a designated enforcer. Finally: what happens if the designated enforcer themselves violates the rules?",
+          "materials": "Paper, pencil",
+          "discover": "Rules that are purely self-enforcing are more stable than rules requiring a trusted enforcer — because they don't create a privileged position that can be abused. But scarcity creates a coordination problem that pure self-interest alone cannot solve. The hardest problem is the enforcer problem: whoever enforces the rules also has the power to abuse them. This is the central puzzle of political authority, and there is no clean solution.",
+          "go_deeper": "Redesign your rule-set for a different situation: now there is enough food for all five, but it requires collective effort to harvest — and anyone can free-ride. How do the optimal rules change? Which type of scarcity (not enough even with cooperation, vs enough only if all cooperate) produces more or less stable social arrangements, and why?",
+          "silent_lesson": "Minimal rule design; coordination problems; enforcement and the enforcer problem; self-enforcing vs authority-dependent rules; political authority and its basis."
+        },
+        {
+          "id": "hobbes_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "thought_experiment",
+          "title": "Does Enforcement Make Agreements Possible?",
+          "hook": "A famous argument holds that in the absence of a power capable of enforcing agreements, all agreements will eventually break down — because rational actors will always defect when defection pays. Formalise this claim and find where it fails.",
+          "challenge": "Model the claim using the Prisoner's Dilemma. Payoff matrix: mutual cooperation = (3,3); mutual defection = (1,1); one defects while other cooperates = (5,0). (1) Show that defection is the dominant strategy in a single-shot game — regardless of what the other player does, defecting pays better. Write the dominance argument formally. (2) Now consider the iterated version (repeated indefinitely, both players remember history): does the dominant strategy change? Why? (3) Identify three real-world conditions under which agreements are maintained without a central enforcer. (4) State precisely where the original claim fails: is it always false, or only false under specific identifiable conditions?",
+          "materials": "Paper, pencil, payoff matrix drawn out",
+          "discover": "In a single-shot game, the claim holds: defection dominates and no agreement is stable without enforcement. In iterated games, cooperation can emerge through reciprocity — but only when future interactions are sufficiently valuable, players can identify each other, and defection can be detected and punished. The original claim fails exactly when these three conditions hold: repeated interaction, identifiability, and detectability. International trade agreements and long-term business relationships work precisely because these conditions are partially met.",
+          "go_deeper": "Axelrod's tournament (1980) showed that Tit-for-Tat wins iterated Prisoner's Dilemma tournaments: cooperate first, then mirror the other player's last move. Analyse why this strategy is robust: it is never the first to defect (nice), it retaliates immediately (punishing), and it forgives after one round (not vindictive). Design a modified strategy that beats Tit-for-Tat in at least one environment, and identify the conditions under which your modification succeeds.",
+          "silent_lesson": "Prisoner's Dilemma; dominant strategy; iterated games and cooperation; conditions for enforcement-free agreement; game theory formalisation of political philosophy; Hobbesian state of nature revisited."
+        }
+      ]
+    }
+  ]
+}

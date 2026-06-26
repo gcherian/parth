@@ -1,0 +1,747 @@
+{
+  "sphere": "Philosophy & Logic",
+  "sphere_id": "philosophy_logic",
+  "sphere_description": "The sphere where humans asked the hardest question of all: how do we know anything? These thinkers built the tools of reason, ethics, and inquiry that every other sphere depends on.",
+  "thinkers": [
+    {
+      "id": "socrates",
+      "name": "Socrates",
+      "era": "470–399 BCE",
+      "origin": "Athens, Greece",
+      "mbti": "ENTP",
+      "key_insight": "Questions are more powerful than answers. True knowledge begins with knowing what you do not know.",
+      "spark": "He was declared the wisest man in Athens — not because he knew the most, but because he alone knew he knew nothing. He spent his life proving it by asking questions. The city eventually killed him for it.",
+      "quote": "I know that I know nothing.",
+      "pascal_moment": "Every question Socrates asked pushed the sphere outward and revealed a larger unknown beyond. His method was the sphere itself.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Question Chain",
+          "challenge": "Choose something you use every day — a pencil, a phone, your shoes. Ask 'Why?' five times in a row, answering each time before asking again. Where do you end up? Share what surprised you.",
+          "hint": "Socrates started with small questions about courage or justice and ended up at the deepest questions about the soul and the universe."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Trial of Ideas",
+          "challenge": "Socrates was put on trial and executed for asking questions that made powerful people uncomfortable. Name one belief in your school, community, or country that most people hold without examining — and design a Socratic examination of it. What three questions would Socrates ask?",
+          "hint": "He never gave answers. He kept asking until people admitted they didn't actually know what they thought they knew."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Socrates and the Machine",
+          "challenge": "The Socratic method exposes hidden assumptions through strategic questioning. Design a 10-turn Socratic dialogue between a student and an AI tutor exploring the question: 'What is consciousness?' The AI's role is not to answer but to help the student discover the limits of their own understanding. Write the dialogue.",
+          "hint": "The most powerful Socratic questions are definitional, not factual. 'What do you mean by X?' is more devastating than 'Is X true?'"
+        }
+      ],
+      "open_question": "Is there a form of knowledge that cannot be reached through questioning alone — or does every truth eventually yield to the right question?",
+      "sphere_expanded": "Critical Thinking, Ethics, Education, Political Philosophy",
+      "connected_thinkers": ["plato", "aristotle", "wittgenstein", "russell"]
+    },
+    {
+      "id": "plato",
+      "name": "Plato",
+      "era": "428–348 BCE",
+      "origin": "Athens, Greece",
+      "mbti": "INFJ",
+      "key_insight": "The world we see is a shadow of a deeper reality — perfect Forms exist beyond the senses.",
+      "spark": "His Allegory of the Cave: imagine people chained in a cave since birth, seeing only shadows on the wall. They think the shadows ARE reality. The philosopher is the one who breaks free and sees the sun.",
+      "quote": "We can easily forgive a child who is afraid of the dark; the real tragedy of life is when men are afraid of the light.",
+      "pascal_moment": "Plato pushed the sphere by proposing that what we call 'real' is itself a shadow — and that the true sphere of knowledge lies beyond perception.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Your Own Cave",
+          "challenge": "Close your eyes. Imagine a chair. Now open your eyes and look at a real chair. Plato said the imaginary 'perfect chair' in your mind is MORE real than the physical one. Draw both. Which feels more real to you, and why?",
+          "hint": "Every chair you've ever seen is slightly different — but your idea of 'chairness' is the same. Where does that idea live?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Shadow Test",
+          "challenge": "Plato said mathematics describes the Forms — not physical things. The number 7 is the same everywhere; every physical '7 apples' is just an imperfect copy. Is mathematics discovered or invented? Defend one position with three arguments.",
+          "hint": "Are numbers real things that exist even when no one is counting? Or did humans create them as a useful tool?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Forms and Physics",
+          "challenge": "Modern physics says the 'real' world is quantum fields — mathematical structures, not solid objects. Electrons are excitations of the electron field; the solid table is mostly empty space. Compare this to Plato's Theory of Forms. Is physics giving Plato the last word? What is the disanalogy?",
+          "hint": "Plato's Forms are eternal and unchanging; quantum fields are dynamic. Does this matter?"
+        }
+      ],
+      "open_question": "Is mathematics discovered (Platonism) or invented (formalism)? This debate remains alive among mathematicians today.",
+      "sphere_expanded": "Metaphysics, Mathematics, Political Philosophy, Education",
+      "connected_thinkers": ["socrates", "aristotle", "descartes", "noether"]
+    },
+    {
+      "id": "aristotle",
+      "name": "Aristotle",
+      "era": "384–322 BCE",
+      "origin": "Stagira, Greece",
+      "mbti": "INTJ",
+      "key_insight": "Classify, categorize, and observe — reality is in particular things, not abstract Forms.",
+      "spark": "He was the world's first systematic classifier: plants, animals, ideas, governments, plays, stars. He built categories for everything. His student was Alexander the Great.",
+      "quote": "It is the mark of an educated mind to be able to entertain a thought without accepting it.",
+      "pascal_moment": "Aristotle mapped the entire known sphere of knowledge in a single lifetime — and in doing so showed just how vast the unknown territory was.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Classifier Game",
+          "challenge": "Pick 20 random objects from around you. Classify them into groups. Now classify your groups into higher groups. Keep going until you have one top category. What is it? Compare your system to a friend's — are they the same?",
+          "hint": "Aristotle started with 'substance' at the top. What would you put at the top of your tree?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Syllogism Machine",
+          "challenge": "Aristotle invented formal logic: 'All humans are mortal. Socrates is human. Therefore Socrates is mortal.' This is a syllogism. Create 5 original syllogisms — two true ones, two that are logically valid but factually false, and one that sounds logical but is actually invalid. Explain why.",
+          "hint": "A syllogism can be logically valid (the form is correct) but factually wrong (a premise is false). These are different problems."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Teleology and Evolution",
+          "challenge": "Aristotle believed in teleology — everything has a purpose (telos), a final cause. An acorn's telos is to become an oak. But Darwin showed that the appearance of purpose in nature comes from natural selection, not inherent goals. Does evolution destroy teleology, or is it another way of expressing the same truth? Write a 500-word argument.",
+          "hint": "Consider: does the concept of 'function' in biology (the function of the heart is to pump blood) imply purpose, or is it purely descriptive?"
+        }
+      ],
+      "open_question": "Does the universe have inherent purpose (teleology), or is apparent purpose entirely explained by physical and evolutionary processes?",
+      "sphere_expanded": "Logic, Biology, Physics, Ethics, Politics, Literature",
+      "connected_thinkers": ["plato", "darwin", "russell", "bacon"]
+    },
+    {
+      "id": "descartes",
+      "name": "René Descartes",
+      "era": "1596–1650",
+      "origin": "France",
+      "mbti": "INTP",
+      "key_insight": "Doubt everything until you find what cannot be doubted. 'I think, therefore I am.'",
+      "spark": "Lying in bed one cold morning, watching a fly on the ceiling, he invented the coordinate system. The same man who doubted everything into dust gave mathematics its most powerful tool.",
+      "quote": "I think, therefore I am.",
+      "pascal_moment": "Descartes found the one point in the sphere that cannot be dissolved by doubt — the thinking self — and built all knowledge outward from there.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Undoubtable List",
+          "challenge": "Descartes tried to doubt everything: his senses, other people, even mathematics. He found only ONE thing he couldn't doubt. Your challenge: make a list of 10 things you believe, then try as hard as you can to doubt each one. Which ones survive your doubt?",
+          "hint": "Can you doubt that you're reading this right now? Can you doubt that you're thinking something?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Coordinates Change Everything",
+          "challenge": "Descartes invented the coordinate system (x-y axes) while watching a fly. Before this invention, geometry and algebra were completely separate subjects. After it, every geometric shape became an equation and every equation became a shape. Explain this connection with one example. What other invention linked two previously separate fields?",
+          "hint": "A circle: x² + y² = r². That equation IS the circle. Geometry and algebra are the same thing."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Mind-Body Problem, 400 Years Later",
+          "challenge": "Descartes said mind and body are completely separate substances (dualism). Neuroscience says they are the same thing — thoughts are brain states. But if mind = brain, then: (1) Can computers be conscious? (2) Is free will possible? (3) What happens to identity after brain injury? Use Descartes's problem to frame all three questions.",
+          "hint": "Descartes's dualism is 'dead' in neuroscience — but the problems it raised are very much alive."
+        }
+      ],
+      "open_question": "What is the relationship between mind and brain — are they the same thing, or is consciousness something that cannot be fully explained by physical processes?",
+      "sphere_expanded": "Mathematics (analytic geometry), Epistemology, Philosophy of Mind",
+      "connected_thinkers": ["spinoza", "leibniz", "kant", "turing_cs"]
+    },
+    {
+      "id": "kant",
+      "name": "Immanuel Kant",
+      "era": "1724–1804",
+      "origin": "Königsberg, Germany",
+      "mbti": "INTJ",
+      "key_insight": "Our minds actively structure reality — we don't passively receive it. Space, time, and causality are frameworks we impose, not features we discover.",
+      "spark": "He never traveled more than 40 miles from his hometown. His daily walk was so regular that neighbors set their watches by him. From this tiny physical orbit, he changed the entire universe of thought.",
+      "quote": "Two things fill the mind with ever new and increasing admiration and reverence: the starry sky above me and the moral law within me.",
+      "pascal_moment": "Kant discovered that the sphere of knowledge has a shape imposed by the knower — the outer boundary is partly a mirror of the inner architecture of the human mind.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Before You Look",
+          "challenge": "Close your eyes. Without looking, can you imagine the room you are in? The walls, floor, ceiling — where they are relative to each other? Kant said space is not something you see OUT THERE — it's a framework your mind imposes on experience. Describe what this means in your own words.",
+          "hint": "You couldn't experience anything as 'in front' or 'behind' or 'near' without your mind providing the spatial framework first."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Universal Law Test",
+          "challenge": "Kant's Categorical Imperative: act only according to rules that you could make universal law for everyone. Apply this test to: (1) copying homework, (2) lying to spare someone's feelings, (3) using social media to spread unverified news. In each case: what happens if EVERYONE follows this rule?",
+          "hint": "Kant said the test is not consequences (what happens if I lie) but universalizability (what if lying were a universal law?)."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Kant vs. Einstein",
+          "challenge": "Kant said space and time are not features of the external world but of the human mind — we MUST perceive things in space and time because our minds work that way. Einstein showed space-time is a physical thing that bends and curves with mass. These seem contradictory. Construct an argument for how both could be right.",
+          "hint": "Consider: maybe Einstein describes what's out there, and Kant describes the limits of what we can perceive. Can the two levels coexist?"
+        }
+      ],
+      "open_question": "Are the categories of our understanding (causality, substance, unity) features of reality or features of the human mind? Can science ever answer this?",
+      "sphere_expanded": "Epistemology, Ethics, Metaphysics, Political Philosophy",
+      "connected_thinkers": ["hume", "descartes", "einstein", "wittgenstein"]
+    },
+    {
+      "id": "nietzsche",
+      "name": "Friedrich Nietzsche",
+      "era": "1844–1900",
+      "origin": "Germany",
+      "mbti": "INTJ",
+      "key_insight": "Values must be constantly re-examined and re-created. 'God is dead' — not a celebration, but a warning about the vacuum that moral systems leave when they collapse.",
+      "spark": "'God is dead, and we have killed him.' He wasn't celebrating. He was terrifying himself — and us — with the consequences. If there is no absolute moral authority, who decides what is good?",
+      "quote": "He who has a why to live can bear almost any how.",
+      "pascal_moment": "Nietzsche pushed the sphere by questioning not just individual beliefs but the entire foundation of Western morality — revealing the terrifying vastness of the ethical unknown.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Your Own Values",
+          "challenge": "Make two lists: (1) Values you were taught by others (parents, school, religion, TV). (2) Values you actually chose for yourself after thinking about them. Is the second list smaller? What does that tell you?",
+          "hint": "Nietzsche thought most people live by values they inherited without examining. He called this 'herd morality.'"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Master and Slave Morality",
+          "challenge": "Nietzsche said there are two kinds of morality: 'master morality' (values created by the strong: nobility, power, excellence) and 'slave morality' (values created by the weak as revenge: humility, meekness, equality). Find a historical or current example of each. Which do you think is more just — and does Nietzsche's framework even allow the question 'which is more just'?",
+          "hint": "The dangerous trap: if you ask 'which is MORE JUST' you're already using a moral framework — but Nietzsche is questioning the framework itself."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Eternal Recurrence",
+          "challenge": "Nietzsche's thought experiment: imagine that your life — every moment, every joy, every pain, every choice — repeats identically for eternity, infinite times. How would this change how you live today? Nietzsche said this is the heaviest possible thought — and the person who could embrace it with joy was the Übermensch. Write a 400-word response.",
+          "hint": "This isn't about whether it's literally true. It's a test: would you be horrified or delighted at infinite repetition? And what does your answer reveal about how you're living?"
+        }
+      ],
+      "open_question": "If there are no absolute moral values, can we still rationally choose between better and worse ways to live — or is all ethics ultimately arbitrary?",
+      "sphere_expanded": "Ethics, Existentialism, Cultural Criticism, Psychology of Religion",
+      "connected_thinkers": ["de_beauvoir", "freud", "mill", "voltaire"]
+    },
+    {
+      "id": "hume",
+      "name": "David Hume",
+      "era": "1711–1776",
+      "origin": "Edinburgh, Scotland",
+      "mbti": "INTP",
+      "key_insight": "What we call 'cause and effect' is really just habit and expectation — we cannot rationally justify our belief that the future will resemble the past.",
+      "spark": "The sun has risen every day of your life. Every day of recorded history. Can you PROVE it will rise tomorrow? Hume said no — and this is called the Problem of Induction. Science has never fully recovered.",
+      "quote": "A wise man proportions his belief to the evidence.",
+      "pascal_moment": "Hume discovered that the foundation of the sphere itself — the assumption that patterns will continue — cannot be justified by reason. The sphere floats on an act of faith.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Sunrise Bet",
+          "challenge": "You're 100% certain the sun will rise tomorrow. But you've never been to tomorrow. You can only observe the past. Make a list of 5 other things you're certain about that you've never directly experienced — things you're trusting will happen based on patterns. Is this trust rational?",
+          "hint": "Hume says this trust is a habit, like a muscle reflex — not a logical proof."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Problem of Induction",
+          "challenge": "Science relies on induction: observing many cases and inferring a general rule. But Hume says induction can never be logically justified. Create an example of a scientific 'law' that was believed for centuries and then turned out to be wrong. What does this show about the limits of inductive reasoning?",
+          "hint": "Consider Newtonian mechanics — true for 200 years, then relativistic effects at high velocities broke it. Was it ever really a 'law'?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Hume and AI Prediction",
+          "challenge": "Machine learning is based entirely on induction — finding patterns in past data and assuming they'll hold in the future. Hume's problem of induction says this has no logical foundation. Yet AI systems make predictions that affect lives (credit scores, medical diagnoses, bail decisions). Write a philosophical analysis: is AI-based induction a different kind of problem than Hume's, or is it the same problem at massive scale?",
+          "hint": "Consider distribution shift: an AI trained on 2020 data failing in 2025 because the world changed. Is this Hume's problem made concrete?"
+        }
+      ],
+      "open_question": "Can scientific induction ever be philosophically justified — or is all of science built on an unjustifiable leap of faith?",
+      "sphere_expanded": "Epistemology, Philosophy of Science, Causation, Ethics",
+      "connected_thinkers": ["kant", "russell", "darwin", "chomsky"]
+    },
+    {
+      "id": "locke",
+      "name": "John Locke",
+      "era": "1632–1704",
+      "origin": "England",
+      "mbti": "ENTJ",
+      "key_insight": "The mind is a blank slate at birth — all knowledge comes from experience. And humans have natural rights to life, liberty, and property.",
+      "spark": "His ideas directly inspired the American Declaration of Independence. Jefferson borrowed Locke's 'life, liberty, and property' almost verbatim — changing 'property' to 'pursuit of happiness.'",
+      "quote": "Education begins the gentleman, but reading, good company, and reflection must finish him.",
+      "pascal_moment": "Locke pushed the sphere by insisting knowledge must be grounded in experience — and by showing that political legitimacy must be grounded in consent, not divine right.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "What Did You Know at Birth?",
+          "challenge": "Locke said the mind starts as a blank slate (tabula rasa) — all knowledge comes from experience. Make a list of everything you know. Now try to trace each item back: is there ANYTHING you know that you were never taught, never experienced, never observed? Or is the slate really blank?",
+          "hint": "Does knowing how to breathe count? Does fear of falling count? These might be biological instincts — not quite 'knowledge' the way Locke meant."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Labor Theory of Property",
+          "challenge": "Locke said property rights arise from mixing your labor with something: you plant seeds in unowned land, the crop is yours. Apply this theory to: (1) a programmer who writes code on their company's computer, (2) an AI trained on human-written books, (3) a musician who samples another song. Who owns what?",
+          "hint": "Where does 'your labor' end and the contribution of others begin? This is a live legal question today."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Locke vs. Chomsky: The Blank Slate Debate",
+          "challenge": "Locke says the mind is blank at birth — all knowledge from experience. Chomsky says there's a universal grammar built into the brain — children learn language too fast and too perfectly to be starting from blank. Modern AI (trained on massive data) looks like the ultimate blank slate learner. Does AI settle the debate in Locke's favor, or does the need for vast training data actually support Chomsky? Write a 400-word position.",
+          "hint": "GPT-4 needed hundreds of billions of words to learn grammar. A human child learns it from hundreds of thousands. Does the scale difference matter?"
+        }
+      ],
+      "open_question": "Is the mind essentially blank at birth, shaped entirely by experience — or does biology pre-wire significant structure, knowledge, and predispositions?",
+      "sphere_expanded": "Epistemology, Political Philosophy, Education, Property Rights",
+      "connected_thinkers": ["rousseau", "kant", "chomsky", "dewey"]
+    },
+    {
+      "id": "wittgenstein",
+      "name": "Ludwig Wittgenstein",
+      "era": "1889–1951",
+      "origin": "Austria/England",
+      "mbti": "INTP",
+      "key_insight": "The limits of my language are the limits of my world. And later: meaning is use — words mean what we do with them, not what they point to.",
+      "spark": "He wrote one of the most famous philosophy books (Tractatus), decided he had completely solved philosophy, gave away his inheritance, became a primary school teacher — then decided he was completely wrong and wrote another famous book.",
+      "quote": "Whereof one cannot speak, thereof one must be silent.",
+      "pascal_moment": "Wittgenstein pushed the sphere to its linguistic boundary — and discovered that the edge of the sphere is made of language. What lies beyond cannot be said, only shown.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Beyond Words",
+          "challenge": "Make a list of 5 experiences, feelings, or ideas that you have but cannot fully put into words. Now try harder — write the closest description you can. Wittgenstein said some truths lie beyond language. Do you believe him? Or can everything important eventually be said?",
+          "hint": "What about the feeling of knowing you've forgotten something? What about the exact feeling of listening to your favourite music?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Language Games",
+          "challenge": "Wittgenstein said 'meaning is use' — the word 'game' doesn't have one essential definition; it means what it does in different contexts. Try to define 'game' in a single sentence that covers chess, football, a children's tickle game, and a video game — without excluding anything. If you can't, what does this show about definitions?",
+          "hint": "Wittgenstein said concepts have 'family resemblances' — overlapping similarities with no single core. Like how family members resemble each other without all sharing one feature."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "LLMs and Language Games",
+          "challenge": "Large language models (like the AI in Parth) learn 'meaning' entirely from how words are used in context — no reference to real-world objects, sensations, or intentions. This is Wittgenstein's meaning-as-use taken to its extreme. Does this mean LLMs 'understand' in Wittgenstein's sense? Or does Wittgenstein's late philosophy actually expose why pure statistical pattern-matching misses something essential about meaning?",
+          "hint": "Consider Wittgenstein's Private Language Argument — meaning requires a public practice of correction. Does an LLM participate in such a practice?"
+        }
+      ],
+      "open_question": "Is there meaningful experience that cannot be expressed in language — and if so, can we ever share it, or is it forever private?",
+      "sphere_expanded": "Philosophy of Language, Logic, Mathematics, Philosophy of Mind",
+      "connected_thinkers": ["russell", "frege", "turing_cs", "chomsky"]
+    },
+    {
+      "id": "russell",
+      "name": "Bertrand Russell",
+      "era": "1872–1970",
+      "origin": "England",
+      "mbti": "ENTP",
+      "key_insight": "Precision in thought requires precision in language and logic. And Russell's Paradox: the set of all sets that don't contain themselves — does it contain itself?",
+      "spark": "He helped create modern logic and won a Nobel Prize in Literature. He was jailed for pacifism at 44, and led anti-nuclear marches at 89. He lived to 97.",
+      "quote": "The fundamental cause of trouble in the world is that the stupid are cocksure while the intelligent are full of doubt.",
+      "pascal_moment": "Russell found a crack in the very foundation of mathematics — a self-referential paradox that showed the sphere of formal logic had hidden holes.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Barber Paradox",
+          "challenge": "In a town, the barber shaves every man who does not shave himself. Who shaves the barber? Try to solve it. Every answer creates a contradiction. This is Russell's Paradox made simple. Why is it impossible to solve, and what does this tell us about self-referential rules?",
+          "hint": "If the barber shaves himself — he's a man who shaves himself, so the barber shouldn't shave him. If he doesn't shave himself — he's a man who doesn't shave himself, so the barber should. Both answers destroy themselves."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Value of Doubt",
+          "challenge": "Russell said: 'The problem with the world is that the stupid are cocksure and the intelligent are full of doubt.' Find three historical examples where absolute certainty led to catastrophe and three where persistent doubt led to breakthrough. What is the right balance between confidence and doubt?",
+          "hint": "Think of scientific revolutions, religious persecutions, political ideologies, and also great discoveries."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Russell's Paradox and Type Theory",
+          "challenge": "Russell's Paradox broke naive set theory. His solution was the Theory of Types: sets must be organized into levels (types) so that a set can only contain sets of lower type — preventing self-reference. Modern programming languages use type systems that echo this solution. Explain the connection between Russell's philosophical paradox and a modern programming language's type system. Use a specific example from Dart, Python, or any language you know.",
+          "hint": "In Dart: a List<int> cannot contain another List<int> directly without explicit wrapping. Is this a type-theoretic safeguard against Russell-style paradoxes?"
+        }
+      ],
+      "open_question": "Is the foundation of mathematics solid — or are there more paradoxes like Russell's hiding in the deepest axioms, waiting to crack it again?",
+      "sphere_expanded": "Logic, Set Theory, Mathematics, Epistemology, Political Philosophy",
+      "connected_thinkers": ["frege", "wittgenstein", "godel", "turing_math"]
+    },
+    {
+      "id": "pascal",
+      "name": "Blaise Pascal",
+      "era": "1623–1662",
+      "origin": "France",
+      "mbti": "INTP",
+      "key_insight": "Knowledge is like a sphere: the more you know, the larger the surface that touches the unknown. And probability theory can guide rational decisions under uncertainty.",
+      "spark": "He invented the first mechanical calculator at 18 to help his tax-collector father. At 31 he had a profound religious experience and became a theologian. He was simultaneously one of the greatest scientists and one of the greatest mystics of his age.",
+      "quote": "All of humanity's problems stem from man's inability to sit quietly in a room alone.",
+      "pascal_moment": "Pascal IS the metaphor. His life was lived at the exact boundary of the sphere — brilliant science touching the darkness of uncertainty and faith.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Draw Your Sphere",
+          "challenge": "Draw a circle. Inside it, write everything you know about one subject (say, animals). On the edge, write what you're just learning. Outside the circle, write questions you don't know how to answer yet. As you learn more and the circle grows — does the edge (the unknown boundary) get smaller or larger? Why?",
+          "hint": "A larger circle has a LONGER circumference — so it touches MORE of the unknown. Learning creates more questions, not fewer."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Pascal's Wager",
+          "challenge": "Pascal's Wager: if God exists and you believe, you gain everything (eternal life). If God doesn't exist and you believe, you lose nothing (a comfortable life). Therefore it's rational to believe. Is this good reasoning? Construct two objections to the wager. Then apply the same wager-style logic to: climate change action, wearing a seatbelt, and studying hard.",
+          "hint": "One classic objection: which God? The wager doesn't tell you which belief is the right bet."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Sphere as Metaphor for Parth",
+          "challenge": "Pascal said the sphere of knowledge is defined by its edge — the contact surface between the known and the unknown. An AI tutor like Parth is meant to help students expand their sphere. Design the algorithm: how should Parth identify the exact edge of each student's knowledge sphere? How should it present the unknown in a way that inspires rather than frightens? Write a design specification, not code.",
+          "hint": "The Vygotsky connection: the Zone of Proximal Development is the pedagogical equivalent of Pascal's sphere edge. How do you operationalize 'productive struggle'?"
+        }
+      ],
+      "open_question": "Is the growth of knowledge self-limiting (we approach truth asymptotically) or unbounded (every answer opens more questions than it closes)?",
+      "sphere_expanded": "Probability Theory, Fluid Mechanics, Theology, Education",
+      "connected_thinkers": ["leibniz", "hume", "vygotsky", "shannon"]
+    },
+    {
+      "id": "spinoza",
+      "name": "Baruch Spinoza",
+      "era": "1632–1677",
+      "origin": "Amsterdam, Netherlands",
+      "mbti": "INFJ",
+      "key_insight": "God and Nature are one. Everything follows from necessary laws. Freedom is not absence of causation, but understanding the causation that moves you.",
+      "spark": "He received the harshest excommunication in Jewish history at age 23 — banned from his community forever, with curses and condemnation written in unusually extreme language. He spent the rest of his life alone, grinding lenses for a living and writing philosophy.",
+      "quote": "Peace is not the absence of war; it is a virtue, a state of mind, a disposition for benevolence, confidence, justice.",
+      "pascal_moment": "Spinoza pushed the sphere by proposing that the unknown IS God — and the sphere of knowledge IS the sphere of God/Nature. To learn more is to understand God better.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Everything is Connected",
+          "challenge": "Spinoza said there is only ONE substance in the universe (God/Nature) and everything is a mode of it — nothing is truly separate. Find 5 things that seem completely unrelated and trace a chain of connections between them. How many steps does it take to connect a stone and a song?",
+          "hint": "Stone → geology → minerals → chemistry → atoms → electrons → electromagnetic waves → sound waves → song. How many steps?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Free Will or Determined?",
+          "challenge": "Spinoza said free will is an illusion: we feel free, but are fully determined by prior causes. Modern neuroscience says decisions are made in the brain before we're consciously aware of them (Libet experiments). If Spinoza is right, can we still hold people morally responsible? Design a justice system that takes determinism seriously.",
+          "hint": "Spinoza's actual view: freedom is not about escaping causation but about being caused by your own nature (reason) rather than external forces. Is that enough for responsibility?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Geometric Method",
+          "challenge": "Spinoza wrote his Ethics like Euclid wrote geometry: Definitions → Axioms → Propositions → Proofs. He thought ethics could be as rigorous as mathematics. Attempt to write one moral proposition in this format: choose a moral statement, state the definitions and axioms you're assuming, and derive the proposition from them. What are the hardest parts?",
+          "hint": "Where do your axioms come from? Euclid's seemed 'self-evident' — but Spinoza's ethical axioms were controversial. Who decides what's an axiom in ethics?"
+        }
+      ],
+      "open_question": "Can ethics be given the same kind of rigorous, deductive foundation as mathematics — or is moral knowledge fundamentally different from mathematical knowledge?",
+      "sphere_expanded": "Metaphysics, Ethics, Political Philosophy, Theology",
+      "connected_thinkers": ["descartes", "leibniz", "einstein", "freud"]
+    },
+    {
+      "id": "leibniz",
+      "name": "Gottfried Wilhelm Leibniz",
+      "era": "1646–1716",
+      "origin": "Leipzig, Germany",
+      "mbti": "INTP",
+      "key_insight": "The universe is made of monads — ultimate units of perception. And calculus is the mathematics of continuous change.",
+      "spark": "He and Newton independently invented calculus at the same time, on opposite sides of Europe, with completely different notation. Their followers waged one of history's most bitter priority disputes. Leibniz's notation (dy/dx) is the one we use today.",
+      "quote": "Music is the pleasure the human mind experiences from counting without being aware that it is counting.",
+      "pascal_moment": "Leibniz's binary arithmetic — just 0s and 1s — seemed like a philosophical toy. Three hundred years later, it became the foundation of all computing.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Binary Counting",
+          "challenge": "Leibniz invented binary arithmetic — numbers made only of 0s and 1s, because he believed all of existence could be represented as presence or absence. Learn to count to 16 in binary (1, 10, 11, 100...). Then write your age in binary. Every computer in the world uses this system.",
+          "hint": "Binary: 0=0, 1=1, 10=2, 11=3, 100=4, 101=5... Each position is a power of 2."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Best Possible World?",
+          "challenge": "Leibniz famously argued this is 'the best of all possible worlds' — God chose to create this universe because it has the maximum variety with the minimum number of laws. Then Voltaire wrote Candide to mock him. After learning about the Lisbon earthquake of 1755 (which killed 40,000 people), the Holocaust, and climate change — is Leibniz's argument still coherent? What would he have to say to defend it?",
+          "hint": "Leibniz's argument is subtle: 'best possible' doesn't mean 'perfect' — it means the best balance of simplicity of laws and richness of phenomena. Can suffering be part of the 'best possible' design?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Calculus Connection",
+          "challenge": "Leibniz invented calculus as a tool for describing continuous change. He saw it as an expression of the monad — the fundamental unit of nature doing its infinitesimal computations. His notation (dy/dx for derivatives, ∫ for integrals) describes a derivative as an infinitely small ratio. Newton used dot notation (ẋ) and avoided infinity. Leibniz's notation won. Why does notation matter so deeply in mathematics and science?",
+          "hint": "Consider: Leibniz's dy/dx makes the chain rule look obvious (dy/dx · dx/dz = dy/dz). Newton's notation makes it opaque. Notation shapes thought."
+        }
+      ],
+      "open_question": "Why do the fundamental constants of physics have the values they do — is this the 'best possible' universe, or could the laws of nature have been otherwise?",
+      "sphere_expanded": "Mathematics (calculus, binary arithmetic), Metaphysics, Logic, Computer Science",
+      "connected_thinkers": ["newton", "descartes", "boole", "shannon"]
+    },
+    {
+      "id": "bacon",
+      "name": "Francis Bacon",
+      "era": "1561–1626",
+      "origin": "England",
+      "mbti": "ENTJ",
+      "key_insight": "Knowledge is power — and power comes from systematic experiment, not from reading Aristotle. The scientific method must replace scholastic authority.",
+      "spark": "He was simultaneously Lord Chancellor of England (the highest legal office) and the inventor of the scientific method. He was eventually convicted of bribery, stripped of office, and spent his last years writing the future of science.",
+      "quote": "Knowledge is power.",
+      "pascal_moment": "Bacon didn't expand the sphere directly — he changed how the sphere expands. He invented the method by which all subsequent expansion became possible.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Design an Experiment",
+          "challenge": "Bacon said the only way to really know something is to test it. Pick one thing you believe (plants grow better with music; left-handed people are better at art; cold water boils faster). Design a simple experiment to test it. What would it mean if your experiment showed you were wrong?",
+          "hint": "A good experiment must have a way to be WRONG. If no result could change your belief, it's not an experiment — it's a ceremony."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Four Idols",
+          "challenge": "Bacon described four 'idols' — systematic errors of human thinking: (1) Idol of the Tribe (human nature's biases), (2) Idol of the Cave (individual biases), (3) Idol of the Marketplace (misleading language), (4) Idol of the Theatre (received philosophical systems). For each, give one modern example from social media, news, or school that illustrates it.",
+          "hint": "The Idol of the Marketplace is particularly relevant to social media — when a word like 'freedom' or 'justice' means different things to different people but they argue as if it has one meaning."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "From New Atlantis to CERN",
+          "challenge": "Bacon's New Atlantis (1627) described 'Solomon's House' — a research institution with scientists specializing in experiments on heat, light, sound, medicine, mechanics, and mathematics, all working together toward mastery of nature. Map his vision to a modern research institution: CERN, the Human Genome Project, or ISRO. What did Bacon envision correctly? What did he miss?",
+          "hint": "Bacon didn't foresee peer review, publication, international collaboration, or the role of mathematics in theoretical physics. What else might today's science miss that future institutions will have?"
+        }
+      ],
+      "open_question": "Is there a limit to what the scientific method can discover — are there real questions it cannot, in principle, answer?",
+      "sphere_expanded": "Scientific Method, Epistemology, Philosophy of Science",
+      "connected_thinkers": ["aristotle", "galileo", "newton", "darwin"]
+    },
+    {
+      "id": "hobbes",
+      "name": "Thomas Hobbes",
+      "era": "1588–1679",
+      "origin": "England",
+      "mbti": "INTJ",
+      "key_insight": "Without law and government, human life is 'solitary, poor, nasty, brutish, and short.' Order is the precondition of all other values.",
+      "spark": "He witnessed the English Civil War and the beheading of a king. This shaped his conviction that civil war was the worst possible evil — worse than tyranny. He wrote Leviathan to make the case for absolute sovereign authority.",
+      "quote": "The condition of man is a condition of war of every one against every one.",
+      "pascal_moment": "Hobbes pushed the sphere of political philosophy by asking: what happens at the absolute boundary — the state of nature before society? The answer terrified everyone.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Rules or Freedom?",
+          "challenge": "Imagine a school with no rules at all — no teachers, no timetable, no consequences. What would happen in the first hour? The first day? The first week? Use your imagination to describe the progression. What rules would students eventually create themselves, and why?",
+          "hint": "Hobbes would predict chaos, then a strong leader emerging. Rousseau would predict children organizing themselves fairly. Who do you think is right?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Internet as State of Nature",
+          "challenge": "Before content moderation, the early internet was close to a 'state of nature' — no enforced rules, anonymous interaction. What happened? What forms of 'Leviathan' have emerged (governments, platforms, community rules)? Compare the governance of three online spaces (Reddit, Twitter/X, WhatsApp groups) through Hobbes's framework.",
+          "hint": "Reddit's upvote/downvote system is a kind of social contract. Twitter's Terms of Service is a kind of sovereign law. But who enforces them?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Hobbes vs. Kropotkin",
+          "challenge": "Hobbes: humans are naturally competitive and selfish; only a strong state prevents war. Peter Kropotkin (anarchist): humans are naturally cooperative; mutual aid is as strong an evolutionary force as competition. Both appeal to nature. Modern evolutionary biology (kin selection, reciprocal altruism, group selection) has evidence for both. Construct a 500-word argument that tries to reconcile the two using evolutionary evidence.",
+          "hint": "Consider: cooperative behavior evolved in small, kin-related groups. Does it scale to strangers? To global society? To AI systems?"
+        }
+      ],
+      "open_question": "What is the minimum authority a state needs to maintain order — and where does legitimate authority end and tyranny begin?",
+      "sphere_expanded": "Political Philosophy, Social Contract Theory, Legal Theory",
+      "connected_thinkers": ["locke", "rousseau", "mill", "darwin"]
+    },
+    {
+      "id": "mill",
+      "name": "John Stuart Mill",
+      "era": "1806–1873",
+      "origin": "England",
+      "mbti": "ENTJ",
+      "key_insight": "The greatest happiness for the greatest number — but quality of pleasure matters too. Higher pleasures (intellect, beauty, justice) are better than lower ones, even if less intense.",
+      "spark": "Taught Greek at 3, Latin at 8, logic at 10, economics at 12 — by a father who considered him a social experiment. Had a complete mental breakdown at 20, recovered through Romantic poetry, and became the greatest liberal thinker of the 19th century.",
+      "quote": "It is better to be Socrates dissatisfied than a fool satisfied.",
+      "pascal_moment": "Mill expanded the sphere of ethics by quantifying happiness — but then discovered that quality cannot be quantified, opening the deepest problem in moral philosophy.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Happiness Calculation",
+          "challenge": "Mill said we should always choose the action that produces the most happiness for the most people. Try this: your friend wants to watch TV instead of doing homework. You could tell or not tell. Who gets happy or unhappy, and by how much, in each scenario? Add it up. What does utilitarianism say you should do?",
+          "hint": "Utilitarianism adds up happiness and suffering across all affected people. Try to assign numbers (even rough ones) and see where they lead."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Harm Principle",
+          "challenge": "Mill's harm principle: the only justification for limiting someone's freedom is to prevent harm to others. Apply this to: (1) banning tobacco, (2) requiring vaccines, (3) removing hate speech from social media, (4) making school attendance mandatory. For each: is there harm to others? How certain must the harm be to justify restriction?",
+          "hint": "The hard cases are where the harm is: indirect, probabilistic, or to yourself. Mill said harm to YOURSELF doesn't justify restriction. Do you agree?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Socrates or the Fool?",
+          "challenge": "Mill said: 'It is better to be Socrates dissatisfied than a fool satisfied.' He meant: awareness and critical thinking, even when painful, are better than ignorance and pleasure. Robert Nozick's Experience Machine thought experiment challenges this: would you plug in to a machine that gives you perfect, unlimited pleasure with no connection to reality? Use Nozick's machine to test Mill's claim. Then ask: is Parth (an AI tutor) more like Socrates or the machine?",
+          "hint": "If you choose not to plug in — why? Mill would say because real achievement and real relationships matter, even if they cause suffering. But what exactly is 'real' about them?"
+        }
+      ],
+      "open_question": "Can the quality of different kinds of happiness be compared — and if so, who has the authority to rank them?",
+      "sphere_expanded": "Ethics, Political Philosophy, Economics, Feminist Philosophy",
+      "connected_thinkers": ["bentham", "kant", "nietzsche", "sen"]
+    },
+    {
+      "id": "rousseau",
+      "name": "Jean-Jacques Rousseau",
+      "era": "1712–1778",
+      "origin": "Geneva, Switzerland",
+      "mbti": "INFP",
+      "key_insight": "Humans are naturally good; civilization corrupts. The social contract must be based on the 'general will' — not just majority rule.",
+      "spark": "He abandoned all five of his children to orphanages, yet wrote the most influential book on education (Émile). This contradiction tortured him. His ideas inspired the French Revolution and modern romanticism simultaneously.",
+      "quote": "Man is born free, and everywhere he is in chains.",
+      "pascal_moment": "Rousseau pushed the sphere by questioning civilization itself — revealing that 'progress' might be the thing that corrupts the sphere from within.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Before Rules",
+          "challenge": "Watch small children (under 3) playing together, if you can. What do they do naturally — before anyone teaches them rules of sharing, fairness, or competition? Are they selfish (Hobbes) or naturally cooperative (Rousseau)? Write what you observe.",
+          "hint": "Toddlers do show empathy spontaneously — but also fierce possessiveness. What does this tell us about 'natural' human character?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "General Will vs. Majority",
+          "challenge": "Rousseau said democracy should be guided by the 'general will' — what is truly good for everyone, not just what 51% want. Is there a difference? Give three historical examples where majority rule produced decisions that violated what was good for everyone. Then design one mechanism that tries to capture the general will rather than just the majority preference.",
+          "hint": "Consider: majority rule in pre-Civil War America, Brexit, or any case where a majority voted against the interests of a minority. Is there a procedure that could capture Rousseau's 'general will'?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Noble Savage and Its Critique",
+          "challenge": "Rousseau's vision of natural humanity was later called the 'noble savage' myth — the idea that indigenous peoples lived in a more authentic, uncorrupted state. This idea was both romanticizing and condescending. Archaeological evidence (mass graves, slavery in pre-contact Americas, warfare in all known hunter-gatherer societies) complicates it. Is there any salvageable truth in Rousseau's critique of civilization — separated from his romanticization of pre-civilized life?",
+          "hint": "Steven Pinker (The Better Angels) argues violence has declined with civilization. But others argue modern technology has enabled unprecedented scale of violence and ecological destruction. What does 'corruption' mean precisely?"
+        }
+      ],
+      "open_question": "Is civilization a net benefit to human wellbeing — or have its costs (alienation, inequality, environmental destruction) outweighed its gains?",
+      "sphere_expanded": "Political Philosophy, Education, Romanticism, Social Contract Theory",
+      "connected_thinkers": ["locke", "hobbes", "dewey", "darwin"]
+    },
+    {
+      "id": "voltaire",
+      "name": "Voltaire",
+      "era": "1694–1778",
+      "origin": "Paris, France",
+      "mbti": "ENTP",
+      "key_insight": "Question everything, especially those in power. Superstition and fanaticism are more dangerous than vice. Satire is a weapon of truth.",
+      "spark": "Imprisoned in the Bastille twice. Exiled from France to England, then to Prussia, then to the Swiss border. His ridicule and wit helped ignite the French Revolution — which began 11 years after his death, when his bones were moved to the Pantheon.",
+      "quote": "Judge a man by his questions rather than his answers.",
+      "pascal_moment": "Voltaire's sphere was the public — he pushed the known into places power had forbidden. He expanded the sphere by making ridicule safe and showing that the emperor had no clothes.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Best Questions",
+          "challenge": "Voltaire said: 'Judge a man by his questions rather than his answers.' Think about the last week. What is the best question you asked — not the one you knew the answer to already, but a genuine question that opened something? Write it down. What made it a good question?",
+          "hint": "A good question is one that makes even the person who answers it think differently. It opens a door rather than confirming what's already known."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Write Like Voltaire",
+          "challenge": "Voltaire wrote Candide to mock Leibniz's optimism by showing a naive character experiencing disasters while insisting 'all is for the best in the best of all possible worlds.' Write a 3-paragraph satirical story in this style — choose something in your school, city, or country that is clearly wrong, and have a naive character experience it while insisting everything is perfect. Satire must be sharp but not cruel.",
+          "hint": "The best satire exaggerates real absurdity, not fictional absurdity. Pick something real — bureaucracy, exam pressure, traffic, pollution — and push it to its logical extreme."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Intellectual Freedom Today",
+          "challenge": "Voltaire fought for freedom of speech and religious tolerance when both were physically dangerous to argue for. Map his specific battles to contemporary fights for intellectual freedom: academic freedom, whistleblowers, dissidents in authoritarian states, and content moderation debates. In each case, ask: who is the 'Voltaire'? Who is the 'Bastille'? Is the internet the printing press of our age — and if so, is it serving the same role?",
+          "hint": "Consider: Voltaire's works were banned and burned — yet spread via underground networks. Social media bans work the same way. What does this tell us about the physics of suppressed ideas?"
+        }
+      ],
+      "open_question": "In a world of algorithmic content filtering and government censorship of the internet — what does freedom of thought mean, and how do we protect it?",
+      "sphere_expanded": "Political Philosophy, Religious Criticism, Satire, Intellectual Freedom",
+      "connected_thinkers": ["leibniz", "rousseau", "mill", "russell"]
+    },
+    {
+      "id": "dewey",
+      "name": "John Dewey",
+      "era": "1859–1952",
+      "origin": "Vermont, USA",
+      "mbti": "ENFJ",
+      "key_insight": "Education is not preparation for life — education IS life. Learning happens through doing, not through memorizing.",
+      "spark": "He transformed American education from rote memorization to learning-by-doing. His lab school in Chicago let children learn by running a small society — cooking, sewing, building — discovering science and history as they needed it.",
+      "quote": "Education is not preparation for life; education is life itself.",
+      "pascal_moment": "Dewey pushed the sphere of pedagogy: he realized the classroom was a sphere unto itself — and that the best way to expand the known is to put children at the edge of the unknown, not behind a wall of facts.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Learning by Doing",
+          "challenge": "Think of something you learned deeply because you DID it — not because you read or memorized it. Maybe swimming, cooking, riding a bike, coding. Describe how you learned it. Compare it to how you learned the same volume of content by reading. Which do you remember better, and why?",
+          "hint": "Dewey said the best learning happens when you hit a real problem in real life. The frustration of not knowing is the engine of genuine learning."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The School Redesign",
+          "challenge": "Dewey believed school should be a miniature democratic society — children should face real problems and learn through solving them. Design a one-day school curriculum for 12-year-olds around one real problem: the school needs to reduce its electricity use by 20%. What subjects does this involve? What skills would students develop? Compare this to a standard school day.",
+          "hint": "Electricity → physics (energy), mathematics (measurement), economics (cost), behavior science (habits), writing (proposals), art (posters). One problem = all subjects."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Dewey and Parth",
+          "challenge": "Dewey's pragmatism: an idea is true if it works. An education is good if it produces growth — the capacity for more growth. Using Dewey's framework, evaluate Parth (this AI tutor). Does it embody Dewey's educational philosophy? Where does it fall short? Propose three features that would make Parth more Dewey-aligned. Reference specific aspects of Dewey's theory.",
+          "hint": "Dewey valued: experience over instruction, democracy over authority, process over product, growth over knowledge transfer. Which of these can an AI facilitate and which can it only simulate?"
+        }
+      ],
+      "open_question": "What is the purpose of education — to transmit existing knowledge, to develop the capacity for thought, to prepare for democratic participation, or something else entirely?",
+      "sphere_expanded": "Education, Pragmatism, Democracy, Social Philosophy",
+      "connected_thinkers": ["rousseau", "vygotsky", "piaget", "james_w"]
+    },
+    {
+      "id": "de_beauvoir",
+      "name": "Simone de Beauvoir",
+      "era": "1908–1986",
+      "origin": "Paris, France",
+      "mbti": "ENTJ",
+      "key_insight": "'One is not born a woman, but rather becomes one.' Gender is a social construction built through performance, expectation, and oppression — not a biological given.",
+      "spark": "In 1949 she published The Second Sex — a book so radical it was put on the Vatican's forbidden list, and so foundational that it launched second-wave feminism. Sartre (her lifelong partner) said it was a better book than his own work.",
+      "quote": "One is not born, but rather becomes, a woman.",
+      "pascal_moment": "De Beauvoir pushed the sphere by showing that gender — something seemingly as fixed as biology — is the product of history, culture, and power. Half the sphere had been defined by the other half.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Roles You Learned",
+          "challenge": "List 10 things about yourself that you were told to be (polite, ambitious, quiet, strong, nurturing...). For each one, ask: Was I born this way, or did I learn it? Who taught me? Was it the same lessons that children of a different gender received? What do your answers tell you?",
+          "hint": "De Beauvoir wasn't saying biology doesn't exist. She was saying that enormous amounts of what we call 'feminine' or 'masculine' are social rather than biological."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Other",
+          "challenge": "De Beauvoir said women are defined as 'the Other' — man is the norm, woman is the deviation. She identified the same pattern in race (white as norm), nationality (Western as norm), and ability (able-bodied as norm). Find 3 examples where you can see this 'othering' in textbooks, news, or everyday language. What is the cost of making any group 'the Other'?",
+          "hint": "Look at which group is described neutrally versus which group is always labelled: 'female doctor,' 'African author,' 'disabled athlete.' The unlabelled group is implicitly the norm."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Existentialism and Identity",
+          "challenge": "De Beauvoir combined existentialism (existence precedes essence — you are what you do, not what you are 'born as') with feminist analysis. Apply this framework to contemporary debates about gender identity, caste identity, and national identity. In each case: what does it mean to say identity is 'constructed' rather than 'essential'? What are the political consequences of each position?",
+          "hint": "If identity is fully constructed, can you choose any identity? If identity is essential, does that justify discrimination? Both extremes seem wrong — where is the right level of constructedness?"
+        }
+      ],
+      "open_question": "To what degree is any identity (gender, caste, nationality, personality) constructed by society, and to what degree is it inherent — and does the answer matter for justice?",
+      "sphere_expanded": "Feminism, Existentialism, Ethics, Political Philosophy",
+      "connected_thinkers": ["nietzsche", "sartre", "mill", "chomsky"]
+    }
+  ]
+}

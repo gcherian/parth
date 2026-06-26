@@ -1,0 +1,106 @@
+"""
+Kernel data models — Event, KernelContext, ModuleResult, EventType.
+
+EventType enumerates the well-known inter-agent event bus keys so that
+refactoring is caught at import time rather than discovered at runtime.
+"""
+from __future__ import annotations
+
+import uuid
+from dataclasses import dataclass, field
+from datetime import datetime, date
+from enum import StrEnum
+from typing import Any
+
+
+class EventType(StrEnum):
+    """
+    Well-known events on the inter-agent bus (AgentSignals.events).
+
+    Layer 0 agents emit these; Layer 1+ agents consume them via
+    signals.events.get(EventType.X).
+    """
+    # EmotionCompass (Layer 0) →
+    DISTRESS_DETECTED = "distress.detected"
+    ENGAGEMENT_HIGH   = "engagement.high"
+    CURIOSITY_ACTIVE  = "curiosity.active"
+
+    # MasteryTracker (Layer 0) →
+    CONCEPT_WEAK = "concept.weak"
+
+    # MisconceptionHunter (Layer 0) →
+    MISCONCEPTION_ACTIVE = "misconception.active"
+
+    # LanguageBridge (Layer 0) →
+    LANG_PREFERENCE = "lang.preference"
+
+    # BeliefCoach (Layer 0) →
+    CONFIDENCE_BIAS = "confidence.bias"
+
+    # ChallengeCalibrator (Layer 1) →
+    DIFFICULTY_ADJUST = "difficulty.adjust"
+
+    # TransferWeaver (Layer 1) →
+    ANALOGY_SUGGESTED = "analogy.suggested"
+
+    # RegisterTuner (Layer 1) →
+    REGISTER_PROFILE = "register.profile"
+
+    # HumorDelightGuide (Layer 1) →
+    DELIGHT_APPROVED = "delight.approved"
+
+
+@dataclass
+class Event:
+    type: str
+    aggregate: str
+    aggregate_id: str
+    payload: dict
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    request_id: str = ""
+    trace_id: str = ""
+    schema_ver: int = 1
+    ts: datetime = field(default_factory=datetime.utcnow)
+
+
+def _derive_session_id(learner_id: str) -> str:
+    """All messages in the same calendar day share a session_id."""
+    today = date.today().isoformat()
+    return f"{learner_id}:{today}"
+
+
+@dataclass
+class KernelContext:
+    request_id: str
+    trace_id: str
+    learner_id: str
+    subject: str
+    grade: int
+    message: str
+    history: list[dict] = field(default_factory=list)
+    # Filled in by modules as they run
+    learner_context: str = ""
+    curriculum_context: str = ""
+    moderation_ok: bool = True
+    distress_detected: bool = False
+    module_data: dict[str, Any] = field(default_factory=dict)
+    # Set by tutor.runtime
+    response_text: str = ""
+    model_used: str = ""
+    # Database connection (injected by kernel, shared across modules in one transaction)
+    db: Any = None
+    # Session ID — derived from learner_id + date so all messages in a day share one session
+    session_id: str = field(default="")
+
+    def __post_init__(self):
+        if not self.session_id:
+            self.session_id = _derive_session_id(self.learner_id)
+
+
+@dataclass
+class ModuleResult:
+    success: bool = True
+    data: dict[str, Any] = field(default_factory=dict)
+    error: str = ""
+    veto: bool = False          # only moderation.ops sets this True
+    veto_response: str = ""     # pre-approved safe message to return instead

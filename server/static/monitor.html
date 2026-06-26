@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth Monitor</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #080e1c;
+    --surface:  #0f1829;
+    --border:   #1e2d47;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --blue:     #3b82f6;
+    --green:    #10b981;
+    --amber:    #f59e0b;
+    --red:      #ef4444;
+    --purple:   #8b5cf6;
+    --cyan:     #06b6d4;
+    --saffron:  #FF9933;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .logo {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--saffron);
+    letter-spacing: .5px;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--text); }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .live-dot {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .5; transform: scale(1.3); }
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    overflow: hidden;
+  }
+  .stat {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 90px;
+  }
+  .stat-val {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue);
+    line-height: 1.2;
+  }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+  .health-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .health-pill.ok  { color: var(--green); border-color: #10b98140; }
+  .health-pill.bad { color: var(--red);   border-color: #ef444440; }
+  .health-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .ok  .health-dot { background: var(--green); }
+  .bad .health-dot { background: var(--red); animation: pulse 1s infinite; }
+
+  /* ── Main layout ── */
+  main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Left: Live feed ── */
+  #feed-panel {
+    width: 340px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .panel-title {
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #feed-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  #feed-list::-webkit-scrollbar { width: 4px; }
+  #feed-list::-webkit-scrollbar-track { background: transparent; }
+  #feed-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .feed-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left-width: 3px;
+    border-radius: 8px;
+    padding: 9px 11px;
+    animation: slideIn .25s ease-out;
+    cursor: default;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .feed-card.excited    { border-left-color: var(--green); }
+  .feed-card.confused   { border-left-color: var(--amber); }
+  .feed-card.disengaged { border-left-color: var(--red); }
+  .feed-card.neutral    { border-left-color: var(--blue); }
+  .feed-card.distress   { border-left-color: var(--red); animation: distressPulse 1s 3; }
+  @keyframes distressPulse {
+    0%, 100% { border-left-color: var(--red); }
+    50%      { border-left-color: #ff8080; box-shadow: 0 0 12px #ef444480; }
+  }
+
+  .feed-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .feed-name  { font-weight: 600; font-size: 12px; color: var(--text); }
+  .feed-time  { font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .feed-meta  { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 3px; }
+
+  .badge {
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .badge-grade   { background: #1e3a5f; color: #60a5fa; }
+  .badge-subject { background: #1a2e1a; color: var(--green); }
+  .badge-misc    { background: #3d2000; color: var(--amber); }
+  .badge-distress{ background: #3d0000; color: var(--red); }
+  .badge-model   { background: #1a1040; color: var(--purple); font-size: 9px; }
+
+  .eng-bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 4px;
+  }
+  .eng-track {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .eng-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+  .eng-val { font-size: 10px; color: var(--muted); min-width: 28px; text-align: right; }
+  .duration { font-size: 10px; color: var(--muted); }
+
+  /* ── Right: Graph panel ── */
+  #graph-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .graph-toolbar {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .filter-btn {
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+  }
+  .filter-btn[data-subj="Mathematics"].active { background: var(--blue); border-color: var(--blue); }
+  .filter-btn[data-subj="Science"].active     { background: var(--green); border-color: var(--green); }
+  .filter-btn[data-subj="History"].active     { background: var(--amber); border-color: var(--amber); }
+  .filter-btn[data-subj="Hindi"].active       { background: var(--purple); border-color: var(--purple); }
+
+  .graph-legend {
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--muted);
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-line { width: 20px; height: 2px; }
+  .legend-line.prereq  { background: var(--blue); }
+  .legend-line.coreq   { background: var(--cyan); border-top: 2px dashed var(--cyan); height: 0; }
+  .legend-line.leadsto { background: var(--purple); border-top: 2px dotted var(--purple); height: 0; }
+
+  #graph-svg {
+    flex: 1;
+    width: 100%;
+    cursor: grab;
+  }
+  #graph-svg:active { cursor: grabbing; }
+
+  /* ── D3 elements ── */
+  .node-circle { stroke-width: 1.5; transition: r .2s; cursor: pointer; }
+  .node-label  { fill: var(--text); font-size: 9px; pointer-events: none; text-anchor: middle; }
+  .link        { stroke-opacity: .6; fill: none; }
+
+  /* ── Tooltip ── */
+  #tooltip {
+    position: fixed;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--text);
+    max-width: 240px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s;
+    z-index: 999;
+    line-height: 1.6;
+  }
+  #tooltip.show { opacity: 1; }
+  #tooltip strong { color: var(--blue); font-size: 13px; }
+  #tooltip .tt-subject { color: var(--muted); font-size: 10px; }
+
+  /* ── Empty state ── */
+  .empty-feed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: var(--muted);
+    gap: 8px;
+    font-size: 12px;
+  }
+  .empty-feed svg { opacity: .3; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo">पार्थ <span>Monitor</span></div>
+  <div class="live-badge"><div class="live-dot"></div> Live</div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val" id="s-today">–</div><div class="stat-label">Today</div></div>
+    <div class="stat"><div class="stat-val" id="s-active">–</div><div class="stat-label">Learners/hr</div></div>
+    <div class="stat"><div class="stat-val" id="s-eng" style="color:var(--green)">–</div><div class="stat-label">Avg Eng</div></div>
+    <div class="stat"><div class="stat-val" id="s-uptime" style="color:var(--muted);font-size:13px">–</div><div class="stat-label">Uptime</div></div>
+    <div class="stat"><div class="stat-val" id="s-clients" style="color:var(--purple)">–</div><div class="stat-label">Watchers</div></div>
+  </div>
+
+  <div style="display:flex;gap:6px;flex-shrink:0">
+    <div class="health-pill ok"  id="pill-pg"><div class="health-dot"></div> Postgres</div>
+    <div class="health-pill ok"  id="pill-ol"><div class="health-dot"></div> Ollama</div>
+  </div>
+</header>
+
+<!-- ── Main ──────────────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- Live feed -->
+  <div id="feed-panel">
+    <div class="panel-title">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Live Interactions
+    </div>
+    <div id="feed-list">
+      <div class="empty-feed" id="feed-empty">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Waiting for interactions…
+      </div>
+    </div>
+  </div>
+
+  <!-- Graph panel -->
+  <div id="graph-panel">
+    <div class="graph-toolbar">
+      <button class="filter-btn active" data-subj="all">All</button>
+      <button class="filter-btn" data-subj="Mathematics">Mathematics</button>
+      <button class="filter-btn" data-subj="Science">Science</button>
+      <button class="filter-btn" data-subj="History">History</button>
+      <button class="filter-btn" data-subj="Hindi">Hindi</button>
+
+      <div class="graph-legend">
+        <div class="legend-item"><div class="legend-line prereq"></div> Prerequisite</div>
+        <div class="legend-item"><div class="legend-line coreq"></div> Co-requisite</div>
+        <div class="legend-item"><div class="legend-line leadsto"></div> Leads-to</div>
+      </div>
+    </div>
+    <svg id="graph-svg"></svg>
+  </div>
+
+</main>
+
+<div id="tooltip"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════════
+const EMOTION_EMOJI = { excited:'🤩', confused:'🤔', disengaged:'😴', neutral:'😊' };
+const SUBJECT_COLOR = {
+  'Mathematics': '#3b82f6',
+  'Science':     '#10b981',
+  'History':     '#f59e0b',
+  'Hindi':       '#8b5cf6',
+  'English':     '#06b6d4',
+  'Geography':   '#ec4899',
+};
+const DEFAULT_COLOR = '#64748b';
+
+function subjectColor(s) { return SUBJECT_COLOR[s] || DEFAULT_COLOR; }
+
+function engColor(v) {
+  if (v >= 7.5) return '#10b981';
+  if (v >= 5)   return '#f59e0b';
+  return '#ef4444';
+}
+
+function fmtTime(iso) {
+  const d = new Date(iso);
+  return d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
+}
+
+function fmtDuration(ms) {
+  return ms >= 1000 ? `${(ms/1000).toFixed(1)}s` : `${ms}ms`;
+}
+
+function truncate(str, n) {
+  return str && str.length > n ? str.slice(0, n) + '…' : str;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LIVE FEED (SSE)
+// ═══════════════════════════════════════════════════════════════════════════════
+const feedList  = document.getElementById('feed-list');
+const feedEmpty = document.getElementById('feed-empty');
+const MAX_CARDS = 60;
+
+function addFeedCard(ev) {
+  if (ev.type !== 'interaction') return;
+
+  feedEmpty.style.display = 'none';
+
+  const emotion  = ev.emotion || 'neutral';
+  const eng      = parseFloat(ev.engagement || 5);
+  const misc     = ev.misconception || '';
+  const distress = ev.distress;
+  const name     = ev.learner_name || ('Learner …' + (ev.learner_id || '').slice(-4));
+  const subj     = ev.subject || 'General';
+  const color    = subjectColor(subj);
+
+  const card = document.createElement('div');
+  card.className = `feed-card ${distress ? 'distress' : emotion}`;
+
+  card.innerHTML = `
+    <div class="feed-top">
+      <div class="feed-name">${EMOTION_EMOJI[emotion] || '😊'} ${escHtml(name)}</div>
+      <div class="feed-time">${fmtTime(ev.ts)}</div>
+    </div>
+    <div class="feed-meta">
+      <span class="badge badge-grade">G${ev.grade || '?'}</span>
+      <span class="badge badge-subject" style="background:${color}22;color:${color}">${escHtml(subj)}</span>
+      ${misc ? `<span class="badge badge-misc" title="${escHtml(misc)}">⚠ ${truncate(misc, 28)}</span>` : ''}
+      ${distress ? `<span class="badge badge-distress">🚨 Distress</span>` : ''}
+      <span class="badge badge-model">${escHtml((ev.model||'').split(':')[0])}</span>
+      <span class="duration">${fmtDuration(ev.duration_ms || 0)}</span>
+    </div>
+    <div class="eng-bar">
+      <div class="eng-track">
+        <div class="eng-fill" style="width:${eng*10}%;background:${engColor(eng)}"></div>
+      </div>
+      <div class="eng-val">${eng.toFixed(1)}</div>
+    </div>`;
+
+  feedList.insertBefore(card, feedList.firstChild);
+
+  // Trim old cards
+  const cards = feedList.querySelectorAll('.feed-card');
+  if (cards.length > MAX_CARDS) cards[cards.length - 1].remove();
+
+  // Flash matched graph node
+  highlightGraphNode(subj);
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function connectSSE() {
+  const es = new EventSource('/monitor/stream');
+  es.onmessage = e => {
+    try { addFeedCard(JSON.parse(e.data)); } catch(_) {}
+  };
+  es.onerror = () => {
+    setTimeout(connectSSE, 3000);
+    es.close();
+  };
+}
+connectSSE();
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STATS POLLING
+// ═══════════════════════════════════════════════════════════════════════════════
+let _seedDone = false;
+
+async function refreshStats() {
+  try {
+    const [stats, health] = await Promise.all([
+      fetch('/monitor/stats').then(r => r.json()),
+      fetch('/health').then(r => r.json()),
+    ]);
+
+    document.getElementById('s-today').textContent   = stats.today_interactions ?? '–';
+    document.getElementById('s-active').textContent  = stats.active_learners ?? '–';
+    document.getElementById('s-eng').textContent     = stats.avg_engagement ?? '–';
+    document.getElementById('s-uptime').textContent  = stats.uptime ?? '–';
+    document.getElementById('s-clients').textContent = stats.live_clients ?? '–';
+
+    setPill('pill-pg', health.postgres);
+    setPill('pill-ol', health.ollama);
+
+    // Pre-populate feed from DB on first load (oldest-first so newest ends up on top)
+    if (!_seedDone && stats.recent && stats.recent.length > 0) {
+      _seedDone = true;
+      [...stats.recent].reverse().forEach(row => {
+        addFeedCard({
+          type:         'interaction',
+          ts:           row.created_at,
+          learner_id:   row.learner_id,
+          learner_name: '',
+          subject:      row.subject,
+          grade:        row.grade,
+          model:        row.model,
+          duration_ms:  row.duration_ms,
+          emotion:      row.emotion,
+          engagement:   row.engagement,
+          misconception: row.misconception,
+          distress:     false,
+        });
+      });
+    }
+  } catch(_) {}
+}
+
+function setPill(id, ok) {
+  const el = document.getElementById(id);
+  el.className = `health-pill ${ok ? 'ok' : 'bad'}`;
+}
+
+refreshStats();
+setInterval(refreshStats, 5000);
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// D3 KNOWLEDGE GRAPH
+// ═══════════════════════════════════════════════════════════════════════════════
+const svg    = d3.select('#graph-svg');
+const tooltip = document.getElementById('tooltip');
+let   simulation, nodeGroup, linkGroup, allNodes = [], allLinks = [], activeFilter = 'all';
+
+// Arrow markers
+function addMarkers(defs) {
+  const types = [
+    { id: 'arrow-prereq',  color: '#3b82f6' },
+    { id: 'arrow-coreq',   color: '#06b6d4' },
+    { id: 'arrow-leadsto', color: '#8b5cf6' },
+  ];
+  types.forEach(t => {
+    defs.append('marker')
+      .attr('id', t.id)
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 22).attr('refY', 0)
+      .attr('markerWidth', 6).attr('markerHeight', 6)
+      .attr('orient', 'auto')
+      .append('path')
+        .attr('d', 'M0,-5L10,0L0,5')
+        .attr('fill', t.color)
+        .attr('opacity', .7);
+  });
+}
+
+function linkMarker(type) {
+  if (type === 'prerequisite') return 'url(#arrow-prereq)';
+  if (type === 'co-requisite') return 'url(#arrow-coreq)';
+  return 'url(#arrow-leadsto)';
+}
+function linkColor(type) {
+  if (type === 'prerequisite') return '#3b82f6';
+  if (type === 'co-requisite') return '#06b6d4';
+  return '#8b5cf6';
+}
+function linkDash(type) {
+  if (type === 'co-requisite') return '5,4';
+  if (type === 'leads-to')     return '2,3';
+  return null;
+}
+
+async function loadGraph() {
+  const data = await fetch('/graph/data').then(r => r.json());
+  allNodes = data.nodes || [];
+  allLinks = data.edges || [];
+  renderGraph();
+}
+
+function renderGraph() {
+  svg.selectAll('*').remove();
+
+  const rect   = document.getElementById('graph-svg').getBoundingClientRect();
+  const W = rect.width || 800;
+  const H = rect.height || 600;
+
+  const defs = svg.append('defs');
+  addMarkers(defs);
+
+  // Glow filter
+  const filter = defs.append('filter').attr('id', 'glow');
+  filter.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'blur');
+  const merge = filter.append('feMerge');
+  merge.append('feMergeNode').attr('in', 'blur');
+  merge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+  const zoom = d3.zoom()
+    .scaleExtent([0.2, 4])
+    .on('zoom', e => container.attr('transform', e.transform));
+  svg.call(zoom);
+
+  const container = svg.append('g');
+  linkGroup = container.append('g').attr('class', 'links');
+  nodeGroup = container.append('g').attr('class', 'nodes');
+
+  const filteredNodes = activeFilter === 'all'
+    ? allNodes
+    : allNodes.filter(n => n.subject === activeFilter);
+  const filteredIds = new Set(filteredNodes.map(n => n.id));
+  const filteredLinks = allLinks.filter(l =>
+    filteredIds.has(l.source?.id || l.source) && filteredIds.has(l.target?.id || l.target)
+  );
+
+  // Degree map for node sizing
+  const degree = {};
+  filteredLinks.forEach(l => {
+    const s = l.source?.id || l.source;
+    const t = l.target?.id || l.target;
+    degree[s] = (degree[s] || 0) + 1;
+    degree[t] = (degree[t] || 0) + 1;
+  });
+
+  simulation = d3.forceSimulation(filteredNodes)
+    .force('link', d3.forceLink(filteredLinks)
+      .id(d => d.id)
+      .distance(80)
+      .strength(.4))
+    .force('charge', d3.forceManyBody().strength(-220))
+    .force('center', d3.forceCenter(W / 2, H / 2))
+    .force('collide', d3.forceCollide(d => nodeRadius(d, degree) + 8));
+
+  // Links
+  const link = linkGroup.selectAll('line')
+    .data(filteredLinks)
+    .join('line')
+      .attr('class', 'link')
+      .attr('stroke', d => linkColor(d.type))
+      .attr('stroke-width', 1.4)
+      .attr('stroke-dasharray', d => linkDash(d.type))
+      .attr('marker-end', d => linkMarker(d.type));
+
+  // Nodes
+  const node = nodeGroup.selectAll('g')
+    .data(filteredNodes)
+    .join('g')
+      .attr('class', 'node')
+      .call(d3.drag()
+        .on('start', dragStart)
+        .on('drag',  dragged)
+        .on('end',   dragEnd));
+
+  node.append('circle')
+    .attr('class', 'node-circle')
+    .attr('r', d => nodeRadius(d, degree))
+    .attr('fill', d => subjectColor(d.subject) + '33')
+    .attr('stroke', d => subjectColor(d.subject))
+    .on('mouseover', showTooltip)
+    .on('mousemove', moveTooltip)
+    .on('mouseout',  hideTooltip)
+    .on('click', (_, d) => openNode(d));
+
+  node.append('text')
+    .attr('class', 'node-label')
+    .attr('dy', d => nodeRadius(d, degree) + 11)
+    .text(d => d.label.length > 16 ? d.label.slice(0, 14) + '…' : d.label)
+    .style('fill', d => subjectColor(d.subject))
+    .style('opacity', d => (degree[d.id] || 0) >= 2 ? 1 : 0.55);
+
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    node.attr('transform', d => `translate(${d.x},${d.y})`);
+  });
+
+  function dragStart(e, d) {
+    if (!e.active) simulation.alphaTarget(.3).restart();
+    d.fx = d.x; d.fy = d.y;
+  }
+  function dragged(e, d) { d.fx = e.x; d.fy = e.y; }
+  function dragEnd(e, d) {
+    if (!e.active) simulation.alphaTarget(0);
+    d.fx = null; d.fy = null;
+  }
+}
+
+function nodeRadius(d, degree) {
+  const base = 9;
+  const deg  = degree[d.id] || 0;
+  return Math.min(base + deg * 2.5, 26);
+}
+
+// Tooltip
+function showTooltip(e, d) {
+  const vc = d.video_count ? `<br><span style="color:var(--muted);font-size:10px">📹 ${d.video_count} videos</span>` : '';
+  const mastery = d.mastery != null
+    ? `<br><span style="color:var(--muted);font-size:10px">Mastery: ${Math.round(d.mastery*100)}%</span>`
+    : '';
+  tooltip.innerHTML = `
+    <strong>${escHtml(d.label)}</strong>
+    <div class="tt-subject">${escHtml(d.subject)} · Grade ${d.grade_min}–${d.grade_max}</div>
+    ${d.description ? `<div style="margin-top:4px;font-size:11px;color:var(--muted)">${escHtml(d.description.slice(0,100))}${d.description.length>100?'…':''}</div>` : ''}
+    ${vc}${mastery}`;
+  tooltip.classList.add('show');
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  const x = e.clientX + 12, y = e.clientY - 10;
+  tooltip.style.left = Math.min(x, window.innerWidth - 260) + 'px';
+  tooltip.style.top  = Math.max(0, y) + 'px';
+}
+function hideTooltip() { tooltip.classList.remove('show'); }
+
+function openNode(d) {
+  if (d.video_ids && d.video_ids.length > 0) {
+    window.open(`https://www.youtube.com/watch?v=${d.video_ids[0]}`, '_blank');
+  }
+}
+
+// Subject filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.subj;
+    renderGraph();
+  });
+});
+
+// Highlight graph node when a subject interaction arrives
+let highlightTimer = null;
+function highlightGraphNode(subject) {
+  if (!nodeGroup) return;
+  nodeGroup.selectAll('.node-circle')
+    .filter(d => d.subject === subject)
+    .style('filter', 'url(#glow)')
+    .transition().duration(800)
+    .style('filter', null);
+}
+
+// Resize handler
+const ro = new ResizeObserver(() => renderGraph());
+ro.observe(document.getElementById('graph-svg'));
+
+loadGraph();
+</script>
+</body>
+</html>

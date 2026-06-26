@@ -1,0 +1,377 @@
+{
+  "sphere": "Biology & Medicine",
+  "sphere_id": "biology_medicine",
+  "sphere_description": "The sphere where humans discovered that life is chemistry, chemistry is physics, and all living things share one common ancestor. From the Hippocratic rejection of superstition to CRISPR — biology is learning to read and rewrite the code of life.",
+  "thinkers": [
+    {
+      "id": "darwin",
+      "name": "Charles Darwin",
+      "era": "1809–1882",
+      "origin": "Shrewsbury, England",
+      "mbti": "INTP",
+      "key_insight": "All life on Earth shares common ancestry. Species change over time through natural selection: variation + heredity + selection pressure = evolution.",
+      "spark": "He waited 20 years to publish, terrified of the consequences. When Alfred Russel Wallace independently arrived at the same theory, Darwin published. The idea that would overthrow humanity's sense of cosmic uniqueness had been sitting in a drawer.",
+      "quote": "It is not the strongest of the species that survives, nor the most intelligent; it is the one most adaptable to change.",
+      "pascal_moment": "Darwin expanded the biological sphere to encompass all life on Earth — showing that the diversity of the living world is a single, branching tree rooted in a common ancestor.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Family Tree of Life",
+          "challenge": "All life shares DNA. Humans share 98% of their DNA with chimpanzees, 85% with mice, 36% with fruit flies, and 26% with yeast. Why do we share any DNA with yeast? Draw the tree of life showing when humans, chimps, mice, flies, and yeast last shared a common ancestor. What does it mean to share an ancestor with a mushroom?",
+          "hint": "The shared DNA encodes basic cellular machinery — how to copy DNA, how to make proteins, how to get energy. These processes evolved once, early, and everything alive today inherited them."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Design an Evolving Organism",
+          "challenge": "Natural selection requires three conditions: (1) variation (individuals differ), (2) heredity (traits are inherited), (3) differential reproduction (some variants reproduce more). Design a hypothetical organism in a specific changing environment (e.g., a warming ocean, a drying forest) and trace which variants would be selected over 10 generations. What new features would evolve? What limitations does your reasoning face?",
+          "hint": "Evolution has no foresight — it can only select for current fitness, not future need. A fish can't evolve lungs in one generation because air-breathing would be useful in 100 years."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Darwin + Mendel = Modern Synthesis",
+          "challenge": "Darwin had no mechanism for heredity — he didn't know about genes. Mendel had a mechanism but didn't know about evolution. The Modern Synthesis (1930s–40s: Fisher, Haldane, Dobzhansky, Mayr) unified them using population genetics. Explain how: (1) mutation provides new variation, (2) Mendelian genetics enables heritability, (3) selection acts on allele frequencies, (4) genetic drift matters in small populations. Then ask: does the Modern Synthesis fully explain evolution — or do epigenetics, lateral gene transfer, niche construction, and developmental constraints require a new synthesis?",
+          "hint": "The Extended Evolutionary Synthesis argues: evolution is not just changes in gene frequencies, but also in developmental systems, ecological inheritance, and phenotypic plasticity. Is Darwin's original insight still at the core?"
+        }
+      ],
+      "open_question": "Are there evolutionary transitions (origin of eukaryotes, multicellularity, language, consciousness) that require new principles beyond natural selection — or is selection sufficient to explain all of life's complexity?",
+      "sphere_expanded": "Evolution, Ecology, Genetics, Paleontology, Biogeography",
+      "connected_thinkers": ["mendel", "curie", "schrodinger", "turing_cs"]
+    },
+    {
+      "id": "mendel",
+      "name": "Gregor Mendel",
+      "era": "1822–1884",
+      "origin": "Heinzendorf, Moravia (Czech Republic)",
+      "mbti": "ISTJ",
+      "key_insight": "Heredity follows mathematical laws. Discrete units (genes) are passed from parents to offspring in fixed ratios. Biology obeys mathematics.",
+      "spark": "A monk who grew 29,000 pea plants in a monastery garden. His paper was ignored for 35 years after his death. When it was rediscovered in 1900, genetics was born overnight.",
+      "quote": "My time will come.",
+      "pascal_moment": "Mendel found the discrete unit of the biological sphere — the gene. Heredity, previously mysterious, became a mathematical table.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Punnett Square",
+          "challenge": "Tall pea plants (TT or Tt) dominate short (tt). Cross a Tt (tall) with a tt (short). Draw the Punnett square. What fraction of offspring are tall? What fraction are short? Now cross Tt × Tt. What do you get? Why does the 3:1 ratio appear — and what did Mendel find so exciting about it?",
+          "hint": "Tt × tt: half Tt (tall), half tt (short) → 1:1 ratio. Tt × Tt: ¼ TT + ½ Tt + ¼ tt → 3 tall : 1 short. The 3:1 ratio was invisible to earlier observers because they averaged traits instead of counting them."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Too Clean to Be True?",
+          "challenge": "Statistical analysis of Mendel's data by Ronald Fisher (1936) showed the results were suspiciously close to the expected ratios — much closer than chance should allow. Fisher concluded Mendel may have unconsciously (or consciously) selected data that confirmed his hypothesis. Does this make Mendel a fraud? Or does it show that great science sometimes requires finding the pattern before presenting the evidence? Discuss the ethics of confirmation bias in science.",
+          "hint": "The scientific consensus is that Mendel's theory is correct even if his specific numerical data was massaged. The THEORY survived, even if the data was shaped. What does this say about how scientific evidence and theory interact?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "From Mendel to CRISPR",
+          "challenge": "Mendel → chromosomes (1882) → DNA as hereditary material (Avery, 1944) → double helix (Watson-Crick, 1953) → genetic code (1961-66) → PCR (Mullis, 1985) → Human Genome Project (2003) → CRISPR gene editing (2012). Trace this 150-year chain: how did each discovery make the next one possible? At what point did 'understanding heredity' become 'controlling heredity'? What ethical frameworks do we need for CRISPR that Mendel could not have imagined?",
+          "hint": "The transition from understanding to control happened when we could not only read DNA but also write it (recombinant DNA, 1970s). CRISPR made writing cheap and precise. Germline editing (changing embryos' DNA) means changes pass to future generations — who did not consent."
+        }
+      ],
+      "open_question": "Given that we can now edit the human genome with CRISPR — what should we edit, what should we leave alone, and who gets to decide?",
+      "sphere_expanded": "Genetics, Heredity, Statistics (in biology), Molecular Biology",
+      "connected_thinkers": ["darwin", "watson_crick", "schrodinger", "turing_cs"]
+    },
+    {
+      "id": "pasteur",
+      "name": "Louis Pasteur",
+      "era": "1822–1895",
+      "origin": "Dole, France",
+      "mbti": "ISTJ",
+      "key_insight": "Infectious diseases are caused by specific microorganisms (germ theory). Spontaneous generation is false. Vaccination can be extended beyond Jenner's smallpox method.",
+      "spark": "He saved the French wine, beer, and silk industries. He developed vaccines for cholera, anthrax, and rabies. He disproved spontaneous generation forever. He did this while France lost a war, while his daughter died, while he suffered a stroke at 45.",
+      "quote": "Chance favors only the prepared mind.",
+      "pascal_moment": "Pasteur pushed the biological sphere to the microbial level — revealing that invisible organisms are the agents of disease, fermentation, and spoilage. An entirely new scale of the sphere became visible.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Swan-Neck Flasks",
+          "challenge": "Pasteur's experiment: he boiled broth (killing microorganisms) in flasks with long, curved swan-neck openings. The broth stayed sterile indefinitely. When he broke the neck to allow air to flow directly in, the broth went cloudy with microorganisms within days. Design this experiment yourself using a jam jar. What is the control? What is the variable? What does it prove?",
+          "hint": "The key: the curved neck lets air in but traps dust particles (which carry microorganisms) in the curve. Breaking the neck allows the trapped microorganisms to fall into the broth. This is elegant because it shows life doesn't generate spontaneously from air — only from contamination."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Outsider Science",
+          "challenge": "Pasteur was a chemist — not a physician or biologist. He saved the wine industry by understanding fermentation; he saved lives by understanding disease. Fleming (penicillin) was an outside observer; Schrödinger (a physicist) wrote the key book on genetics. Make a list of 5 great scientific discoveries made by people trained in different fields. What does this pattern say about the value of interdisciplinary thinking — and why does it happen?",
+          "hint": "Outsiders bring different tools and see different patterns. Pasteur applied chemistry's precision to biology's complexity. He measured what biologists had only described. The outsider also doesn't share the insiders' assumptions — which is both strength and weakness."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Vaccines and the Evolutionary Arms Race",
+          "challenge": "Pasteur extended Jenner's vaccination principle to other diseases by growing pathogens in weakened (attenuated) form. Modern vaccines use killed pathogens, protein subunits, or mRNA (a code for a pathogen protein). But pathogens evolve resistance — flu vaccines need annual updates; tuberculosis strains are developing multi-drug resistance; we have no HIV vaccine. Explain the evolutionary arms race between pathogens and immune systems. Why is vaccine development easier for some pathogens (smallpox) than others (HIV, malaria)?",
+          "hint": "Smallpox: one stable strain, slow mutation rate. HIV: mutates every replication cycle, reverse transcriptase has no proofreading. The target for the immune system keeps moving. What biological property makes a pathogen a 'good' vaccine target?"
+        }
+      ],
+      "open_question": "We are entering a post-antibiotic era as bacteria develop resistance. How do we win an evolutionary arms race against organisms that evolve a million times faster than we do?",
+      "sphere_expanded": "Microbiology, Immunology, Vaccinology, Food Science",
+      "connected_thinkers": ["jenner", "lister", "darwin", "fleming"]
+    },
+    {
+      "id": "fleming",
+      "name": "Alexander Fleming",
+      "era": "1881–1955",
+      "origin": "Lochfield, Scotland",
+      "mbti": "ISFP",
+      "key_insight": "Penicillium mold produces a substance that kills bacteria. Serendipity favors the prepared and observant mind.",
+      "spark": "He noticed that a contaminated Petri dish showed a clear zone around a mold colony — bacteria dead around the mold. A less curious scientist would have thrown the plate away. Fleming kept it and changed medicine forever.",
+      "quote": "One sometimes finds what one is not looking for.",
+      "pascal_moment": "Fleming's sphere was the petri dish — and he saw what everyone else saw but no one else noticed. Sometimes the sphere expands by paying exquisite attention to what's already there.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Prepared Mind",
+          "challenge": "Fleming said luck 'favors the prepared mind' — meaning you can only notice something significant if you already know enough to recognize significance. Make a list of 5 things you've noticed recently that most people around you didn't notice. What did you know that made you notice them? What are you NOT noticing because you don't have the knowledge to recognize it?",
+          "hint": "A botanist sees 30 different species in a field that others see as 'grass.' A programmer sees a security flaw in a website that others see as a normal page. Knowledge sharpens perception."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The 14-Year Gap",
+          "challenge": "Fleming discovered penicillin in 1928. It wasn't used medically until 1942 — 14 years later (by Florey and Chain, who shared the Nobel Prize with Fleming). Why the gap? Research the process of: identifying the active compound, purifying it in useful quantities, testing for toxicity, running clinical trials, scaling up production. What does this chain say about the distance between scientific discovery and practical application — and how can we shorten it?",
+          "hint": "The COVID mRNA vaccines went from sequence (January 2020) to approval (December 2020) in 11 months. Normal vaccine development takes 10-15 years. What was different? What risks were taken? Were they justified?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Post-Antibiotic Era",
+          "challenge": "Fleming warned in his Nobel lecture (1945): 'The ignorant man may easily underdose himself and by exposing his microbes to non-lethal quantities of the drug make them resistant.' Today, 700,000 people die annually from antibiotic-resistant infections; by 2050, that may be 10 million/year. Map the evolutionary dynamics: why does antibiotic use create resistance? Why do hospital infections evolve resistance faster? Design a global antibiotic stewardship policy, considering: patient demand, physician incentives, agricultural use, and the economics of new antibiotic development.",
+          "hint": "New antibiotics are unprofitable: you save them for emergencies (use sparingly) but drug companies need to sell them (use constantly). This market failure has stopped new antibiotic development. How do you fix it?"
+        }
+      ],
+      "open_question": "As antibiotic resistance rises and new antibiotic development stalls, what alternative approaches (phage therapy, antimicrobial peptides, CRISPR-based treatments) might replace or supplement antibiotics?",
+      "sphere_expanded": "Microbiology, Pharmacology, Infectious Disease",
+      "connected_thinkers": ["pasteur", "lister", "darwin", "jenner"]
+    },
+    {
+      "id": "hippocrates",
+      "name": "Hippocrates",
+      "era": "460–370 BCE",
+      "origin": "Cos, Greece",
+      "mbti": "INTJ",
+      "key_insight": "Disease has natural causes — not supernatural ones. Medicine should observe, record, and treat systematically. Physicians must follow ethical principles above all.",
+      "spark": "He separated medicine from religion and superstition in an age when disease was attributed to divine punishment. He is called the 'father of medicine' — though he probably never wrote any of the works attributed to him. He is an idea as much as a person.",
+      "quote": "First, do no harm.",
+      "pascal_moment": "Hippocrates expanded the medical sphere by asserting that the sphere of disease belongs to nature, not to the gods — and can therefore be studied and understood.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "First, Do No Harm",
+          "challenge": "The Hippocratic Oath says doctors must 'first, do no harm' — meaning: if you don't know what will help, do nothing rather than something that might hurt. Find three medical practices from the past (bloodletting, lobotomy, thalidomide for morning sickness) that were done by doctors with good intentions but caused great harm. What does this teach about the difference between good intentions and good outcomes in medicine?",
+          "hint": "Bloodletting was practiced for 2,000 years — it probably killed more patients than it saved, including George Washington. The principle 'first, do no harm' is violated when doctors intervene without strong evidence of benefit."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "From Sacred to Natural Disease",
+          "challenge": "Hippocrates wrote 'On the Sacred Disease' about epilepsy: it was called 'sacred' because its dramatic symptoms (convulsions, loss of consciousness) seemed like divine possession. Hippocrates argued it was a brain disorder. Why was this revolutionary? Find two other historical diseases that were attributed to supernatural causes and were later explained naturally. What was the social and political cost of the supernatural explanation in each case?",
+          "hint": "Epilepsy → stigma, exclusion, imprisonment. Mental illness → exorcism, burning as witches. Leprosy → divine punishment, forced isolation. The natural explanation doesn't just change how we treat the disease — it changes whether we treat the patient with compassion."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Humors and Homeostasis",
+          "challenge": "Hippocratic medicine was based on four humors: blood, phlegm, yellow bile, black bile. Disease was an imbalance of humors; health was their equilibrium. Modern medicine has homeostasis (blood sugar, temperature, pH, hormone levels must stay in narrow ranges) and the immune system's balance between response and tolerance. Is Hippocratic humoral theory entirely wrong — or does it capture something about the nature of physiological balance that modern reductionism misses? What did the humors get right in conceptual terms?",
+          "hint": "The humoral concept of balance/imbalance maps onto: pH balance, immune homeostasis, hormonal regulation, gut microbiome balance. The specific substances were wrong; the concept of dynamic equilibrium was right. How often does this pattern appear in the history of science?"
+        }
+      ],
+      "open_question": "As AI systems begin to assist with medical diagnosis and treatment, how do we maintain the Hippocratic commitment to 'first, do no harm' when the AI's reasoning is opaque?",
+      "sphere_expanded": "Medicine, Medical Ethics, Natural Philosophy of Disease",
+      "connected_thinkers": ["vesalius", "harvey", "pasteur", "aristotle"]
+    },
+    {
+      "id": "vesalius",
+      "name": "Andreas Vesalius",
+      "era": "1514–1564",
+      "origin": "Brussels, Belgium",
+      "mbti": "ISTJ",
+      "key_insight": "Anatomy must be learned from the body itself — not from ancient texts. Observation overrules authority.",
+      "spark": "He stole corpses from the gallows to dissect and discovered that Galen, revered for 1,400 years, was wrong about human anatomy in over 200 places. Galen had described ape anatomy and assumed it applied to humans.",
+      "quote": "I am not accustomed to saying anything with certainty after only one or two observations.",
+      "pascal_moment": "Vesalius pushed the sphere into the human body itself — replacing second-hand texts with first-hand observation and revealing a different interior than the authorities had described.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Your Internal Map",
+          "challenge": "Draw the human body from memory — place the organs where you think they are: heart, lungs, liver, stomach, kidneys, intestines. Then compare to an anatomical diagram. What did you get right? What did you get wrong? Vesalius discovered that people had been teaching anatomy for 1,400 years based on wrong diagrams. How is it possible to be confidently wrong for that long?",
+          "hint": "When you have a trusted authority (Galen), you fit observations to the authority rather than updating the authority from observations. This is called 'confirmation bias' or 'appeal to authority.'"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Why 1,400 Years of Error?",
+          "challenge": "Galen's anatomy was wrong because he dissected apes, not humans, and because Roman law forbade human dissection. Why didn't anyone check for 1,400 years? Research the social, religious, and institutional factors that prevented systematic anatomical observation from 200 CE to 1543 CE. What changed in the Renaissance that made Vesalius possible?",
+          "hint": "The Church's prohibition on human dissection softened in the 13th-14th century. Italian universities began licensed dissection for medical education. The printing press (1450s) made Vesalius's illustrated De Fabrica widely available. What combination of factors allowed the sphere to expand?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "1543: The Year Science Changed",
+          "challenge": "In 1543, two books were published: Copernicus's De Revolutionibus (heliocentric astronomy) and Vesalius's De Humani Corporis Fabrica (human anatomy). Both replaced 1,400-year-old authorities (Ptolemy and Galen) with direct observation. Both were published against significant resistance. Why is 1543 considered a pivot point in the history of science? What were the common factors in both revolutions — and what does this pattern tell us about how scientific paradigm shifts happen?",
+          "hint": "Kuhn's Structure of Scientific Revolutions: anomalies accumulate → crisis → paradigm shift. In both 1543 cases: anomalies had been noticed for decades, the new system required courage to publish, and the shift happened not overnight but over generations."
+        }
+      ],
+      "open_question": "In an age of AI-assisted imaging and virtual dissection, how do medical students develop the tactile, spatial intuition that Vesalius said could only come from direct observation?",
+      "sphere_expanded": "Anatomy, Medical Education, Scientific Methodology",
+      "connected_thinkers": ["hippocrates", "harvey", "galileo", "copernicus"]
+    },
+    {
+      "id": "harvey",
+      "name": "William Harvey",
+      "era": "1578–1657",
+      "origin": "Folkestone, England",
+      "mbti": "ISTJ",
+      "key_insight": "Blood circulates — the heart pumps it in a closed loop around the body. The heart is a pump, not a source of heat as Galen believed.",
+      "spark": "He calculated that the heart pumps about 245 liters per hour — far more than the body contains, or could possibly produce. Therefore blood must circulate. Simple arithmetic overthrew Galen.",
+      "quote": "I profess to learn and to teach anatomy not from books but from dissections, not from the tenets of Philosophers but from the fabric of Nature.",
+      "pascal_moment": "Harvey expanded the physiological sphere by applying quantitative thinking to biology — measuring flows and volumes and letting arithmetic force a revolutionary conclusion.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Your Pumping Heart",
+          "challenge": "Feel your pulse for 60 seconds. Count the beats. Each beat pumps about 70 mL of blood. Calculate: how many liters does your heart pump per minute? Per hour? Per day? Per year? Your total blood volume is about 5 liters. How many times does your entire blood supply circulate each day? Harvey used this calculation to prove circulation — do it yourself.",
+          "hint": "At 70 beats/min × 70 mL/beat = 4,900 mL/min ≈ 5 L/min. Per hour: 300 L. The body has 5 L of blood. So the entire blood supply circulates 60 times per hour. This can only work if blood circulates — not if it's continuously produced and consumed."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Gap Harvey Left",
+          "challenge": "Harvey proved circulation but couldn't explain HOW blood passed from arteries to veins — the capillaries were too small to see without a microscope (which didn't yet exist). Marcello Malpighi discovered capillaries in 1661, four years after Harvey's death. How did Harvey handle this gap in his own theory? Compare his response to how Newton handled the fact that he couldn't explain WHY gravity worked (only how). What is the right way to hold an incomplete theory?",
+          "hint": "Harvey explicitly said: 'How blood passes from the arteries to the veins I cannot determine by direct observation.' He held the theory confidently while acknowledging the gap honestly. This epistemic humility is a model for scientific practice."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Quantitative Biology: Harvey's Legacy",
+          "challenge": "Harvey introduced quantitative, mechanical thinking into physiology — treating the body as a hydraulic machine governed by measurable forces. This approach eventually produced: pharmacokinetics (how drugs distribute through the body), cardiac output measurement, blood pressure medicine, artificial hearts, and organ-on-a-chip technology. Trace the conceptual lineage from Harvey's pump model to one modern cardiovascular technology. At what point did the mechanical metaphor break down — and what replaced it?",
+          "hint": "The mechanical pump model works for bulk flow but not for: oxygen transport (requires hemoglobin chemistry), blood clotting (requires signaling cascades), or the heart's electrical pacemaker (requires electrophysiology). Biology kept adding complexity beyond the machine."
+        }
+      ],
+      "open_question": "As we develop artificial hearts, synthetic blood, and vascular organoids — at what point does the biological system become so artificial that we need new ethical and conceptual frameworks?",
+      "sphere_expanded": "Physiology, Cardiovascular Medicine, Experimental Biology",
+      "connected_thinkers": ["vesalius", "hippocrates", "galileo", "pasteur"]
+    },
+    {
+      "id": "linnaeus",
+      "name": "Carl Linnaeus",
+      "era": "1707–1778",
+      "origin": "Råshult, Sweden",
+      "mbti": "ISTJ",
+      "key_insight": "All living things can be classified into a hierarchical taxonomy. Every species has a two-part Latin name (genus + species) that is universal across languages.",
+      "spark": "He classified himself as Homo sapiens — the first person to formally place humans in the animal kingdom. He classified over 7,700 plant species and 4,400 animal species in his lifetime.",
+      "quote": "God created, Linnaeus organized.",
+      "pascal_moment": "Linnaeus built the scaffolding of the biological sphere — the classification system that made it possible to ask 'how many kinds of things are there?' and to track the answer.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Your Own Classification System",
+          "challenge": "Choose 20 objects from around you (not living things). Create a hierarchical classification system: Kingdom → Phylum → Class → Order → Family → Genus → Species. At each level, decide what property separates the groups. Compare your system to a classmate's. Are they the same? What does it mean that there are many valid classification systems — and only one can be the 'official' one?",
+          "hint": "You might classify by: material (wood, metal, plastic), function (tools, containers, decorations), size (small, medium, large). None of these is 'wrong' — but which is most useful for science? Linnaeus used visible morphological features; modern taxonomy uses DNA."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Universal Names",
+          "challenge": "Before Linnaeus, a plant might be called 20 different names in 20 different languages and regions. A Chinese botanist, an Indian ayurvedic practitioner, and a European physician might all study the same plant without knowing it. Binomial nomenclature (Homo sapiens, Panthera tigris) gave every species one universal name. Map the practical consequences: how does universal naming enable: global disease tracking, drug discovery, conservation treaties, and scientific collaboration?",
+          "hint": "Consider: the COVID-19 pathogen has one universal name (SARS-CoV-2). If it were named differently in each country, contact tracing and vaccine coordination would be impossible. Naming IS infrastructure."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "DNA Overturns Appearances",
+          "challenge": "DNA sequencing has overturned thousands of Linnaeus's classifications. Whales were classified away from hippos; hippos are actually whales' closest relatives. Crocodiles are more closely related to birds than to lizards. Fungi are more closely related to animals than to plants. What is the difference between classification by appearance (morphology) and classification by evolutionary relatedness (phylogeny)? Is one more 'real' — and what does this question mean?",
+          "hint": "Convergent evolution: dolphins and fish look similar (streamlined, fins) but are unrelated. Analogy vs. homology: similar appearance from similar function (analogy) vs. similar structure from common ancestry (homology). Phylogenetic classification reveals ancestry; morphological classification reveals function. Both are real — they ask different questions."
+        }
+      ],
+      "open_question": "Estimates for the number of species on Earth range from 8 million to 1 trillion (including microorganisms). How do we classify, name, and understand biodiversity faster than it's being destroyed?",
+      "sphere_expanded": "Taxonomy, Systematics, Biogeography, Conservation Biology",
+      "connected_thinkers": ["darwin", "aristotle", "mendel", "al_khwarizmi"]
+    },
+    {
+      "id": "jenner",
+      "name": "Edward Jenner",
+      "era": "1749–1823",
+      "origin": "Berkeley, England",
+      "mbti": "INFJ",
+      "key_insight": "Exposing the body to a mild disease (cowpox) can protect against a related fatal one (smallpox). The immune system can be trained.",
+      "spark": "He heard from milkmaids that those who caught cowpox never got smallpox. He tested his theory by injecting cowpox pus into an 8-year-old boy, then exposing him to smallpox. The boy didn't get sick. Modern medical ethics would prohibit this experiment.",
+      "quote": "The deviation of man from the state in which he was originally placed by nature seems to have proved to him a prolific source of diseases.",
+      "pascal_moment": "Jenner pushed the medical sphere by acting on a folk observation, transforming it into a systematic method, and creating the concept of vaccination — without ever knowing about germs, viruses, or the immune system.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "How a Vaccine Works",
+          "challenge": "Explain how a vaccine works using one of these analogies: (1) a fire drill, (2) a wanted poster given to police, (3) a password given to a security guard. Choose the best analogy and explain why it works and where it breaks down. Then invent your own analogy that might be better.",
+          "hint": "The wanted poster: the vaccine shows the immune system a 'picture' of the enemy. When the real pathogen arrives, the immune system already has its profile. But the wanted poster can be outdated (flu mutations). Can you extend the analogy?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Without Understanding Why",
+          "challenge": "Jenner had no germ theory (Pasteur came 60 years later). He didn't know about viruses (discovered in the 1890s). He didn't know about the immune system (T cells and B cells weren't understood until the 1950s-60s). He succeeded by observing a pattern (cowpox protects against smallpox) without understanding the mechanism. Is this science? Compare to: doctors who used quinine for malaria centuries before they knew it was a parasite; sailors who used citrus to prevent scurvy before vitamins were discovered. What level of understanding is required before using a treatment?",
+          "hint": "The randomized controlled trial (RCT) — testing whether a treatment works without knowing why it works — is the gold standard of modern medicine. It embeds Jenner's approach into institutional practice."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Only Eradicated Disease",
+          "challenge": "Smallpox is the only human disease we've eradicated completely (declared by WHO in 1980). What conditions made eradication possible? (Hint: effective vaccine, no animal reservoir, visible symptoms, global coordination.) Why haven't we eradicated polio, measles, malaria, or tuberculosis, despite decades of effort? Design a strategy to eradicate one disease of your choice, addressing: vaccine development, cold chain, surveillance, political will, and antivaccine movements.",
+          "hint": "Polio: we're close but it hides in immunocompromised people; in conflict zones vaccination is impossible; wild poliovirus can be replaced by vaccine-derived poliovirus. Malaria: no effective vaccine until recently (RTS,S 2021); no human-only reservoir; complex parasite life cycle. What's the bottleneck for your chosen disease?"
+        }
+      ],
+      "open_question": "Vaccine hesitancy has resurged globally. How do we communicate the science of vaccination to populations who have different epistemological frameworks — different ideas about how to know what's true?",
+      "sphere_expanded": "Immunology, Public Health, Epidemiology, Medical Ethics",
+      "connected_thinkers": ["pasteur", "lister", "darwin", "hippocrates"]
+    },
+    {
+      "id": "lister",
+      "name": "Joseph Lister",
+      "era": "1827–1912",
+      "origin": "Upton, England",
+      "mbti": "ISTJ",
+      "key_insight": "Surgical wound infections are caused by microorganisms. Antiseptic technique — killing microorganisms before and during surgery — prevents them.",
+      "spark": "Before Lister, 50% of surgical patients died from post-operative infection. After his carbolic acid spray, mortality dropped dramatically. He applied Pasteur's germ theory to surgery — a bridge from laboratory science to clinical practice.",
+      "quote": "The material cause of that greatest reproach to operative surgery, septic poisoning, may be exposed and avoided.",
+      "pascal_moment": "Lister pushed the surgical sphere by connecting Pasteur's invisible world (germ theory) to the operating theater — proving that the most practical of acts (surgery) depended on the most theoretical of insights (microorganisms cause disease).",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Obvious in Hindsight",
+          "challenge": "Why do surgeons wash their hands before surgery? This seems obvious. But before Lister and Semmelweis (who noticed that doctors who performed autopsies killed more mothers during childbirth), it was NOT done. Why is something that seems obviously necessary so hard to see when you don't have the theoretical framework? Find 3 other 'obvious' preventions that weren't practiced before the right theory was in place.",
+          "hint": "Consider: seatbelts (obvious once you understand momentum), hand sanitation (obvious once germ theory exists), smoking kills (obvious once epidemiology exists). The theory doesn't just explain — it makes the obvious visible."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Cross-Domain Application",
+          "challenge": "Lister took Pasteur's laboratory discovery (germs cause fermentation) and applied it to surgery (germs cause wound infection). This is a classic example of scientific insight crossing from one domain to another. Research and identify 3 other cases where a theoretical discovery in one field directly enabled a practical breakthrough in another. What intellectual qualities make someone good at cross-domain application?",
+          "hint": "Examples: information theory (Shannon) → error-correcting codes (engineering); quantum tunneling (physics) → scanning tunneling microscope; game theory (mathematics) → auction design (economics). The connection-maker must understand both domains at depth."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Resistance to Paradigm Shifts in Medicine",
+          "challenge": "Lister's antiseptic surgery was resisted for years by surgeons who argued: 'I've always done it this way and my patients survive.' Semmelweis (who discovered handwashing in 1847) was ridiculed, fired, and died in an asylum — partly from the infection he was trying to prevent. Analyze the psychological, institutional, and sociological factors that resist paradigm shifts in medicine. Compare to: the resistance to H. pylori as the cause of ulcers (Marshall and Warren, 1980s), the resistance to prions as infectious proteins (Prusiner, 1990s), the resistance to fecal microbiome transplants (2000s).",
+          "hint": "Common factors: training investment (I spent 10 years learning this, it must be right), authority structures (the professor said X), statistical thinking errors (my patients survive, so I can't be causing harm), commercial interests (pharmaceutical companies with competing products). Can any of these be overcome by better education?"
+        }
+      ],
+      "open_question": "Hospital-acquired infections still kill hundreds of thousands globally each year, despite known prevention methods. Why does the gap between scientific knowledge and clinical practice remain so large?",
+      "sphere_expanded": "Antiseptic Surgery, Microbiology, Public Health, Medical Practice",
+      "connected_thinkers": ["pasteur", "jenner", "hippocrates", "darwin"]
+    }
+  ]
+}

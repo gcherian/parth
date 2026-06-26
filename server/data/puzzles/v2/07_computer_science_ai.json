@@ -1,0 +1,237 @@
+{
+  "sphere": "computer_science_ai",
+  "version": 2,
+  "description": "Subject-matter puzzles about computation, logic, and intelligence. Students build algorithms, test their limits, and discover the deep questions at the boundary of what machines can and cannot do.",
+  "thinkers": [
+    {
+      "id": "turing",
+      "name": "Alan Turing",
+      "domain": "Computation / Algorithms / Machine Intelligence",
+      "puzzles": [
+        {
+          "id": "turing_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "game",
+          "title": "Be the Computer",
+          "hook": "Before electronic computers existed, the word 'computer' meant a person whose job was to follow mathematical rules exactly. Can you do it?",
+          "challenge": "Here is a Bubble Sort algorithm written in plain English:\n1. Start at position 1. Compare items at positions 1 and 2. If position 1 is larger, swap them.\n2. Move to position 2. Compare positions 2 and 3. Swap if needed.\n3. Continue until the end of the list.\n4. Repeat the whole sequence until no swaps happen in a full pass.\nWrite 10 random numbers on cards. Execute the algorithm exactly — no shortcuts, no guessing ahead. Count every comparison and every swap. How many steps did it take?",
+          "materials": "10 index cards with numbers written on them, tally counter on paper",
+          "discover": "Following rules mechanically produces correct output — no 'understanding' of sorting is required. You behaved exactly as a computer does. The machine doesn't 'know' what sorted means — it just follows rules.",
+          "go_deeper": "Can you write a different algorithm that sorts the same list in fewer steps? Test it on the same 10 cards and count.",
+          "silent_lesson": "Algorithm as mechanical rule-following; Church-Turing thesis; computation without understanding; what it means to compute."
+        },
+        {
+          "id": "turing_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "design",
+          "title": "The Distinguishing Test",
+          "hook": "If a machine could carry on a conversation so naturally you couldn't tell it from a human — should we say it's thinking? And how would you design a test to find out?",
+          "challenge": "Design 10 questions that you believe only a human could answer correctly (not general knowledge — questions that require genuine experience, emotion, or judgment). Test your questions in two rounds: (a) ask a classmate, (b) try to answer as you imagine a simple pattern-matching machine would. Which questions succeeded in distinguishing? Which didn't? Revise and explain why some worked better.",
+          "materials": "Paper, pencil",
+          "discover": "Designing a reliable test is harder than it looks. Many 'human' responses can be mimicked by patterns. The questions that work best reveal something specific about consciousness or embodied experience — not just knowledge.",
+          "go_deeper": "If a machine eventually passes every test you can design, does that prove it's thinking? Or just that you've run out of tests? What's the difference?",
+          "silent_lesson": "Turing test; philosophy of mind; behaviorism vs functionalism; what 'intelligence' means; Chinese Room argument."
+        },
+        {
+          "id": "turing_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "proof",
+          "title": "The Uncomputable",
+          "hook": "Is there a program that can tell you — for ANY other program and ANY input — whether it will run forever or eventually stop? Prove it one way or the other.",
+          "challenge": "Assume a program HALT(P, I) exists that returns TRUE if program P on input I eventually halts, and FALSE if it runs forever. Now define a new program WEIRD:\n- WEIRD runs HALT(WEIRD, WEIRD)\n- If HALT returns TRUE, WEIRD runs forever\n- If HALT returns FALSE, WEIRD halts\nNow ask: what does HALT(WEIRD, WEIRD) return? Trace both possibilities to their contradiction. Conclude.",
+          "materials": "Pencil, paper, logical reasoning",
+          "discover": "Either answer leads to contradiction. Therefore HALT cannot exist. Some questions are provably unanswerable by any algorithm — not because we haven't found the algorithm yet, but because the assumption of its existence generates a logical paradox.",
+          "go_deeper": "This self-referential proof structure (assuming something exists, having it reason about itself, deriving contradiction) also appears in Cantor's diagonal argument and Gödel's incompleteness theorems. What do these proofs share structurally?",
+          "silent_lesson": "Halting problem; undecidability; limits of computation; diagonalization; self-reference as source of logical paradox."
+        }
+      ]
+    },
+    {
+      "id": "von_neumann",
+      "name": "John von Neumann",
+      "domain": "Game Theory / Architecture / Self-Replication",
+      "puzzles": [
+        {
+          "id": "von_neumann_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "game",
+          "title": "Think From the End",
+          "hook": "Most people play games forward — 'what should I do next?' A better strategy is to work backward — 'what position do I need to be in just before the last move?' Start there.",
+          "challenge": "Play Nim: start with 12 matches. Players take turns removing 1, 2, or 3 matches. The player who takes the last match wins. Play 5 games randomly. Now: work backward from the end. If it's your turn and there's 1 match, you win. 2 matches? 3? 4? Map every position as W (you win) or L (you lose) assuming both play perfectly. Find the pattern. Now play 5 more games using this pattern. Do you win more?",
+          "materials": "12 matchsticks or pencils",
+          "discover": "Every position has an exact value (win or loss) when both players play perfectly. The pattern: multiples of 4 are losing positions. Working backward from the end is the algorithm for perfect play.",
+          "go_deeper": "What changes if the player who takes the LAST match LOSES? Remap all positions. Does the pattern shift?",
+          "silent_lesson": "Minimax algorithm; backward induction; game theory; optimal strategy; Zermelo's theorem."
+        },
+        {
+          "id": "von_neumann_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Cooperation Trap",
+          "hook": "Two people, unable to communicate, must each decide simultaneously to cooperate or betray. The mathematics says they'll both make a choice that's worse for both of them. Why?",
+          "challenge": "The scoring: if both cooperate, each gets 3 points. If both betray, each gets 1 point. If one betrays and one cooperates, the betrayer gets 5 and the cooperator gets 0. Play 10 rounds with a partner (no talking). Score each round. Now play 20 more rounds, knowing you'll play 20. Does behaviour change? Now play with unknown number of rounds. Explain the differences.",
+          "materials": "Paper for scorekeeping, two players",
+          "discover": "In a single round, betrayal is always individually rational — you're better off regardless of what the other person does. But mutual betrayal leaves both worse off than mutual cooperation. In repeated rounds with unknown end, cooperation can emerge as a stable equilibrium.",
+          "go_deeper": "The 'Tit for Tat' strategy (cooperate first, then copy the other player's last move) wins most computer tournaments. Why? What does its success say about the evolution of cooperation in nature?",
+          "silent_lesson": "Prisoner's dilemma; Nash equilibrium; cooperation and defection; evolutionary game theory; iterated games."
+        },
+        {
+          "id": "von_neumann_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "construction",
+          "title": "The Self-Replicating Pattern",
+          "hook": "Long before DNA was understood, a mathematician proved theoretically that any machine complex enough can reproduce itself — not through magic, but through logical necessity. Can you design one?",
+          "challenge": "Use a 20×20 grid (graph paper). Design a set of simple rules for each cell: each cell is ON or OFF; its state in the next generation depends on how many of its 8 neighbours are ON. Try this rule set first: a cell turns ON if exactly 3 neighbours are ON; stays ON if 2 or 3 neighbours are ON; otherwise turns OFF. Start with a 5-cell pattern. Does it grow, shrink, or repeat? Can you find a starting pattern that replicates (produces a copy of itself elsewhere on the grid after several generations)?",
+          "materials": "Large graph paper, pencil, two colours",
+          "discover": "Simple local rules produce complex global behaviour. Reproduction is not a biological miracle — it's a logical property that emerges in systems of sufficient complexity. The instructions for copying must be encoded in the thing being copied.",
+          "go_deeper": "Von Neumann proved that self-replication requires a universal constructor + a description copier + a description reader — exactly the role of ribosomes, DNA, and transcription enzymes in biology. Which cell structures correspond to which logical components?",
+          "silent_lesson": "Von Neumann's self-replicating automata; cellular automata; Game of Life; logical basis of self-replication; connection to molecular biology."
+        }
+      ]
+    },
+    {
+      "id": "shannon",
+      "name": "Claude Shannon",
+      "domain": "Information Theory / Entropy / Communication",
+      "puzzles": [
+        {
+          "id": "shannon_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "game",
+          "title": "Information is Surprise",
+          "hook": "Which tells you more: 'It rained yesterday in Kerala' or 'It rained yesterday in the Sahara Desert'? Why does one feel like bigger news than the other?",
+          "challenge": "Play 20 Questions — but count how many questions you need for different targets. Round 1: target is any animal. Round 2: target is specifically one of only 4 animals. Round 3: target is one of 128 animals. Predict how many questions each should take. Test it. What's the pattern?",
+          "materials": "Paper for listing animals, two players",
+          "discover": "Every time you double the number of possibilities, you need exactly one more question. 4 animals → 2 questions. 8 → 3. 128 → 7. Information content = log₂(number of equally likely possibilities). Rare events carry more information than common ones.",
+          "go_deeper": "In Morse code, E (most common letter) is just one dot. Q (rare) is dash-dash-dot-dash. Why does this design save transmission time?",
+          "silent_lesson": "Information entropy; log₂ as measure of information; efficient coding; Shannon's fundamental insight."
+        },
+        {
+          "id": "shannon_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "investigation",
+          "title": "The Noisy Channel",
+          "hook": "You can send a message through a noisy channel — static might flip some bits — and the receiver can still reconstruct your original message perfectly. How many extra bits do you need?",
+          "challenge": "Write a 10-letter message. Encode it by repeating each letter 3 times (AAA BBB CCC...). Hand it to a partner who secretly changes 1 in every 3 characters randomly. Can you decode the original? Now try without the repetition — just 1 error per 3 characters. Can you still recover it? What is the cost of the redundancy (extra characters needed)?",
+          "materials": "Paper, pencil, eraser (for 'noise')",
+          "discover": "Tripling every bit lets you correct 1 error per 3 bits by majority vote (2-of-3 agrees with original). But you've tripled the message size. Shannon proved there's a maximum error rate below which perfect communication is possible with minimal redundancy — and an exact formula for it.",
+          "go_deeper": "A Hamming code can correct 1 error in a 4-bit message using only 3 extra bits (7 bits total vs 12 for the tripling method). Look up how Hamming codes work. Why is it more efficient?",
+          "silent_lesson": "Shannon's channel capacity theorem; error correction; redundancy; Hamming codes; information vs noise."
+        },
+        {
+          "id": "shannon_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "investigation",
+          "title": "The Entropy of English",
+          "hook": "How predictable is the English language? And if you knew exactly how predictable it was, how much could you compress it without losing any information?",
+          "challenge": "Take a page of text (100+ words). Count the frequency of each letter (a–z + space). Calculate the information entropy: H = -Σ p(x) × log₂(p(x)) for each character. Compare your result to the maximum possible entropy for 27 symbols (log₂ 27 ≈ 4.76 bits). What fraction of maximum entropy does English use? Now estimate how much you could compress a page of English text without any loss.",
+          "materials": "Page of text, calculator, frequency table",
+          "discover": "English has entropy ~4.5 bits/character vs maximum 4.76 bits — but because of word-level patterns and grammar, the actual entropy is closer to ~1.5 bits/character when you account for context. English is highly redundant and compressible by ~70%.",
+          "go_deeper": "Calculate the entropy for a page of a language you know (Hindi, Tamil, etc.). Which language uses more of its maximum information capacity? What structural features of each language drive the difference?",
+          "silent_lesson": "Shannon entropy formula; information capacity; compression limits; redundancy of natural language; cross-linguistic comparison."
+        }
+      ]
+    },
+    {
+      "id": "lovelace",
+      "name": "Ada Lovelace",
+      "domain": "Algorithms / General-Purpose Computation",
+      "puzzles": [
+        {
+          "id": "lovelace_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "design",
+          "title": "The Recipe that Leaves Nothing to Imagination",
+          "hook": "A recipe says 'add a pinch of salt.' That's fine for a human — but a machine has no idea how large your fingers are. What would a perfect recipe look like?",
+          "challenge": "Take a simple task: making toast. Write it as an algorithm so precise that a person who has never seen bread, a toaster, or food could execute it correctly — with no assumed knowledge. Define every term. Specify every measurement and duration. Test it: read your algorithm aloud and have a partner follow it literally, refusing to use any judgment not specified in the instructions. How many hidden assumptions did you find?",
+          "materials": "Paper, pencil, toaster (optional, for testing)",
+          "discover": "Humans fill in hundreds of unconscious assumptions every second. Machines cannot. Writing a true algorithm forces you to make every assumption explicit. This is the hardest part of programming — not the logic, but uncovering what you silently assume.",
+          "go_deeper": "Write an algorithm for tying your shoelaces with no reference to 'left' or 'right' hand, no reference to 'the loop', and no assumed knowledge of what a knot is.",
+          "silent_lesson": "Algorithm precision; what it means to give a machine instructions; Lovelace's insight that the engine could manipulate any symbol, not just numbers."
+        },
+        {
+          "id": "lovelace_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "construction",
+          "title": "Loop vs Straight Line",
+          "hook": "A list of steps in order is powerful. A list of steps that can loop and make decisions is incomparably more powerful. What's the actual difference?",
+          "challenge": "Sort a list of 10 numbers using two methods: Method A — write out every single comparison and swap step explicitly (no loops). Method B — write the same algorithm using loop notation (REPEAT WHILE..., IF...THEN). Count the number of written steps for a 10-item list. Now predict how many steps Method A would need for a 20-item list. For 100. For 1,000. What happens to Method B?",
+          "materials": "Paper, pencil, 10 numbered cards",
+          "discover": "Method A grows as n² (100 items → 10,000 written steps). Method B stays compact because the loop instruction replaces repeating the same steps. The program's length stays constant even as the problem grows — this is what makes algorithms powerful.",
+          "go_deeper": "Design a flowchart for binary search (finding a number in a sorted list) using at most 5 decision boxes. Show that it finds any target in a 1,000-item list in at most 10 steps.",
+          "silent_lesson": "Control flow; loops; algorithmic efficiency; Lovelace's notes on Babbage's Analytical Engine; difference between a machine and a general-purpose computer."
+        },
+        {
+          "id": "lovelace_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "construction",
+          "title": "Computing Without Computers",
+          "hook": "The first computer program ever written was not for a calculation — it was for generating a sequence of numbers that had fascinated mathematicians for centuries. Can you implement it on paper?",
+          "challenge": "Bernoulli numbers follow the recurrence: B₀ = 1, and for n ≥ 1, Σ(k=0 to n) C(n+1,k) × Bₖ = 0. Use this to compute B₀ through B₈ step by step. At each step, write out the expansion fully. Then implement the same computation as a structured algorithm (pseudocode with nested loops) that a machine could execute. Count the number of arithmetic operations.",
+          "materials": "Pencil, paper, combinatorics reference (for C(n,k) values)",
+          "discover": "The algorithm uses a nested loop structure: outer loop over n, inner loop over k. The machine doesn't know what Bernoulli numbers are — it just follows the recurrence. The insight: any mathematical relation that can be stated as a recurrence can be computed mechanically.",
+          "go_deeper": "The original algorithm was designed for a mechanical engine that could only add, subtract, multiply, and store numbers. Rewrite your algorithm using ONLY those four operations. What changes?",
+          "silent_lesson": "Lovelace's algorithm for Bernoulli numbers; first computer program; general-purpose computation; nested loops; mechanical computation."
+        }
+      ]
+    },
+    {
+      "id": "boole",
+      "name": "George Boole",
+      "domain": "Boolean Logic / Binary Arithmetic",
+      "puzzles": [
+        {
+          "id": "boole_b",
+          "level": "beginner",
+          "age_range": "6–10",
+          "type": "construction",
+          "title": "The True-False Machine",
+          "hook": "Every decision your phone makes — every game, every message, every video — is built from just two values: TRUE and FALSE. Everything else is combination.",
+          "challenge": "Build truth tables for the three basic operations: AND (both true → true), OR (either true → true), NOT (flips). Fill a table for all combinations of A (T/F) and B (T/F). Now evaluate: (A AND B) OR (NOT A) for all four combinations of A and B. What do you notice about the result column?",
+          "materials": "Paper, pencil",
+          "discover": "The result column is all TRUE — it's a tautology (always true regardless of A and B). Complex logic collapses to a table. And the table is always complete, predictable, and mechanical.",
+          "go_deeper": "Can you build an AND gate using only NAND? Try: A AND B = NOT(A NAND B). Verify with a truth table. This means NAND alone can build all of logic — and all of computing.",
+          "silent_lesson": "Boolean algebra; truth tables; logic gates; NAND completeness; foundation of digital logic."
+        },
+        {
+          "id": "boole_i",
+          "level": "intermediate",
+          "age_range": "10–14",
+          "type": "pattern",
+          "title": "Counting in Two",
+          "hook": "With ten fingers, you can count to 10. With the same ten fingers in binary, you can count to 1,023. The difference? Base.",
+          "challenge": "Learn binary: 0=0, 1=1, 10=2, 11=3, 100=4... Write out all numbers 0–31 in binary. Find the pattern for how many binary digits you need for: numbers up to 7, up to 15, up to 31, up to 63. Now encode your first name in binary using ASCII (A=01000001, B=01000010...). How many bits does your name take?",
+          "materials": "Paper, pencil, ASCII table (provided or looked up)",
+          "discover": "Binary is a complete, consistent number system. The choice of base-10 is historical habit — evolution gave us 10 fingers. Computers use base-2 because a switch has two states (on/off), not ten. Any information can be encoded in binary.",
+          "go_deeper": "Hexadecimal (base 16) uses digits 0–9 and A–F. Convert your name's binary encoding into hexadecimal. Why do programmers prefer hex to binary for large numbers?",
+          "silent_lesson": "Binary number system; positional notation; base-2 vs base-10; why computers use binary; information encoding."
+        },
+        {
+          "id": "boole_a",
+          "level": "advanced",
+          "age_range": "14–16+",
+          "type": "construction",
+          "title": "The Arithmetic Machine",
+          "hook": "Every arithmetic operation — addition, subtraction, multiplication — can be built from exactly three types of logic gates. Design the simplest possible adding machine.",
+          "challenge": "Design a half-adder: inputs A, B (each 0 or 1); outputs Sum and Carry. Hint: Sum = A XOR B; Carry = A AND B. Verify with a truth table. Now design a full-adder that also takes a Carry-in (from a previous column). It has 3 inputs (A, B, Cᵢₙ) and 2 outputs (Sum, Cₒᵤₜ). Draw the circuit diagram using AND, OR, and NOT gates. Test all 8 input combinations. Finally, explain how to chain 4 full-adders to add two 4-bit numbers.",
+          "materials": "Paper, pencil",
+          "discover": "A 1-bit adder uses 5 gates. Chain 8 of them to add two 8-bit numbers (0–255). Chain 64 for a 64-bit processor. ALL arithmetic — including multiplication and division — reduces to combinations of these same gates.",
+          "go_deeper": "Design a 1-bit subtractor using full-adder logic. Hint: subtraction can be implemented as addition of the two's complement. What does two's complement mean, and how does it allow a single adder circuit to do both addition and subtraction?",
+          "silent_lesson": "Boolean algebra applied to arithmetic; half-adder; full-adder; how CPUs implement arithmetic; two's complement."
+        }
+      ]
+    }
+  ]
+}

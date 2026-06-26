@@ -1,0 +1,226 @@
+{
+  "_meta": {
+    "description": "Every NCERT concept × every sphere = a concrete bridge analogy. Parth selects the best bridge for each child based on sphere_affinity and provisional_telos.",
+    "structure": "concept_id → sphere → { hook, example, best_for_telos[], puzzle_id? }"
+  },
+
+  "pi": {
+    "astronomy_cosmology": {
+      "hook": "Earth travels 2πr in one orbit. If you know Earth is 150 million km from the Sun, how far does it travel in a year?",
+      "example": "Orbital circumference = 2π × orbital radius. Pi appears in every circular orbit in the universe.",
+      "best_for_telos": ["explorer", "scientist"],
+      "puzzle_id": "copernicus_i"
+    },
+    "arts_interdisciplinary": {
+      "hook": "The nautilus shell spirals outward by a fixed ratio at every turn. A circle cut into that spiral traces pi.",
+      "example": "Harmonic series on a guitar string: the frequencies are multiples that circle back — pi hides in the Fourier transform of any musical tone.",
+      "best_for_telos": ["artist", "philosopher"]
+    },
+    "cricket": {
+      "hook": "Roll a cricket ball forward one full rotation along a ruler. Measure how far it travelled. Divide by the ball's diameter.",
+      "example": "Every circular object contains pi in the relationship between its size and the distance it covers in one rotation.",
+      "best_for_telos": ["builder", "scientist"]
+    },
+    "philosophy_logic": {
+      "hook": "4 × (1 - 1/3 + 1/5 - 1/7 + 1/9 - ...) = π. Why does an endless sum of odd-number fractions give you the ratio of a circle's circumference to its diameter?",
+      "example": "The Leibniz formula connects the discrete (integers) to the continuous (circles). What does that mean about the nature of mathematics?",
+      "best_for_telos": ["philosopher", "explorer"]
+    },
+    "mathematics": {
+      "hook": "Draw a circle. Measure its diameter with a ruler. Now roll a coin of that diameter around the circle's edge. Count how many times it rotates.",
+      "example": "The answer is always π — regardless of the circle's size. This scale-invariance is the deep fact.",
+      "best_for_telos": ["builder", "scientist"]
+    }
+  },
+
+  "fractions": {
+    "music": {
+      "hook": "A whole note gets 4 beats. A half note gets 2. A quarter note gets 1. An eighth note gets half a beat. Why are musical notes called fractions?",
+      "example": "Time signatures in music are fractions: 3/4 time means 3 quarter-notes per bar. Reading music IS reading fractions.",
+      "best_for_telos": ["artist", "builder"],
+      "v2_sphere": "arts_interdisciplinary"
+    },
+    "cooking": {
+      "hook": "A recipe calls for 3/4 cup of flour. You want to make half the recipe. How much flour do you need?",
+      "example": "Every kitchen calculation involving recipes uses fractions: doubling, halving, converting cups to tablespoons.",
+      "best_for_telos": ["builder", "scientist"]
+    },
+    "astronomy_cosmology": {
+      "hook": "Jupiter takes 12 Earth years to orbit the Sun. Saturn takes 29.5 years. What fraction of a Saturn year is a Jupiter year?",
+      "example": "Orbital period ratios are fractions. Ancient astronomers discovered planetary ratios before they had decimal notation.",
+      "best_for_telos": ["explorer", "scientist"],
+      "puzzle_id": "kepler_b"
+    },
+    "eastern_wisdom": {
+      "hook": "Aryabhata calculated the length of a year as 365 days, 6 hours, 12 minutes, 30 seconds. How would you write that as a fraction of a day?",
+      "example": "Ancient Indian astronomers worked in fractions of a day and a year centuries before the decimal system spread globally.",
+      "best_for_telos": ["philosopher", "explorer"],
+      "puzzle_id": "aryabhata_b"
+    }
+  },
+
+  "gravity": {
+    "astronomy_cosmology": {
+      "hook": "The Moon falls toward Earth every second — but it also moves sideways fast enough that it keeps missing. What keeps it in orbit?",
+      "example": "Orbital motion is free-fall with enough sideways velocity to keep curving around the planet. The same force that drops an apple keeps the Moon circling.",
+      "best_for_telos": ["explorer", "scientist"],
+      "puzzle_id": "newton_i"
+    },
+    "cricket": {
+      "hook": "A cricket ball thrown horizontally and one dropped straight down from the same height — which hits the ground first?",
+      "example": "Both hit at the same time. Horizontal motion and vertical fall are independent. This is why parabolic flight paths work.",
+      "best_for_telos": ["builder", "scientist"]
+    },
+    "philosophy_logic": {
+      "hook": "Newton said gravity acts at a distance — instantly, across empty space. Leibniz asked: how? Through what? This debate was never resolved in Newton's lifetime.",
+      "example": "Action at a distance was philosophically disturbing — it implied something could affect something else without touching it. Einstein later replaced it with curved spacetime.",
+      "best_for_telos": ["philosopher", "explorer"],
+      "puzzle_id": "newton_a"
+    }
+  },
+
+  "photosynthesis": {
+    "chemistry": {
+      "hook": "A plant weighs 1 gram when it sprouts. After six months it weighs 1 kilogram. Where did the extra 999 grams come from? Not the soil — the air.",
+      "example": "Plants build their bodies from CO₂ — a gas. The carbon in every leaf, every wooden plank, every fruit came from the atmosphere.",
+      "best_for_telos": ["scientist", "explorer"],
+      "puzzle_id": "lavoisier_b"
+    },
+    "eastern_wisdom": {
+      "hook": "Ancient Indian texts describe how trees are alive — that they feel, breathe, and respond to the world. Modern science confirms: they process light into food. How?",
+      "example": "The Vrikshayurveda (ancient Indian tree science) described plant responses that modern plant physiology is still studying.",
+      "best_for_telos": ["philosopher", "artist"]
+    },
+    "cooking": {
+      "hook": "Every vegetable you eat was once sunlight. The energy in your dal, your roti, your rice — all of it started as a photon hitting a leaf.",
+      "example": "The caloric energy in food is captured solar energy, stored in chemical bonds. Digestion releases it back.",
+      "best_for_telos": ["artist", "explorer"]
+    }
+  },
+
+  "evolution": {
+    "social_sciences": {
+      "hook": "When conditions change suddenly — a drought, a new predator, a disease — which individuals survive? Is it the strongest? The fastest? Or the best-fitted to the new conditions?",
+      "example": "Natural selection works on variation. Without variation, there is nothing to select. The source of variation (mutation) is random — selection is not.",
+      "best_for_telos": ["philosopher", "scientist"],
+      "puzzle_id": "darwin_b"
+    },
+    "eastern_wisdom": {
+      "hook": "The Jain concept of anekantavada (many-sidedness of truth) says no single description of reality is complete. Evolutionary theory says no single trait is 'best' — it depends on the environment.",
+      "example": "Evolution is contextual fitness, not absolute improvement. An adaptation that helps in one environment can be lethal in another.",
+      "best_for_telos": ["philosopher", "explorer"]
+    },
+    "computer_science_ai": {
+      "hook": "Genetic algorithms in computers mimic evolution: start with random solutions, select the best, recombine and mutate them, repeat. The computer 'evolves' a solution it was never explicitly programmed for.",
+      "example": "Evolution is an algorithm. It runs on populations, not individuals. The 'code' is DNA; the 'fitness function' is survival and reproduction.",
+      "best_for_telos": ["builder", "scientist"],
+      "puzzle_id": "turing_a"
+    }
+  },
+
+  "algebra": {
+    "eastern_wisdom": {
+      "hook": "Imagine a balance scale. An unknown weight on one side, known weights on the other. How do you find the unknown? You've just done algebra without numbers.",
+      "example": "Al-Khwarizmi described this in 830 CE — the balance-scale method for solving equations. The word 'algebra' comes from his title: al-jabr (restoration of balance).",
+      "best_for_telos": ["builder", "philosopher"],
+      "puzzle_id": "al_khwarizmi_b"
+    },
+    "astronomy_cosmology": {
+      "hook": "Astronomers calculate where a comet will be in 300 years. They have never seen it there. They use algebra — equations that model motion — to predict.",
+      "example": "Prediction from equations is algebra's superpower. You can solve for the unknown (the comet's future position) from what you know (its current position and speed).",
+      "best_for_telos": ["explorer", "scientist"]
+    }
+  },
+
+  "probability": {
+    "cricket": {
+      "hook": "A spinner bowls 100 deliveries in a Test match. 32 are dot balls, 40 are singles, 18 are boundaries, 10 are wickets. What is the probability of a wicket on the next ball?",
+      "example": "Probability from frequency: if past data shows 10/100 = 10% wicket rate, we estimate the next ball has roughly 10% chance. But: past performance doesn't guarantee future outcomes.",
+      "best_for_telos": ["scientist", "builder"]
+    },
+    "biology_medicine": {
+      "hook": "A disease affects 1% of the population. A test for it is 99% accurate. You test positive. What is the probability you actually have the disease?",
+      "example": "Bayes' theorem: the answer is less than 50% — because false positives outnumber true positives when the disease is rare. This is why medical testing is statistical.",
+      "best_for_telos": ["philosopher", "scientist"],
+      "puzzle_id": "pasteur_a"
+    },
+    "social_sciences": {
+      "hook": "If you flip a coin 10 times and get heads every time, what is the probability of heads on the 11th flip?",
+      "example": "50% — the coin has no memory. But humans feel it 'should' be tails. This error is the Gambler's Fallacy: confusing independent events with dependent ones.",
+      "best_for_telos": ["philosopher", "scientist"]
+    }
+  },
+
+  "conservation_of_energy": {
+    "cooking": {
+      "hook": "You burn 100g of wood. The ash weighs only 5g. Where did the other 95g go? And what about the energy that was released as heat?",
+      "example": "Mass-energy conservation: the 95g became gas and heat. Neither disappeared — they changed form. The energy released equals the chemical energy stored in the bonds.",
+      "best_for_telos": ["scientist", "builder"],
+      "puzzle_id": "lavoisier_i"
+    },
+    "astronomy_cosmology": {
+      "hook": "A spacecraft launched toward Pluto has no engine after the initial burn. Yet it keeps travelling for 9 years. What keeps it moving?",
+      "example": "Conservation of momentum: in a vacuum with no friction, an object in motion stays in motion. The energy put in at launch is still there — just as kinetic energy.",
+      "best_for_telos": ["explorer", "scientist"]
+    },
+    "philosophy_logic": {
+      "hook": "Parmenides argued in 500 BCE: 'Nothing comes from nothing.' Lavoisier proved it with a scale 2300 years later. Was Parmenides doing physics or philosophy?",
+      "example": "The conservation of mass is a philosophical principle before it is a physical law. The experiment confirms what pure reason had already suspected.",
+      "best_for_telos": ["philosopher", "explorer"],
+      "puzzle_id": "lavoisier_a"
+    }
+  },
+
+  "geometry_circles": {
+    "astronomy_cosmology": {
+      "hook": "Ancient astronomers modelled all planetary orbits as perfect circles — and were very nearly right. Earth's orbit is 98% circular. How close to a circle is a circle?",
+      "example": "Eccentricity: a measure of how far an ellipse deviates from a circle. Earth's eccentricity is 0.017 — nearly perfect circle. Pluto's is 0.248.",
+      "best_for_telos": ["scientist", "explorer"]
+    },
+    "arts_interdisciplinary": {
+      "hook": "Every circular arch in Mughal architecture had to be constructed without modern tools. How did the builders ensure the curve was mathematically perfect?",
+      "example": "Practical geometry: a circle is defined by a fixed center and constant radius. Any point on the circle is exactly that distance from the center. Builders used ropes.",
+      "best_for_telos": ["builder", "artist"]
+    }
+  },
+
+  "electricity": {
+    "cooking": {
+      "hook": "An electric cooker has a 2000W element. If you run it for 30 minutes, how much does it cost? What is 'watt' actually measuring?",
+      "example": "Power = energy per second. A watt is one joule per second. Your electricity bill charges for joules (kilowatt-hours). Cooking is energy accounting.",
+      "best_for_telos": ["builder", "scientist"]
+    },
+    "biology_medicine": {
+      "hook": "Your heart generates enough electrical signal to be detected from your wrist. Neurons fire at up to 100 electrical pulses per second. Your body runs on electricity.",
+      "example": "Bioelectricity: the same principles (voltage, current, resistance) that govern circuits govern nerve impulses. The Nernst equation governs both.",
+      "best_for_telos": ["explorer", "scientist"]
+    }
+  },
+
+  "cell_biology": {
+    "computer_science_ai": {
+      "hook": "A cell has a membrane that controls what enters and exits, a nucleus that stores instructions, ribosomes that manufacture proteins from those instructions. Sound familiar?",
+      "example": "The cell is a biological computer: membrane = firewall, DNA = program code, ribosomes = CPU executing code, mitochondria = power supply.",
+      "best_for_telos": ["builder", "explorer"],
+      "puzzle_id": "turing_b"
+    },
+    "philosophy_logic": {
+      "hook": "Is a single cell alive? Is a virus alive? What is the minimum definition of life — and who decides?",
+      "example": "Defining life is a philosophical problem disguised as a biological one. Every proposed definition (reproduction, metabolism, response to environment) has edge cases.",
+      "best_for_telos": ["philosopher", "explorer"]
+    }
+  },
+
+  "indian_independence": {
+    "philosophy_logic": {
+      "hook": "Gandhi's satyagraha was a philosophical argument made without words: civil disobedience as a claim that unjust laws have no moral authority. Was it a political strategy or a philosophical proof?",
+      "example": "Civil disobedience is a logical structure: if a law is unjust, obeying it validates injustice. Non-violent resistance exposes the contradiction in the oppressor's position.",
+      "best_for_telos": ["philosopher", "artist"]
+    },
+    "social_sciences": {
+      "hook": "In 1900, Britain controlled 23% of Earth's land surface with 0.1% of its population. How is that possible? What makes empire economically sustainable — until it isn't?",
+      "example": "Political economy of colonialism: extraction, asymmetric trade, currency control. The same mechanisms that made empire profitable made it politically unstable.",
+      "best_for_telos": ["scientist", "explorer"]
+    }
+  }
+}

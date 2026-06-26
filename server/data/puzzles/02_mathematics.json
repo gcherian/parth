@@ -1,0 +1,377 @@
+{
+  "sphere": "Mathematics",
+  "sphere_id": "mathematics",
+  "sphere_description": "The sphere where pure thought discovered truths that turned out to describe physical reality — often centuries before anyone knew why. Mathematics is the language the universe speaks to itself.",
+  "thinkers": [
+    {
+      "id": "euclid",
+      "name": "Euclid",
+      "era": "~300 BCE",
+      "origin": "Alexandria, Egypt",
+      "mbti": "ISTJ",
+      "key_insight": "From five self-evident axioms, all of geometry follows with logical necessity. A few truths, carefully chosen, can generate an infinite structure.",
+      "spark": "His Elements was the mathematics textbook for 2,300 years — longer than any other textbook in history. Every theorem in it is still true.",
+      "quote": "There is no royal road to geometry.",
+      "pascal_moment": "Euclid built the first great sphere of mathematical knowledge — structured, complete, and crystalline. And in doing so, he revealed how far geometry could go from just five starting points.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Compass and Straightedge",
+          "challenge": "Using only a compass (for circles) and a straightedge (no ruler — no measurements allowed), construct: (1) a line exactly equal in length to another line, (2) a perfect perpendicular bisector, (3) an equilateral triangle. Euclid's entire geometry was built from these tools. Try to figure out how before looking it up.",
+          "hint": "The compass measures equal distances. The straightedge draws straight lines. These two tools, used cleverly, can do almost everything — but not quite everything."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Parallel Problem",
+          "challenge": "Euclid's fifth postulate (the parallel postulate) says: through a point not on a line, exactly one parallel line can be drawn. For 2,000 years mathematicians tried to prove this from the other four axioms — they all failed. When Riemann and Lobachevsky finally proved it was independent, they discovered curved geometries. What does it mean for an axiom to be 'independent'? Why did this matter for the concept of truth in mathematics?",
+          "hint": "If you can build consistent geometry where MORE than one parallel line exists (sphere surface), and consistent geometry where NONE exist (saddle surface), then the parallel postulate describes one possible geometry — not THE geometry."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Axioms and Reality",
+          "challenge": "Euclid's axioms seemed self-evident — but none of them are actually about physical reality. Real space curves (as Einstein showed). Real lines have finite precision (as quantum mechanics shows). So is Euclidean geometry true? What does 'true' mean for a mathematical system — correspondence with reality, or internal consistency? Use this question to explain the difference between applied and pure mathematics.",
+          "hint": "Consider: Euclidean geometry is 'true' within its axiomatic system. It's approximately true for everyday distances. But it's false in strong gravitational fields. What does this three-way distinction mean for the nature of mathematical truth?"
+        }
+      ],
+      "open_question": "Is mathematics discovered (we find truths that already exist) or invented (we construct useful logical systems)? And does the answer change whether Euclidean or non-Euclidean geometry is 'real'?",
+      "sphere_expanded": "Geometry, Logic, Proof Theory",
+      "connected_thinkers": ["pythagoras", "riemann", "descartes", "frege"]
+    },
+    {
+      "id": "archimedes",
+      "name": "Archimedes",
+      "era": "287–212 BCE",
+      "origin": "Syracuse, Sicily",
+      "mbti": "INTP",
+      "key_insight": "Physical principles can be derived mathematically. Give me a lever long enough and a place to stand, and I shall move the world.",
+      "spark": "He leapt from his bath shouting 'Eureka!' He designed war machines that held off the Roman fleet for years. He was killed by a Roman soldier during the sack of Syracuse — allegedly because he refused to stop working on a mathematical diagram.",
+      "quote": "Give me a lever long enough and a fulcrum on which to place it, and I shall move the world.",
+      "pascal_moment": "Archimedes pushed the sphere to the boundary of what pure mathematics could touch: infinity, physical reality, and the power of idealized models to control nature.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Eureka in Your Kitchen",
+          "challenge": "Archimedes discovered that a submerged object displaces water equal to its own volume. Take an irregular object (a rock, a toy) and measure its volume by submerging it in a graduated container of water. This is the Archimedes principle in action. Now calculate its density (density = mass/volume). What material do you think it is?",
+          "hint": "Fill a container to the brim, submerge the object, and catch the overflow. The overflow volume = the object's volume."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Squeezing Pi",
+          "challenge": "Archimedes calculated π by inscribing and circumscribing polygons around a circle: a 96-sided polygon gives 3.1408 < π < 3.1429. He achieved this without a calculator. Try to calculate π using 6-sided and 12-sided polygons. Show your work geometrically. What accuracy do you achieve? How many sides would you need to match your phone's calculator?",
+          "hint": "A regular hexagon inscribed in a circle of radius 1 has perimeter 6. A circle of radius 1 has circumference 2π ≈ 6.28. So 3 < π < 3.14... from just a hexagon."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Pre-Calculus Calculus",
+          "challenge": "Archimedes calculated areas under parabolas using a method of exhaustion — dividing a region into infinitely many triangles and summing them. This is integral calculus, 1,800 years before Newton and Leibniz. Study his proof for the area of a parabolic segment. What key conceptual step did he take that Newton and Leibniz later formalized? What was missing from Archimedes's approach that the fundamental theorem of calculus provided?",
+          "hint": "Archimedes knew HOW to sum the series; Newton knew WHY differentiation and integration are inverses. The missing piece is the connection between areas (integrals) and rates of change (derivatives)."
+        }
+      ],
+      "open_question": "Why is mathematics so 'unreasonably effective' at describing physical reality — is this a deep mystery, or should we expect it given that we developed mathematics to describe the world?",
+      "sphere_expanded": "Geometry, Physics (hydrostatics, levers), Proto-Calculus",
+      "connected_thinkers": ["euclid", "newton", "leibniz", "einstein"]
+    },
+    {
+      "id": "pythagoras",
+      "name": "Pythagoras",
+      "era": "570–495 BCE",
+      "origin": "Samos, Greece",
+      "mbti": "INTJ",
+      "key_insight": "Number is the essence of all things. Mathematics and music and astronomy are one.",
+      "spark": "He founded a mathematical brotherhood with secret symbols, strict rules, and religious rituals. One rule: never eat beans. His followers apparently drowned a man who discovered that √2 is irrational — threatening their belief that all is number (rational number).",
+      "quote": "There is geometry in the humming of the strings, there is music in the spacing of the spheres.",
+      "pascal_moment": "Pythagoras pushed the sphere by unifying number, geometry, and music — and then the sphere cracked: irrational numbers proved that his unified vision was incomplete.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Theorem Lives",
+          "challenge": "Draw a right triangle on graph paper. Measure the three sides (a, b, c where c is the longest). Check: does a² + b² = c²? Now try it for five different right triangles. Is the theorem always true? Now try a non-right triangle — does it still hold?",
+          "hint": "The theorem ONLY works for right triangles. The right angle is the magic ingredient."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Crisis of √2",
+          "challenge": "Pythagoras's followers believed all numbers were rational (expressible as fractions). Then someone proved √2 is irrational — it cannot be written as any fraction p/q. Prove it yourself: assume √2 = p/q (in lowest terms), square both sides, and reach a contradiction. Why did this discovery threaten the entire Pythagorean worldview?",
+          "hint": "If √2 = p/q, then 2 = p²/q², so p² = 2q², so p² is even, so p is even, so p = 2k, so 4k² = 2q², so q² = 2k², so q is even — but then p/q was not in lowest terms. Contradiction."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Music, Mathematics, and Physics",
+          "challenge": "Pythagoras discovered that musical harmony corresponds to simple ratios: an octave is 2:1, a fifth is 3:2, a fourth is 4:3. Modern physics describes particles as quantum fields with specific frequencies and their interactions as wave interference. Kepler later described planetary orbits as a 'music of the spheres.' Are these mathematical harmonies a profound unity — or just a pattern our minds impose? Construct both sides of the argument.",
+          "hint": "The ratios of string lengths ARE the mathematics; the pleasure we feel in hearing them is a biological response. But why does the biology respond to mathematical ratios? That's the deep question."
+        }
+      ],
+      "open_question": "Is the universe fundamentally mathematical — or does mathematics describe the universe because we built mathematics to fit what we observe?",
+      "sphere_expanded": "Number Theory, Music Theory, Cosmology, Mathematics Education",
+      "connected_thinkers": ["euclid", "plato", "kepler", "euler"]
+    },
+    {
+      "id": "gauss",
+      "name": "Carl Friedrich Gauss",
+      "era": "1777–1855",
+      "origin": "Brunswick, Germany",
+      "mbti": "INTJ",
+      "key_insight": "Mathematics is the queen of sciences. And number theory is the queen of mathematics. Patterns in numbers are both beautiful and deeper than they first appear.",
+      "spark": "As a child he was asked to sum 1 to 100 as punishment. He wrote the answer (5050) in seconds. He saw that the first and last numbers paired to 101, and there were 50 such pairs. He published his first great work at 21.",
+      "quote": "Mathematics is the queen of the sciences and number theory is the queen of mathematics.",
+      "pascal_moment": "Gauss pushed the sphere into non-Euclidean geometry, number theory, and statistics simultaneously — and quietly kept results in his notebook for years, releasing them only when they were perfect.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Gauss Trick",
+          "challenge": "Sum 1 + 2 + 3 + ... + 100 without adding them one by one. Use Gauss's method: pair the first and last numbers (1+100=101), the second and second-last (2+99=101)... How many pairs? What is the total? Now generalize: what is the sum of 1 to n?",
+          "hint": "There are 50 pairs, each summing to 101. So total = 50 × 101 = 5050. For 1 to n: n(n+1)/2."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Bell Curve Everywhere",
+          "challenge": "Gauss described the normal distribution (bell curve): most values cluster around the average, with fewer values further out. Measure 30 different naturally occurring quantities (heights of students, leaf lengths, test scores, etc.) and check: do they follow a bell curve? Now ask: WHY does this pattern appear so often in nature? (Hint: Central Limit Theorem.)",
+          "hint": "The Central Limit Theorem: when you add up many independent random variables, the result approaches a normal distribution regardless of what the individual distributions look like. Nature is full of addition."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Gauss and Curved Space",
+          "challenge": "Gauss developed the theory of curved surfaces and proved that curvature is an intrinsic property of a surface — a being living on a curved surface could discover its curvature by internal measurements alone, without needing to step outside and look. This became the foundation for Riemann's geometry and Einstein's general relativity. Explain this chain of ideas in your own words. What does it mean for a being inside a curved space to 'measure' that curvature?",
+          "hint": "On a sphere, the angles of a triangle add up to more than 180°. You don't need to fly into space to discover this — you can measure it from the surface. Gauss proved this."
+        }
+      ],
+      "open_question": "Is there a formula that predicts the distribution of prime numbers — the Riemann Hypothesis, still unsolved, promises such a formula. What would proving it change?",
+      "sphere_expanded": "Number Theory, Statistics, Non-Euclidean Geometry, Electromagnetism",
+      "connected_thinkers": ["euclid", "riemann", "einstein", "noether"]
+    },
+    {
+      "id": "euler",
+      "name": "Leonhard Euler",
+      "era": "1707–1783",
+      "origin": "Basel, Switzerland",
+      "mbti": "INTP",
+      "key_insight": "Mathematical structures connect in unexpected ways. e^(iπ) + 1 = 0 — the most beautiful equation — links the five most fundamental constants.",
+      "spark": "He went blind in both eyes and continued producing mathematics at the same rate, dictating to scribes. He is the most prolific mathematician in history.",
+      "quote": "To those who ask what the infinitely small quantity in mathematics is, we answer that it is actually zero.",
+      "pascal_moment": "Euler pushed the sphere by discovering connections between previously separate mathematical realms — analysis, algebra, and geometry unified through complex numbers.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Bridge Puzzle",
+          "challenge": "The city of Königsberg had 7 bridges. Can you walk through the city, crossing each bridge exactly once? Try it with a map (draw it yourself: two islands, two banks, 7 bridges). Euler proved it was impossible. His solution invented graph theory. Can you figure out why it's impossible before reading his answer?",
+          "hint": "Euler found the key: a path crossing every edge exactly once is only possible if there are at most two points with an odd number of connections. Count the odd-degree points in Königsberg."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Euler's Identity",
+          "challenge": "Euler's formula: e^(ix) = cos(x) + i·sin(x). When x = π: e^(iπ) = cos(π) + i·sin(π) = -1 + 0 = -1. Therefore e^(iπ) + 1 = 0. This connects e (the base of natural logarithms), i (the imaginary unit), π (the circle constant), 1 (the multiplicative identity), and 0 (the additive identity). Explain what each of these constants IS, in your own words. Why is their connection surprising?",
+          "hint": "These five constants come from completely different mathematical contexts: e from growth, i from square roots of negatives, π from circles, 1 and 0 from counting. Their union in one equation suggests a deep underlying unity."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Complex Numbers and Physics",
+          "challenge": "Euler's formula makes complex numbers into rotations in the complex plane. Quantum mechanics is entirely written in complex numbers — the wave function ψ is complex-valued. Electric circuit analysis uses complex impedance. Signal processing uses complex Fourier transforms. Why does the universe seem to 'prefer' complex numbers? Is this a deep fact about reality, or a mathematical convenience?",
+          "hint": "One view: complex numbers aren't physically real — they're just useful bookkeeping. Another: quantum mechanics suggests the universe is literally complex (requires both real and imaginary parts to describe). Recent experiments (Renou et al., 2021) suggest the latter. Look this up."
+        }
+      ],
+      "open_question": "Why do complex numbers — invented to solve abstract algebraic equations — turn out to be essential for describing quantum mechanics, the fundamental theory of matter?",
+      "sphere_expanded": "Complex Analysis, Graph Theory, Number Theory, Topology",
+      "connected_thinkers": ["pythagoras", "gauss", "leibniz", "shannon"]
+    },
+    {
+      "id": "riemann",
+      "name": "Bernhard Riemann",
+      "era": "1826–1866",
+      "origin": "Hanover, Germany",
+      "mbti": "INTP",
+      "key_insight": "Geometry can describe curved spaces of any dimension. Space itself can curve — and curved space describes gravity.",
+      "spark": "He died of tuberculosis at 39. In 40 years of life he contributed to mathematics what most mathematicians don't achieve in 80. Einstein used his geometry 60 years after Riemann developed it.",
+      "quote": "If only I had the theorems! Then I should find the proofs easily enough.",
+      "pascal_moment": "Riemann pushed the sphere beyond flat space and into the curved manifolds that turned out to describe the actual geometry of the universe.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Triangles on a Ball",
+          "challenge": "On a flat surface, the angles of a triangle always add up to 180°. Draw a triangle on the surface of a ball (an orange works well): start at the North Pole, draw a line to the equator, travel 90° along the equator, then return to the North Pole. What do the three angles add up to? What does this tell you about curved space?",
+          "hint": "All three angles are 90° each. The triangle's angles sum to 270°. On a curved surface, the rules of flat geometry no longer hold."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Riemann Hypothesis",
+          "challenge": "The Riemann Hypothesis says: all the 'non-trivial' zeros of the Riemann zeta function lie on the line where the real part equals 1/2. This is the most famous unsolved problem in mathematics, worth $1,000,000. But why do mathematicians care? Research what the zeros of the zeta function have to do with the distribution of prime numbers, and explain the connection in your own words.",
+          "hint": "The gaps between primes look random — but Riemann showed they're controlled by the zeros of the zeta function. If those zeros are all on one line, the primes are 'as regular as possible.' This matters for cryptography."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Riemannian Geometry and General Relativity",
+          "challenge": "Einstein's general relativity describes gravity not as a force but as the curvature of spacetime. The mathematical language is Riemannian geometry (specifically pseudo-Riemannian manifolds). The metric tensor g_μν describes how distances are measured in curved spacetime. Einstein's field equations say: curvature = energy-momentum. Explain in conceptual terms (not equations) why curved space IS gravity, and why this is a more fundamental description than Newton's gravitational force.",
+          "hint": "A planet in orbit is not being pulled — it's following the straightest possible path (geodesic) in curved spacetime. The curvature is caused by mass. Gravity is the geometry of spacetime."
+        }
+      ],
+      "open_question": "The Riemann Hypothesis has been verified for trillions of zeros but remains unproven. Why is a million-dollar prize not enough to produce a proof — what does this say about the limits of human mathematical ability?",
+      "sphere_expanded": "Differential Geometry, Complex Analysis, Number Theory (underpins General Relativity)",
+      "connected_thinkers": ["gauss", "euclid", "einstein", "godel"]
+    },
+    {
+      "id": "godel",
+      "name": "Kurt Gödel",
+      "era": "1906–1978",
+      "origin": "Brünn, Austria-Hungary / Princeton, USA",
+      "mbti": "INTP",
+      "key_insight": "Every sufficiently powerful formal system contains true statements it cannot prove. Mathematics is inherently incomplete. Consistency cannot be proven from within.",
+      "spark": "His incompleteness theorems were a bomb dropped on Hilbert's program — the attempt to make mathematics perfectly complete and consistent. Gödel proved it was impossible. He later starved to death, refusing to eat food prepared by anyone but his wife — who was hospitalized.",
+      "quote": "Either mathematics is too big for the human mind, or the human mind is more than a machine.",
+      "pascal_moment": "Gödel discovered the edge of the mathematical sphere from the inside — and proved that the edge is not a wall but a mirror. The sphere of provable mathematics is surrounded by true-but-unprovable truths.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Liar's Paradox",
+          "challenge": "'This statement is false.' Is it true or false? If it's true, then what it says is true, so it's false. If it's false, then what it says is false, so it's true. You can't escape. This self-referential loop is the heart of Gödel's idea. Find three other self-referential paradoxes or strange loops in language, images, or stories.",
+          "hint": "M.C. Escher's hands drawing each other. A list of all lists that don't contain themselves. A book that is its own appendix. Strange loops are everywhere."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "What Incompleteness Means",
+          "challenge": "Gödel proved: in any consistent formal system powerful enough to do arithmetic, there are true statements that cannot be proven within that system. This means: (1) mathematics cannot prove its own consistency, and (2) no finite set of axioms captures all mathematical truth. What does this mean for: physics (which tries to find a 'theory of everything'), AI (which might be modeled as a formal system), and human knowledge in general?",
+          "hint": "If even mathematics — the most rigorous of human endeavors — has unprovable truths, what does this say about scientific theories, which are less rigorous?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Gödel, Turing, and AI",
+          "challenge": "Roger Penrose argued in The Emperor's New Mind that Gödel's theorem shows AI can never be truly intelligent — because a Turing machine (formal system) is subject to Gödel's theorem, while the human mind can 'see' the truth of Gödel sentences directly. John Searle made a related argument (Chinese Room). Write a rigorous rebuttal to Penrose's argument from the perspective of a computer scientist or mathematician. What is the strongest counter-argument, and what does it require us to assume?",
+          "hint": "Key counter: Gödel's theorem says a system can't prove ITS OWN consistency — not that it can't surpass any specific formal system. A system can go beyond one formal system by adopting a stronger one. Why can't AI do this indefinitely?"
+        }
+      ],
+      "open_question": "Does Gödel's incompleteness theorem imply that human mathematical intuition is non-algorithmic — or is the human brain also a formal system, subject to the same limitations?",
+      "sphere_expanded": "Mathematical Logic, Foundations of Mathematics, Philosophy of Mind, Computer Science",
+      "connected_thinkers": ["russell", "turing_math", "wittgenstein", "frege"]
+    },
+    {
+      "id": "ramanujan",
+      "name": "Srinivasa Ramanujan",
+      "era": "1887–1920",
+      "origin": "Kumbakonam, Tamil Nadu, India",
+      "mbti": "INFP",
+      "key_insight": "Mathematical truth can be discovered through intuition and dreaming. The deepest formulas arrive whole, not built step by step.",
+      "spark": "A self-taught clerk from Madras sent a letter to Cambridge mathematician G.H. Hardy filled with unproven theorems. Hardy called it the most remarkable mathematical letter he had ever received. Ramanujan said the goddess Namagiri brought him formulas in dreams.",
+      "quote": "An equation for me has no meaning unless it represents a thought of God.",
+      "pascal_moment": "Ramanujan pushed the sphere from its inside out — intuiting results that mathematicians are still proving today, a century after his death.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Hardy-Ramanujan Number",
+          "challenge": "Hardy visited Ramanujan in hospital and mentioned he had arrived in taxi number 1729, which seemed uninteresting. Ramanujan immediately said: 'No, it's a very interesting number — it's the smallest number expressible as the sum of two cubes in two different ways.' Find the two ways to express 1729 as the sum of two cubes. (Hint: cubes are 1, 8, 27, 64, 125, 216, 343, 512, 729, 1000...)",
+          "hint": "1729 = 1³ + 12³ = 9³ + 10³. Check: 1+1728=1729 and 729+1000=1729. Ramanujan 'knew' this instantly because he had played with numbers the way others play with music."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Proof by Intuition?",
+          "challenge": "Ramanujan wrote thousands of formulas in his notebooks — often without proof. Mathematicians have been verifying them for a century. Almost all are correct. He wrote one famous 'approximate' formula for π that converges incredibly fast. What does it mean for a mathematical result to be 'correct but unproven'? Is this a different kind of knowledge? Compare Ramanujan's approach to how a physicist 'knows' something (by experiment) vs. how a mathematician 'knows' something (by proof).",
+          "hint": "A formula being numerically verified to a trillion decimal places is strong evidence but not proof. Ramanujan's approach was empirical — he tested formulas numerically and trusted patterns. Is this mathematics or physics?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Mock Theta Functions and Black Holes",
+          "challenge": "Ramanujan's last letter from his deathbed described 'mock theta functions' — mathematical objects he couldn't explain but sensed were important. 90 years later, they were used to count the quantum states of black holes (Hawking radiation). How can a dying mathematician in 1920 without any knowledge of quantum mechanics or general relativity discover objects that describe black holes? What does this say about the relationship between pure mathematics and physical reality?",
+          "hint": "This is the 'unreasonable effectiveness of mathematics' at its most extreme. Ramanujan discovered mathematical structures that described physical reality decades before the physics existed. Is this evidence that mathematics and physics are the same thing at some deep level?"
+        }
+      ],
+      "open_question": "Is mathematical discovery purely rational — or is there a form of mathematical intuition, perhaps even mystical, that bypasses conscious reasoning and accesses deeper structures?",
+      "sphere_expanded": "Number Theory, Infinite Series, Modular Forms, Mock Theta Functions",
+      "connected_thinkers": ["euler", "hardy", "hawking", "pythagoras"]
+    },
+    {
+      "id": "noether",
+      "name": "Emmy Noether",
+      "era": "1882–1935",
+      "origin": "Erlangen, Germany / Princeton, USA",
+      "mbti": "INTJ",
+      "key_insight": "Every symmetry in nature corresponds to a conservation law. Conservation of energy comes from time symmetry. Conservation of momentum comes from space symmetry.",
+      "spark": "Refused a professorship at Göttingen because she was a woman — Hilbert argued furiously for her: 'This is a university, not a bathhouse.' Einstein called her the most significant creative mathematical genius thus far produced.",
+      "quote": "My methods are really methods of working and thinking; this is why they have crept in everywhere anonymously.",
+      "pascal_moment": "Noether's theorem expanded the sphere by showing that the deepest conservation laws of physics are not arbitrary facts — they are logical consequences of symmetry. Beauty and truth are the same thing.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Symmetry in Nature",
+          "challenge": "Find 10 examples of symmetry in nature (bilateral symmetry in faces, radial symmetry in flowers, translational symmetry in crystal lattices). For each, ask: what is 'conserved' — what stays the same when you apply the symmetry? For a mirror-symmetric face: left and right are swapped, but the 'face' is preserved. What do you call the thing that's preserved?",
+          "hint": "Noether showed that in physics, symmetry always preserves something measurable. In everyday life, symmetry preserves identity. Both are conservation laws of a sort."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Symmetry and Conservation",
+          "challenge": "Noether's theorem (simplified): time-translation symmetry (physics is the same yesterday and today) → energy is conserved. Space-translation symmetry (physics is the same here and there) → momentum is conserved. Rotational symmetry → angular momentum is conserved. Now ask: if the laws of physics CHANGED over time (or in different places), what would stop being conserved? Why might this be an experimental test for whether the universe has constant laws?",
+          "hint": "Astronomers check whether the fine structure constant (α) was the same 10 billion years ago by looking at ancient starlight spectra. If it changed, Noether's theorem says energy wouldn't be conserved in the early universe."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Abstract Algebra and the Unity of Mathematics",
+          "challenge": "Noether revolutionized algebra by studying mathematical structures themselves (rings, fields, ideals) rather than specific equations. She asked: what are the essential structural features that make mathematics work? This abstraction transformed algebra from a collection of techniques into a unified theory. How did Noether's approach to algebra — studying structure rather than calculation — influence modern physics (quantum groups, gauge theories) and computer science (abstract data types, category theory)?",
+          "hint": "A modern programming language's type system embodies Noether-style abstraction: you specify the structure (what operations are defined) rather than the implementation. This is the same move Noether made in mathematics."
+        }
+      ],
+      "open_question": "Are the symmetries of physics (Lorentz symmetry, gauge symmetry, CPT symmetry) features of the universe itself — or constraints our theories impose on reality? Could there be a universe without symmetry?",
+      "sphere_expanded": "Abstract Algebra, Theoretical Physics (conservation laws, gauge theories)",
+      "connected_thinkers": ["einstein", "hilbert", "gauss", "riemann"]
+    },
+    {
+      "id": "turing_math",
+      "name": "Alan Turing (Mathematics)",
+      "era": "1912–1954",
+      "origin": "London, England",
+      "mbti": "INTP",
+      "key_insight": "Computation itself can be mathematically defined — as a symbol-manipulating machine. And the limits of computation can be proven as mathematical theorems.",
+      "spark": "He defined what a 'computer' is in a 1936 paper — before electronic computers existed. His universal machine could simulate any other machine. He then proved that some problems are undecidable — no computer can ever solve them.",
+      "quote": "We can only see a short distance ahead, but we can see plenty there that needs to be done.",
+      "pascal_moment": "Turing pushed the sphere by defining its computational boundary — proving that even an ideal computer with infinite time and memory cannot solve certain problems. The sphere of the computable is surrounded by the undecidable.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "What is an Algorithm?",
+          "challenge": "An algorithm is an unambiguous, step-by-step procedure that solves a problem. Write an algorithm for: (1) tying a shoelace, (2) finding the largest number in a list, (3) deciding whether a number is prime. For each, test your algorithm on a case you didn't think about when writing it. Does it still work?",
+          "hint": "The hardest part of writing an algorithm is handling edge cases: what if the list has only one number? What if the number is 1? What if the shoes are already tied?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Halting Problem",
+          "challenge": "Turing's Halting Problem: write a program that takes any other program as input and decides whether that program will stop (halt) or run forever. Turing proved no such program can exist. Here's a sketch of why: suppose HALT(P) exists. Build a new program D that: if HALT says P halts, D loops forever; if HALT says P loops, D halts. What happens when you run D on D? Why does this prove HALT can't exist?",
+          "hint": "If D halts → HALT says D halts → D loops. If D loops → HALT says D loops → D halts. Either way, HALT gives the wrong answer. This is a programmatic version of the Liar's Paradox."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Decidability and Gödel",
+          "challenge": "Turing's undecidability and Gödel's incompleteness are the same theorem in different disguises. Both are about self-reference: Gödel builds a statement that talks about its own provability; Turing builds a program that talks about its own halting. Prove (in your own words, not formally) that the undecidability of the halting problem is equivalent to Gödel's incompleteness theorem. What does this equivalence mean about the relationship between logic and computation?",
+          "hint": "If you could decide halting, you could decide provability (run the proof-search program and check if it halts). If you could decide provability, Gödel's theorem would be violated. Therefore undecidability ↔ incompleteness."
+        }
+      ],
+      "open_question": "Is the human brain a Turing machine — subject to the same computational limits — or does consciousness involve non-computable processes? This remains one of the deepest open questions in philosophy of mind.",
+      "sphere_expanded": "Computability Theory, Mathematical Logic, Computer Science, AI",
+      "connected_thinkers": ["godel", "russell", "von_neumann", "shannon"]
+    }
+  ]
+}

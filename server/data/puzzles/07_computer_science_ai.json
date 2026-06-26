@@ -1,0 +1,192 @@
+{
+  "sphere": "Computer Science & AI",
+  "sphere_id": "computer_science_ai",
+  "sphere_description": "The sphere where humans discovered that thinking itself can be formalized — and then built machines that do it. From Boole's logic gates to large language models, this sphere asks the deepest question: what is computation, and is the mind a computer?",
+  "thinkers": [
+    {
+      "id": "turing_cs",
+      "name": "Alan Turing (Computer Science)",
+      "era": "1912–1954",
+      "origin": "London, England",
+      "mbti": "INTP",
+      "key_insight": "A machine that reads, writes, and moves across a tape according to rules is computing. All computation is equivalent to this. Some problems cannot be computed by any machine.",
+      "spark": "He cracked the Enigma cipher, saving an estimated 14 million lives. He was then prosecuted by the British government for being gay, chemically castrated, and found dead at 41. In 2009, the British government formally apologized.",
+      "quote": "We can only see a short distance ahead, but we can see plenty there that needs to be done.",
+      "pascal_moment": "Turing defined the sphere of the computable — and proved that this sphere has a hard boundary: the halting problem and undecidable propositions lie permanently outside it.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Turing Test Today",
+          "challenge": "Turing proposed: a machine is 'intelligent' if a human judge, communicating by text only, cannot tell it apart from a human. You are now talking to Parth — an AI. Is Parth passing the Turing Test with you? Try to design 3 questions that would reliably distinguish a human from an AI. Then try them on Parth. What did you discover?",
+          "hint": "Good Turing Test probes: ask for personal emotional experiences ('describe the last time you cried'), common sense about physical reality ('if I flip a pancake, which side was the floor touching?'), or creative inconsistency ('tell me a story about your childhood'). What does the AI do with questions it can't answer honestly?"
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "The Universal Machine",
+          "challenge": "Turing's universal Turing machine can simulate any other Turing machine. This means: one computer, with the right software, can simulate any other computer. This is the theoretical basis for: virtual machines, emulators (playing old video games), cloud computing, and containerization. Explain, in your own words, what 'universality' means here — and why it is a profound mathematical result, not just an engineering convenience.",
+          "hint": "Before universality was proven, you might think: some computations require special hardware. Turing showed: no — any computation can be encoded as data for a universal machine. Software-hardware separation becomes theoretically grounded. This is why you can run iOS apps on a Windows emulator."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "What AI Cannot Do",
+          "challenge": "Turing proved that no algorithm can solve the Halting Problem. More broadly, there are infinitely many undecidable problems — problems that no Turing machine can solve in finite time for all inputs. Rice's theorem says: any non-trivial property of programs (Does it terminate? Does it output 'hello'? Is it correct?) is undecidable. What are the practical implications for AI safety and software verification? Can an AI system ever be proven 'safe' — and what does Turing's theorem say about the limits of such proofs?",
+          "hint": "Formal verification can prove specific properties of specific programs — but only by restricting the domain severely. A general 'is this program safe?' verifier is impossible (Rice's theorem). This means AI safety cannot be solved by mathematical proof alone — it requires empirical testing, interpretability research, and likely accepting irreducible residual uncertainty."
+        }
+      ],
+      "open_question": "Is the human brain a Turing machine — capable of computing only what Turing machines can compute — or does consciousness involve something non-computable?",
+      "sphere_expanded": "Computability Theory, Cryptography, AI Theory, Mathematical Logic",
+      "connected_thinkers": ["godel", "shannon", "von_neumann", "boole"]
+    },
+    {
+      "id": "von_neumann",
+      "name": "John von Neumann",
+      "era": "1903–1957",
+      "origin": "Budapest, Hungary / Princeton, USA",
+      "mbti": "INTJ",
+      "key_insight": "Store program and data in the same memory — the von Neumann architecture. This design underlies every computer built in the last 75 years.",
+      "spark": "Contributed to: quantum mechanics (measurement theory), game theory (minimax theorem), economics (expected utility), nuclear weapons design (implosion lens), and computer architecture — all in one lifetime. Enrico Fermi said: 'von Neumann could outcompute anyone I know — and he was the best mathematician I ever met.'",
+      "quote": "Young man, in mathematics you don't understand things. You just get used to them.",
+      "pascal_moment": "Von Neumann pushed the sphere of computation from mechanical to electronic and from fixed-program to stored-program — the architectural insight that made general-purpose computing possible.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The Von Neumann Architecture",
+          "challenge": "Every computer has: (1) CPU (does calculations), (2) Memory/RAM (stores current data and programs), (3) Storage (disk, SSD — permanent storage), (4) Input/Output (keyboard, screen, network). Draw a diagram connecting these components. Von Neumann's key insight: programs are data — they live in the same memory as the data they process. Why is this more flexible than having separate program memory and data memory?",
+          "hint": "If programs are data, you can: write programs that modify other programs, store programs like files, send programs over networks, and have one program generate another. This is why viruses exist — and also why software updates, compilers, and AI model training exist."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Game Theory: The Minimax Theorem",
+          "challenge": "Von Neumann's minimax theorem: in any two-player zero-sum game, there is always an optimal strategy (minimax) for each player. In chess, there's a 'game-theoretically optimal' strategy even though we can't compute it (the game tree is too large). Apply the minimax idea to: a penalty kick in football (striker vs. goalkeeper), price competition between two shops, and arms reduction negotiations. In each case: what is the minimax strategy and when does it break down (when is the game not truly zero-sum)?",
+          "hint": "Penalty kick: striker should randomize between left/right. If striker always kicks left, goalkeeper will learn to go left. If goalkeeper always goes left, striker should kick right. Optimal: both randomize at Nash equilibrium probabilities. This is identical in structure to nuclear deterrence (MAD)."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Von Neumann and Moral Responsibility",
+          "challenge": "Von Neumann designed the implosion lens for the first atom bomb — the shaped explosive that compressed the plutonium core. He also designed the first electronic computer. He knew exactly what both would be used for. Should scientists bear responsibility for the weapons applications of their work? Compare his situation to: Fritz Haber (chemical weapons, but also fertilizer saving billions), Edward Teller (hydrogen bomb), and current AI researchers. Is there a meaningful distinction between discovering a principle and designing a weapon?",
+          "hint": "Von Neumann's position: 'If you say why not bomb them tomorrow, I say, why not today? If you say today at five o'clock, I say why not one o'clock?' He actively advocated for nuclear deterrence. Is this the response of a brilliant, morally serious person — or of someone who has dissociated calculation from ethics?"
+        }
+      ],
+      "open_question": "The von Neumann bottleneck (CPU must fetch data from memory one item at a time) limits computing speed. Neuromorphic computing (brain-inspired parallel architecture) may replace it. Would a non-von Neumann AI think differently?",
+      "sphere_expanded": "Computer Architecture, Game Theory, Economics, Quantum Mechanics, Nuclear Weapons",
+      "connected_thinkers": ["turing_cs", "shannon", "boole", "nash"]
+    },
+    {
+      "id": "shannon",
+      "name": "Claude Shannon",
+      "era": "1916–2001",
+      "origin": "Petoskey, Michigan, USA",
+      "mbti": "INTP",
+      "key_insight": "Information can be measured (in bits). Every channel has a maximum transmission capacity. Information entropy and thermodynamic entropy are the same mathematical structure.",
+      "spark": "Invented information theory at Bell Labs — while riding a unicycle in the hallways and juggling. He later built robotic mice that solved mazes and a machine that calculated Roman numerals while smoking a pipe. He died with Alzheimer's disease, unable to remember the theorems he had proved.",
+      "quote": "Information is the resolution of uncertainty.",
+      "pascal_moment": "Shannon defined the sphere of information — giving it a precise mathematical measure and proving that the sphere has hard limits (channel capacity) and a deep connection to physics (entropy).",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Counting Bits",
+          "challenge": "Shannon's bit: answering any yes/no question gives 1 bit of information. To identify 1 card from a deck of 52: how many yes/no questions do you need (in the worst case, with an optimal strategy)? Try it: play 20 Questions. Shannon proved you need at most ⌈log₂(52)⌉ = 6 questions if you ask optimally. What is the optimal first question for a deck of 52 cards?",
+          "hint": "Optimal strategy: each question should split the remaining possibilities in half. 'Is the card in the top half?' narrows from 52 to 26. Then 'top half of that?' narrows to 13. Six questions: 2⁶ = 64 > 52, so 6 questions always suffice. This is binary search — the same algorithm used in sorted databases."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Channel Capacity",
+          "challenge": "Shannon's channel capacity theorem: C = B log₂(1 + S/N), where B is bandwidth (Hz), S is signal power, N is noise power. This is the maximum rate of information transmission over a noisy channel. Calculate the theoretical maximum speed of: (1) a telephone modem (B=4 kHz, S/N=1000), (2) a WiFi channel (B=20 MHz, S/N=100), (3) fiber optic (B=1 THz, S/N=10⁶). Why can engineers never quite reach Shannon's limit — but keep getting closer?",
+          "hint": "(1) C = 4,000 × log₂(1001) ≈ 40 kbps. Early modems achieved 56 kbps because they used phone lines' actual bandwidth (including frequencies above 4 kHz) creatively. (2) C ≈ 133 Mbps; actual WiFi ~100 Mbps (approaching the limit with modern coding). (3) C ≈ 20 Tbps. Shannon's theorem is the absolute ceiling — approaching it requires ever more sophisticated error-correcting codes."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Information Is Physical",
+          "challenge": "Shannon's information entropy H = -Σ p log p is mathematically identical to Boltzmann's thermodynamic entropy S = -k Σ p log p. Rolf Landauer (1961) proved: erasing 1 bit of information must dissipate at least kT ln(2) of energy as heat (Landauer's principle). This means computation has a thermodynamic cost. Derive what this means for: (1) the minimum energy cost of running a 1 GHz processor performing 10⁹ operations per second, (2) the thermodynamic cost of training GPT-4, (3) whether a reversible computer could compute without generating heat. Does this connect to Maxwell's Demon and the arrow of time?",
+          "hint": "At room temperature (T=300K): kT ln(2) ≈ 2.8×10⁻²¹ J per bit erasure. Actual computers are ~10⁶ times less efficient than Landauer's limit — meaning reversible computing could theoretically reduce energy use by a million-fold. Maxwell's Demon generates entropy when it erases its memory — Landauer's principle resolves the paradox."
+        }
+      ],
+      "open_question": "If information is physical (Landauer's principle), does the universe compute — and is consciousness a form of information processing that has thermodynamic consequences?",
+      "sphere_expanded": "Information Theory, Communications Engineering, Cryptography, Thermodynamics of Computation",
+      "connected_thinkers": ["turing_math", "boltzmann", "hawking", "boole"]
+    },
+    {
+      "id": "lovelace",
+      "name": "Ada Lovelace",
+      "era": "1815–1852",
+      "origin": "London, England",
+      "mbti": "INTJ",
+      "key_insight": "A machine that manipulates symbols by rules can do far more than arithmetic — it can compose music, draw graphics, perform any operation that can be symbolized. The program is the key, not the machine.",
+      "spark": "The daughter of Lord Byron (the Romantic poet) and a mathematician mother who had her educated in mathematics precisely to prevent her from inheriting her father's 'madness.' She wrote the first computer program — for a machine that was never built.",
+      "quote": "The Analytical Engine weaves algebraic patterns, just as the Jacquard loom weaves flowers and leaves.",
+      "pascal_moment": "Lovelace expanded the sphere of computing beyond arithmetic — seeing that a machine that manipulates symbols could produce music, art, science, and any human creation that can be formalized.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "The First Program",
+          "challenge": "Ada wrote an algorithm for Babbage's Analytical Engine to compute Bernoulli numbers — a sequence used in number theory. The algorithm used: variables (stored numbers), operations (arithmetic), loops (repeat a process), and conditionals (if-then). These are the same elements every computer program uses today. Write a pseudocode algorithm (English steps) to compute the first 10 Fibonacci numbers. Identify which steps use each of Ada's four elements.",
+          "hint": "Fibonacci: F(1)=1, F(2)=1, F(n)=F(n-1)+F(n-2). Algorithm: SET a=1, SET b=1, PRINT a, PRINT b, REPEAT 8 times: SET c = a+b, PRINT c, SET a=b, SET b=c. The REPEAT is Ada's loop; the SET operations use variables; the arithmetic uses operations."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Can a Machine Originate?",
+          "challenge": "Ada wrote: 'The Analytical Engine has no power of originating anything. It can only do what we know how to order it to perform.' In 2024, large language models produce novel text, images, music, and mathematical proofs. Does this violate Ada's claim — or does it fulfill it? Was she wrong about the limits of machines — or right that everything 'creative' a machine produces was implicitly ordered by the humans who designed and trained it?",
+          "hint": "One view: LLMs 'only' recombine patterns from training data — Ada is right. Another view: human creativity also recombines patterns from prior experience — so Ada's claim applies equally to humans. A third view: novelty requires intentionality, which machines lack. Which criterion of 'origination' do you think matters most?"
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "Ada's Vision vs. AI Reality",
+          "challenge": "Ada foresaw that if the Analytical Engine could manipulate symbols by rule, it could compose music, do science, create art. She was right that the capability was in principle possible. She was (possibly) wrong that a machine that computes can 'think.' Evaluate Ada's philosophical contribution against the background of: (1) Turing's test (1950), (2) Searle's Chinese Room (1980), (3) large language models (2020s). Did Ada anticipate the philosophical problem correctly, or did she understate the difficulty? What question did she not ask that she should have?",
+          "hint": "Ada didn't ask: can a symbol-manipulating machine have understanding? Can it have goals? Can it suffer? These are the questions that AI ethics grapples with today. She defined the capability; the philosophy of what that capability means remained unasked for 150 years."
+        }
+      ],
+      "open_question": "If an AI system can write code, compose music, prove theorems, and generate images — what remains of the concept of 'human creativity' as something distinct and valuable?",
+      "sphere_expanded": "Programming, Computer Science History, Philosophy of AI",
+      "connected_thinkers": ["babbage", "turing_cs", "boole", "shannon"]
+    },
+    {
+      "id": "boole",
+      "name": "George Boole",
+      "era": "1815–1864",
+      "origin": "Lincoln, England",
+      "mbti": "INTJ",
+      "key_insight": "Logic can be expressed as algebra — TRUE and FALSE can be computed. AND, OR, NOT are sufficient to express all logical relationships.",
+      "spark": "A self-taught son of a cobbler who never attended university, yet became a professor of mathematics in Cork, Ireland. He died of pneumonia at 49 — his wife, trying to follow the homeopathic principle of 'like cures like,' reportedly poured buckets of water over him.",
+      "quote": "No matter how correct a mathematical theorem may appear to be, one ought never to be satisfied that there was not something imperfect about it until it also gives the impression of being beautiful.",
+      "pascal_moment": "Boole discovered that the sphere of logical thought could be made computational — turning the abstract rules of reason into a mathematical algebra that machines could implement.",
+      "puzzles": [
+        {
+          "level": "beginner",
+          "age_range": "6–10",
+          "title": "Boolean Logic",
+          "challenge": "Boolean algebra uses only TRUE (1) and FALSE (0). Evaluate: (1) TRUE AND FALSE, (2) TRUE OR FALSE, (3) NOT TRUE, (4) (TRUE AND FALSE) OR (NOT FALSE), (5) NOT (TRUE OR FALSE). Draw truth tables for AND, OR, and NOT. Every decision a computer makes is built from these three operations. Can you express 'If it rains AND I have an umbrella, I will go out' as a Boolean expression?",
+          "hint": "AND: both must be true. OR: at least one must be true. NOT: flips. For the umbrella: go_out = rains AND has_umbrella. If you also go out when it doesn't rain: go_out = (rains AND has_umbrella) OR (NOT rains). But that simplifies to: go_out = (NOT rains) OR has_umbrella. Check with a truth table."
+        },
+        {
+          "level": "intermediate",
+          "age_range": "10–14",
+          "title": "Logic Gates as Circuits",
+          "challenge": "Boole's algebra maps directly to electrical circuits: AND gate = two switches in series (current flows only if BOTH are closed); OR gate = two switches in parallel (current flows if EITHER is closed); NOT gate = inverts the signal. Design a half-adder circuit using only NAND gates (AND followed by NOT — the universal gate). A half-adder takes two 1-bit inputs (A, B) and produces a sum bit (A XOR B) and a carry bit (A AND B). NAND is universal: any logic circuit can be built from NAND gates alone. Show how.",
+          "hint": "XOR from NAND: A XOR B = NAND(NAND(A, NAND(A,B)), NAND(B, NAND(A,B))). This 4-NAND circuit is used in every CPU ever built. The universality of NAND means any computation requires only this one gate type — an enormous manufacturing simplification."
+        },
+        {
+          "level": "advanced",
+          "age_range": "14–16+",
+          "title": "The Laws of Thought",
+          "challenge": "Boole called his book 'The Laws of Thought' — he believed Boolean algebra captured how the human mind reasons. Modern cognitive science says: human reasoning is NOT Boolean — humans commit systematic logical errors (conjunction fallacy, base rate neglect, confirmation bias), and there are logical tasks that most humans find hard (modus tollens). But AI systems trained on human-generated data also exhibit these biases. Does this mean: (1) Boole was wrong about human thought, (2) AI 'inherited' our non-Boolean reasoning, or (3) Boolean logic is a useful formal system that describes ideal reasoning, not actual reasoning? Write a 400-word position.",
+          "hint": "The distinction between descriptive (how do people actually think) and normative (how should people reason) logic is crucial. Boole made a normative claim (this is how thought SHOULD work) that he confused with a descriptive one (this is how thought DOES work). Modern cognitive science separates the two. Where does an AI fall on this spectrum?"
+        }
+      ],
+      "open_question": "As quantum computers use quantum bits (qubits) that can be in superposition of 0 and 1 — is Boolean logic still sufficient, or do we need a quantum logic for quantum AI?",
+      "sphere_expanded": "Mathematical Logic, Digital Electronics, Computer Science, Set Theory",
+      "connected_thinkers": ["frege", "turing_math", "shannon", "von_neumann"]
+    }
+  ]
+}
