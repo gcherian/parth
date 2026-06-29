@@ -592,3 +592,24 @@ CREATE TABLE IF NOT EXISTS learner_state.lens_portraits (
 
 CREATE INDEX IF NOT EXISTS lens_portraits_learner_lens_idx
     ON learner_state.lens_portraits (learner_id, lens, computed_at DESC);
+
+-- ── Pilot gate: pretest baseline snapshot ────────────────────────────────────
+-- Recorded once, at or before the first session, so w4_gain can compare real
+-- starting mastery rather than assuming a fixed prior.
+CREATE TABLE IF NOT EXISTS metrics.learner_baselines (
+    learner_id    TEXT PRIMARY KEY,
+    avg_mastery   REAL NOT NULL DEFAULT 0.0,
+    concept_count INT  NOT NULL DEFAULT 0,
+    recorded_at   TIMESTAMPTZ DEFAULT now()
+);
+
+-- ── Pilot gate: guardian engagement log ──────────────────────────────────────
+-- Written every time a guardian fetches the parent dashboard report.
+-- Used by the guardian_engaged gate to prove the "sold to the parent" claim.
+CREATE TABLE IF NOT EXISTS parent_dashboard.views (
+    id          BIGSERIAL PRIMARY KEY,
+    learner_id  TEXT NOT NULL,
+    viewed_at   TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS parent_dashboard_views_learner_idx
+    ON parent_dashboard.views (learner_id, viewed_at DESC);

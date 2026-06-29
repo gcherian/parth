@@ -215,12 +215,14 @@ class _AchievementsList extends StatelessWidget {
 
   const _AchievementsList({required this.questions});
 
-  static const _achievements = [
-    (emoji: '🌱', title: 'First Step', desc: 'Asked your first question', threshold: 1),
-    (emoji: '🔍', title: 'Curious Mind', desc: 'Asked 10 questions', threshold: 10),
-    (emoji: '📚', title: 'Scholar', desc: 'Asked 25 questions', threshold: 25),
-    (emoji: '🏆', title: 'Knowledge Seeker', desc: 'Asked 50 questions', threshold: 50),
-    (emoji: '⭐', title: 'Wisdom Master', desc: 'Asked 100 questions', threshold: 100),
+  // Milestones are positive-only: no locks, no shame, no count-shaming copy.
+  // Unearned milestones are shown dimly — visible as future moments, not failures.
+  static const _milestones = [
+    (emoji: '🌱', title: 'Curious', desc: 'Your learning journey has begun', threshold: 1),
+    (emoji: '🔍', title: 'Explorer', desc: 'You keep coming back with new questions', threshold: 10),
+    (emoji: '📚', title: 'Deep Thinker', desc: 'You go beyond the obvious', threshold: 25),
+    (emoji: '🌟', title: 'Knowledge Builder', desc: 'Your questions are getting sharper', threshold: 50),
+    (emoji: '🦅', title: 'Independent Mind', desc: 'You trust your own thinking now', threshold: 100),
   ];
 
   @override
@@ -242,12 +244,12 @@ class _AchievementsList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Achievements',
+            'Your Journey',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppTheme.darkText),
           ),
           const SizedBox(height: 8),
-          ..._achievements.map((a) {
-            final unlocked = questions >= a.threshold;
+          ..._milestones.map((a) {
+            final reached = questions >= a.threshold;
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
@@ -256,15 +258,28 @@ class _AchievementsList extends StatelessWidget {
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(
-                      color: unlocked
+                      color: reached
                           ? AppTheme.saffron.withOpacity(0.1)
-                          : Colors.grey.shade100,
+                          : Colors.grey.shade50,
                       borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: reached
+                            ? AppTheme.saffron.withOpacity(0.3)
+                            : Colors.grey.shade200,
+                      ),
                     ),
                     child: Center(
                       child: Text(
-                        unlocked ? a.emoji : '🔒',
-                        style: const TextStyle(fontSize: 20),
+                        a.emoji,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: reached ? null : const Color(0x00000000),
+                        ).copyWith(
+                          // Dim unearned milestones without hiding them
+                          shadows: reached
+                              ? null
+                              : [const Shadow(color: Colors.transparent)],
+                        ),
                       ),
                     ),
                   ),
@@ -278,17 +293,20 @@ class _AchievementsList extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: unlocked ? AppTheme.darkText : AppTheme.lightText,
+                            color: reached ? AppTheme.darkText : AppTheme.lightText,
                           ),
                         ),
                         Text(
                           a.desc,
-                          style: const TextStyle(fontSize: 12, color: AppTheme.lightText),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: reached ? AppTheme.lightText : AppTheme.lightText.withOpacity(0.5),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  if (unlocked)
+                  if (reached)
                     const Icon(Icons.check_circle_rounded, color: AppTheme.success, size: 20),
                 ],
               ),

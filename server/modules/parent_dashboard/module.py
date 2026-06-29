@@ -86,6 +86,11 @@ async def build_report(conn, learner_id: str) -> dict:
         "INSERT INTO parent_dashboard.reports (learner_id, payload) VALUES ($1, $2)",
         learner_id, json.dumps(report, default=str),
     )
+    # Record guardian view for the guardian_engaged pilot gate.
+    await conn.execute(
+        "INSERT INTO parent_dashboard.views (learner_id) VALUES ($1)",
+        learner_id,
+    )
     return report
 
 
