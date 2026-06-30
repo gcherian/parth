@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/subject.dart';
 import '../theme/app_theme.dart';
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _userName = 'Student';
   int _grade = 5;
   int _tabIndex = 0;
+  bool _isAdmin = false;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _userName = prefs.getString('user_name') ?? 'Student';
       _grade = prefs.getInt('grade') ?? 5;
+      _isAdmin = prefs.getBool('is_admin') ?? false;
     });
   }
 
@@ -46,6 +49,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: IndexedStack(index: _tabIndex, children: tabs),
+      floatingActionButton: _isAdmin
+          ? FloatingActionButton.small(
+              heroTag: 'claude_fab',
+              backgroundColor: const Color(0xFFD97706),
+              tooltip: 'Talk to Claude',
+              onPressed: () => launchUrl(
+                Uri.parse('https://claude.ai'),
+                mode: LaunchMode.externalApplication,
+              ),
+              child: const Text('🤖', style: TextStyle(fontSize: 18)),
+            )
+          : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tabIndex,
         onDestinationSelected: (i) => setState(() => _tabIndex = i),

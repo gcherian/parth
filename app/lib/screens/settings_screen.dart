@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/chat_provider.dart';
 import '../theme/app_theme.dart';
@@ -19,12 +20,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _testing = false;
   String? _testResult;
   bool _testOk = false;
+  bool _isAdmin = false;
+  int _versionTaps = 0;
 
   @override
   void initState() {
     super.initState();
     final current = ref.read(chatProvider).serverUrl ?? '';
     _urlCtrl = TextEditingController(text: current);
+    _loadAdminState();
+  }
+
+  Future<void> _loadAdminState() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    setState(() => _isAdmin = prefs.getBool('is_admin') ?? false);
+  }
+
+  Future<void> _handleVersionTap() async {
+    _versionTaps++;
+    if (_versionTaps >= 5) {
+      _versionTaps = 0;
+      final prefs = await SharedPreferences.getInstance();
+      final newVal = !_isAdmin;
+      await prefs.setBool('is_admin', newVal);
+      if (!mounted) return;
+      setState(() => _isAdmin = newVal);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(newVal ? '🤖 Admin mode ON' : 'Admin mode off'),
+        duration: const Duration(seconds: 2),
+      ));
+    }
   }
 
   @override
@@ -230,10 +256,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           const SizedBox(height: 40),
-          const Center(
-            child: Text(
-              'Parth v1.0 · Made with ❤️ for every Indian child',
-              style: TextStyle(fontSize: 11, color: AppTheme.lightText),
+          Center(
+            child: GestureDetector(
+              onTap: _handleVersionTap,
+              child: Text(
+                _isAdmin
+                    ? '🤖 Admin mode ON · Parth v1.0'
+                    : 'Parth v1.0 · Made with ❤️ for every Indian child',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: _isAdmin ? AppTheme.saffron : AppTheme.lightText,
+                  fontWeight: _isAdmin ? FontWeight.w600 : FontWeight.normal,
+                ),
+              ),
             ),
           ),
         ],
