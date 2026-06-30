@@ -1,12 +1,14 @@
 """
-Teacher feedback API — receives portrait form submissions and serves the form HTML.
+Teacher feedback API — no student login required.
 
 Flow:
-  1. Teacher receives WhatsApp link: /teacher/form?code=A1B2C3D4
-  2. They fill the form, which POSTs JSON to /teacher/feedback
-  3. We resolve student_code → learner_id (first 8 chars of UUID, case-insensitive)
-  4. Store in teacher.portraits; upsert on (student_code, subject) so resubmission updates
-  5. /chat injects the portrait into learner_context via get_teacher_portrait_context()
+  Static link: /teacher/form  (no ?code= needed)
+  Teacher enters their phone number, student name, grade, and subject.
+  Portrait is keyed on (teacher_phone, student_name, subject).
+  student_code is optional — if provided, we resolve it to a learner_id so
+  Parth can inject the portrait into chat context automatically.
+  Without a code, portraits are still stored and can be matched later when
+  the student's learner_id is linked to the teacher's phone.
 """
 import json
 from typing import Optional
@@ -23,11 +25,15 @@ log = get_logger("teacher.routes")
 router = APIRouter(prefix="/teacher", tags=["teacher"])
 
 
-# ── Pydantic model (all fields optional except the three required ones) ───────
+# ── Pydantic model ────────────────────────────────────────────────────────────
 
 class TeacherFeedbackRequest(BaseModel):
-    student_code:       str
+    teacher_phone:      str
     teacher_name:       str
+    student_name:       str
+    student_grade:      Optional[str] = None
+    school:             Optional[str] = None
+    student_code:       Optional[str] = None   # optional join code
     subject:            str
     teacher_duration:   Optional[str] = None
     learning_style:     Optional[list[str]] = None
@@ -60,42 +66,56 @@ async def teacher_form():
 
 @router.post("/feedback")
 async def submit_feedback(body: TeacherFeedbackRequest):
-    code = body.student_code.upper().strip()
-    if len(code) < 4:
-        raise HTTPException(status_code=422, detail="student_code too short")
+    phone = body.teacher_phone.strip()
+    if len(phone) < 6:
+        raise HTTPException(status_code=422, detail="teacher_phone too short")
+    if not body.student_name.strip():
+        raise HTTPException(status_code=422, detail="student_name required")
 
     pool = await get_pool()
     async with pool.acquire() as conn:
-        # Resolve student_code → full learner_id
-        # The join code is the first 8 chars of the UUID (no dashes in the first segment)
-        learner_row = await conn.fetchrow(
-            "SELECT learner_id FROM learner_state.profiles WHERE UPPER(SUBSTR(learner_id, 1, 8)) = $1",
-            code,
-        )
-        learner_id = learner_row["learner_id"] if learner_row else None
+        # Try to resolve student_code → learner_id if code was given
+        learner_id = None
+        if body.student_code:
+            code = body.student_code.upper().strip()
+            learner_row = await conn.fetchrow(
+                "SELECT learner_id FROM learner_state.profiles "
+                "WHERE UPPER(SUBSTR(learner_id, 1, 8)) = $1",
+                code,
+            )
+            learner_id = learner_row["learner_id"] if learner_row else None
 
-        if not learner_id:
-            log.warning("teacher_portrait_unresolved_code", code=code)
-
-        payload = body.model_dump(exclude={"student_code", "teacher_name", "subject"})
+        payload = body.model_dump(exclude={
+            "teacher_phone", "teacher_name", "student_name",
+            "student_grade", "school", "student_code", "subject",
+        })
 
         await conn.execute(
             """
             INSERT INTO teacher.portraits
-                (student_code, learner_id, teacher_name, subject, payload, submitted_at)
-            VALUES ($1, $2, $3, $4, $5::jsonb, now())
-            ON CONFLICT (student_code, subject) DO UPDATE
-                SET learner_id   = COALESCE($2, teacher.portraits.learner_id),
-                    teacher_name = $3,
-                    payload      = $5::jsonb,
-                    submitted_at = now()
+                (teacher_phone, teacher_name, student_name, student_grade,
+                 school, student_code, learner_id, subject, payload, submitted_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb, now())
+            ON CONFLICT (teacher_phone, student_name, subject) DO UPDATE
+                SET teacher_name  = $2,
+                    student_grade = COALESCE($4, teacher.portraits.student_grade),
+                    school        = COALESCE($5, teacher.portraits.school),
+                    student_code  = COALESCE($6, teacher.portraits.student_code),
+                    learner_id    = COALESCE($7, teacher.portraits.learner_id),
+                    payload       = $9::jsonb,
+                    submitted_at  = now()
             """,
-            code, learner_id, body.teacher_name, body.subject,
-            json.dumps(payload),
+            phone, body.teacher_name, body.student_name.strip(),
+            body.student_grade, body.school,
+            body.student_code.upper() if body.student_code else None,
+            learner_id, body.subject, json.dumps(payload),
         )
 
-        log.info("teacher_portrait_saved", code=code, learner_id=learner_id,
-                 subject=body.subject)
+        log.info("teacher_portrait_saved",
+                 teacher_phone=phone[-4:],   # log only last 4 digits
+                 student=body.student_name,
+                 subject=body.subject,
+                 learner_id=learner_id)
 
     return {"status": "ok", "learner_id": learner_id}
 
@@ -104,8 +124,8 @@ async def submit_feedback(body: TeacherFeedbackRequest):
 
 async def get_teacher_portrait_context(conn, learner_id: str) -> str:
     """
-    Return a compact teacher portrait string to inject into the tutor's system prompt.
-    Returns empty string if no portraits exist yet.
+    Return a compact teacher portrait string for injection into the tutor prompt.
+    Returns empty string if no portraits have been linked to this learner_id.
     """
     rows = await conn.fetch(
         """

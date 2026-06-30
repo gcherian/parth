@@ -615,17 +615,27 @@ CREATE INDEX IF NOT EXISTS parent_dashboard_views_learner_idx
     ON parent_dashboard.views (learner_id, viewed_at DESC);
 
 -- ── Teacher portraits ────────────────────────────────────────────────────────
+-- Teachers may not have the student's join code. Primary key is
+-- (teacher_phone, student_name, subject) so a teacher can submit
+-- portraits for multiple students without any app login or join code.
+-- student_code and learner_id are optional — filled only when available.
 CREATE SCHEMA IF NOT EXISTS teacher;
 
 CREATE TABLE IF NOT EXISTS teacher.portraits (
     id              BIGSERIAL PRIMARY KEY,
-    student_code    TEXT NOT NULL,          -- 8-char join code from app
-    learner_id      TEXT,                   -- resolved full UUID (nullable)
+    teacher_phone   TEXT NOT NULL,          -- teacher's mobile number (key)
     teacher_name    TEXT NOT NULL DEFAULT '',
+    student_name    TEXT NOT NULL DEFAULT '',
+    student_grade   TEXT,
+    student_code    TEXT,                   -- optional 8-char join code
+    learner_id      TEXT,                   -- resolved full UUID (nullable)
     subject         TEXT NOT NULL DEFAULT '',
+    school          TEXT,
     payload         JSONB NOT NULL DEFAULT '{}',
     submitted_at    TIMESTAMPTZ DEFAULT now(),
-    CONSTRAINT teacher_portraits_code_subject_uq UNIQUE (student_code, subject)
+    CONSTRAINT teacher_portraits_uq UNIQUE (teacher_phone, student_name, subject)
 );
 CREATE INDEX IF NOT EXISTS teacher_portraits_learner_idx
     ON teacher.portraits (learner_id) WHERE learner_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS teacher_portraits_phone_idx
+    ON teacher.portraits (teacher_phone);

@@ -312,26 +312,57 @@
 <!-- Steps -->
 <div class="steps-container">
 
-  <!-- ── STEP 0: Who are we talking about? ───────────────────────────── -->
+  <!-- ── STEP 0: Who are you and who is the student? ─────────────────── -->
   <div class="step active" id="step-0">
     <div class="step-card">
       <div class="step-icon">🙏</div>
       <div class="step-title">Let's start with the basics</div>
-      <div class="step-sub">This takes about 3 minutes. Everything you share helps Parth be a better mentor.</div>
+      <div class="step-sub">No login needed. Takes 3 minutes. Helps Parth personalise learning for your student.</div>
       <div class="divider"></div>
 
       <div class="q">
-        <label class="q-label">Student join code <span class="req">*</span></label>
-        <div class="q-hint">The 8-character code shared by the student or parent</div>
-        <input type="text" id="student_code" placeholder="e.g. A1B2C3D4"
-               maxlength="8" style="text-transform:uppercase; letter-spacing: 3px; font-size: 18px; font-weight: 700;">
-        <div class="field-err" id="err_code">Please enter the student code</div>
+        <label class="q-label">Your mobile number <span class="req">*</span></label>
+        <div class="q-hint">Used to link your feedback — never shared</div>
+        <input type="text" id="teacher_phone" placeholder="e.g. 9876543210"
+               inputmode="numeric" maxlength="15">
+        <div class="field-err" id="err_phone">Please enter your mobile number</div>
       </div>
 
       <div class="q">
         <label class="q-label">Your name <span class="req">*</span></label>
         <input type="text" id="teacher_name" placeholder="e.g. Priya Sharma">
         <div class="field-err" id="err_name">Please enter your name</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">School name</label>
+        <input type="text" id="school_name" placeholder="e.g. St. Mary's School, Pune">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="q">
+        <label class="q-label">Student's name <span class="req">*</span></label>
+        <input type="text" id="student_name" placeholder="e.g. Arjun">
+        <div class="field-err" id="err_student">Please enter the student's name</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Student's grade</label>
+        <div class="chips" id="grade_chips">
+          <div class="chip" data-val="6">Grade 6</div>
+          <div class="chip" data-val="7">Grade 7</div>
+          <div class="chip" data-val="8">Grade 8</div>
+          <div class="chip" data-val="9">Grade 9</div>
+          <div class="chip" data-val="10">Grade 10</div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Student join code <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+        <div class="q-hint">The 8-character code from the Parth app — skip if you don't have it</div>
+        <input type="text" id="student_code" placeholder="e.g. A1B2C3D4"
+               maxlength="8" style="text-transform:uppercase; letter-spacing: 3px; font-size: 18px; font-weight: 700;">
       </div>
 
       <div class="q">
@@ -731,12 +762,21 @@ function showErr(id, show) {
 function validateStep(step) {
   let ok = true;
   if (step === 0) {
-    const code = document.getElementById('student_code').value.trim();
-    if (!code) { showErr('err_code', true); ok = false; } else showErr('err_code', false);
-    const name = document.getElementById('teacher_name').value.trim();
-    if (!name) { showErr('err_name', true); ok = false; } else showErr('err_name', false);
+    const phone = document.getElementById('teacher_phone').value.trim();
+    if (phone.length < 6) { showErr('err_phone', true); ok = false; } else showErr('err_phone', false);
+    const tname = document.getElementById('teacher_name').value.trim();
+    if (!tname) { showErr('err_name', true); ok = false; } else showErr('err_name', false);
+    const sname = document.getElementById('student_name').value.trim();
+    if (!sname) { showErr('err_student', true); ok = false; } else showErr('err_student', false);
     if (!data.subject) { showErr('err_subject', true); ok = false; } else showErr('err_subject', false);
-    if (ok) { data.student_code = code.toUpperCase(); data.teacher_name = name; }
+    if (ok) {
+      data.teacher_phone = phone;
+      data.teacher_name  = tname;
+      data.student_name  = sname;
+      data.school        = document.getElementById('school_name').value.trim() || undefined;
+      const code = document.getElementById('student_code').value.trim();
+      if (code) data.student_code = code.toUpperCase();
+    }
   }
   if (step === 1) {
     if (!data.learning_style || data.learning_style.length === 0) { showErr('err_style', true); ok = false; } else showErr('err_style', false);
@@ -845,6 +885,7 @@ function init() {
   }
 
   // Step 0
+  initSingleChips('grade_chips', 'student_grade');
   initSingleChips('subject_chips', 'subject');
   initSingleChips('duration_chips', 'teacher_duration');
 
