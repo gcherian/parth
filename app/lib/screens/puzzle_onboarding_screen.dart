@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/puzzle.dart';
 import '../services/puzzle_service.dart';
 import '../theme/app_theme.dart';
+import 'home_screen.dart';
 import 'portrait_reveal_screen.dart';
 
 // ── Sphere metadata ────────────────────────────────────────────────────────────
@@ -81,6 +82,17 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
     _learnerId = prefs.getString('learner_id') ?? '';
     _serverUrl = prefs.getString('server_url') ?? '';
     _grade = prefs.getInt('grade') ?? 6;
+
+    // No server yet — skip puzzle onboarding and go straight to the app.
+    // The child can always come back to puzzles once a server is configured.
+    if (_serverUrl.isEmpty) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+      return;
+    }
+
     await _fetchProbe();
   }
 
