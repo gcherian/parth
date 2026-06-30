@@ -8,6 +8,7 @@ import '../widgets/subject_card.dart';
 import 'chat_screen.dart';
 import 'progress_screen.dart';
 import 'settings_screen.dart';
+import 'skills_screen.dart';
 import 'subjects_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -44,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final tabs = [
       _HomeTab(userName: _userName, grade: _grade),
       const SubjectsScreen(),
+      const SkillsScreen(),
       const ProgressScreen(),
     ];
 
@@ -74,6 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.auto_stories_outlined),
             selectedIcon: Icon(Icons.auto_stories),
             label: 'Subjects',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bolt_outlined),
+            selectedIcon: Icon(Icons.bolt),
+            label: 'Skills',
           ),
           NavigationDestination(
             icon: Icon(Icons.emoji_events_outlined),
