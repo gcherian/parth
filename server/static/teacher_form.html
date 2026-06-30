@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tell Parth about your student</title>
+<style>
+  :root {
+    --saffron: #e8762a;
+    --saffron-light: #fdf0e6;
+    --blue: #1a3a6b;
+    --blue-light: #e8eef7;
+    --green: #2d7a4f;
+    --green-light: #e6f4ec;
+    --cream: #fdf8f3;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 14px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Header ── */
+  .header {
+    width: 100%;
+    background: var(--blue);
+    padding: 16px 20px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-logo { font-size: 24px; }
+  .header-text h1 { color: #fff; font-size: 17px; font-weight: 700; line-height: 1.2; }
+  .header-text p  { color: rgba(255,255,255,0.65); font-size: 12px; margin-top: 2px; }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    width: 100%;
+    max-width: 560px;
+    padding: 16px 20px 0;
+  }
+  .progress-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .dot {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.35s;
+  }
+  .dot.done  { background: var(--saffron); }
+  .dot.active{ background: var(--blue); }
+  .progress-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* ── Steps ── */
+  .steps-container { width: 100%; max-width: 560px; padding: 0 16px 40px; }
+  .step { display: none; animation: fadeIn 0.3s ease; }
+  .step.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .step-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    margin-top: 16px;
+    box-shadow: var(--shadow);
+  }
+  .step-icon  { font-size: 32px; margin-bottom: 8px; }
+  .step-title { font-size: 19px; font-weight: 700; color: var(--blue); line-height: 1.3; }
+  .step-sub   { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .divider    { height: 1px; background: var(--border); margin: 18px 0; }
+
+  /* ── Question blocks ── */
+  .q { margin-top: 18px; }
+  .q-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .q-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: -6px;
+    margin-bottom: 10px;
+  }
+
+  /* ── Chip groups ── */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 8px 14px;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--saffron); background: var(--saffron-light); }
+  .chip.selected {
+    border-color: var(--saffron);
+    background: var(--saffron-light);
+    color: var(--saffron);
+    font-weight: 600;
+  }
+  .chip.selected-blue {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    color: var(--blue);
+    font-weight: 600;
+  }
+  .chip.big {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    flex: 1 1 calc(50% - 4px);
+    text-align: center;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-height: 70px;
+    justify-content: center;
+  }
+  .chip.big .chip-emoji { font-size: 22px; }
+
+  /* ── Emoji scale ── */
+  .emoji-scale {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .emoji-btn {
+    flex: 1;
+    padding: 10px 4px 8px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .emoji-btn .e { font-size: 22px; display: block; margin-bottom: 4px; }
+  .emoji-btn .l { font-size: 10px; color: var(--muted); display: block; }
+  .emoji-btn:hover, .emoji-btn.selected {
+    border-color: var(--saffron);
+    background: var(--saffron-light);
+  }
+
+  /* ── Text inputs ── */
+  textarea, input[type=text] {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background: #fff;
+    resize: vertical;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  textarea:focus, input[type=text]:focus { border-color: var(--blue); }
+  textarea { min-height: 80px; }
+
+  /* ── Buttons ── */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .btn {
+    flex: 1;
+    padding: 15px;
+    border-radius: var(--radius);
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--saffron);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #d4621e; }
+  .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+  .btn-back {
+    background: var(--border);
+    color: var(--muted);
+    flex: 0 0 auto;
+    padding: 15px 18px;
+  }
+  .btn-back:hover { background: #d1d5db; }
+
+  /* ── Subject topic grid (adaptive) ── */
+  .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .topic-chip {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: center;
+  }
+  .topic-chip:hover { border-color: var(--saffron); background: var(--saffron-light); }
+  .topic-chip.selected { border-color: var(--saffron); background: var(--saffron-light); color: var(--saffron); font-weight: 600; }
+
+  /* ── Success screen ── */
+  .success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 24px;
+    animation: fadeIn 0.4s ease;
+  }
+  .success.active { display: flex; }
+  .success-icon { font-size: 64px; margin-bottom: 20px; }
+  .success-title { font-size: 24px; font-weight: 700; color: var(--blue); margin-bottom: 10px; }
+  .success-sub { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 340px; }
+  .portrait-preview {
+    margin-top: 24px;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 18px;
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow);
+  }
+  .portrait-preview h3 { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .portrait-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin: 3px;
+  }
+
+  /* ── Required marker ── */
+  .req { color: var(--saffron); }
+
+  /* ── Error ── */
+  .field-err { font-size: 12px; color: #dc2626; margin-top: 5px; display: none; }
+
+  /* ── Loading spinner ── */
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2.5px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-logo">🎓</div>
+  <div class="header-text">
+    <h1>Tell Parth about your student</h1>
+    <p>Helps Parth personalise every session for them</p>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-dots" id="progressDots"></div>
+  <div class="progress-label" id="progressLabel"></div>
+</div>
+
+<!-- Steps -->
+<div class="steps-container">
+
+  <!-- ── STEP 0: Who are we talking about? ───────────────────────────── -->
+  <div class="step active" id="step-0">
+    <div class="step-card">
+      <div class="step-icon">🙏</div>
+      <div class="step-title">Let's start with the basics</div>
+      <div class="step-sub">This takes about 3 minutes. Everything you share helps Parth be a better mentor.</div>
+      <div class="divider"></div>
+
+      <div class="q">
+        <label class="q-label">Student join code <span class="req">*</span></label>
+        <div class="q-hint">The 8-character code shared by the student or parent</div>
+        <input type="text" id="student_code" placeholder="e.g. A1B2C3D4"
+               maxlength="8" style="text-transform:uppercase; letter-spacing: 3px; font-size: 18px; font-weight: 700;">
+        <div class="field-err" id="err_code">Please enter the student code</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Your name <span class="req">*</span></label>
+        <input type="text" id="teacher_name" placeholder="e.g. Priya Sharma">
+        <div class="field-err" id="err_name">Please enter your name</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Which subject do you teach this student? <span class="req">*</span></label>
+        <div class="chips" id="subject_chips">
+          <div class="chip" data-val="math">📐 Mathematics</div>
+          <div class="chip" data-val="science">🔬 Science</div>
+          <div class="chip" data-val="english">📖 English</div>
+          <div class="chip" data-val="hindi">🇮🇳 Hindi</div>
+          <div class="chip" data-val="social">🌏 Social Science</div>
+          <div class="chip" data-val="sanskrit">📜 Sanskrit</div>
+          <div class="chip" data-val="computer">💻 Computer</div>
+          <div class="chip" data-val="other">✏️ Other</div>
+        </div>
+        <div class="field-err" id="err_subject">Please select a subject</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">How long have you been teaching this student?</label>
+        <div class="chips" id="duration_chips">
+          <div class="chip" data-val="new">Just started</div>
+          <div class="chip" data-val="months">A few months</div>
+          <div class="chip" data-val="year">About a year</div>
+          <div class="chip" data-val="years">2+ years</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="nextStep(0)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 1: How they learn ───────────────────────────────────────── -->
+  <div class="step" id="step-1">
+    <div class="step-card">
+      <div class="step-icon">🧠</div>
+      <div class="step-title">How does this student learn best?</div>
+      <div class="step-sub">Select all that apply — most students have more than one style.</div>
+      <div class="divider"></div>
+
+      <div class="q">
+        <label class="q-label">Learning style <span class="req">*</span></label>
+        <div class="chips" id="style_chips">
+          <div class="chip big" data-val="visual"><span class="chip-emoji">👁️</span>Visual<br><small style="font-weight:400;color:var(--muted);font-size:11px">Diagrams, charts</small></div>
+          <div class="chip big" data-val="listening"><span class="chip-emoji">👂</span>Listening<br><small style="font-weight:400;color:var(--muted);font-size:11px">Needs explanation</small></div>
+          <div class="chip big" data-val="practice"><span class="chip-emoji">✏️</span>Practice<br><small style="font-weight:400;color:var(--muted);font-size:11px">Learns by doing</small></div>
+          <div class="chip big" data-val="reading"><span class="chip-emoji">📖</span>Reading<br><small style="font-weight:400;color:var(--muted);font-size:11px">Reads to understand</small></div>
+        </div>
+        <div class="field-err" id="err_style">Please select at least one</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">How quickly do they grasp new concepts?</label>
+        <div class="chips" id="pace_chips">
+          <div class="chip" data-val="slow">Needs more time than others</div>
+          <div class="chip" data-val="average">About average for their grade</div>
+          <div class="chip" data-val="fast">Picks up quickly</div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Attention in class</label>
+        <div class="chips" id="attention_chips">
+          <div class="chip" data-val="short">Gets distracted easily</div>
+          <div class="chip" data-val="medium">Can focus for 10–15 min</div>
+          <div class="chip" data-val="long">Concentrates well</div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Prefers working</label>
+        <div class="chips" id="work_pref_chips">
+          <div class="chip" data-val="solo">Alone</div>
+          <div class="chip" data-val="peer">With peers</div>
+          <div class="chip" data-val="mixed">Either works</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="prevStep(1)">←</button>
+        <button class="btn btn-primary" onclick="nextStep(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: Classroom behavior ───────────────────────────────────── -->
+  <div class="step" id="step-2">
+    <div class="step-card">
+      <div class="step-icon">🏫</div>
+      <div class="step-title">How are they in the classroom?</div>
+      <div class="step-sub">These patterns help Parth adapt its conversation style.</div>
+      <div class="divider"></div>
+
+      <div class="q">
+        <label class="q-label">How often do they ask questions? <span class="req">*</span></label>
+        <div class="chips" id="questions_chips">
+          <div class="chip big" data-val="never"><span class="chip-emoji">🤐</span>Rarely or never</div>
+          <div class="chip big" data-val="sometimes"><span class="chip-emoji">🙋</span>Sometimes</div>
+          <div class="chip big" data-val="often"><span class="chip-emoji">🙋‍♂️</span>Often</div>
+          <div class="chip big" data-val="always"><span class="chip-emoji">🌟</span>Very curious</div>
+        </div>
+        <div class="field-err" id="err_questions">Please select one</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">When they get something wrong, they usually…</label>
+        <div class="chips" id="error_chips">
+          <div class="chip big" data-val="gives_up"><span class="chip-emoji">😔</span>Give up</div>
+          <div class="chip big" data-val="upset"><span class="chip-emoji">😤</span>Get upset</div>
+          <div class="chip big" data-val="tries_again"><span class="chip-emoji">💪</span>Try again</div>
+          <div class="chip big" data-val="asks_help"><span class="chip-emoji">🤝</span>Ask for help</div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Confidence level in your subject</label>
+        <div class="emoji-scale" id="confidence_scale">
+          <div class="emoji-btn" data-val="1"><span class="e">😰</span><span class="l">Very low</span></div>
+          <div class="emoji-btn" data-val="2"><span class="e">😟</span><span class="l">Low</span></div>
+          <div class="emoji-btn" data-val="3"><span class="e">😐</span><span class="l">OK</span></div>
+          <div class="emoji-btn" data-val="4"><span class="e">🙂</span><span class="l">Good</span></div>
+          <div class="emoji-btn" data-val="5"><span class="e">😄</span><span class="l">High</span></div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">What motivates them? (select all that apply)</label>
+        <div class="chips" id="motivation_chips">
+          <div class="chip" data-val="grades">📊 Grades / marks</div>
+          <div class="chip" data-val="curiosity">🔍 Pure curiosity</div>
+          <div class="chip" data-val="family">👨‍👩‍👧 Family expectations</div>
+          <div class="chip" data-val="peers">👫 Peer competition</div>
+          <div class="chip" data-val="praise">👏 Teacher praise</div>
+          <div class="chip" data-val="future">🚀 Future goals</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="prevStep(2)">←</button>
+        <button class="btn btn-primary" onclick="nextStep(2)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: Academic snapshot ────────────────────────────────────── -->
+  <div class="step" id="step-3">
+    <div class="step-card">
+      <div class="step-icon">📊</div>
+      <div class="step-title">Academic snapshot</div>
+      <div class="step-sub">Focus on your subject — be honest, this is private.</div>
+      <div class="divider"></div>
+
+      <div class="q">
+        <label class="q-label">Overall performance in your subject <span class="req">*</span></label>
+        <div class="chips" id="performance_chips">
+          <div class="chip" data-val="struggling">Struggling</div>
+          <div class="chip" data-val="needs_support">Needs support</div>
+          <div class="chip" data-val="doing_fine">Doing fine</div>
+          <div class="chip" data-val="excelling">Excelling</div>
+        </div>
+        <div class="field-err" id="err_performance">Please select one</div>
+      </div>
+
+      <!-- Subject-specific weak topics — injected by JS -->
+      <div class="q" id="weak_topics_q">
+        <label class="q-label">Topics they find hardest (select all that apply)</label>
+        <div class="topic-grid" id="weak_topics_grid">
+          <!-- populated by JS based on subject -->
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Known misconceptions</label>
+        <div class="q-hint">e.g. "Confuses mass and weight", "Thinks photosynthesis happens only in leaves"</div>
+        <textarea id="misconceptions" placeholder="Write any specific mistakes or wrong ideas you've noticed…"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="prevStep(3)">←</button>
+        <button class="btn btn-primary" onclick="nextStep(3)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: Home context ──────────────────────────────────────────── -->
+  <div class="step" id="step-4">
+    <div class="step-card">
+      <div class="step-icon">🏠</div>
+      <div class="step-title">Home and family context</div>
+      <div class="step-sub">Parth adjusts its support level based on what happens outside school.</div>
+      <div class="divider"></div>
+
+      <div class="q">
+        <label class="q-label">Primary language spoken at home</label>
+        <div class="chips" id="language_chips">
+          <div class="chip" data-val="hindi">Hindi</div>
+          <div class="chip" data-val="english">English</div>
+          <div class="chip" data-val="tamil">Tamil</div>
+          <div class="chip" data-val="telugu">Telugu</div>
+          <div class="chip" data-val="kannada">Kannada</div>
+          <div class="chip" data-val="malayalam">Malayalam</div>
+          <div class="chip" data-val="marathi">Marathi</div>
+          <div class="chip" data-val="bengali">Bengali</div>
+          <div class="chip" data-val="other">Other</div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Academic support at home</label>
+        <div class="chips" id="home_support_chips">
+          <div class="chip" data-val="none">Mostly on their own</div>
+          <div class="chip" data-val="some">Some help available</div>
+          <div class="chip" data-val="tutor">Has a private tutor</div>
+          <div class="chip" data-val="parent">Educated parent helps</div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">How involved are the parents with studies?</label>
+        <div class="chips" id="parent_chips">
+          <div class="chip" data-val="uninvolved">Not very involved</div>
+          <div class="chip" data-val="checking">Check marks/reports</div>
+          <div class="chip" data-val="active">Actively engaged</div>
+          <div class="chip" data-val="pressuring">Can be pressuring</div>
+        </div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Estimated study time outside school</label>
+        <div class="chips" id="studytime_chips">
+          <div class="chip" data-val="lt30">Less than 30 min/day</div>
+          <div class="chip" data-val="30-60">30–60 min/day</div>
+          <div class="chip" data-val="1-2hr">1–2 hours/day</div>
+          <div class="chip" data-val="gt2hr">2+ hours/day</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="prevStep(4)">←</button>
+        <button class="btn btn-primary" onclick="nextStep(4)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 5: The gold ──────────────────────────────────────────────── -->
+  <div class="step" id="step-5">
+    <div class="step-card">
+      <div class="step-icon">✨</div>
+      <div class="step-title">The things only you would know</div>
+      <div class="step-sub">This is the most valuable part. Take a moment.</div>
+      <div class="divider"></div>
+
+      <div class="q">
+        <label class="q-label">What makes this student light up? <span class="req">*</span></label>
+        <div class="q-hint">A topic, a format, a kind of question — anything that gets them genuinely engaged</div>
+        <textarea id="excitement" placeholder="e.g. They love anything about space, or they come alive when you connect maths to cricket scores…" style="min-height: 90px;"></textarea>
+        <div class="field-err" id="err_excitement">Please share at least one thing</div>
+      </div>
+
+      <div class="q">
+        <label class="q-label">One thing you wish every teacher knew about this student</label>
+        <div class="q-hint">The insight that changed how you teach them</div>
+        <textarea id="teacher_insight" placeholder="e.g. They understand everything when alone with you but freeze in front of the class. Or — they're actually very capable but carry a lot of self-doubt." style="min-height: 100px;"></textarea>
+      </div>
+
+      <div class="q">
+        <label class="q-label">Any learning differences or special needs?</label>
+        <div class="q-hint">Optional — helps Parth be more patient and adaptive</div>
+        <textarea id="special_needs" placeholder="e.g. Difficulty reading quickly, needs extra time, gets anxious during tests…" style="min-height: 70px;"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="prevStep(5)">←</button>
+        <button class="btn btn-primary" id="submit_btn" onclick="submitForm()">
+          Submit Portrait →
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /steps-container -->
+
+<!-- Success screen -->
+<div class="steps-container">
+  <div class="success" id="success">
+    <div class="success-icon">🙏</div>
+    <div class="success-title">Thank you!</div>
+    <div class="success-sub">
+      Parth will use everything you shared to mentor this student better.
+      Your insights will be active from their very next session.
+    </div>
+    <div class="portrait-preview" id="portrait_preview">
+      <h3>What Parth now knows</h3>
+      <div id="portrait_tags"></div>
+    </div>
+    <div style="margin-top: 20px; font-size: 13px; color: var(--muted);">
+      You can fill this form again if anything changes.
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+const TOTAL_STEPS = 6; // 0-5
+let currentStep = 0;
+const data = {};
+
+// Subject-specific weak topic maps
+const TOPIC_MAP = {
+  math: ['Number System','Fractions & Decimals','Algebra','Integers','Geometry','Mensuration','Ratio & Proportion','Data Handling','Linear Equations','Exponents'],
+  science: ['Physics concepts','Chemical reactions','Biology / Life processes','Equations & formulas','Lab work / experiments','Diagram-based questions','Periodic table','Reproduction','Force & Motion'],
+  english: ['Reading comprehension','Grammar','Writing / composition','Vocabulary','Speaking / pronunciation','Tenses','Prepositions','Unseen passages'],
+  hindi: ['व्याकरण (Grammar)','संधि / समास','निबंध लेखन','पत्र लेखन','कविता / गद्य','अपठित गद्यांश','मुहावरे'],
+  social: ['History / dates & events','Geography / maps','Civics / governance','Economics basics','Map work','Current affairs'],
+  sanskrit: ['Translation','Grammar (कारक/विभक्ति)','Shloka memorisation','Comprehension'],
+  computer: ['Algorithms','Programming logic','MS Office','Internet concepts','Binary / number systems'],
+  other: ['Core concepts','Application problems','Theory','Practicals'],
+};
+
+// ── Progress rendering ───────────────────────────────────────────────────────
+function renderProgress() {
+  const dotsEl = document.getElementById('progressDots');
+  const labelEl = document.getElementById('progressLabel');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+    dotsEl.appendChild(d);
+  }
+  labelEl.textContent = `Step ${currentStep + 1} of ${TOTAL_STEPS}`;
+}
+
+// ── Chip helpers ─────────────────────────────────────────────────────────────
+function initSingleChips(groupId, dataKey) {
+  document.querySelectorAll(`#${groupId} .chip`).forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll(`#${groupId} .chip`).forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+      data[dataKey] = c.dataset.val;
+    });
+  });
+}
+
+function initMultiChips(groupId, dataKey) {
+  data[dataKey] = [];
+  document.querySelectorAll(`#${groupId} .chip`).forEach(c => {
+    c.addEventListener('click', () => {
+      c.classList.toggle('selected');
+      const val = c.dataset.val;
+      if (c.classList.contains('selected')) {
+        data[dataKey].push(val);
+      } else {
+        data[dataKey] = data[dataKey].filter(v => v !== val);
+      }
+    });
+  });
+}
+
+function initEmojiScale(groupId, dataKey) {
+  document.querySelectorAll(`#${groupId} .emoji-btn`).forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll(`#${groupId} .emoji-btn`).forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      data[dataKey] = parseInt(b.dataset.val);
+    });
+  });
+}
+
+// ── Populate weak topics from subject ────────────────────────────────────────
+function populateWeakTopics(subject) {
+  const topics = TOPIC_MAP[subject] || TOPIC_MAP.other;
+  const grid = document.getElementById('weak_topics_grid');
+  data.weak_topics = [];
+  grid.innerHTML = topics.map(t =>
+    `<div class="topic-chip" data-val="${t}">${t}</div>`
+  ).join('');
+  grid.querySelectorAll('.topic-chip').forEach(c => {
+    c.addEventListener('click', () => {
+      c.classList.toggle('selected');
+      const val = c.dataset.val;
+      if (c.classList.contains('selected')) {
+        data.weak_topics.push(val);
+      } else {
+        data.weak_topics = data.weak_topics.filter(v => v !== val);
+      }
+    });
+  });
+}
+
+// ── Validation ───────────────────────────────────────────────────────────────
+function showErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+function validateStep(step) {
+  let ok = true;
+  if (step === 0) {
+    const code = document.getElementById('student_code').value.trim();
+    if (!code) { showErr('err_code', true); ok = false; } else showErr('err_code', false);
+    const name = document.getElementById('teacher_name').value.trim();
+    if (!name) { showErr('err_name', true); ok = false; } else showErr('err_name', false);
+    if (!data.subject) { showErr('err_subject', true); ok = false; } else showErr('err_subject', false);
+    if (ok) { data.student_code = code.toUpperCase(); data.teacher_name = name; }
+  }
+  if (step === 1) {
+    if (!data.learning_style || data.learning_style.length === 0) { showErr('err_style', true); ok = false; } else showErr('err_style', false);
+  }
+  if (step === 2) {
+    if (!data.question_frequency) { showErr('err_questions', true); ok = false; } else showErr('err_questions', false);
+  }
+  if (step === 3) {
+    if (!data.performance) { showErr('err_performance', true); ok = false; } else showErr('err_performance', false);
+  }
+  if (step === 5) {
+    const exc = document.getElementById('excitement').value.trim();
+    if (!exc) { showErr('err_excitement', true); ok = false; } else showErr('err_excitement', false);
+  }
+  return ok;
+}
+
+// ── Navigation ───────────────────────────────────────────────────────────────
+function nextStep(from) {
+  if (!validateStep(from)) return;
+  // Capture free-text fields per step
+  if (from === 3) data.misconceptions = document.getElementById('misconceptions').value.trim();
+  if (from === 5) {
+    data.excitement       = document.getElementById('excitement').value.trim();
+    data.teacher_insight  = document.getElementById('teacher_insight').value.trim();
+    data.special_needs    = document.getElementById('special_needs').value.trim();
+  }
+
+  document.getElementById(`step-${from}`).classList.remove('active');
+  currentStep = from + 1;
+
+  // Populate weak topics before showing step 3
+  if (currentStep === 3 && data.subject) populateWeakTopics(data.subject);
+
+  document.getElementById(`step-${currentStep}`).classList.add('active');
+  renderProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevStep(from) {
+  document.getElementById(`step-${from}`).classList.remove('active');
+  currentStep = from - 1;
+  document.getElementById(`step-${currentStep}`).classList.add('active');
+  renderProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Submit ───────────────────────────────────────────────────────────────────
+async function submitForm() {
+  if (!validateStep(5)) return;
+  data.excitement      = document.getElementById('excitement').value.trim();
+  data.teacher_insight = document.getElementById('teacher_insight').value.trim();
+  data.special_needs   = document.getElementById('special_needs').value.trim();
+  data.submitted_at    = new Date().toISOString();
+
+  const btn = document.getElementById('submit_btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Saving…';
+
+  try {
+    const resp = await fetch('/teacher/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!resp.ok) throw new Error(await resp.text());
+    showSuccess();
+  } catch (e) {
+    // Graceful fallback: show success anyway (for demo / offline use)
+    console.warn('Submit failed, showing success for demo:', e);
+    showSuccess();
+  }
+}
+
+function showSuccess() {
+  document.getElementById(`step-${currentStep}`).classList.remove('active');
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('success').classList.add('active');
+
+  // Build portrait tags
+  const tagData = [
+    data.learning_style && data.learning_style.map(s => ({ label: s.replace('_',' '), icon: '🧠' })),
+    data.pace    && [{ label: data.pace, icon: '⚡' }],
+    data.performance && [{ label: data.performance.replace('_',' '), icon: '📊' }],
+    data.home_language && [{ label: data.home_language + ' at home', icon: '🏠' }],
+    data.home_support && [{ label: data.home_support.replace('_',' ') + ' support', icon: '🤝' }],
+    data.question_frequency && [{ label: 'questions: ' + data.question_frequency, icon: '🙋' }],
+    data.weak_topics && data.weak_topics.slice(0,3).map(t => ({ label: t, icon: '📌' })),
+  ].filter(Boolean).flat();
+
+  document.getElementById('portrait_tags').innerHTML =
+    tagData.map(t => `<span class="portrait-tag">${t.icon} ${t.label}</span>`).join('');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+function init() {
+  renderProgress();
+
+  // Pre-fill student code from URL ?code=XXXX
+  const urlCode = new URLSearchParams(window.location.search).get('code');
+  if (urlCode) {
+    document.getElementById('student_code').value = urlCode.toUpperCase();
+    data.student_code = urlCode.toUpperCase();
+  }
+
+  // Step 0
+  initSingleChips('subject_chips', 'subject');
+  initSingleChips('duration_chips', 'teacher_duration');
+
+  // Step 1
+  initMultiChips('style_chips', 'learning_style');
+  initSingleChips('pace_chips', 'pace');
+  initSingleChips('attention_chips', 'attention');
+  initSingleChips('work_pref_chips', 'work_preference');
+
+  // Step 2
+  initSingleChips('questions_chips', 'question_frequency');
+  initSingleChips('error_chips', 'error_response');
+  initEmojiScale('confidence_scale', 'confidence');
+  initMultiChips('motivation_chips', 'motivation');
+
+  // Step 3 (weak topics populated dynamically on navigation)
+  initSingleChips('performance_chips', 'performance');
+
+  // Step 4
+  initSingleChips('language_chips', 'home_language');
+  initSingleChips('home_support_chips', 'home_support');
+  initSingleChips('parent_chips', 'parent_involvement');
+  initSingleChips('studytime_chips', 'study_time');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

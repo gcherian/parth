@@ -112,6 +112,15 @@ class LearnerStateModule(Module):
             except Exception as _puzzle_exc:
                 log.debug("puzzle_portrait_skipped", error=str(_puzzle_exc))
 
+            # ── Teacher portrait injection ─────────────────────────────────
+            try:
+                from modules.teacher.routes import get_teacher_portrait_context
+                teacher_ctx = await get_teacher_portrait_context(conn, ctx.learner_id)
+                if teacher_ctx:
+                    learner_ctx = learner_ctx + "\n\n" + teacher_ctx
+            except Exception as _teacher_exc:
+                log.debug("teacher_portrait_skipped", error=str(_teacher_exc))
+
             return ModuleResult(data={
                 "learner_context": learner_ctx,
                 "profile": profile,

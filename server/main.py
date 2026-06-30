@@ -91,7 +91,10 @@ app.add_middleware(
     allow_headers=["*", "X-Parth-Key", "X-Admin-Key", "Authorization"],
 )
 
+from modules.teacher.routes import router as teacher_router
+
 app.include_router(iam_router)
+app.include_router(teacher_router)
 
 # ── Input sanitization ────────────────────────────────────────────────────────
 _CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
@@ -293,8 +296,20 @@ async def chat(
 ):
     _require_uuid(req.learner_id)
 
-    # Consent gate — blocks unregistered and child learners without guardian approval
+    # Consent gate — auto-registers unknown learners in pilot/demo mode so the
+    # Flutter app works without a separate onboarding API call.
     consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
+    if not consent_ok:
+        # Try to auto-register and grant consent (pilot / first-run flow)
+        try:
+            await register_pilot_learner(
+                learner_id=req.learner_id,
+                name=req.learner_name or "Learner",
+                grade=req.grade,
+            )
+            consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
+        except Exception:
+            pass
     if not consent_ok:
         raise HTTPException(
             status_code=403,

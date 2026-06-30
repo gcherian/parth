@@ -613,3 +613,19 @@ CREATE TABLE IF NOT EXISTS parent_dashboard.views (
 );
 CREATE INDEX IF NOT EXISTS parent_dashboard_views_learner_idx
     ON parent_dashboard.views (learner_id, viewed_at DESC);
+
+-- ── Teacher portraits ────────────────────────────────────────────────────────
+CREATE SCHEMA IF NOT EXISTS teacher;
+
+CREATE TABLE IF NOT EXISTS teacher.portraits (
+    id              BIGSERIAL PRIMARY KEY,
+    student_code    TEXT NOT NULL,          -- 8-char join code from app
+    learner_id      TEXT,                   -- resolved full UUID (nullable)
+    teacher_name    TEXT NOT NULL DEFAULT '',
+    subject         TEXT NOT NULL DEFAULT '',
+    payload         JSONB NOT NULL DEFAULT '{}',
+    submitted_at    TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT teacher_portraits_code_subject_uq UNIQUE (student_code, subject)
+);
+CREATE INDEX IF NOT EXISTS teacher_portraits_learner_idx
+    ON teacher.portraits (learner_id) WHERE learner_id IS NOT NULL;
