@@ -39,17 +39,16 @@ class ChatState {
     String? learnerId,
     String? learnerName,
     int? grade,
-  }) =>
-      ChatState(
-        messages: messages ?? this.messages,
-        isLoading: isLoading ?? this.isLoading,
-        currentSubject: currentSubject ?? this.currentSubject,
-        error: clearError ? null : error ?? this.error,
-        serverUrl: clearServerUrl ? null : serverUrl ?? this.serverUrl,
-        learnerId: learnerId ?? this.learnerId,
-        learnerName: learnerName ?? this.learnerName,
-        grade: grade ?? this.grade,
-      );
+  }) => ChatState(
+    messages: messages ?? this.messages,
+    isLoading: isLoading ?? this.isLoading,
+    currentSubject: currentSubject ?? this.currentSubject,
+    error: clearError ? null : error ?? this.error,
+    serverUrl: clearServerUrl ? null : serverUrl ?? this.serverUrl,
+    learnerId: learnerId ?? this.learnerId,
+    learnerName: learnerName ?? this.learnerName,
+    grade: grade ?? this.grade,
+  );
 
   bool get usingLocalServer => serverUrl != null && serverUrl!.isNotEmpty;
 }
@@ -57,9 +56,10 @@ class ChatState {
 class ChatNotifier extends StateNotifier<ChatState> {
   final AiService _ai;
   final _uuid = const Uuid();
+  late final Future<void> _initFuture;
 
   ChatNotifier(this._ai) : super(const ChatState()) {
-    _init();
+    _initFuture = _init();
   }
 
   Future<void> _init() async {
@@ -79,20 +79,26 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
   // Production URL injected at build time via --dart-define=PARTH_SERVER_URL=https://...
   // Falls back to empty string; user configures in Settings on first launch.
-  static const _builtInServerUrl =
-      String.fromEnvironment('PARTH_SERVER_URL', defaultValue: '');
+  static const _builtInServerUrl = String.fromEnvironment(
+    'PARTH_SERVER_URL',
+    defaultValue: '',
+  );
 
   Future<void> _loadServerUrl() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString('server_url') ?? '';
     // Discard stale tunnel URLs; prefer built-in production URL when nothing saved.
     String url;
-    if (saved.isNotEmpty && !saved.contains('trycloudflare.com') && !saved.contains('100.125')) {
+    if (saved.isNotEmpty &&
+        !saved.contains('trycloudflare.com') &&
+        !saved.contains('100.125')) {
       url = saved;
     } else if (_builtInServerUrl.isNotEmpty) {
       url = _builtInServerUrl;
     } else {
-      url = saved.contains('trycloudflare.com') || saved.contains('100.125') ? '' : saved;
+      url = saved.contains('trycloudflare.com') || saved.contains('100.125')
+          ? ''
+          : saved;
     }
     if (url != saved) await prefs.setString('server_url', url);
     state = state.copyWith(serverUrl: url);
@@ -118,10 +124,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   void _persist(List<Message> messages) {
-    Hive.box('messages').put(
-      'chat_history',
-      messages.map((m) => m.toJson()).toList(),
-    );
+    Hive.box(
+      'messages',
+    ).put('chat_history', messages.map((m) => m.toJson()).toList());
   }
 
   void setSubject(Subject subject) {
@@ -130,6 +135,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
   Future<void> sendMessage(String content) async {
     if (content.trim().isEmpty) return;
+    await _initFuture;
 
     final userMsg = Message(
       id: _uuid.v4(),
@@ -140,7 +146,11 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
 
     final withUser = [...state.messages, userMsg];
-    state = state.copyWith(messages: withUser, isLoading: true, clearError: true);
+    state = state.copyWith(
+      messages: withUser,
+      isLoading: true,
+      clearError: true,
+    );
 
     try {
       final reply = await _ai.sendMessage(
@@ -173,7 +183,13 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   void clearChat() {
-    state = ChatState(serverUrl: state.serverUrl);
+    state = ChatState(
+      serverUrl: state.serverUrl,
+      learnerId: state.learnerId,
+      learnerName: state.learnerName,
+      grade: state.grade,
+      currentSubject: state.currentSubject,
+    );
     _persist([]);
   }
 }

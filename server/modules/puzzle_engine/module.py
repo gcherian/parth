@@ -209,6 +209,7 @@ class PuzzleEngineModule(Module):
             "primary_sphere":   primary,
             "portrait_confidence": new_portrait["confidence"],
             "register_dominant": max(reg.probs, key=reg.probs.__getitem__),
+            "misconception":    eval_result.get("misconception", ""),
         })
 
     async def on_erase(self, learner_id: str, ctx: KernelContext):

@@ -296,8 +296,8 @@ async def chat(
 ):
     _require_uuid(req.learner_id)
 
-    # Consent gate — auto-registers unknown learners in pilot/demo mode so the
-    # Flutter app works without a separate onboarding API call.
+    # Consent gate — /learner/register normally creates this row after cold start.
+    # Keep pilot auto-registration as a fallback for older clients.
     consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
     if not consent_ok:
         # Try to auto-register and grant consent (pilot / first-run flow)
@@ -602,9 +602,14 @@ async def puzzle_respond(
     _: None = Depends(rate_limit),
 ):
     from kernel.context import Event, KernelContext
+    from modules.puzzle_engine import loader
     from modules.moderation_ops.module import moderate_text, _BLOCK_RESPONSE
 
     _require_uuid(req.learner_id)
+
+    puzzle = loader.get(req.puzzle_id)
+    if puzzle is None:
+        raise HTTPException(status_code=404, detail="Unknown puzzle")
 
     # Moderate child's free-text response before persisting
     mod = moderate_text(req.response)
@@ -638,19 +643,18 @@ async def puzzle_respond(
             },
         )
 
-        # Persist the raw response
+        result = await _module_registry["puzzle.engine"].handle(event, ctx)
+
+        # Persist the raw response with real puzzle metadata for the portrait path.
         await conn.execute("""
             INSERT INTO puzzle_engine.responses
                 (learner_id, puzzle_id, thinker_id, sphere, level,
-                 response_text, time_seconds, reached_deeper)
-            SELECT $1,$2,
-                   COALESCE((SELECT thinker_id FROM puzzle_engine.responses
-                              WHERE puzzle_id=$2 LIMIT 1), 'unknown'),
-                   'unknown', 'beginner', $3, $4, $5
-        """, req.learner_id, req.puzzle_id, req.response,
-             req.time_seconds, req.reached_deeper)
-
-        result = await _module_registry["puzzle.engine"].handle(event, ctx)
+                 response_text, time_seconds, quality, reached_deeper, misconception)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        """, req.learner_id, req.puzzle_id,
+             puzzle["thinker_id"], puzzle["sphere"], puzzle["level"],
+             req.response, req.time_seconds, int(result.data.get("quality", 0)),
+             req.reached_deeper, str(result.data.get("misconception", "") or ""))
     return result.data
 
 
