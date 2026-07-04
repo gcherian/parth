@@ -52,7 +52,7 @@ class PuzzleService {
     required int grade,
     required String serverUrl,
   }) async {
-    await http
+    final r = await http
         .post(
           Uri.parse('${_base(serverUrl)}/puzzle/respond'),
           headers: _headers,
@@ -66,6 +66,34 @@ class PuzzleService {
           }),
         )
         .timeout(const Duration(seconds: 30));
+    if (r.statusCode < 200 || r.statusCode >= 300) {
+      throw Exception(_detailFrom(r, fallback: 'Puzzle response failed'));
+    }
+  }
+
+  Future<void> registerLearner({
+    required String learnerId,
+    required String name,
+    required int grade,
+    required String serverUrl,
+  }) async {
+    if (serverUrl.isEmpty) {
+      throw Exception('No server configured');
+    }
+    final r = await http
+        .post(
+          Uri.parse('${_base(serverUrl)}/learner/register'),
+          headers: _headers,
+          body: jsonEncode({
+            'learner_id': learnerId,
+            'name': name,
+            'grade': grade,
+          }),
+        )
+        .timeout(const Duration(seconds: 15));
+    if (r.statusCode < 200 || r.statusCode >= 300) {
+      throw Exception(_detailFrom(r, fallback: 'Learner registration failed'));
+    }
   }
 
   Future<PuzzlePortrait> getPortrait({
@@ -81,7 +109,18 @@ class PuzzleService {
     if (r.statusCode != 200) {
       throw Exception('Server returned ${r.statusCode}');
     }
-    return PuzzlePortrait.fromJson(
-        jsonDecode(r.body) as Map<String, dynamic>);
+    return PuzzlePortrait.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  String _detailFrom(http.Response response, {required String fallback}) {
+    try {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final detail = data['detail'];
+      if (detail is String && detail.isNotEmpty) return detail;
+      if (detail is Map && detail['message'] is String) {
+        return detail['message'] as String;
+      }
+    } catch (_) {}
+    return '$fallback (${response.statusCode})';
   }
 }

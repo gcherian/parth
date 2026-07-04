@@ -3,7 +3,7 @@ import json as _json
 import logging
 import re
 import time
-import uuid
+import uuid as _uuid_mod
 from collections import defaultdict
 from datetime import datetime
 
@@ -16,7 +16,11 @@ from pydantic import BaseModel, Field
 
 from config import Config
 from foundation.db import get_pool, apply_schema, close_pool
-from foundation.identity import check_consent, SCOPE_AI_INTERACTION
+from foundation.identity import (
+    check_consent,
+    register_pilot_learner,
+    SCOPE_AI_INTERACTION,
+)
 from foundation import metrics as metrics_mod
 from foundation.observability import configure_logging, get_logger
 from foundation.outbox import relay_loop
@@ -177,6 +181,60 @@ def rate_limit(request: Request):
     _buckets[ip].append(now)
 
 
+# ── UUID validation ───────────────────────────────────────────────────────────
+_UUID_RE = re.compile(
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+    re.IGNORECASE,
+)
+
+
+def _require_uuid(learner_id: str) -> str:
+    """Raise 400 if learner_id is not a valid UUID. Returns the id unchanged."""
+    if not _UUID_RE.match(learner_id):
+        raise HTTPException(status_code=400, detail="Invalid learner ID format")
+    return learner_id
+
+
+# ── Per-learner daily cap ─────────────────────────────────────────────────────
+
+async def _check_daily_cap(learner_id: str) -> None:
+    """Raise 429 if this learner has exceeded their daily interaction cap."""
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        count = await conn.fetchval(
+            "SELECT COUNT(*) FROM learner_state.interactions "
+            "WHERE learner_id=$1 AND created_at > now() - interval '24 hours'",
+            learner_id,
+        ) or 0
+    if count >= Config.DAILY_REQUEST_CAP:
+        raise HTTPException(
+            status_code=429,
+            detail=(
+                "Aaj bahut mehnat ki! You've reached today's learning limit — "
+                "come back tomorrow. 🌟"
+            ),
+        )
+
+
+# ── Background helpers ───────────────────────────────────────────────────────
+
+async def _create_distress_alert(learner_id: str, snippet: str) -> None:
+    """Create a parent dashboard alert when distress is detected outside /chat."""
+    try:
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            await conn.execute(
+                """INSERT INTO parent_dashboard.alerts
+                       (learner_id, alert_type, message)
+                   VALUES ($1, 'distress', $2)""",
+                learner_id,
+                f"Possible distress detected in a puzzle response: {snippet}",
+            )
+        log.warning("distress_alert_created", learner_id=learner_id)
+    except Exception as exc:
+        log.warning("distress_alert_failed", error=str(exc))
+
+
 # ── Request / Response models ─────────────────────────────────────────────────
 class Message(BaseModel):
     role: str = Field(..., max_length=20)
@@ -217,7 +275,9 @@ async def chat(
     req: ChatRequest,
     _: None = Depends(rate_limit),
 ):
-    # Consent gate — blocks child learners without guardian approval
+    _require_uuid(req.learner_id)
+
+    # Consent gate — blocks unregistered and child learners without guardian approval
     consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
     if not consent_ok:
         raise HTTPException(
@@ -231,12 +291,18 @@ async def chat(
             },
         )
 
+    # Per-learner daily cap — cost control
+    await _check_daily_cap(req.learner_id)
+
+    # Sanitize subject before it enters the LLM system prompt
+    safe_subject = _sanitize(req.subject, max_len=100)
+
     history = [{"role": m.role, "content": m.content} for m in req.history]
     try:
         result = await _orchestrator.handle(
             learner_id=req.learner_id,
             message=req.message,
-            subject=req.subject,
+            subject=safe_subject,
             grade=req.grade,
             history=history,
             model_override=req.model,
@@ -334,9 +400,34 @@ async def consent_grant(req: ConsentGrantRequest, _: None = Depends(rate_limit))
     return {"status": "consent_granted"}
 
 
+# ── Learner registration (pilot — auto-grants consent, no OTP yet) ────────────
+class LearnerRegisterRequest(BaseModel):
+    learner_id: str = Field(..., max_length=100)
+    name: str = Field(..., max_length=100)
+    grade: int = Field(..., ge=1, le=12)
+
+
+@app.post("/learner/register")
+async def learner_register(req: LearnerRegisterRequest, _: None = Depends(rate_limit)):
+    """
+    Register a new learner and auto-grant pilot consent.
+    Must be called after cold-start completes and before /chat can be used.
+    Idempotent — safe to call multiple times.
+    """
+    ok = await register_pilot_learner(
+        learner_id=req.learner_id,
+        name=_sanitize(req.name, max_len=100),
+        grade=req.grade,
+    )
+    if not ok:
+        raise HTTPException(status_code=400, detail="Invalid learner ID format")
+    return {"status": "registered", "learner_id": req.learner_id}
+
+
 # ── Learner profile endpoint ──────────────────────────────────────────────────
 @app.get("/learner/{learner_id}")
-async def get_learner(learner_id: str):
+async def get_learner(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     pool = await get_pool()
     async with pool.acquire() as conn:
         profile = await conn.fetchrow(
@@ -359,7 +450,8 @@ async def get_learner(learner_id: str):
 
 # ── Per-child agent config endpoint ──────────────────────────────────────────
 @app.get("/learner/{learner_id}/config")
-async def get_learner_config(learner_id: str):
+async def get_learner_config(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     """
     Return the full per-child agent config for a learner:
       - per-agent overrides (from child_agent_config)
@@ -413,7 +505,8 @@ async def get_learner_config(learner_id: str):
 
 # ── Learner psyche endpoint ───────────────────────────────────────────────────
 @app.get("/learner/{learner_id}/psyche")
-async def get_learner_psyche(learner_id: str):
+async def get_learner_psyche(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     from modules.learner_state.psyche import get_psyche, interpret_psyche
     pool = await get_pool()
     async with pool.acquire() as conn:
@@ -423,7 +516,8 @@ async def get_learner_psyche(learner_id: str):
 
 # ── Erase learner (GDPR / DPDP right to erasure) ─────────────────────────────
 @app.delete("/learner/{learner_id}")
-async def erase_learner(learner_id: str):
+async def erase_learner(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     await _orchestrator.erase_learner(learner_id)
     return {"erased": True, "learner_id": learner_id}
 
@@ -440,13 +534,20 @@ class PuzzleResponseRequest(BaseModel):
 
 
 @app.get("/puzzle/next/{learner_id}")
-async def puzzle_next(learner_id: str, grade: int = 6, subject: str = "General"):
+async def puzzle_next(
+    learner_id: str,
+    grade: int = 6,
+    subject: str = "General",
+    _: None = Depends(rate_limit),
+):
+    _require_uuid(learner_id)
+    grade = max(1, min(12, grade))
     from kernel.context import Event, KernelContext
     pool = await get_pool()
     async with pool.acquire() as conn:
         ctx = KernelContext(
-            request_id=str(uuid.uuid4()),
-            trace_id=str(uuid.uuid4()),
+            request_id=str(_uuid_mod.uuid4()),
+            trace_id=str(_uuid_mod.uuid4()),
             learner_id=learner_id,
             subject=subject,
             grade=grade,
@@ -464,13 +565,35 @@ async def puzzle_next(learner_id: str, grade: int = 6, subject: str = "General")
 
 
 @app.post("/puzzle/respond")
-async def puzzle_respond(req: PuzzleResponseRequest, background_tasks: BackgroundTasks):
+async def puzzle_respond(
+    req: PuzzleResponseRequest,
+    background_tasks: BackgroundTasks,
+    _: None = Depends(rate_limit),
+):
     from kernel.context import Event, KernelContext
+    from modules.puzzle_engine import loader
+    from modules.moderation_ops.module import moderate_text, _BLOCK_RESPONSE
+
+    _require_uuid(req.learner_id)
+
+    puzzle = loader.get(req.puzzle_id)
+    if puzzle is None:
+        raise HTTPException(status_code=404, detail="Unknown puzzle")
+
+    # Moderate child's free-text response before persisting
+    mod = moderate_text(req.response)
+    if mod["harmful_detected"]:
+        raise HTTPException(status_code=400, detail=_BLOCK_RESPONSE)
+    if mod["distress_detected"]:
+        background_tasks.add_task(
+            _create_distress_alert, req.learner_id, req.response[:200]
+        )
+
     pool = await get_pool()
     async with pool.acquire() as conn:
         ctx = KernelContext(
-            request_id=str(uuid.uuid4()),
-            trace_id=str(uuid.uuid4()),
+            request_id=str(_uuid_mod.uuid4()),
+            trace_id=str(_uuid_mod.uuid4()),
             learner_id=req.learner_id,
             subject="puzzle",
             grade=req.grade,
@@ -489,24 +612,24 @@ async def puzzle_respond(req: PuzzleResponseRequest, background_tasks: Backgroun
             },
         )
 
-        # Persist the raw response
+        result = await _module_registry["puzzle.engine"].handle(event, ctx)
+
+        # Persist the raw response with real puzzle metadata for the portrait path.
         await conn.execute("""
             INSERT INTO puzzle_engine.responses
                 (learner_id, puzzle_id, thinker_id, sphere, level,
-                 response_text, time_seconds, reached_deeper)
-            SELECT $1,$2,
-                   COALESCE((SELECT thinker_id FROM puzzle_engine.responses
-                              WHERE puzzle_id=$2 LIMIT 1), 'unknown'),
-                   'unknown', 'beginner', $3, $4, $5
-        """, req.learner_id, req.puzzle_id, req.response,
-             req.time_seconds, req.reached_deeper)
-
-        result = await _module_registry["puzzle.engine"].handle(event, ctx)
+                 response_text, time_seconds, quality, reached_deeper, misconception)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        """, req.learner_id, req.puzzle_id,
+             puzzle["thinker_id"], puzzle["sphere"], puzzle["level"],
+             req.response, req.time_seconds, int(result.data.get("quality", 0)),
+             req.reached_deeper, str(result.data.get("misconception", "") or ""))
     return result.data
 
 
 @app.get("/puzzle/portrait/{learner_id}")
-async def puzzle_portrait(learner_id: str):
+async def puzzle_portrait(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     from modules.puzzle_engine.module import _load_portrait, _load_register_state
     from modules.puzzle_engine.register import RegisterState, register_visualisation
     pool = await get_pool()
@@ -552,8 +675,8 @@ async def puzzle_bridge(concept_id: str, learner_id: str | None = None):
 
 # ── Pilot metrics endpoint ───────────────────────────────────────────────────
 @app.get("/metrics/pilot/{learner_id}")
-async def pilot_metrics(learner_id: str):
-    """Compute and return pilot gate metrics for a learner."""
+async def pilot_metrics(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     pool = await get_pool()
     async with pool.acquire() as conn:
         gates = await metrics_mod.compute_pilot_gates(conn, learner_id)
@@ -562,7 +685,8 @@ async def pilot_metrics(learner_id: str):
 
 # ── Parent dashboard endpoints ────────────────────────────────────────────────
 @app.get("/parent/{learner_id}/report")
-async def parent_report(learner_id: str):
+async def parent_report(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     from modules.parent_dashboard.module import build_report
     pool = await get_pool()
     async with pool.acquire() as conn:
@@ -571,7 +695,8 @@ async def parent_report(learner_id: str):
 
 
 @app.get("/parent/{learner_id}/alerts")
-async def parent_alerts(learner_id: str):
+async def parent_alerts(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
     pool = await get_pool()
     async with pool.acquire() as conn:
         rows = await conn.fetch(
@@ -953,9 +1078,23 @@ async def world_presence(location_id: str):
 
 
 @app.post("/world/chat")
-async def world_chat(req: WorldChatRequest):
+async def world_chat(req: WorldChatRequest, _: None = Depends(rate_limit)):
+    from modules.moderation_ops.module import moderate_text, _BLOCK_RESPONSE, _DISTRESS_RESPONSE
+
     if req.location_id not in LOCATIONS:
         raise HTTPException(status_code=404, detail="Unknown location")
+
+    # Moderate child's message before storing or processing
+    mod = moderate_text(req.message)
+    if mod["harmful_detected"]:
+        raise HTTPException(status_code=400, detail=_BLOCK_RESPONSE)
+    if mod["distress_detected"]:
+        # Return the distress response immediately; don't involve the shared world
+        return {
+            "response": _DISTRESS_RESPONSE,
+            "present": [],
+            "group_size": 0,
+        }
 
     persona = PERSONA_MAP.get(req.learner_id)
     if not persona:
@@ -1170,8 +1309,14 @@ async def get_lens_portrait(lens_name: str, learner_id: str):
 
 
 @app.post("/api/lens/{lens_name}/{learner_id}/run")
-async def run_lens(lens_name: str, learner_id: str, period_days: int = 30):
+async def run_lens(
+    lens_name: str,
+    learner_id: str,
+    period_days: int = 30,
+    _: None = Depends(rate_limit),
+):
     """Compute and save a lens portrait for any lens."""
+    _require_uuid(learner_id)
     valid = {"cognitive", "affect", "psychological", "contextual", "relational"}
     if lens_name not in valid:
         raise HTTPException(status_code=400, detail=f"Unknown lens. Valid: {sorted(valid)}")

@@ -18,6 +18,7 @@ log = get_logger("moderation.ops")
 
 # Distress signals — conservative: err on the side of flagging
 _DISTRESS_PATTERNS = [
+    # English
     r"\bhurt\s+my\s*self\b",
     r"\bkill\s+my\s*self\b",
     r"\bwant\s+to\s+die\b",
@@ -26,19 +27,51 @@ _DISTRESS_PATTERNS = [
     r"\bno\s+one\s+cares\b",
     r"\bnobody\s+loves\b",
     r"\bi\s+hate\s+(my\s+life|myself)\b",
-    r"\bkuch\s+nahi\s+rehna\b",          # Hindi distress
+    r"\bif\s+i\s+(wasn't|weren't|was\s+not|were\s+not)\s+here\b",
+    r"\bdisappear\s+forever\b",
+    r"\bend\s+it\s+all\b",
+    r"\bnot\s+worth\s+living\b",
+    # Hindi (romanised)
+    r"\bkuch\s+nahi\s+rehna\b",
     r"\bjeena\s+nahi\b",
     r"\bmarna\s+chahta\b",
+    r"\bmarna\s+chahti\b",
+    r"\bzindagi\s+nahi\s+chahiye\b",
+    r"\bkhatam\s+kar\s+lun\b",
+    r"\bkhatam\s+kar\s+loon\b",
+    r"\bbahut\s+thak\s+gaya\b",
+    r"\bbahut\s+thak\s+gayi\b",
+    r"\bkoi\s+nahi\s+hai\s+mera\b",
+    r"\bkisi\s+ko\s+parwah\s+nahi\b",
+    r"\bmujhe\s+mat\s+chahiye\b",
+    # Devanagari
+    r"मरना\s*चाहता",
+    r"जीना\s*नहीं",
+    r"सब\s*खत्म",
+    r"मुझे\s*नहीं\s*चाहिए",
 ]
 
 _HARMFUL_PATTERNS = [
     r"\b(porn|sex(ual)?|naked|nude)\b",
     r"\b(gun|weapon|bomb|explosive|kill\s+someone)\b",
-    r"\b(drug|cocaine|heroin|weed|ganja)\b",
+    r"\b(drug|cocaine|heroin|weed|ganja|charas|smack)\b",
 ]
 
 _DISTRESS_RE = re.compile("|".join(_DISTRESS_PATTERNS), re.IGNORECASE)
 _HARMFUL_RE = re.compile("|".join(_HARMFUL_PATTERNS), re.IGNORECASE)
+
+
+# ── Standalone utility — importable by other modules ─────────────────────────
+
+def moderate_text(text: str) -> dict:
+    """
+    Returns {"distress_detected": bool, "harmful_detected": bool}.
+    Callers decide what action to take — this function only classifies.
+    """
+    return {
+        "distress_detected": bool(_DISTRESS_RE.search(text)),
+        "harmful_detected":  bool(_HARMFUL_RE.search(text)),
+    }
 
 _DISTRESS_RESPONSE = (
     "Ek second ruko. Tumse baat karni hai. "

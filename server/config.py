@@ -54,6 +54,10 @@ class Config:
     # ── Prompt context ────────────────────────────────────────────────────────
     MAX_HISTORY_TURNS: int = int(os.getenv("MAX_HISTORY_TURNS", "16"))
 
+    # ── Abuse limits ─────────────────────────────────────────────────────────
+    # Max chat interactions per learner per 24-hour window (cost + abuse control)
+    DAILY_REQUEST_CAP: int = int(os.getenv("DAILY_REQUEST_CAP", "200"))
+
     # ── Security ──────────────────────────────────────────────────────────────
     # App API key — all app endpoints require X-Parth-Key: <key>.
     # If empty (default), auth is skipped (local dev mode). ALWAYS set in prod.

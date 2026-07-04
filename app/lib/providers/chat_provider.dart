@@ -57,9 +57,10 @@ class ChatState {
 class ChatNotifier extends StateNotifier<ChatState> {
   final AiService _ai;
   final _uuid = const Uuid();
+  late final Future<void> _initFuture;
 
   ChatNotifier(this._ai) : super(const ChatState()) {
-    _init();
+    _initFuture = _init();
   }
 
   Future<void> _init() async {
@@ -87,12 +88,16 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final saved = prefs.getString('server_url') ?? '';
     // Discard stale tunnel URLs; prefer built-in production URL when nothing saved.
     String url;
-    if (saved.isNotEmpty && !saved.contains('trycloudflare.com') && !saved.contains('100.125')) {
+    if (saved.isNotEmpty &&
+        !saved.contains('trycloudflare.com') &&
+        !saved.contains('100.125')) {
       url = saved;
     } else if (_builtInServerUrl.isNotEmpty) {
       url = _builtInServerUrl;
     } else {
-      url = saved.contains('trycloudflare.com') || saved.contains('100.125') ? '' : saved;
+      url = saved.contains('trycloudflare.com') || saved.contains('100.125')
+          ? ''
+          : saved;
     }
     if (url != saved) await prefs.setString('server_url', url);
     state = state.copyWith(serverUrl: url);
@@ -130,6 +135,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
   Future<void> sendMessage(String content) async {
     if (content.trim().isEmpty) return;
+    await _initFuture;
 
     final userMsg = Message(
       id: _uuid.v4(),
@@ -140,7 +146,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
 
     final withUser = [...state.messages, userMsg];
-    state = state.copyWith(messages: withUser, isLoading: true, clearError: true);
+    state =
+        state.copyWith(messages: withUser, isLoading: true, clearError: true);
 
     try {
       final reply = await _ai.sendMessage(
@@ -173,7 +180,13 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   void clearChat() {
-    state = ChatState(serverUrl: state.serverUrl);
+    state = ChatState(
+      serverUrl: state.serverUrl,
+      learnerId: state.learnerId,
+      learnerName: state.learnerName,
+      grade: state.grade,
+      currentSubject: state.currentSubject,
+    );
     _persist([]);
   }
 }

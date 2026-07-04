@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import '../models/puzzle.dart';
 import '../services/puzzle_service.dart';
@@ -64,6 +65,8 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
   bool _submitting = false;
   bool _submitted = false;
   bool _revealed = false;
+  bool _completing = false;
+  String? _completionError;
 
   // Choice card state — ID currently being processed
   String? _processingId;
@@ -77,6 +80,10 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
   Future<void> _init() async {
     final prefs = await SharedPreferences.getInstance();
     _learnerId = prefs.getString('learner_id') ?? '';
+    if (_learnerId.isEmpty) {
+      _learnerId = const Uuid().v4();
+      await prefs.setString('learner_id', _learnerId);
+    }
     _serverUrl = prefs.getString('server_url') ?? '';
     _grade = prefs.getInt('grade') ?? 6;
     await _fetchProbe();
@@ -100,6 +107,7 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
         _submitted = false;
         _revealed = false;
         _processingId = null;
+        _completionError = null;
         _responseCtrl.clear();
       });
     } catch (e) {
@@ -124,8 +132,11 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
         grade: _grade,
         serverUrl: _serverUrl,
       );
-    } catch (_) {
-      // Non-blocking — choice is already registered by the server loading it
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _processingId = null);
+      _showError('Could not save that choice. Please try again.');
+      return;
     }
     _advance();
   }
@@ -144,8 +155,11 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
         grade: _grade,
         serverUrl: _serverUrl,
       );
-    } catch (_) {
-      // Non-blocking — continue to discover reveal even on network error
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      _showError('Could not save your response. Please try again.');
+      return;
     }
     setState(() {
       _submitting = false;
@@ -165,8 +179,34 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
   }
 
   Future<void> _completeColdStart() async {
+    if (_completing) return;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('cold_start_done', true);
+    setState(() {
+      _completing = true;
+      _completionError = null;
+    });
+
+    final name = prefs.getString('user_name') ?? '';
+    final grade = prefs.getInt('grade') ?? _grade;
+    try {
+      await _service.registerLearner(
+        learnerId: _learnerId,
+        name: name,
+        grade: grade,
+        serverUrl: _serverUrl,
+      );
+      await prefs.setBool('learner_registered', true);
+      await prefs.setBool('cold_start_done', true);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _completing = false;
+        _completionError =
+            'Could not finish setup. Check your connection and try again.';
+      });
+      return;
+    }
+
     if (!mounted) return;
     Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (_) => PortraitRevealScreen(
@@ -174,6 +214,15 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
         serverUrl: _serverUrl,
       ),
     ));
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppTheme.saffron,
+      ),
+    );
   }
 
   @override
@@ -231,7 +280,12 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
                                     ? null
                                     : _onPuzzleSubmit,
                                 onReveal: _onReveal,
-                                onNext: _revealed ? _advance : null,
+                                onNext:
+                                    _revealed && !_completing ? _advance : null,
+                                nextBusy: _completing,
+                                nextLabel:
+                                    _probeIndex >= 4 ? 'Enter Parth' : 'Next →',
+                                errorText: _completionError,
                               ),
               ),
             ),
@@ -255,7 +309,7 @@ class _TopBar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Parth is getting to know you',
             style: TextStyle(
               color: AppTheme.bodyText,
@@ -371,8 +425,7 @@ class _ChoiceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            probe.instruction ??
-                'Which of these makes you more curious?',
+            probe.instruction ?? 'Which of these makes you more curious?',
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
@@ -441,9 +494,7 @@ class _ChoiceOption extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         decoration: BoxDecoration(
-          color: loading
-              ? AppTheme.violet.withOpacity(0.06)
-              : Colors.white,
+          color: loading ? AppTheme.violet.withOpacity(0.06) : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: loading
@@ -500,16 +551,14 @@ class _ChoiceOption extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: disabled
-                            ? Colors.grey.shade100
-                            : AppTheme.violet,
+                        color:
+                            disabled ? Colors.grey.shade100 : AppTheme.violet,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         'This one →',
                         style: TextStyle(
-                          color:
-                              disabled ? AppTheme.lightText : Colors.white,
+                          color: disabled ? AppTheme.lightText : Colors.white,
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                         ),
@@ -534,6 +583,9 @@ class _PuzzleCard extends StatelessWidget {
   final VoidCallback? onSubmit;
   final VoidCallback onReveal;
   final VoidCallback? onNext;
+  final bool nextBusy;
+  final String nextLabel;
+  final String? errorText;
 
   const _PuzzleCard({
     super.key,
@@ -545,6 +597,9 @@ class _PuzzleCard extends StatelessWidget {
     required this.onSubmit,
     required this.onReveal,
     required this.onNext,
+    required this.nextBusy,
+    required this.nextLabel,
+    required this.errorText,
   });
 
   @override
@@ -559,8 +614,7 @@ class _PuzzleCard extends StatelessWidget {
         children: [
           // Sphere badge
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
             decoration: BoxDecoration(
               color: AppTheme.violet.withOpacity(0.08),
               borderRadius: BorderRadius.circular(30),
@@ -715,6 +769,9 @@ class _PuzzleCard extends StatelessWidget {
                     text: puzzle.discover,
                     followUp: probe.followUp,
                     onNext: onNext,
+                    nextBusy: nextBusy,
+                    nextLabel: nextLabel,
+                    errorText: errorText,
                   )
                 : const SizedBox.shrink(),
           ),
@@ -772,11 +829,17 @@ class _DiscoverReveal extends StatelessWidget {
   final String text;
   final String? followUp;
   final VoidCallback? onNext;
+  final bool nextBusy;
+  final String nextLabel;
+  final String? errorText;
 
   const _DiscoverReveal({
     required this.text,
     required this.followUp,
     required this.onNext,
+    required this.nextBusy,
+    required this.nextLabel,
+    required this.errorText,
   });
 
   @override
@@ -797,8 +860,8 @@ class _DiscoverReveal extends StatelessWidget {
               ],
             ),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-                color: AppTheme.mint.withOpacity(0.35), width: 1.5),
+            border:
+                Border.all(color: AppTheme.mint.withOpacity(0.35), width: 1.5),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -837,11 +900,30 @@ class _DiscoverReveal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
+        if (errorText != null) ...[
+          Text(
+            errorText!,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: AppTheme.saffron,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
         SizedBox(
           width: double.infinity,
           child: FilledButton(
             onPressed: onNext,
-            child: const Text('Next →'),
+            child: nextBusy
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                        color: Colors.white, strokeWidth: 2),
+                  )
+                : Text(nextLabel),
           ),
         ),
       ],
