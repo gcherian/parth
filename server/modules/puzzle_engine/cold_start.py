@@ -120,7 +120,7 @@ def get_probe(
         Serve any puzzle with go_deeper, then ask:
         "What was the most surprising thing you noticed? Tell me in your own words."
     """
-    if probe_number in (0, 1):
+    if probe_number == 0:
         pair = random.choice(_PROBE_1_PAIRS)
         hook_a = _best_hook(pair[0], "beginner", seen_ids)
         hook_b = _best_hook(pair[1], "beginner", seen_ids)
@@ -135,7 +135,7 @@ def get_probe(
             "option_b": hook_b,
         }
 
-    if probe_number == 2:
+    if probe_number == 1:
         sphere = primary_sphere or "mathematics"
         # Deliberately serve intermediate to probe ZPD
         puzzle = _best_puzzle(sphere, "intermediate", seen_ids)
@@ -148,7 +148,7 @@ def get_probe(
             "puzzle": puzzle,
         }
 
-    if probe_number == 3:
+    if probe_number == 2:
         sphere = primary_sphere or "mathematics"
         puzzle = _best_puzzle(sphere, "beginner", seen_ids)
         return {
@@ -158,7 +158,7 @@ def get_probe(
             "puzzle": puzzle,
         }
 
-    if probe_number == 4:
+    if probe_number == 3:
         bridge_sphere = _BRIDGES.get(primary_sphere or "mathematics", "philosophy_logic")
         puzzle = _best_puzzle(bridge_sphere, "beginner", seen_ids)
         return {
@@ -172,7 +172,7 @@ def get_probe(
             "puzzle": puzzle,
         }
 
-    if probe_number == 5:
+    if probe_number == 4:
         sphere = primary_sphere or "philosophy_logic"
         # Pick a puzzle that has a strong go_deeper
         puzzle = _best_puzzle_with_go_deeper(sphere, seen_ids)

@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'dart:async';
 
 import 'package:http/http.dart' as http;
 
 import '../models/puzzle.dart';
 
 class PuzzleService {
-  static const _appKey =
-      String.fromEnvironment('PARTH_API_KEY', defaultValue: '');
+  static const _appKey = String.fromEnvironment(
+    'PARTH_API_KEY',
+    defaultValue: '',
+  );
 
   String _base(String serverUrl) {
     final url = serverUrl.trim();
@@ -15,9 +16,9 @@ class PuzzleService {
   }
 
   Map<String, String> get _headers => {
-        'Content-Type': 'application/json',
-        if (_appKey.isNotEmpty) 'X-Parth-Key': _appKey,
-      };
+    'Content-Type': 'application/json',
+    if (_appKey.isNotEmpty) 'X-Parth-Key': _appKey,
+  };
 
   Map<String, String> get _getHeaders =>
       _appKey.isNotEmpty ? {'X-Parth-Key': _appKey} : {};
@@ -52,7 +53,7 @@ class PuzzleService {
     required int grade,
     required String serverUrl,
   }) async {
-    await http
+    final r = await http
         .post(
           Uri.parse('${_base(serverUrl)}/puzzle/respond'),
           headers: _headers,
@@ -66,6 +67,9 @@ class PuzzleService {
           }),
         )
         .timeout(const Duration(seconds: 30));
+    if (r.statusCode < 200 || r.statusCode >= 300) {
+      throw Exception(_detailFrom(r, fallback: 'Puzzle response failed'));
+    }
   }
 
   Future<void> registerLearner({
@@ -74,22 +78,22 @@ class PuzzleService {
     required int grade,
     required String serverUrl,
   }) async {
-    if (serverUrl.isEmpty) return; // offline / local dev — skip
-    try {
-      await http
-          .post(
-            Uri.parse('${_base(serverUrl)}/learner/register'),
-            headers: _headers,
-            body: jsonEncode({
-              'learner_id': learnerId,
-              'name': name,
-              'grade': grade,
-            }),
-          )
-          .timeout(const Duration(seconds: 15));
-    } catch (_) {
-      // Non-fatal — the learner will be prompted to complete onboarding
-      // again if consent is missing when they first open /chat.
+    if (serverUrl.isEmpty) {
+      throw Exception('No server configured');
+    }
+    final r = await http
+        .post(
+          Uri.parse('${_base(serverUrl)}/learner/register'),
+          headers: _headers,
+          body: jsonEncode({
+            'learner_id': learnerId,
+            'name': name,
+            'grade': grade,
+          }),
+        )
+        .timeout(const Duration(seconds: 15));
+    if (r.statusCode < 200 || r.statusCode >= 300) {
+      throw Exception(_detailFrom(r, fallback: 'Learner registration failed'));
     }
   }
 
@@ -106,7 +110,18 @@ class PuzzleService {
     if (r.statusCode != 200) {
       throw Exception('Server returned ${r.statusCode}');
     }
-    return PuzzlePortrait.fromJson(
-        jsonDecode(r.body) as Map<String, dynamic>);
+    return PuzzlePortrait.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  String _detailFrom(http.Response response, {required String fallback}) {
+    try {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final detail = data['detail'];
+      if (detail is String && detail.isNotEmpty) return detail;
+      if (detail is Map && detail['message'] is String) {
+        return detail['message'] as String;
+      }
+    } catch (_) {}
+    return '$fallback (${response.statusCode})';
   }
 }

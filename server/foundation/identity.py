@@ -17,15 +17,18 @@ async def check_consent(learner_id: str, scope: str) -> bool:
     - is not a child (no guardian link required), OR
     - has an active guardian consent record covering the requested scope.
 
-    For anonymous learners (no identity row): logs a warning, inserts a
-    placeholder identity row so the learner is now tracked, and returns True.
-    For child learners without guardian consent: blocks (returns False).
+    Unknown learners and child learners without guardian consent are blocked.
     """
+    try:
+        child_uuid = _uuid.UUID(learner_id)
+    except (AttributeError, TypeError, ValueError):
+        return False
+
     pool = await get_pool()
     async with pool.acquire() as conn:
         row = await conn.fetchrow(
-            "SELECT type FROM foundation.identities WHERE id::text = $1",
-            learner_id,
+            "SELECT type FROM foundation.identities WHERE id = $1",
+            child_uuid,
         )
         if row is None:
             # Unknown learner — deny access until they complete registration.
@@ -46,9 +49,9 @@ async def check_consent(learner_id: str, scope: str) -> bool:
             """
             SELECT consent_given, scope
             FROM foundation.guardian_links
-            WHERE child_id::text = $1 AND consent_given = true
+            WHERE child_id = $1 AND consent_given = true
             """,
-            learner_id,
+            child_uuid,
         )
         if link is None:
             log.warning("consent_missing", learner_id=learner_id, scope=scope)
@@ -64,11 +67,16 @@ async def is_child_without_consent(learner_id: str) -> bool:
     Returns False for non-child identities, anonymous learners, or
     children who already have consent.
     """
+    try:
+        child_uuid = _uuid.UUID(learner_id)
+    except (AttributeError, TypeError, ValueError):
+        return False
+
     pool = await get_pool()
     async with pool.acquire() as conn:
         row = await conn.fetchrow(
-            "SELECT type FROM foundation.identities WHERE id::text = $1",
-            learner_id,
+            "SELECT type FROM foundation.identities WHERE id = $1",
+            child_uuid,
         )
         if row is None or row["type"] != "child":
             return False
@@ -76,9 +84,9 @@ async def is_child_without_consent(learner_id: str) -> bool:
         link = await conn.fetchrow(
             """
             SELECT 1 FROM foundation.guardian_links
-            WHERE child_id::text = $1 AND consent_given = true
+            WHERE child_id = $1 AND consent_given = true
             """,
-            learner_id,
+            child_uuid,
         )
         return link is None
 
@@ -91,12 +99,13 @@ async def register_pilot_learner(learner_id: str, name: str, grade: int) -> bool
     """
     try:
         child_uuid = _uuid.UUID(learner_id)
-    except ValueError:
+    except (AttributeError, TypeError, ValueError):
         return False
+    child_name = (name or "Student")[:100]
 
     # Deterministic guardian UUID derived from the child's UUID.
     # Each child gets their own synthetic guardian record.
-    guardian_uuid = _uuid.uuid5(_uuid.NAMESPACE_DNS, f"pilot-guardian:{learner_id}")
+    guardian_uuid = _uuid.uuid5(_uuid.NAMESPACE_DNS, f"pilot-guardian:{child_uuid}")
 
     pool = await get_pool()
     async with pool.acquire() as conn:
@@ -106,7 +115,7 @@ async def register_pilot_learner(learner_id: str, name: str, grade: int) -> bool
                 """INSERT INTO foundation.identities (id, type, name, grade)
                    VALUES ($1, 'child', $2, $3)
                    ON CONFLICT (id) DO UPDATE SET name=$2, grade=$3""",
-                child_uuid, name[:100], grade,
+                child_uuid, child_name, grade,
             )
             # Synthetic pilot guardian
             await conn.execute(
@@ -130,7 +139,7 @@ async def register_pilot_learner(learner_id: str, name: str, grade: int) -> bool
                 """INSERT INTO learner_state.profiles (learner_id, name, grade)
                    VALUES ($1, $2, $3)
                    ON CONFLICT (learner_id) DO UPDATE SET name=$2, grade=$3""",
-                learner_id, name[:100], grade,
+                str(child_uuid), child_name, grade,
             )
 
     # Create DID for the child if not already present (non-fatal — IAM may not
@@ -139,9 +148,9 @@ async def register_pilot_learner(learner_id: str, name: str, grade: int) -> bool
         from foundation.did import create_did_for_identity
         await create_did_for_identity(child_uuid, save_private=True)
     except Exception as _did_exc:
-        log.warning("did_creation_skipped", learner_id=learner_id, reason=str(_did_exc))
+        log.warning("did_creation_skipped", learner_id=str(child_uuid), reason=str(_did_exc))
 
-    log.info("pilot_learner_registered", learner_id=learner_id, name=name, grade=grade)
+    log.info("pilot_learner_registered", learner_id=str(child_uuid), name=child_name, grade=grade)
     return True
 
 
