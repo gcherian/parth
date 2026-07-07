@@ -120,6 +120,17 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
         grade: _grade,
         serverUrl: _serverUrl,
       );
+      if (probe.mode == ProbeMode.complete) {
+        setState(() {
+          _probe = probe;
+          _probeIndex = 4;
+          _loadingProbe = false;
+          _error = null;
+          _completionError = null;
+        });
+        await _completeColdStart();
+        return;
+      }
       setState(() {
         _probe = probe;
         _loadingProbe = false;
@@ -221,8 +232,10 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
       if (!mounted) return;
       setState(() {
         _completing = false;
-        _completionError =
-            'Could not finish setup. Check your connection and try again.';
+        _completionError = e.toString().replaceFirst('Exception: ', '');
+        if (_probe?.mode == ProbeMode.complete) {
+          _error = _completionError;
+        }
       });
       return;
     }
@@ -537,8 +550,8 @@ class _ChoiceOption extends StatelessWidget {
             color: loading
                 ? AppTheme.violet
                 : disabled
-                ? Colors.grey.shade200
-                : AppTheme.violet.withOpacity(0.22),
+                    ? Colors.grey.shade200
+                    : AppTheme.violet.withOpacity(0.22),
             width: loading ? 2 : 1.5,
           ),
           boxShadow: [
@@ -592,9 +605,8 @@ class _ChoiceOption extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: disabled
-                            ? Colors.grey.shade100
-                            : AppTheme.violet,
+                        color:
+                            disabled ? Colors.grey.shade100 : AppTheme.violet,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(

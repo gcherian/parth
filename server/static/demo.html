@@ -111,7 +111,7 @@ button:disabled { opacity: 0.4; cursor: default; transform: none; }
 .progress-fill { height: 100%; background: #f97316; border-radius: 2px; transition: width 0.5s; width: 0%; }
 
 /* ══ AGENT CASCADE PANEL ══════════════════════════════════════════════════════
-   The "dmesg" of the learning kernel — shows what the 15 agents detected
+   The "dmesg" of the learning kernel — shows what the learner agents detected
    and emitted, cluster by cluster, after every interaction.
 */
 #cascade-section {
@@ -234,20 +234,20 @@ button:disabled { opacity: 0.4; cursor: default; transform: none; }
 <header>
   <div class="brand">
     <h1>पार्थ · Parth</h1>
-    <p>15 children · 15 specialist agents · one living model per child</p>
+    <p>15 children · 18 learner agents · one living model per child</p>
   </div>
   <div class="controls">
-    <div class="hstat"><strong id="totalMsgs">0</strong> model updates &nbsp;·&nbsp; <span id="activeCounter">0 / 15</span> active</div>
+    <div class="hstat"><strong id="totalMsgs">0</strong> model updates &nbsp;·&nbsp; <span id="activeCounter">0 / 18</span> active</div>
     <button id="btnReset" onclick="resetDemo()">⏹ Reset</button>
     <button id="btnStory" onclick="openStory()">📖 Meera's Story</button>
-    <button id="btnRun"   onclick="runDemo()">▶ Run All 15</button>
+    <button id="btnRun"   onclick="runDemo()">▶ Run All</button>
   </div>
 </header>
 
 <div id="grid-section"><div id="grid"></div></div>
 
 <!-- Agent Cascade Panel ─────────────────────────────────────────────────────
-     Shows what the 15 agents detected after every interaction.
+     Shows what the learner agents detected after every interaction.
      Selecting a card or sending a message populates this automatically.
 -->
 <div id="cascade-section">
@@ -259,13 +259,13 @@ button:disabled { opacity: 0.4; cursor: default; transform: none; }
     <span class="cascade-meta" id="cascade-meta"></span>
   </div>
   <div class="cascade-body" id="cascade-body">
-    <div class="cascade-empty">The 15 agents observe every interaction. Send a message or click a scenario to see them fire.</div>
+    <div class="cascade-empty">The learner agents observe every interaction. Send a message or click a scenario to see them fire.</div>
   </div>
 </div>
 
 <!-- Story overlay ───────────────────────────────────────────────────────────
      Meera's full fraction journey: frustration → scaffolding → breakthrough.
-     Shows how the 15 agents build a child model across 5 interactions.
+     Shows how the learner agents build a child model across 5 interactions.
 -->
 <div id="story-overlay">
   <div class="story-hdr">
@@ -298,13 +298,13 @@ button:disabled { opacity: 0.4; cursor: default; transform: none; }
 // ── Cluster definitions (used by cascade renderer) ────────────────────────────
 const CLUSTERS = [
   { id:'affect',    cls:'cc-affect',    icon:'❤️',  label:'Affect & Motivation',
-    agents:['emotion_compass','belief_coach','challenge_calibrator','humor_delight_guide'] },
+    agents:['emotion_compass','belief_coach','challenge_calibrator','humor_delight_guide','motivation_drive'] },
   { id:'cognition', cls:'cc-cognition', icon:'🧠',  label:'Knowledge & Cognition',
-    agents:['mastery_tracker','misconception_hunter','curriculum_cartographer','memory_keeper'] },
+    agents:['mastery_tracker','misconception_hunter','curriculum_cartographer','memory_keeper','learning_velocity'] },
   { id:'linguistic',cls:'cc-linguistic',icon:'🌐',  label:'Linguistic & Cultural',
     agents:['language_bridge','register_tuner','transfer_weaver'] },
   { id:'context',   cls:'cc-context',   icon:'🏠',  label:'Context & Relationships',
-    agents:['family_alliance','rhythm_time_steward','inquiry_alchemist'] },
+    agents:['family_alliance','rhythm_time_steward','inquiry_alchemist','social_preference'] },
   { id:'pedagogy',  cls:'cc-pedagogy',  icon:'🎯',  label:'Pedagogy & Preference',
     agents:['pattern_creation_guide'] },
 ];
@@ -576,7 +576,8 @@ function acquireSlot(sig) {
 function releaseSlot() { _slots++; if (_queue.length>0) _queue.shift().res(); }
 
 function updateCounters() {
-  document.getElementById('activeCounter').textContent = `${activeCount} / 15`;
+  const agentTotal = CLUSTERS.reduce((sum, c) => sum + c.agents.length, 0);
+  document.getElementById('activeCounter').textContent = `${activeCount} / ${agentTotal}`;
   document.getElementById('totalMsgs').textContent = totalMessages;
 }
 

@@ -68,7 +68,7 @@ class LearnerStateModule(Module):
                 conn, ctx.learner_id, profile, psyche
             )
 
-            # ── Agent harness — 15 agents contribute their context slice ──
+            # ── Agent harness — live agents contribute their context slice ──
             agent_ctx, read_trace = await _harness.build_context_traced(conn, ctx.learner_id)
             if agent_ctx:
                 learner_ctx = learner_ctx + "\n\n" + agent_ctx
@@ -261,7 +261,7 @@ class LearnerStateModule(Module):
             "learner_state.episodes",
             "learner_state.curiosity_sessions",
             "learner_state.open_loops",
-            # 15-agent harness tables
+            # agent harness tables
             "learner_state.affect_state",
             "learner_state.curriculum_map",
             "learner_state.challenge_state",
@@ -274,6 +274,12 @@ class LearnerStateModule(Module):
             "learner_state.rhythm_state",
             "learner_state.pattern_state",
             "learner_state.kt_events",
+            "learner_state.learning_velocity_state",
+            "learner_state.motivation_drive_state",
+            "learner_state.social_learning_state",
+            "learner_state.value_purpose_reflections",
+            "learner_state.value_purpose_state",
+            "learner_state.dimension_snapshots",
             # practice engine
             "practice_engine.cards",
             "practice_engine.answers",

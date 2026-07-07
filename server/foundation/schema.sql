@@ -578,6 +578,72 @@ CREATE TABLE IF NOT EXISTS learner_state.confidence_calibration (
     PRIMARY KEY (learner_id, concept_id)
 );
 
+-- ── Learning Velocity: ZPD-normalized time-to-mastery estimate ───────────────
+CREATE TABLE IF NOT EXISTS learner_state.learning_velocity_state (
+    learner_id              TEXT PRIMARY KEY,
+    velocity_score          REAL DEFAULT 0.5,
+    confidence              REAL DEFAULT 0.0,
+    zpd_distance            REAL DEFAULT 0.0,
+    time_to_mastery_turns   REAL DEFAULT 0.0,
+    sample_size             INT DEFAULT 0,
+    evidence_json           JSONB DEFAULT '{}',
+    updated_at              TIMESTAMPTZ DEFAULT now()
+);
+
+-- ── Motivation & Drive: voluntary returns after difficult turns ─────────────
+CREATE TABLE IF NOT EXISTS learner_state.motivation_drive_state (
+    learner_id               TEXT PRIMARY KEY,
+    drive_score              REAL DEFAULT 0.5,
+    confidence               REAL DEFAULT 0.0,
+    return_after_difficulty  REAL,
+    active_days_14           INT DEFAULT 0,
+    avg_gap_hours            REAL,
+    hard_return_count        INT DEFAULT 0,
+    evidence_json            JSONB DEFAULT '{}',
+    updated_at               TIMESTAMPTZ DEFAULT now()
+);
+
+-- ── Social Learning: group vs solo vs teach-back preference ─────────────────
+CREATE TABLE IF NOT EXISTS learner_state.social_learning_state (
+    learner_id              TEXT PRIMARY KEY,
+    group_preference        REAL DEFAULT 0.5,
+    solo_preference         REAL DEFAULT 0.5,
+    teach_back_preference   REAL DEFAULT 0.5,
+    sample_count            INT DEFAULT 0,
+    last_signal             TEXT DEFAULT '',
+    updated_at              TIMESTAMPTZ DEFAULT now()
+);
+
+-- ── Value & Purpose: periodic reflection, not per-message inference ─────────
+CREATE TABLE IF NOT EXISTS learner_state.value_purpose_reflections (
+    id             TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    learner_id     TEXT NOT NULL,
+    prompt_id      TEXT NOT NULL,
+    prompt_text    TEXT NOT NULL,
+    response_text  TEXT NOT NULL,
+    themes_json    JSONB DEFAULT '{}',
+    created_at     TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS value_reflections_learner_idx
+    ON learner_state.value_purpose_reflections (learner_id, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS learner_state.value_purpose_state (
+    learner_id      TEXT PRIMARY KEY,
+    purpose_themes  JSONB DEFAULT '{}',
+    values_json     JSONB DEFAULT '[]',
+    confidence      REAL DEFAULT 0.0,
+    sample_count    INT DEFAULT 0,
+    updated_at      TIMESTAMPTZ DEFAULT now()
+);
+
+-- ── Product-facing 15-dimension snapshot cache ──────────────────────────────
+CREATE TABLE IF NOT EXISTS learner_state.dimension_snapshots (
+    learner_id     TEXT PRIMARY KEY,
+    snapshot_json  JSONB NOT NULL DEFAULT '{}',
+    updated_at     TIMESTAMPTZ DEFAULT now()
+);
+
 -- ── Developmental Lens Portraits ──────────────────────────────────────────────
 -- Written by lens agents (cognitive, affect, psychological, contextual, relational).
 -- One row per (learner, lens, run). Latest row per lens is the current portrait.

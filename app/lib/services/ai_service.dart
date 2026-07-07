@@ -26,10 +26,13 @@ class AiService {
         ? serverUrl.substring(0, serverUrl.length - 1)
         : serverUrl;
 
-    final historyJson = history.takeLast(16).map((m) => {
-          'role': m.isUser ? 'user' : 'assistant',
-          'content': m.content,
-        }).toList();
+    final historyJson = history
+        .takeLast(16)
+        .map((m) => {
+              'role': m.isUser ? 'user' : 'assistant',
+              'content': m.content,
+            })
+        .toList();
 
     try {
       final response = await http
@@ -54,13 +57,19 @@ class AiService {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         return data['response'] as String;
       } else if (response.statusCode == 429) {
-        throw Exception('Ek minute ruko! Too many questions — please wait a moment.');
+        throw Exception(
+            'Ek minute ruko! Too many questions — please wait a moment.');
       } else {
         // Body may not be JSON when the connection was aborted mid-response
         String detail = 'Server error ${response.statusCode}';
         try {
           final data = jsonDecode(response.body) as Map<String, dynamic>;
-          detail = (data['detail'] as String?) ?? detail;
+          final rawDetail = data['detail'];
+          if (rawDetail is String && rawDetail.isNotEmpty) {
+            detail = rawDetail;
+          } else if (rawDetail is Map && rawDetail['message'] is String) {
+            detail = rawDetail['message'] as String;
+          }
         } catch (_) {}
         throw Exception(detail);
       }
@@ -118,10 +127,13 @@ Your teaching style:
           'No API key configured. Set up the local server or add your Anthropic key.');
     }
 
-    final messages = history.takeLast(12).map((m) => {
-          'role': m.isUser ? 'user' : 'assistant',
-          'content': m.content,
-        }).toList()
+    final messages = history
+        .takeLast(12)
+        .map((m) => {
+              'role': m.isUser ? 'user' : 'assistant',
+              'content': m.content,
+            })
+        .toList()
       ..add({'role': 'user', 'content': userMessage});
 
     try {
@@ -150,7 +162,9 @@ Your teaching style:
         String error = 'Unknown error';
         try {
           final body = jsonDecode(response.body) as Map<String, dynamic>;
-          error = ((body['error'] as Map<String, dynamic>?))?['message'] as String? ?? error;
+          error = ((body['error'] as Map<String, dynamic>?))?['message']
+                  as String? ??
+              error;
         } catch (_) {}
         throw Exception('Anthropic error ${response.statusCode}: $error');
       }

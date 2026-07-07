@@ -1,5 +1,5 @@
 """
-15-agent learner harness — registry and dependency-ordered dispatch list.
+Learner harness — registry and dependency-ordered dispatch list.
 
 Architecture
 ------------
@@ -28,14 +28,17 @@ Dispatch order follows the inter-agent event dependency graph:
     09 TransferWeaver        → analogy.suggested
     10 RegisterTuner         → register.profile  (reads lang.preference)
     11 HumorDelightGuide     → delight.approved  (reads distress.detected)
+    12 LearningVelocity      → ZPD-normalized time-to-mastery
+    13 MotivationDrive       → voluntary return under difficulty
+    14 SocialPreference      → group/solo/teach-back preference
 
   Layer 2 — integrators (read Layer 0 + 1 events)
-    12 InquiryAlchemist      → curiosity threads + SEL repair
-    13 FamilyAlliance        → consent-gated caregiver context
-    14 RhythmTimeSteward     → pacing and peak-focus window
+    15 InquiryAlchemist      → curiosity threads + SEL repair
+    16 FamilyAlliance        → consent-gated caregiver context
+    17 RhythmTimeSteward     → pacing and peak-focus window
 
   Layer 3 — synthesiser (reads episodes + curiosity threads; always last)
-    15 PatternCreationGuide  → wonder questions + cross-scale pattern tracking
+    18 PatternCreationGuide  → wonder questions + cross-scale pattern tracking
 
 Research foundations
 --------------------
@@ -43,6 +46,9 @@ Research foundations
   Shen et al.       — interpretable KT first; SAINT+ as upgrade path (MasteryTracker)
   Kapur & Bielaczyc — productive failure (ChallengeCalibrator)
   Dunlosky et al.   — retrieval practice + spaced practice as primitives (MemoryKeeper)
+  ZPD normalization — velocity is measured against distance to current learning band
+  Self-determination— motivation is inferred from voluntary return under difficulty
+  Peer instruction  — teach-back and collaboration preference are separate signals
   García & Lin      — translanguaging; unified linguistic repertoire (LanguageBridge)
   Dweck             — growth mindset (BeliefCoach)
   CASEL             — SEL boundaries; family partnership (InquiryAlchemist, FamilyAlliance)
@@ -62,6 +68,9 @@ from modules.learner_state.agents.memory_keeper          import MemoryKeeperAgen
 from modules.learner_state.agents.transfer_weaver        import TransferWeaverAgent
 from modules.learner_state.agents.register_tuner         import RegisterTunerAgent
 from modules.learner_state.agents.humor_delight_guide    import HumorDelightGuideAgent
+from modules.learner_state.agents.learning_velocity      import LearningVelocityAgent
+from modules.learner_state.agents.motivation_drive       import MotivationDriveAgent
+from modules.learner_state.agents.social_preference      import SocialPreferenceAgent
 from modules.learner_state.agents.inquiry_alchemist      import InquiryAlchemistAgent
 from modules.learner_state.agents.family_alliance        import FamilyAllianceAgent
 from modules.learner_state.agents.rhythm_time_steward    import RhythmTimeStewardAgent
@@ -69,7 +78,7 @@ from modules.learner_state.agents.pattern_creation_guide import PatternCreationG
 
 
 def build_agent_registry() -> list[LearnerAgent]:
-    """Return all 15 agents in inter-agent dependency order."""
+    """Return all live learner agents in inter-agent dependency order."""
     return [
         EmotionCompassAgent(),         # 01 — affect vector; distress/engagement events first
         CurriculumCartographerAgent(), # 02 — coverage map; no event deps
@@ -82,8 +91,11 @@ def build_agent_registry() -> list[LearnerAgent]:
         TransferWeaverAgent(),         # 09 — analogy scores + history
         RegisterTunerAgent(),          # 10 — tone/register; emits register.profile
         HumorDelightGuideAgent(),      # 11 — reads distress.detected; emits delight.approved
-        InquiryAlchemistAgent(),       # 12 — curiosity threads + SEL repair
-        FamilyAllianceAgent(),         # 13 — consent-gated caregiver context
-        RhythmTimeStewardAgent(),      # 14 — pacing and peak-focus
-        PatternCreationGuideAgent(),   # 15 — wonder questions; last (reads episodes + threads)
+        LearningVelocityAgent(),       # 12 — ZPD-normalized time-to-mastery
+        MotivationDriveAgent(),        # 13 — return cadence under difficulty
+        SocialPreferenceAgent(),       # 14 — group/solo/teach-back preference
+        InquiryAlchemistAgent(),       # 15 — curiosity threads + SEL repair
+        FamilyAllianceAgent(),         # 16 — consent-gated caregiver context
+        RhythmTimeStewardAgent(),      # 17 — pacing and peak-focus
+        PatternCreationGuideAgent(),   # 18 — wonder questions; last (reads episodes + threads)
     ]
