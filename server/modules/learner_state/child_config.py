@@ -3,7 +3,7 @@ Per-child agent configuration.
 
 Design
 ------
-Every agent in the 15-agent harness reads from global Config.* constants.
+Every agent in the learner harness reads from global Config.* constants.
 This module adds a per-child override layer: a guardian (or the BMAD onboarding
 agent) can adjust any of these parameters for a specific child without touching
 global defaults.
@@ -112,6 +112,27 @@ AGENT_SCHEMA: dict[str, dict[str, dict]] = {
         },
     },
 
+    "learning_velocity": {
+        "strong_threshold": {
+            "type": "float", "min": 0.4, "max": 0.95, "default": Config.MASTERY_STRONG_THRESHOLD,
+            "description": "Mastery probability used as the destination for time-to-mastery estimates.",
+            "guardian_visible": False,
+        },
+        "weak_threshold": {
+            "type": "float", "min": 0.05, "max": 0.5, "default": Config.MASTERY_WEAK_THRESHOLD,
+            "description": "Lower bound of the ZPD band used to normalize learning velocity.",
+            "guardian_visible": False,
+        },
+    },
+
+    "motivation_drive": {
+        "return_window_days": {
+            "type": "int", "min": 1, "max": 14, "default": 7,
+            "description": "Window for counting a return after a difficult turn.",
+            "guardian_visible": False,
+        },
+    },
+
     "memory_keeper": {
         "sm2_initial_ease": {
             "type": "float", "min": 1.3, "max": 3.0, "default": 2.5,
@@ -197,6 +218,14 @@ AGENT_SCHEMA: dict[str, dict[str, dict]] = {
         "caregiver_context": {
             "type": "str", "max_length": 500, "default": "",
             "description": "Any context about the home environment Parth should be aware of.",
+            "guardian_visible": True,
+        },
+    },
+
+    "social_preference": {
+        "peer_prompts_enabled": {
+            "type": "bool", "default": False,
+            "description": "Allow optional peer-style or teach-back prompts when social preference is strong.",
             "guardian_visible": True,
         },
     },

@@ -462,7 +462,7 @@
     <div class="messages" id="messages">
       <div class="msg msg-parth">
         <div class="msg-label">🌟 Parth</div>
-        Select a student above, then tap a demo scenario — or type your own message. All 15 agents observe every interaction in real time.
+        Select a student above, then tap a demo scenario — or type your own message. The learner agents observe every interaction in real time.
       </div>
     </div>
 
@@ -576,6 +576,7 @@ const CLUSTERS = [
       { name:"belief_coach",         icon:"💪", label:"Belief Coach" },
       { name:"challenge_calibrator", icon:"⚖️", label:"Challenge Calibrator" },
       { name:"humor_delight_guide",  icon:"😄", label:"Humor & Delight" },
+      { name:"motivation_drive",     icon:"🔥", label:"Motivation Drive" },
     ],
     emits: ["distress.detected","engagement.high","curiosity.active","confidence.bias","difficulty.adjust","delight.approved"],
     reads: [],
@@ -591,6 +592,7 @@ const CLUSTERS = [
       { name:"misconception_hunter",    icon:"🎯", label:"Misconception Hunter" },
       { name:"curriculum_cartographer", icon:"🗺️", label:"Curriculum Cartographer" },
       { name:"memory_keeper",           icon:"🧩", label:"Memory Keeper" },
+      { name:"learning_velocity",       icon:"🚀", label:"Learning Velocity" },
     ],
     emits: ["concept.weak","misconception.active"],
     reads: [],
@@ -619,6 +621,7 @@ const CLUSTERS = [
       { name:"family_alliance",      icon:"🏠", label:"Family Alliance" },
       { name:"rhythm_time_steward",  icon:"⏰", label:"Rhythm Steward" },
       { name:"inquiry_alchemist",    icon:"🔮", label:"Inquiry Alchemist" },
+      { name:"social_preference",    icon:"🤝", label:"Social Preference" },
     ],
     emits: [],
     reads: ["distress.detected"],
@@ -814,7 +817,7 @@ function buildArchPanel() {
       <div class="kernel-hdr">
         <span class="kernel-icon">📚</span>
         <span class="kernel-name">Learning Kernel</span>
-        <span class="kernel-tag">Per-interaction · 15 agents · 5 clusters · event bus · appends: affect_state · mastery_map · misconceptions · analogies · register</span>
+        <span class="kernel-tag">Per-interaction · 18 agents · 5 clusters · event bus · appends: affect_state · mastery_map · misconceptions · analogies · register</span>
       </div>
       <div class="cluster-grid" id="cluster-grid">
         ${CLUSTERS.map(c => `
@@ -1089,7 +1092,7 @@ function renderNarrative(trace, events, readMap) {
   const lines = [];
 
   // Opening
-  lines.push(`<div class="narrative-line">${p.emoji} <strong>${p.name}</strong> sent a message — all 15 agents observed simultaneously.</div>`);
+  lines.push(`<div class="narrative-line">${p.emoji} <strong>${p.name}</strong> sent a message — the learner agents observed simultaneously.</div>`);
 
   // Trust kernel
   lines.push(`<div class="narrative-line" style="border-left-color:#dc2626">🛡️ <strong>Trust Kernel</strong> — content checked, consent verified, interaction logged to audit trail.</div>`);

@@ -254,6 +254,21 @@ async def _create_distress_alert(learner_id: str, snippet: str) -> None:
         log.warning("distress_alert_failed", error=str(exc))
 
 
+async def _cold_start_complete(learner_id: str) -> bool:
+    """Return True once the learner has persisted all five cold-start probes."""
+    try:
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            count = await conn.fetchval(
+                "SELECT COUNT(*) FROM puzzle_engine.responses WHERE learner_id=$1",
+                learner_id,
+            ) or 0
+        return int(count) >= 5
+    except Exception as exc:
+        log.warning("cold_start_check_failed", learner_id=learner_id, error=str(exc))
+        return False
+
+
 # ── Request / Response models ─────────────────────────────────────────────────
 class Message(BaseModel):
     role: str = Field(..., max_length=20)
@@ -300,14 +315,16 @@ async def chat(
     # Keep pilot auto-registration as a fallback for older clients.
     consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
     if not consent_ok:
-        # Try to auto-register and grant consent (pilot / first-run flow)
+        # Repair the handoff if the fifth puzzle saved but /learner/register
+        # failed on the client. Do not bypass the cold-start contract.
         try:
-            await register_pilot_learner(
-                learner_id=req.learner_id,
-                name=req.learner_name or "Learner",
-                grade=req.grade,
-            )
-            consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
+            if await _cold_start_complete(req.learner_id):
+                await register_pilot_learner(
+                    learner_id=req.learner_id,
+                    name=req.learner_name or "Learner",
+                    grade=req.grade,
+                )
+                consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
         except Exception:
             pass
     if not consent_ok:
@@ -438,6 +455,12 @@ class LearnerRegisterRequest(BaseModel):
     grade: int = Field(..., ge=1, le=12)
 
 
+class ValueReflectionRequest(BaseModel):
+    prompt_id: str = Field(..., max_length=100)
+    prompt_text: str = Field(..., max_length=500)
+    response_text: str = Field(..., max_length=2000)
+
+
 @app.post("/learner/register")
 async def learner_register(req: LearnerRegisterRequest, _: None = Depends(rate_limit)):
     """
@@ -445,6 +468,15 @@ async def learner_register(req: LearnerRegisterRequest, _: None = Depends(rate_l
     Must be called after cold-start completes and before /chat can be used.
     Idempotent — safe to call multiple times.
     """
+    _require_uuid(req.learner_id)
+    if not await _cold_start_complete(req.learner_id):
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "error": "cold_start_incomplete",
+                "message": "Complete the five puzzle probes before entering chat.",
+            },
+        )
     ok = await register_pilot_learner(
         learner_id=req.learner_id,
         name=_sanitize(req.name, max_len=100),
@@ -453,6 +485,53 @@ async def learner_register(req: LearnerRegisterRequest, _: None = Depends(rate_l
     if not ok:
         raise HTTPException(status_code=400, detail="Invalid learner ID format")
     return {"status": "registered", "learner_id": req.learner_id}
+
+
+# ── Learner 15-dimension snapshot ────────────────────────────────────────────
+@app.get("/learner/{learner_id}/dimensions")
+async def learner_dimensions(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
+    from modules.learner_state.dimensions import (
+        build_dimension_snapshot,
+        save_dimension_snapshot,
+    )
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        snapshot = await build_dimension_snapshot(conn, learner_id)
+        await save_dimension_snapshot(conn, learner_id, snapshot)
+    return snapshot
+
+
+# ── Value & purpose reflection ───────────────────────────────────────────────
+@app.get("/learner/{learner_id}/reflection-prompt")
+async def learner_reflection_prompt(learner_id: str, _: None = Depends(rate_limit)):
+    _require_uuid(learner_id)
+    from modules.learner_state.value_purpose import next_reflection_prompt
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        return await next_reflection_prompt(conn, learner_id)
+
+
+@app.post("/learner/{learner_id}/reflection")
+async def learner_reflection(
+    learner_id: str,
+    req: ValueReflectionRequest,
+    _: None = Depends(rate_limit),
+):
+    _require_uuid(learner_id)
+    from modules.learner_state.value_purpose import record_reflection
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        return await record_reflection(
+            conn,
+            learner_id,
+            _sanitize(req.prompt_id, max_len=100),
+            _sanitize(req.prompt_text, max_len=500),
+            req.response_text.strip()[:2000],
+        )
 
 
 # ── Learner profile endpoint ──────────────────────────────────────────────────

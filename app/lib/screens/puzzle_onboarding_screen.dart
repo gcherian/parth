@@ -112,6 +112,17 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
         grade: _grade,
         serverUrl: _serverUrl,
       );
+      if (probe.mode == ProbeMode.complete) {
+        setState(() {
+          _probe = probe;
+          _probeIndex = 4;
+          _loadingProbe = false;
+          _error = null;
+          _completionError = null;
+        });
+        await _completeColdStart();
+        return;
+      }
       setState(() {
         _probe = probe;
         _loadingProbe = false;
@@ -213,8 +224,10 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
       if (!mounted) return;
       setState(() {
         _completing = false;
-        _completionError =
-            'Could not finish setup. Check your connection and try again.';
+        _completionError = e.toString().replaceFirst('Exception: ', '');
+        if (_probe?.mode == ProbeMode.complete) {
+          _error = _completionError;
+        }
       });
       return;
     }
@@ -265,36 +278,38 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
                 child: _loadingProbe
                     ? const _LoadingCard(key: ValueKey('loading'))
                     : _error != null
-                    ? _ErrorCard(
-                        key: const ValueKey('error'),
-                        message: _error!,
-                        onRetry: _fetchProbe,
-                      )
-                    : _probe!.mode == ProbeMode.choice
-                    ? _ChoiceCard(
-                        key: ValueKey('choice_$_probeIndex'),
-                        probe: _probe!,
-                        processingId: _processingId,
-                        onChoose: _processingId != null
-                            ? null
-                            : _onChoicePicked,
-                      )
-                    : _PuzzleCard(
-                        key: ValueKey('puzzle_$_probeIndex'),
-                        probe: _probe!,
-                        controller: _responseCtrl,
-                        submitted: _submitted,
-                        revealed: _revealed,
-                        submitting: _submitting,
-                        onSubmit: (_submitting || _submitted)
-                            ? null
-                            : _onPuzzleSubmit,
-                        onReveal: _onReveal,
-                        onNext: _revealed && !_completing ? _advance : null,
-                        nextBusy: _completing,
-                        nextLabel: _probeIndex >= 4 ? 'Enter Parth' : 'Next →',
-                        errorText: _completionError,
-                      ),
+                        ? _ErrorCard(
+                            key: const ValueKey('error'),
+                            message: _error!,
+                            onRetry: _fetchProbe,
+                          )
+                        : _probe!.mode == ProbeMode.choice
+                            ? _ChoiceCard(
+                                key: ValueKey('choice_$_probeIndex'),
+                                probe: _probe!,
+                                processingId: _processingId,
+                                onChoose: _processingId != null
+                                    ? null
+                                    : _onChoicePicked,
+                              )
+                            : _PuzzleCard(
+                                key: ValueKey('puzzle_$_probeIndex'),
+                                probe: _probe!,
+                                controller: _responseCtrl,
+                                submitted: _submitted,
+                                revealed: _revealed,
+                                submitting: _submitting,
+                                onSubmit: (_submitting || _submitted)
+                                    ? null
+                                    : _onPuzzleSubmit,
+                                onReveal: _onReveal,
+                                onNext:
+                                    _revealed && !_completing ? _advance : null,
+                                nextBusy: _completing,
+                                nextLabel:
+                                    _probeIndex >= 4 ? 'Enter Parth' : 'Next →',
+                                errorText: _completionError,
+                              ),
               ),
             ),
           ],
@@ -511,8 +526,8 @@ class _ChoiceOption extends StatelessWidget {
             color: loading
                 ? AppTheme.violet
                 : disabled
-                ? Colors.grey.shade200
-                : AppTheme.violet.withOpacity(0.22),
+                    ? Colors.grey.shade200
+                    : AppTheme.violet.withOpacity(0.22),
             width: loading ? 2 : 1.5,
           ),
           boxShadow: [
@@ -566,9 +581,8 @@ class _ChoiceOption extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: disabled
-                            ? Colors.grey.shade100
-                            : AppTheme.violet,
+                        color:
+                            disabled ? Colors.grey.shade100 : AppTheme.violet,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(

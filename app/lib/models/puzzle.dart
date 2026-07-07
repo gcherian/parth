@@ -57,7 +57,7 @@ class PuzzleCardData {
       );
 }
 
-enum ProbeMode { choice, puzzle }
+enum ProbeMode { choice, puzzle, complete }
 
 class ColdStartProbe {
   final int probeNumber;
@@ -84,7 +84,14 @@ class ColdStartProbe {
 
   factory ColdStartProbe.fromJson(Map<String, dynamic> outer) {
     final probeNumber = outer['probe_number'] as int? ?? 0;
+    final outerMode = outer['mode'] as String? ?? '';
     final inner = (outer['probe'] as Map?)?.cast<String, dynamic>() ?? {};
+    if (outerMode == 'normal' || inner.isEmpty) {
+      return const ColdStartProbe(
+        probeNumber: 5,
+        mode: ProbeMode.complete,
+      );
+    }
     final innerMode = inner['mode'] as String? ?? 'puzzle';
 
     if (innerMode == 'choice') {

@@ -1,5 +1,5 @@
 """
-Learner Agent interfaces — the plug-in contract for the 15-agent harness.
+Learner Agent interfaces — the plug-in contract for the learner harness.
 
 LearnerAgent: abstract interface (ABC)
 BaseAgent:    resilient implementation base — wraps _observe() / _read() with
@@ -78,7 +78,7 @@ class LearnerAgent(ABC):
 
 class BaseAgent(LearnerAgent):
     """
-    Resilient base for all 15 registered agents in the learner harness.
+    Resilient base for all registered agents in the learner harness.
 
     Implements the observe / read contract with:
       • Structured warning logs on any failure (never silent)
