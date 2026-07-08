@@ -200,16 +200,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ],
           const SizedBox(height: 8),
           _QuickFillTile(
-            label: 'Local WiFi (192.168.1.33)',
-            url: 'http://192.168.1.33:8000',
-            onTap: (url) {
-              _urlCtrl.text = url;
-              HapticFeedback.selectionClick();
-            },
-          ),
-          _QuickFillTile(
-            label: 'Internet tunnel (works anywhere)',
-            url: 'https://improvement-harris-governmental-attacks.trycloudflare.com',
+            label: 'Local WiFi (192.168.1.35)',
+            url: 'http://192.168.1.35:8000',
             onTap: (url) {
               _urlCtrl.text = url;
               HapticFeedback.selectionClick();

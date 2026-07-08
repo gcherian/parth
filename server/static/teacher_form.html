@@ -884,6 +884,11 @@ function init() {
     data.student_code = urlCode.toUpperCase();
   }
 
+  // Carry a survey-link token (?token=...) through to submission, if present,
+  // so the response can be attributed to the school/cohort it was sent to.
+  const urlToken = new URLSearchParams(window.location.search).get('token');
+  if (urlToken) data.survey_token = urlToken;
+
   // Step 0
   initSingleChips('grade_chips', 'student_grade');
   initSingleChips('subject_chips', 'subject');

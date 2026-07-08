@@ -19,6 +19,7 @@ from pydantic import BaseModel
 
 from foundation.db import get_pool
 from foundation.observability import get_logger
+from modules.survey.routes import verify_survey_token, mark_survey_link_opened
 
 log = get_logger("teacher.routes")
 
@@ -55,12 +56,17 @@ class TeacherFeedbackRequest(BaseModel):
     teacher_insight:    Optional[str] = None
     special_needs:      Optional[str] = None
     submitted_at:       Optional[str] = None
+    survey_token:       Optional[str] = None   # from a /survey/link invitation, if any
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @router.get("/form")
-async def teacher_form():
+async def teacher_form(token: Optional[str] = None):
+    if token:
+        claims = await verify_survey_token(token)
+        if claims:
+            await mark_survey_link_opened(token)
     return FileResponse("static/teacher_form.html")
 
 
@@ -71,6 +77,12 @@ async def submit_feedback(body: TeacherFeedbackRequest):
         raise HTTPException(status_code=422, detail="teacher_phone too short")
     if not body.student_name.strip():
         raise HTTPException(status_code=422, detail="student_name required")
+
+    school_id = None
+    if body.survey_token:
+        claims = await verify_survey_token(body.survey_token)
+        if claims:
+            school_id = claims.get("school_id")
 
     pool = await get_pool()
     async with pool.acquire() as conn:
@@ -88,14 +100,15 @@ async def submit_feedback(body: TeacherFeedbackRequest):
         payload = body.model_dump(exclude={
             "teacher_phone", "teacher_name", "student_name",
             "student_grade", "school", "student_code", "subject",
+            "survey_token",
         })
 
         await conn.execute(
             """
             INSERT INTO teacher.portraits
                 (teacher_phone, teacher_name, student_name, student_grade,
-                 school, student_code, learner_id, subject, payload, submitted_at)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb, now())
+                 school, student_code, learner_id, subject, payload, submitted_at, school_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb, now(), $10)
             ON CONFLICT (teacher_phone, student_name, subject) DO UPDATE
                 SET teacher_name  = $2,
                     student_grade = COALESCE($4, teacher.portraits.student_grade),
@@ -103,19 +116,21 @@ async def submit_feedback(body: TeacherFeedbackRequest):
                     student_code  = COALESCE($6, teacher.portraits.student_code),
                     learner_id    = COALESCE($7, teacher.portraits.learner_id),
                     payload       = $9::jsonb,
-                    submitted_at  = now()
+                    submitted_at  = now(),
+                    school_id     = COALESCE($10, teacher.portraits.school_id)
             """,
             phone, body.teacher_name, body.student_name.strip(),
             body.student_grade, body.school,
             body.student_code.upper() if body.student_code else None,
-            learner_id, body.subject, json.dumps(payload),
+            learner_id, body.subject, json.dumps(payload), school_id,
         )
 
         log.info("teacher_portrait_saved",
                  teacher_phone=phone[-4:],   # log only last 4 digits
                  student=body.student_name,
                  subject=body.subject,
-                 learner_id=learner_id)
+                 learner_id=learner_id,
+                 school_id=school_id)
 
     return {"status": "ok", "learner_id": learner_id}
 

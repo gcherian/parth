@@ -91,7 +91,9 @@ async def is_child_without_consent(learner_id: str) -> bool:
         return link is None
 
 
-async def register_pilot_learner(learner_id: str, name: str, grade: int) -> bool:
+async def register_pilot_learner(
+    learner_id: str, name: str, grade: int, school_id: str | None = None
+) -> bool:
     """
     Register a new learner and auto-grant pilot consent (no OTP yet).
     Idempotent — safe to call again if the learner already exists.
@@ -112,10 +114,12 @@ async def register_pilot_learner(learner_id: str, name: str, grade: int) -> bool
         async with conn.transaction():
             # Child identity
             await conn.execute(
-                """INSERT INTO foundation.identities (id, type, name, grade)
-                   VALUES ($1, 'child', $2, $3)
-                   ON CONFLICT (id) DO UPDATE SET name=$2, grade=$3""",
-                child_uuid, child_name, grade,
+                """INSERT INTO foundation.identities (id, type, name, grade, school_id)
+                   VALUES ($1, 'child', $2, $3, $4)
+                   ON CONFLICT (id) DO UPDATE
+                       SET name=$2, grade=$3,
+                           school_id=COALESCE($4, foundation.identities.school_id)""",
+                child_uuid, child_name, grade, school_id,
             )
             # Synthetic pilot guardian
             await conn.execute(

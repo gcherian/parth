@@ -27,6 +27,9 @@ class _FakeLogger:
     def warning(self, *args, **kwargs):
         pass
 
+    def error(self, *args, **kwargs):
+        pass
+
 
 fake_observability = types.ModuleType("foundation.observability")
 fake_observability.get_logger = lambda *_args, **_kwargs: _FakeLogger()
@@ -66,11 +69,12 @@ class _FakeConn:
 
     async def execute(self, sql, *args):
         if "INSERT INTO foundation.identities" in sql and "'child'" in sql:
-            child_id, name, grade = args
+            child_id, name, grade, school_id = args
             self.identities[child_id] = {
                 "type": "child",
                 "name": name,
                 "grade": grade,
+                "school_id": school_id,
             }
         elif "INSERT INTO foundation.identities" in sql and "'guardian'" in sql:
             guardian_id = args[0]

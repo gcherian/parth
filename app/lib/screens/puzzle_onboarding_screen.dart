@@ -5,8 +5,10 @@ import 'package:uuid/uuid.dart';
 import '../models/puzzle.dart';
 import '../services/puzzle_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/server_config.dart';
 import 'home_screen.dart';
 import 'portrait_reveal_screen.dart';
+import 'settings_screen.dart';
 
 // ── Sphere metadata ────────────────────────────────────────────────────────────
 
@@ -82,10 +84,16 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
     final prefs = await SharedPreferences.getInstance();
     _learnerId = prefs.getString('learner_id') ?? '';
     if (_learnerId.isEmpty) {
+      // Defensive: onboarding should always set this, but never call the
+      // puzzle API with a blank ID — the server rejects it and the resulting
+      // generic network error is indistinguishable from a real connectivity
+      // failure, which makes this bug very confusing to diagnose from the UI.
       _learnerId = const Uuid().v4();
       await prefs.setString('learner_id', _learnerId);
     }
-    _serverUrl = prefs.getString('server_url') ?? '';
+    final saved = prefs.getString('server_url') ?? '';
+    _serverUrl = resolveServerUrl(saved);
+    if (_serverUrl != saved) await prefs.setString('server_url', _serverUrl);
     _grade = prefs.getInt('grade') ?? 6;
 
     // No server yet — skip puzzle onboarding and go straight to the app.
@@ -269,6 +277,13 @@ class _PuzzleOnboardingScreenState extends State<PuzzleOnboardingScreen> {
                         key: const ValueKey('error'),
                         message: _error!,
                         onRetry: _fetchProbe,
+                        onOpenSettings: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => const SettingsScreen()),
+                          );
+                          _init();
+                        },
                       )
                     : _probe!.mode == ProbeMode.choice
                     ? _ChoiceCard(
@@ -382,7 +397,13 @@ class _LoadingCard extends StatelessWidget {
 class _ErrorCard extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
-  const _ErrorCard({super.key, required this.message, required this.onRetry});
+  final VoidCallback onOpenSettings;
+  const _ErrorCard({
+    super.key,
+    required this.message,
+    required this.onRetry,
+    required this.onOpenSettings,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -405,6 +426,11 @@ class _ErrorCard extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ElevatedButton(onPressed: onRetry, child: const Text('Try again')),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: onOpenSettings,
+              child: const Text('Change server address'),
+            ),
           ],
         ),
       ),

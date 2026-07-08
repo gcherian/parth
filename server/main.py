@@ -92,9 +92,13 @@ app.add_middleware(
 )
 
 from modules.teacher.routes import router as teacher_router
+from modules.notify.routes import router as notify_router
+from modules.survey.routes import router as survey_router
 
 app.include_router(iam_router)
 app.include_router(teacher_router)
+app.include_router(notify_router)
+app.include_router(survey_router)
 
 # ── Input sanitization ────────────────────────────────────────────────────────
 _CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
@@ -436,6 +440,7 @@ class LearnerRegisterRequest(BaseModel):
     learner_id: str = Field(..., max_length=100)
     name: str = Field(..., max_length=100)
     grade: int = Field(..., ge=1, le=12)
+    school_id: str | None = Field(None, max_length=100)
 
 
 @app.post("/learner/register")
@@ -449,6 +454,7 @@ async def learner_register(req: LearnerRegisterRequest, _: None = Depends(rate_l
         learner_id=req.learner_id,
         name=_sanitize(req.name, max_len=100),
         grade=req.grade,
+        school_id=req.school_id,
     )
     if not ok:
         raise HTTPException(status_code=400, detail="Invalid learner ID format")
@@ -712,6 +718,60 @@ async def pilot_metrics(learner_id: str, _: None = Depends(rate_limit)):
     async with pool.acquire() as conn:
         gates = await metrics_mod.compute_pilot_gates(conn, learner_id)
     return {"learner_id": learner_id, "gates": gates}
+
+
+@app.get("/pilot/funnel")
+async def pilot_funnel(school_id: str | None = None, _: None = Depends(rate_limit)):
+    """
+    Registration → onboarding-complete → portrait-revealed → first-chat
+    counts, optionally scoped to one school_id. Read-only rollup — does not
+    touch metrics.pilot_gates (that stays per-learner, see /metrics/pilot).
+
+    Learners registered before school_id existed show under "unassigned".
+    """
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        where = "WHERE i.type = 'child'"
+        args: list = []
+        if school_id:
+            args.append(school_id)
+            where += " AND i.school_id = $1"
+
+        registered = await conn.fetchval(
+            f"SELECT count(*) FROM foundation.identities i {where}", *args
+        )
+        onboarded = await conn.fetchval(
+            f"""
+            SELECT count(*) FROM foundation.identities i
+            JOIN puzzle_engine.learner_state ls ON ls.learner_id = i.id::text
+            {where} AND ls.onboarding_done = true
+            """,
+            *args,
+        )
+        portrait_revealed = await conn.fetchval(
+            f"""
+            SELECT count(*) FROM foundation.identities i
+            JOIN puzzle_engine.portraits p ON p.learner_id = i.id::text
+            {where}
+            """,
+            *args,
+        )
+        first_chat = await conn.fetchval(
+            f"""
+            SELECT count(DISTINCT i.id) FROM foundation.identities i
+            JOIN metrics.sessions s ON s.learner_id = i.id::text
+            {where}
+            """,
+            *args,
+        )
+
+    return {
+        "school_id": school_id or "all",
+        "registered": registered,
+        "onboarding_complete": onboarded,
+        "portrait_revealed": portrait_revealed,
+        "first_chat": first_chat,
+    }
 
 
 # ── Parent dashboard endpoints ────────────────────────────────────────────────

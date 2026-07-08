@@ -7,8 +7,8 @@ tqdm==4.67.1
 asyncpg==0.30.0
 boto3==1.35.93
 structlog==24.4.0
-opentelemetry-api==1.28.4
-opentelemetry-sdk==1.28.4
+opentelemetry-api==1.28.2
+opentelemetry-sdk==1.28.2
 python-dotenv==1.0.1
 yt-dlp==2024.11.18
 youtube-transcript-api==0.6.3
@@ -18,3 +18,5 @@ PyJWT==2.10.1
 cryptography>=42.0.0
 bcrypt>=4.1.0
 twilio>=9.0.0
+typer>=0.15.1
+rich>=13.9.4

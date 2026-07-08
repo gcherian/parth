@@ -17,6 +17,9 @@ CREATE TABLE IF NOT EXISTS foundation.identities (
     created_at  TIMESTAMPTZ DEFAULT now()
 );
 
+-- Add new columns to existing installations
+ALTER TABLE foundation.identities ADD COLUMN IF NOT EXISTS school_id TEXT;
+
 CREATE TABLE IF NOT EXISTS foundation.guardian_links (
     guardian_id   UUID REFERENCES foundation.identities(id) ON DELETE CASCADE,
     child_id      UUID REFERENCES foundation.identities(id) ON DELETE CASCADE,
@@ -639,3 +642,41 @@ CREATE INDEX IF NOT EXISTS teacher_portraits_learner_idx
     ON teacher.portraits (learner_id) WHERE learner_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS teacher_portraits_phone_idx
     ON teacher.portraits (teacher_phone);
+
+-- Add new columns to existing installations
+-- Filled from a verified survey_links token at submission time (see below),
+-- distinct from the free-text `school` field a teacher can type by hand.
+ALTER TABLE teacher.portraits ADD COLUMN IF NOT EXISTS school_id TEXT;
+
+-- ── Survey links — tokenized, trackable teacher-form invitations ────────────
+-- Issued via POST /survey/link. `token` is a signed, expiring JWT; the row
+-- exists so an open (GET /teacher/form?token=) and a submission can be
+-- attributed back to a school/cohort without a full roster system.
+CREATE TABLE IF NOT EXISTS teacher.survey_links (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    school_id       TEXT NOT NULL,
+    teacher_phone   TEXT,
+    token           TEXT NOT NULL UNIQUE,
+    expires_at      TIMESTAMPTZ NOT NULL,
+    created_at      TIMESTAMPTZ DEFAULT now(),
+    opened_at       TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS teacher_survey_links_school_idx
+    ON teacher.survey_links (school_id);
+
+-- ── Notify — outbound comms log (email / sms / whatsapp) ────────────────────
+-- Every send attempt via POST /notify/send is logged here, success or
+-- failure, so a pilot lead can see why a reminder didn't land.
+CREATE SCHEMA IF NOT EXISTS notify;
+
+CREATE TABLE IF NOT EXISTS notify.log (
+    id          BIGSERIAL PRIMARY KEY,
+    recipient   TEXT NOT NULL,
+    channel     TEXT NOT NULL CHECK (channel IN ('email','sms','whatsapp')),
+    template    TEXT NOT NULL,
+    status      TEXT NOT NULL CHECK (status IN ('sent','failed')),
+    error       TEXT,
+    sent_at     TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS notify_log_recipient_idx
+    ON notify.log (recipient, sent_at DESC);

@@ -66,6 +66,15 @@ class Config:
     # Admin key — for monitor, observer, playground, graph etc.
     ADMIN_KEY: str = os.getenv("ADMIN_KEY", "")
 
+    # ── Notify / survey links ─────────────────────────────────────────────────
+    # Twilio WhatsApp-enabled sender, e.g. "whatsapp:+14155238886" (Twilio's
+    # sandbox number for pilot testing). Reuses TWILIO_SID/TOKEN from OTP config.
+    TWILIO_WHATSAPP_FROM: str = os.getenv("TWILIO_WHATSAPP_FROM", "")
+    # HS256 signing secret for ephemeral /survey/link tokens — deliberately
+    # separate from the Ed25519 DID auth keys, which are for identity-bound
+    # tokens, not short-lived share links. ALWAYS set a real value in prod.
+    SURVEY_LINK_SECRET: str = os.getenv("SURVEY_LINK_SECRET", "dev-insecure-survey-secret")
+
     @classmethod
     def use_anthropic_tutor(cls) -> bool:
         """True when the tutor should call Anthropic instead of Ollama."""

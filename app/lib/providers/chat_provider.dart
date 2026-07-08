@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import '../models/message.dart';
 import '../models/subject.dart';
 import '../services/ai_service.dart';
+import '../utils/server_config.dart';
 
 class ChatState {
   final List<Message> messages;
@@ -77,29 +78,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
     state = state.copyWith(messages: msgs);
   }
 
-  // Production URL injected at build time via --dart-define=PARTH_SERVER_URL=https://...
-  // Falls back to empty string; user configures in Settings on first launch.
-  static const _builtInServerUrl = String.fromEnvironment(
-    'PARTH_SERVER_URL',
-    defaultValue: '',
-  );
-
   Future<void> _loadServerUrl() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString('server_url') ?? '';
-    // Discard stale tunnel URLs; prefer built-in production URL when nothing saved.
-    String url;
-    if (saved.isNotEmpty &&
-        !saved.contains('trycloudflare.com') &&
-        !saved.contains('100.125')) {
-      url = saved;
-    } else if (_builtInServerUrl.isNotEmpty) {
-      url = _builtInServerUrl;
-    } else {
-      url = saved.contains('trycloudflare.com') || saved.contains('100.125')
-          ? ''
-          : saved;
-    }
+    final url = resolveServerUrl(saved);
     if (url != saved) await prefs.setString('server_url', url);
     state = state.copyWith(serverUrl: url);
   }
