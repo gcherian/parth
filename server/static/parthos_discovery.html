@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ParthOS Teacher Discovery Questionnaire</title>
+<style>
+  :root {
+    --saffron: #e8762a;
+    --saffron-light: #fdf0e6;
+    --blue: #1a3a6b;
+    --blue-light: #e8eef7;
+    --green: #2d7a4f;
+    --green-light: #e6f4ec;
+    --amber: #b8860b;
+    --amber-light: #fbf3de;
+    --agent: #6d4aff;
+    --agent-light: #f0ecff;
+    --cream: #fdf8f3;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --radius: 14px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Header */
+  .header {
+    width: 100%;
+    background: var(--blue);
+    padding: 16px 20px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-logo { font-size: 24px; }
+  .header-text h1 { color: #fff; font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .header-text p  { color: rgba(255,255,255,0.65); font-size: 11px; margin-top: 2px; }
+
+  /* Progress */
+  .progress-wrap { width: 100%; max-width: 560px; padding: 16px 20px 0; }
+  .progress-dots { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .dot { flex: 1; height: 4px; border-radius: 2px; background: var(--border); transition: background 0.35s; }
+  .dot.done   { background: var(--saffron); }
+  .dot.active { background: var(--blue); }
+  .progress-label { font-size: 11px; color: var(--muted); text-align: right; }
+
+  /* Container */
+  .steps-container { width: 100%; max-width: 560px; padding: 0 16px 40px; }
+  .step-card { background: #fff; border-radius: var(--radius); padding: 22px 20px; margin-top: 16px; box-shadow: var(--shadow); animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .agent-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--agent-light); color: var(--agent);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+    padding: 4px 10px; border-radius: 100px; margin-bottom: 10px;
+  }
+  .agent-badge .dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--agent); animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .followup-banner {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--agent-light); color: var(--agent);
+    border: 1px dashed var(--agent);
+    border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .step-icon  { font-size: 30px; margin-bottom: 6px; }
+  .step-title { font-size: 18px; font-weight: 700; color: var(--blue); line-height: 1.3; }
+  .step-sub   { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .divider    { height: 1px; background: var(--border); margin: 16px 0; }
+
+  .q { margin-top: 18px; }
+  .q:first-of-type { margin-top: 8px; }
+  .q-label { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; display: block; }
+  .q-hint { font-size: 12px; color: var(--muted); margin-top: -4px; margin-bottom: 8px; line-height: 1.4; }
+
+  /* Chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 8px 14px; border-radius: 100px; border: 1.5px solid var(--border);
+    background: #fff; font-size: 13px; color: var(--text); cursor: pointer;
+    transition: all 0.18s; user-select: none; white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--saffron); background: var(--saffron-light); }
+  .chip.selected { border-color: var(--saffron); background: var(--saffron-light); color: var(--saffron); font-weight: 600; }
+
+  /* Text inputs */
+  textarea, input[type=text] {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; font-size: 14px; font-family: inherit; color: var(--text);
+    background: #fff; resize: vertical; transition: border-color 0.2s; outline: none;
+  }
+  textarea:focus, input[type=text]:focus { border-color: var(--blue); }
+  textarea { min-height: 70px; }
+
+  /* Buttons */
+  .btn-row { display: flex; gap: 10px; margin-top: 22px; }
+  .btn {
+    flex: 1; padding: 15px; border-radius: var(--radius); border: none;
+    font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.18s; font-family: inherit;
+  }
+  .btn-primary { background: var(--saffron); color: #fff; }
+  .btn-primary:hover { background: #d4621e; }
+  .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+  .btn-back { background: var(--border); color: var(--muted); flex: 0 0 auto; padding: 15px 18px; }
+  .btn-back:hover { background: #d1d5db; }
+  .btn-ghost { background: var(--blue-light); color: var(--blue); }
+  .btn-ghost:hover { background: #d9e3f2; }
+
+  /* Scale grid (1-5 importance rows) */
+  .scale-endpoints { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .scale-row { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .scale-row:last-child { border-bottom: none; }
+  .scale-row.negative { background: var(--amber-light); border-radius: 10px; padding: 10px 10px; margin: 4px 0; border-bottom: none; }
+  .scale-row-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .scale-row.negative .scale-row-label { color: #8a5a00; }
+  .scale-row-note { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .scale-btns { display: flex; gap: 6px; }
+  .scale-btn {
+    flex: 1; padding: 8px 0; text-align: center; border-radius: 9px; border: 1.5px solid var(--border);
+    background: #fff; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.15s;
+  }
+  .scale-btn:hover { border-color: var(--blue); }
+  .scale-btn.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+  .scale-row.negative .scale-btn.selected { border-color: var(--amber); background: #f6e6b8; color: #8a5a00; }
+
+  /* Matrix multiselect */
+  .matrix-row { margin-bottom: 16px; }
+  .matrix-row-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--blue); }
+  .matrix-options { display: flex; flex-wrap: wrap; gap: 6px; }
+  .matrix-opt {
+    padding: 6px 12px; border-radius: 100px; border: 1.5px solid var(--border); background: #fff;
+    font-size: 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .matrix-opt.selected { border-color: var(--green); background: var(--green-light); color: var(--green); font-weight: 600; }
+
+  /* Note box */
+  .note-box { background: var(--blue-light); border-radius: 10px; padding: 10px 12px; font-size: 12px; color: var(--blue); margin: 10px 0 4px; line-height: 1.5; }
+
+  /* Intro */
+  .intro-pillars { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+  .pillar { display: flex; gap: 10px; align-items: flex-start; background: var(--cream); border-radius: 10px; padding: 10px 12px; }
+  .pillar .p-icon { font-size: 18px; }
+  .pillar .p-text b { display: block; font-size: 13px; color: var(--blue); }
+  .pillar .p-text span { font-size: 12px; color: var(--muted); }
+
+  /* Summary / export */
+  .summary-block { margin-top: 14px; }
+  .summary-block h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .agent-log-item { font-size: 12px; color: var(--text); background: var(--agent-light); border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; }
+  .agent-log-item b { color: var(--agent); }
+  .json-pre {
+    background: #14162a; color: #a8ffb0; font-size: 11px; line-height: 1.5;
+    border-radius: 10px; padding: 14px; max-height: 320px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  .copy-flash { color: var(--green); font-size: 12px; font-weight: 600; margin-top: 6px; display: none; }
+
+  .required-mark { color: var(--saffron); }
+  .field-err { font-size: 12px; color: #dc2626; margin-top: 5px; }
+  .console-note { font-size: 11px; color: var(--muted); text-align: center; margin: 18px 0 4px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">🧭</div>
+  <div class="header-text">
+    <h1>ParthOS Teacher Discovery</h1>
+    <p>Designing the future of personalized learning — with you</p>
+  </div>
+</div>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-dots" id="progressDots"></div>
+  <div class="progress-label" id="progressLabel"></div>
+</div>
+
+<div class="steps-container">
+  <div id="screen-root"></div>
+</div>
+
+<div class="console-note">Prototype — nothing is sent anywhere. Your answers live only in this browser tab until you export them.</div>
+
+<script>
+/* =========================================================================
+   ParthOS Teacher Discovery Questionnaire
+   ---------------------------------------------------------------------
+   Architecture: a small coordinator walks a per-section "screen queue".
+   Each section is owned by a lightweight agent object (IntakeAgent,
+   LearningAgent, RelationshipAgent, TrustAgent, FutureAgent, ReflectionAgent).
+   Every agent exposes decideNext(state, queue, justCompletedId) which can
+   splice in adaptive follow-up screens or drop irrelevant ones, based on
+   this teacher's answers so far (this section AND earlier sections).
+   This mirrors common "skip logic / branching logic" patterns (SurveyJS
+   visibleIf/enableIf, Typeform logic jumps) but implemented by hand,
+   client-side, with zero dependencies.
+   ========================================================================= */
+
+// ---------------------------------------------------------------------------
+// OPTIONAL "smart mode" hook — OFF by default. See README note below.
+// To enable: set SMART_MODE.enabled = true and SMART_MODE.endpoint to a URL
+// you control that accepts POST { question, answer } and returns JSON
+// { followUp: "some adaptive question text" }. This file never calls any
+// live Anthropic/OpenAI endpoint and never ships an API key. When disabled
+// (default), zero network requests are made anywhere on this page — the
+// entire adaptive experience below is pure rule-based client-side logic.
+// ---------------------------------------------------------------------------
+const SMART_MODE = {
+  enabled: false,
+  endpoint: '',        // e.g. 'https://your-backend.example.com/api/followup'
+  timeoutMs: 6000,
+};
+
+async function requestAIFollowUp(question, answer) {
+  if (!SMART_MODE.enabled || !SMART_MODE.endpoint) return null;
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), SMART_MODE.timeoutMs);
+    const resp = await fetch(SMART_MODE.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, answer }),
+      signal: ctrl.signal,
+    });
+    clearTimeout(t);
+    if (!resp.ok) return null;
+    const json = await resp.json();
+    return (json && typeof json.followUp === 'string' && json.followUp.trim()) ? json.followUp.trim() : null;
+  } catch (e) {
+    console.warn('[smart mode] follow-up request failed, falling back silently:', e);
+    return null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+const state = {
+  meta: { startedAt: null, completedAt: null, smartModeUsed: false },
+  about: { name: '', school: '', role: '', roleOther: '', experience: '', ageGroup: '' },
+  learning: { importance: {}, top3: [], top3Other: '', open1: '', open2: '', open3: '', followupFrustration: '' },
+  relationship: { importance: {}, companion: {}, open1: '', open2: '', open3: '', followupJudged: '' },
+  trust: { ownership: '', ownershipOther: '', visibility: {}, open: {}, specialEducatorNote: '' },
+  future: { capabilities: [], capabilitiesOther: '', principalFollowup: '' },
+  reflection: { s1: '', s2: '', s3: '', aiFollowupQuestion: '', aiFollowupAnswer: '' },
+  agentLog: [],
+};
+
+function logAgent(agentName, message) {
+  state.agentLog.push({ agent: agentName, note: message, at: new Date().toISOString() });
+}
+
+// ---------------------------------------------------------------------------
+// Reference data
+// ---------------------------------------------------------------------------
+const LEARNING_ROWS = [
+  { key: 'priorKnowledge', label: 'Understanding what a child already knows' },
+  { key: 'misconceptions', label: 'Identifying misconceptions' },
+  { key: 'curiosity', label: 'Measuring curiosity' },
+  { key: 'confidence', label: 'Measuring confidence' },
+  { key: 'motivation', label: 'Measuring motivation' },
+  { key: 'frustration', label: 'Understanding frustration' },
+  { key: 'attention', label: 'Measuring sustained attention' },
+  { key: 'speed', label: 'Understanding learning speed' },
+  { key: 'timing', label: 'Knowing when a child learns best' },
+  { key: 'familySupport', label: 'Understanding family support' },
+];
+
+const TOP3_OPTIONS = ['Prior Knowledge','Curiosity','Motivation','Confidence','Stress','Attention','Family Environment','Peer Influence','Teacher Relationship','Sleep','Nutrition','Emotional Well-being','Other'];
+
+const RELATIONSHIP_ROWS = [
+  { key: 'safe', label: 'Feeling emotionally safe' },
+  { key: 'listened', label: 'Feeling listened to' },
+  { key: 'encouraged', label: 'Being encouraged' },
+  { key: 'challenged', label: 'Being challenged' },
+  { key: 'understood', label: 'Being understood' },
+  { key: 'mistakes', label: 'Being allowed to make mistakes' },
+];
+
+const COMPANION_ROWS = [
+  { key: 'enjoys', label: 'Child enjoys talking to Parth' },
+  { key: 'returns', label: 'Child voluntarily returns to talk to Parth again' },
+  { key: 'asksFreely', label: 'Child asks questions freely' },
+  { key: 'confusionHonest', label: 'Child expresses confusion honestly' },
+  { key: 'feelsEncouraged', label: 'Child feels encouraged' },
+  { key: 'feelsJudged', label: 'Child feels judged by Parth', negative: true },
+];
+
+const OWNERSHIP_OPTIONS = ['Parent','Child','School','Shared Ownership','Other'];
+
+const VISIBILITY_ROWS = [
+  { key: 'knowledgeProgress', label: 'Knowledge Progress', options: ['Parent','Teacher','Child','School','Nobody Else'], exclusive: ['Nobody Else'] },
+  { key: 'emotionalState', label: 'Emotional State', options: ['Parent','Teacher','Counselor','Child Only'], exclusive: ['Child Only'] },
+  { key: 'learningDifficulties', label: 'Learning Difficulties', options: ['Parent','Teacher','Child','Counselor'], exclusive: [] },
+  { key: 'stressIndicators', label: 'Stress Indicators', options: ['Parent','Teacher','Counselor','Child Only'], exclusive: ['Child Only'] },
+];
+
+const TRUST_OPEN_1 = [
+  { key: 'q1', label: 'What should Parth always remember about a learner?' },
+  { key: 'q2', label: 'What should Parth intentionally forget?' },
+  { key: 'q3', label: 'Should children be able to delete memories?' },
+  { key: 'q4', label: 'When should Parth ask for parental permission?' },
+];
+const TRUST_OPEN_2 = [
+  { key: 'q5', label: 'When should Parth stay silent?' },
+  { key: 'q6', label: 'What should happen if Parth makes a wrong recommendation?' },
+  { key: 'q7', label: 'What should happen if a teacher disagrees with Parth?' },
+  { key: 'q8', label: 'What should happen if a child expresses emotional distress?' },
+];
+
+const FUTURE_CAPABILITIES = [
+  { key: 'personalizedPaths', label: 'Personalized learning paths' },
+  { key: 'misconceptionDetection', label: 'Early detection of misconceptions' },
+  { key: 'attentionDetection', label: 'Detecting attention and engagement' },
+  { key: 'cognitiveGames', label: 'Cognitive games' },
+  { key: 'motivationUnderstanding', label: 'Understanding motivation' },
+  { key: 'parentGuidance', label: 'Parent guidance' },
+  { key: 'teacherInsights', label: 'Teacher insights' },
+  { key: 'emotionalSupport', label: 'Emotional well-being support' },
+  { key: 'careerPathways', label: 'Career pathway recommendations', teenOnly: true },
+  { key: 'sustainability', label: 'Environmental and sustainability projects' },
+  { key: 'aiMentor', label: 'AI mentor' },
+  { key: 'collaborativeLearning', label: 'Collaborative learning' },
+  { key: 'bci', label: 'Brain-computer interfaces (optional, speculative)' },
+  { key: 'other', label: 'Other' },
+];
+
+// ---------------------------------------------------------------------------
+// Small render helpers
+// ---------------------------------------------------------------------------
+function esc(s) { return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function chipsHtml(id, options, selectedValue) {
+  return `<div class="chips" id="${id}">` + options.map(o => {
+    const val = typeof o === 'string' ? o : o.value;
+    const label = typeof o === 'string' ? o : o.label;
+    const sel = val === selectedValue ? ' selected' : '';
+    return `<div class="chip${sel}" data-val="${esc(val)}">${esc(label)}</div>`;
+  }).join('') + `</div>`;
+}
+
+function bindSingleChips(root, id, onSelect) {
+  const group = root.querySelector('#' + id);
+  if (!group) return;
+  group.querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      group.querySelectorAll('.chip').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+      onSelect(c.dataset.val);
+    });
+  });
+}
+
+function bindMultiChips(root, id, onToggle) {
+  const group = root.querySelector('#' + id);
+  if (!group) return;
+  group.querySelectorAll('.chip').forEach(c => {
+    c.addEventListener('click', () => {
+      c.classList.toggle('selected');
+      onToggle(c.dataset.val, c.classList.contains('selected'), group);
+    });
+  });
+}
+
+function scaleGridHtml(id, rows, opts) {
+  opts = opts || {};
+  const endpoints = opts.endpoints || ['Not Important', 'Extremely Important'];
+  let html = `<div class="scale-endpoints"><span>1 · ${esc(endpoints[0])}</span><span>5 · ${esc(endpoints[1])}</span></div>`;
+  html += `<div id="${id}">`;
+  rows.forEach(row => {
+    const rowEndpoints = row.negative ? ['Rarely a risk', 'Frequently a risk'] : endpoints;
+    html += `<div class="scale-row${row.negative ? ' negative' : ''}" data-key="${row.key}">`;
+    html += `<div class="scale-row-label">${esc(row.label)}</div>`;
+    if (row.negative) html += `<div class="scale-row-note">A LOW score here is the good outcome — this asks how much of a risk it is, not how desirable it is.</div>`;
+    html += `<div class="scale-btns">`;
+    for (let v = 1; v <= 5; v++) html += `<div class="scale-btn" data-val="${v}" title="${v===1?esc(rowEndpoints[0]):(v===5?esc(rowEndpoints[1]):'')}">${v}</div>`;
+    html += `</div></div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function bindScaleGrid(root, id, targetObj) {
+  const group = root.querySelector('#' + id);
+  if (!group) return;
+  group.querySelectorAll('.scale-row').forEach(row => {
+    const key = row.dataset.key;
+    row.querySelectorAll('.scale-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        targetObj[key] = parseInt(btn.dataset.val, 10);
+      });
+    });
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Screen registry: id -> { render(state)->html, bind(root,state), collect(root,state)->{valid,errors} }
+// ---------------------------------------------------------------------------
+const SCREENS = {};
+
+// --- about_all -------------------------------------------------------------
+SCREENS['about_all'] = {
+  title: 'Let’s start with you',
+  subtitle: 'No login, nothing saved to a server. Takes about 15-20 minutes end to end, and adapts as you go.',
+  icon: '🙏',
+  render(s) {
+    return `
+      <div class="q">
+        <label class="q-label">Name <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+        <input type="text" id="f_name" placeholder="e.g. Priya Sharma" value="${esc(s.about.name)}">
+      </div>
+      <div class="q">
+        <label class="q-label">School</label>
+        <input type="text" id="f_school" placeholder="e.g. St. Mary's School, Pune" value="${esc(s.about.school)}">
+      </div>
+      <div class="q">
+        <label class="q-label">Role <span class="required-mark">*</span></label>
+        <div class="q-hint">This shapes which follow-up questions you'll see later.</div>
+        ${chipsHtml('f_role', ['Class Teacher','Subject Teacher','Special Educator','Principal','Counselor','Other'], s.about.role)}
+        <div id="f_role_other_wrap" style="margin-top:10px; ${s.about.role === 'Other' ? '' : 'display:none;'}">
+          <input type="text" id="f_role_other" placeholder="Please specify your role" value="${esc(s.about.roleOther)}">
+        </div>
+        <div class="field-err" id="err_role" style="display:none;">Please select a role.</div>
+      </div>
+      <div class="q">
+        <label class="q-label">Years of teaching experience</label>
+        ${chipsHtml('f_exp', ['<2','2-5','5-10','10-20','20+'], s.about.experience)}
+      </div>
+      <div class="q">
+        <label class="q-label">Age group you teach <span class="required-mark">*</span></label>
+        <div class="q-hint">Also used to keep later questions age-appropriate.</div>
+        ${chipsHtml('f_age', ['5-8','9-12','13-15','16-18'], s.about.ageGroup)}
+        <div class="field-err" id="err_age" style="display:none;">Please select an age group.</div>
+      </div>
+    `;
+  },
+  bind(root, s) {
+    bindSingleChips(root, 'f_role', v => {
+      s.about.role = v;
+      root.querySelector('#f_role_other_wrap').style.display = v === 'Other' ? '' : 'none';
+    });
+    bindSingleChips(root, 'f_exp', v => { s.about.experience = v; });
+    bindSingleChips(root, 'f_age', v => { s.about.ageGroup = v; });
+  },
+  collect(root, s) {
+    s.about.name = root.querySelector('#f_name').value.trim();
+    s.about.school = root.querySelector('#f_school').value.trim();
+    const otherEl = root.querySelector('#f_role_other');
+    if (otherEl) s.about.roleOther = otherEl.value.trim();
+    let valid = true;
+    if (!s.about.role) { root.querySelector('#err_role').style.display = 'block'; valid = false; }
+    if (!s.about.ageGroup) { root.querySelector('#err_age').style.display = 'block'; valid = false; }
+    return { valid };
+  },
+};
+
+// --- learning_importance -----------------------------------------------------
+SCREENS['learning_importance'] = {
+  title: 'Understanding how a child learns',
+  subtitle: 'Rate how important each is to truly understanding a learner.',
+  icon: '🧠',
+  render(s) {
+    const rows = LEARNING_ROWS.map(r => {
+      if (r.key === 'familySupport' && s.about.ageGroup === '5-8') {
+        return { ...r, label: 'Understanding home routine & support' }; // reworded for younger age group
+      }
+      return r;
+    });
+    return `<div class="q">${scaleGridHtml('learning_grid', rows)}</div>`;
+  },
+  bind(root, s) { bindScaleGrid(root, 'learning_grid', s.learning.importance); },
+  collect() { return { valid: true }; },
+};
+
+// --- learning_followup (conditional) ---------------------------------------
+SCREENS['learning_followup'] = {
+  title: 'A quick example',
+  subtitle: 'You flagged this as extremely important — a concrete moment helps us design for it.',
+  icon: '⚡',
+  followUp: true,
+  render(s) {
+    const triggers = [];
+    if (s.learning.importance.frustration === 5) triggers.push('understanding frustration');
+    if (s.learning.importance.attention === 5) triggers.push('measuring sustained attention');
+    const label = `What's a recent example where you caught ${triggers.join(' or ')} in a child, and what happened?`;
+    return `<div class="q"><label class="q-label">${esc(label)}</label>
+      <textarea id="f_followup_frustration" placeholder="A short, specific moment is more useful than a generalisation...">${esc(s.learning.followupFrustration)}</textarea></div>`;
+  },
+  bind() {},
+  collect(root, s) { s.learning.followupFrustration = root.querySelector('#f_followup_frustration').value.trim(); return { valid: true }; },
+};
+
+// --- learning_top3 -----------------------------------------------------------
+SCREENS['learning_top3'] = {
+  title: 'The biggest levers',
+  subtitle: 'Which three factors influence learning the most? Pick up to three.',
+  icon: '🎯',
+  render(s) {
+    return `
+      <div class="q">${chipsHtml('f_top3', TOP3_OPTIONS, null)}</div>
+      <div class="q" id="f_top3_other_wrap" style="${s.learning.top3.includes('Other') ? '' : 'display:none;'}">
+        <input type="text" id="f_top3_other" placeholder="Please specify" value="${esc(s.learning.top3Other)}">
+      </div>
+      <div class="field-err" id="err_top3" style="display:none;">Please choose at most three.</div>
+    `;
+  },
+  bind(root, s) {
+    const group = root.querySelector('#f_top3');
+    group.querySelectorAll('.chip').forEach(c => {
+      if (s.learning.top3.includes(c.dataset.val)) c.classList.add('selected');
+    });
+    bindMultiChips(root, 'f_top3', (val, isSelected) => {
+      if (isSelected) {
+        if (s.learning.top3.length >= 3) {
+          // enforce max 3 — undo selection visually and in state
+          const el = [...group.querySelectorAll('.chip')].find(c => c.dataset.val === val);
+          el.classList.remove('selected');
+          root.querySelector('#err_top3').style.display = 'block';
+          return;
+        }
+        root.querySelector('#err_top3').style.display = 'none';
+        s.learning.top3.push(val);
+      } else {
+        s.learning.top3 = s.learning.top3.filter(v => v !== val);
+      }
+      root.querySelector('#f_top3_other_wrap').style.display = s.learning.top3.includes('Other') ? '' : 'none';
+    });
+  },
+  collect(root, s) {
+    const otherEl = root.querySelector('#f_top3_other');
+    if (otherEl) s.learning.top3Other = otherEl.value.trim();
+    return { valid: true };
+  },
+};
+
+// --- learning_open -----------------------------------------------------------
+SCREENS['learning_open'] = {
+  title: 'In your own words',
+  subtitle: 'There are no right or wrong answers here.',
+  icon: '✍️',
+  render(s) {
+    return `
+      <div class="q"><label class="q-label">How do you know that a child has truly understood a concept?</label>
+        <textarea id="f_open1">${esc(s.learning.open1)}</textarea></div>
+      <div class="q"><label class="q-label">What signs tell you that a child is pretending to understand?</label>
+        <textarea id="f_open2">${esc(s.learning.open2)}</textarea></div>
+      <div class="q"><label class="q-label">What is the hardest learning problem that current classrooms cannot solve?</label>
+        <textarea id="f_open3">${esc(s.learning.open3)}</textarea></div>
+    `;
+  },
+  bind() {},
+  collect(root, s) {
+    s.learning.open1 = root.querySelector('#f_open1').value.trim();
+    s.learning.open2 = root.querySelector('#f_open2').value.trim();
+    s.learning.open3 = root.querySelector('#f_open3').value.trim();
+    return { valid: true };
+  },
+};
+
+// --- relationship_importance --------------------------------------------------
+SCREENS['relationship_importance'] = {
+  title: 'What makes a relationship work',
+  subtitle: 'Rate how important each of these is for a child, generally.',
+  icon: '🤝',
+  render() { return `<div class="q">${scaleGridHtml('rel_grid', RELATIONSHIP_ROWS)}</div>`; },
+  bind(root, s) { bindScaleGrid(root, 'rel_grid', s.relationship.importance); },
+  collect() { return { valid: true }; },
+};
+
+// --- relationship_companion ----------------------------------------------------
+SCREENS['relationship_companion'] = {
+  title: 'Now imagine Parth as a companion',
+  subtitle: 'If Parth becomes a digital learning companion, how important is each of these?',
+  icon: '💬',
+  render() { return `<div class="q">${scaleGridHtml('companion_grid', COMPANION_ROWS)}</div>`; },
+  bind(root, s) { bindScaleGrid(root, 'companion_grid', s.relationship.companion); },
+  collect() { return { valid: true }; },
+};
+
+// --- relationship_followup_judged (conditional) --------------------------------
+SCREENS['relationship_followup_judged'] = {
+  title: 'Reducing a real risk',
+  subtitle: 'You flagged a meaningful risk of children feeling judged by an AI mentor.',
+  icon: '⚡',
+  followUp: true,
+  render(s) {
+    return `<div class="q"><label class="q-label">What would reduce that risk, in your view — in how Parth talks, or in how it's introduced to a child?</label>
+      <textarea id="f_followup_judged" placeholder="Tone, wording, transparency, an opt-out, a human always in the loop...">${esc(s.relationship.followupJudged)}</textarea></div>`;
+  },
+  bind() {},
+  collect(root, s) { s.relationship.followupJudged = root.querySelector('#f_followup_judged').value.trim(); return { valid: true }; },
+};
+
+// --- relationship_open -----------------------------------------------------
+SCREENS['relationship_open'] = {
+  title: 'In your own words',
+  subtitle: '',
+  icon: '✍️',
+  render(s) {
+    return `
+      <div class="q"><label class="q-label">What makes a child trust an adult?</label>
+        <textarea id="f_open1">${esc(s.relationship.open1)}</textarea></div>
+      <div class="q"><label class="q-label">What causes children to stop asking questions?</label>
+        <textarea id="f_open2">${esc(s.relationship.open2)}</textarea></div>
+      <div class="q"><label class="q-label">How would you know if a child genuinely enjoys interacting with an AI mentor?</label>
+        <textarea id="f_open3">${esc(s.relationship.open3)}</textarea></div>
+    `;
+  },
+  bind() {},
+  collect(root, s) {
+    s.relationship.open1 = root.querySelector('#f_open1').value.trim();
+    s.relationship.open2 = root.querySelector('#f_open2').value.trim();
+    s.relationship.open3 = root.querySelector('#f_open3').value.trim();
+    return { valid: true };
+  },
+};
+
+// --- trust_ownership ---------------------------------------------------------
+SCREENS['trust_ownership'] = {
+  title: 'Who should own the data?',
+  subtitle: 'A learner’s data — who should ultimately own it?',
+  icon: '🔐',
+  render(s) {
+    return `<div class="q">${chipsHtml('f_ownership', OWNERSHIP_OPTIONS, s.trust.ownership)}
+      <div id="f_ownership_other_wrap" style="margin-top:10px; ${s.trust.ownership === 'Other' ? '' : 'display:none;'}">
+        <input type="text" id="f_ownership_other" placeholder="Please specify" value="${esc(s.trust.ownershipOther)}">
+      </div></div>`;
+  },
+  bind(root, s) {
+    bindSingleChips(root, 'f_ownership', v => {
+      s.trust.ownership = v;
+      root.querySelector('#f_ownership_other_wrap').style.display = v === 'Other' ? '' : 'none';
+    });
+  },
+  collect(root, s) {
+    const otherEl = root.querySelector('#f_ownership_other');
+    if (otherEl) s.trust.ownershipOther = otherEl.value.trim();
+    return { valid: true };
+  },
+};
+
+// --- trust_visibility ----------------------------------------------------------
+SCREENS['trust_visibility'] = {
+  title: 'Who should be allowed to see what',
+  subtitle: 'For each type of information, who should have access?',
+  icon: '👁️',
+  render(s) {
+    let html = '';
+    VISIBILITY_ROWS.forEach(row => {
+      const selected = s.trust.visibility[row.key] || [];
+      html += `<div class="matrix-row" data-key="${row.key}">
+        <div class="matrix-row-label">${esc(row.label)}</div>
+        <div class="matrix-options">` +
+        row.options.map(o => `<div class="matrix-opt${selected.includes(o) ? ' selected' : ''}" data-val="${esc(o)}">${esc(o)}</div>`).join('') +
+        `</div></div>`;
+    });
+    return html;
+  },
+  bind(root, s) {
+    VISIBILITY_ROWS.forEach(row => {
+      if (!s.trust.visibility[row.key]) s.trust.visibility[row.key] = [];
+      const rowEl = root.querySelector(`.matrix-row[data-key="${row.key}"]`);
+      rowEl.querySelectorAll('.matrix-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+          const val = opt.dataset.val;
+          const isExclusive = row.exclusive.includes(val);
+          let sel = s.trust.visibility[row.key];
+          if (opt.classList.contains('selected')) {
+            opt.classList.remove('selected');
+            sel = sel.filter(v => v !== val);
+          } else {
+            if (isExclusive) {
+              // exclusive option clears everything else in the row
+              rowEl.querySelectorAll('.matrix-opt').forEach(o => o.classList.remove('selected'));
+              sel = [val];
+            } else {
+              // selecting a normal option clears any exclusive selection
+              row.exclusive.forEach(ex => {
+                sel = sel.filter(v => v !== ex);
+                const exEl = [...rowEl.querySelectorAll('.matrix-opt')].find(o => o.dataset.val === ex);
+                if (exEl) exEl.classList.remove('selected');
+              });
+              sel.push(val);
+            }
+            opt.classList.add('selected');
+          }
+          s.trust.visibility[row.key] = sel;
+        });
+      });
+    });
+  },
+  collect() { return { valid: true }; },
+};
+
+// --- trust_special_educator (conditional) ---------------------------------
+SCREENS['trust_special_educator'] = {
+  title: 'A note on learning differences',
+  subtitle: 'As a Special Educator, your view on this carries extra weight.',
+  icon: '⚡',
+  followUp: true,
+  render(s) {
+    return `<div class="q"><label class="q-label">What should Parth understand about a learner's specific learning differences, and who beyond you should be trusted to see that information?</label>
+      <textarea id="f_special_educator" placeholder="e.g. dyslexia, processing speed, sensory needs, IEP-style accommodations...">${esc(s.trust.specialEducatorNote)}</textarea></div>`;
+  },
+  bind() {},
+  collect(root, s) { s.trust.specialEducatorNote = root.querySelector('#f_special_educator').value.trim(); return { valid: true }; },
+};
+
+// --- trust_open_1 / trust_open_2 -------------------------------------------
+function trustOpenRender(rows, s) {
+  return rows.map(r => `<div class="q"><label class="q-label">${esc(r.label)}</label>
+    <textarea id="f_${r.key}">${esc(s.trust.open[r.key] || '')}</textarea></div>`).join('');
+}
+SCREENS['trust_open_1'] = {
+  title: 'Memory & permission',
+  subtitle: '',
+  icon: '🧩',
+  render(s) { return trustOpenRender(TRUST_OPEN_1, s); },
+  bind() {},
+  collect(root, s) { TRUST_OPEN_1.forEach(r => { s.trust.open[r.key] = root.querySelector('#f_' + r.key).value.trim(); }); return { valid: true }; },
+};
+SCREENS['trust_open_2'] = {
+  title: 'When things go wrong',
+  subtitle: '',
+  icon: '🧩',
+  render(s) { return trustOpenRender(TRUST_OPEN_2, s); },
+  bind() {},
+  collect(root, s) { TRUST_OPEN_2.forEach(r => { s.trust.open[r.key] = root.querySelector('#f_' + r.key).value.trim(); }); return { valid: true }; },
+};
+
+// --- future_capabilities -----------------------------------------------------
+SCREENS['future_capabilities'] = {
+  title: 'Parth, five years from now',
+  subtitle: 'Which capabilities would create the greatest value? Select all that apply.',
+  icon: '🚀',
+  render(s) {
+    const skipTeenOnly = s.about.ageGroup === '5-8';
+    const items = FUTURE_CAPABILITIES.filter(c => !(c.teenOnly && skipTeenOnly)).map(c => ({ value: c.key, label: c.label }));
+    let html = `<div class="q">${chipsHtml('f_future', items, null)}</div>`;
+    if (skipTeenOnly) {
+      html += `<div class="note-box">Since you teach ages 5-8, "Career pathway recommendations" has been left out as not yet relevant to this age group.</div>`;
+    }
+    html += `<div class="q" id="f_future_other_wrap" style="${s.future.capabilities.includes('other') ? '' : 'display:none;'}">
+      <input type="text" id="f_future_other" placeholder="Please specify" value="${esc(s.future.capabilitiesOther)}"></div>`;
+    return html;
+  },
+  bind(root, s) {
+    const group = root.querySelector('#f_future');
+    group.querySelectorAll('.chip').forEach(c => { if (s.future.capabilities.includes(c.dataset.val)) c.classList.add('selected'); });
+    bindMultiChips(root, 'f_future', (val, isSelected) => {
+      if (isSelected) s.future.capabilities.push(val); else s.future.capabilities = s.future.capabilities.filter(v => v !== val);
+      root.querySelector('#f_future_other_wrap').style.display = s.future.capabilities.includes('other') ? '' : 'none';
+    });
+  },
+  collect(root, s) {
+    const otherEl = root.querySelector('#f_future_other');
+    if (otherEl) s.future.capabilitiesOther = otherEl.value.trim();
+    return { valid: true };
+  },
+};
+
+// --- future_followup_principal (conditional) --------------------------------
+SCREENS['future_followup_principal'] = {
+  title: 'A school leader’s view',
+  subtitle: 'As a Principal, this is especially useful to us.',
+  icon: '⚡',
+  followUp: true,
+  render(s) {
+    return `<div class="q"><label class="q-label">What would make it easier for your school to trust and adopt something like Parth at scale?</label>
+      <textarea id="f_principal" placeholder="Policy, training, data agreements, a pilot structure...">${esc(s.future.principalFollowup)}</textarea></div>`;
+  },
+  bind() {},
+  collect(root, s) { s.future.principalFollowup = root.querySelector('#f_principal').value.trim(); return { valid: true }; },
+};
+
+// --- reflection_all -----------------------------------------------------------
+SCREENS['reflection_all'] = {
+  title: 'Final reflection',
+  subtitle: 'Complete these in your own words. Take your time.',
+  icon: '✨',
+  render(s) {
+    return `
+      <div class="q"><label class="q-label">"A truly intelligent learning system should&hellip;"</label>
+        <textarea id="f_s1">${esc(s.reflection.s1)}</textarea></div>
+      <div class="q"><label class="q-label">"If I could change one thing about education today&hellip;"</label>
+        <textarea id="f_s2">${esc(s.reflection.s2)}</textarea></div>
+      <div class="q"><label class="q-label">What does it mean to truly know a child?</label>
+        <textarea id="f_s3">${esc(s.reflection.s3)}</textarea></div>
+    `;
+  },
+  bind() {},
+  collect(root, s) {
+    s.reflection.s1 = root.querySelector('#f_s1').value.trim();
+    s.reflection.s2 = root.querySelector('#f_s2').value.trim();
+    s.reflection.s3 = root.querySelector('#f_s3').value.trim();
+    return { valid: true };
+  },
+};
+
+// --- reflection_ai_followup (conditional on SMART_MODE) ----------------------
+SCREENS['reflection_ai_followup'] = {
+  title: 'One more thought',
+  subtitle: 'Generated by the configured smart-mode endpoint based on your answer.',
+  icon: '🤖',
+  followUp: true,
+  render(s) {
+    return `<div class="q"><label class="q-label">${esc(s.reflection.aiFollowupQuestion || 'Anything to add?')}</label>
+      <textarea id="f_ai_followup">${esc(s.reflection.aiFollowupAnswer)}</textarea></div>`;
+  },
+  bind() {},
+  collect(root, s) { s.reflection.aiFollowupAnswer = root.querySelector('#f_ai_followup').value.trim(); return { valid: true }; },
+};
+
+// ---------------------------------------------------------------------------
+// Agents — each owns a section's base screen order and a decideNext()
+// ---------------------------------------------------------------------------
+const IntakeAgent = {
+  name: 'IntakeAgent',
+  sectionLabel: 'About You',
+  baseOrder: ['about_all'],
+  decideNext(s, queue) { return queue; }, // no adaptivity needed — this section feeds every other agent
+};
+
+const LearningAgent = {
+  name: 'LearningAgent',
+  sectionLabel: 'Understanding Learning',
+  baseOrder: ['learning_importance', 'learning_top3', 'learning_open'],
+  decideNext(s, queue, justCompletedId) {
+    if (justCompletedId === 'learning_importance' && !queue.includes('learning_followup')) {
+      const trig = s.learning.importance.frustration === 5 || s.learning.importance.attention === 5;
+      if (trig) {
+        const idx = queue.indexOf('learning_importance');
+        queue = [...queue.slice(0, idx + 1), 'learning_followup', ...queue.slice(idx + 1)];
+        logAgent('LearningAgent', 'Rated frustration/attention as Extremely Important (5) → asked for a concrete example.');
+      }
+    }
+    return queue;
+  },
+};
+
+const RelationshipAgent = {
+  name: 'RelationshipAgent',
+  sectionLabel: 'Relationship',
+  baseOrder: ['relationship_importance', 'relationship_companion', 'relationship_open'],
+  decideNext(s, queue, justCompletedId) {
+    if (justCompletedId === 'relationship_companion' && !queue.includes('relationship_followup_judged')) {
+      if ((s.relationship.companion.feelsJudged || 0) >= 4) {
+        const idx = queue.indexOf('relationship_companion');
+        queue = [...queue.slice(0, idx + 1), 'relationship_followup_judged', ...queue.slice(idx + 1)];
+        logAgent('RelationshipAgent', 'Flagged a meaningful risk of children feeling judged (>=4/5) → asked how to mitigate it.');
+      }
+    }
+    return queue;
+  },
+};
+
+const TrustAgent = {
+  name: 'TrustAgent',
+  sectionLabel: 'Trust',
+  baseOrder: ['trust_ownership', 'trust_visibility', 'trust_open_1', 'trust_open_2'],
+  decideNext(s, queue, justCompletedId) {
+    if ((justCompletedId === 'trust_visibility' || justCompletedId == null) && s.about.role === 'Special Educator' && !queue.includes('trust_special_educator')) {
+      const idx = queue.indexOf('trust_visibility');
+      const insertAt = idx >= 0 ? idx + 1 : 1;
+      queue = [...queue.slice(0, insertAt), 'trust_special_educator', ...queue.slice(insertAt)];
+      logAgent('TrustAgent', 'Role = Special Educator → surfaced an extra depth prompt about learning differences.');
+    }
+    return queue;
+  },
+};
+
+const FutureAgent = {
+  name: 'FutureAgent',
+  sectionLabel: 'The Future',
+  baseOrder: ['future_capabilities'],
+  decideNext(s, queue, justCompletedId) {
+    if ((justCompletedId === 'future_capabilities' || justCompletedId == null) && s.about.role === 'Principal' && !queue.includes('future_followup_principal')) {
+      queue = [...queue, 'future_followup_principal'];
+      logAgent('FutureAgent', 'Role = Principal → asked a school-adoption follow-up.');
+    }
+    return queue;
+  },
+};
+
+const ReflectionAgent = {
+  name: 'ReflectionAgent',
+  sectionLabel: 'Final Reflection',
+  baseOrder: ['reflection_all'],
+  decideNext(s, queue, justCompletedId) { return queue; }, // async smart-mode injection handled by coordinator
+};
+
+const AGENTS = [IntakeAgent, LearningAgent, RelationshipAgent, TrustAgent, FutureAgent, ReflectionAgent];
+
+// One-time static skip logging (age-based rewording / omission), so the
+// summary log reflects it even though it's applied at render time.
+let _staticNotesLogged = false;
+function logStaticAdaptations(s) {
+  if (_staticNotesLogged) return;
+  if (s.about.ageGroup === '5-8') {
+    logAgent('LearningAgent', 'Age group = 5-8 → reworded "Understanding family support" to "Understanding home routine & support".');
+    logAgent('FutureAgent', 'Age group = 5-8 → omitted "Career pathway recommendations" as not yet relevant.');
+    _staticNotesLogged = true;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Coordinator
+// ---------------------------------------------------------------------------
+const coordinator = {
+  sectionIndex: -1, // -1 = intro screen
+  queue: [],
+  pointer: 0,
+  history: [], // flat list of {sectionIndex, screenId} visited, for back navigation across sections
+
+  start() {
+    state.meta.startedAt = new Date().toISOString();
+    this.renderIntro();
+  },
+
+  renderIntro() {
+    const root = document.getElementById('screen-root');
+    document.getElementById('progressWrap').style.display = 'none';
+    root.innerHTML = `
+      <div class="step-card">
+        <div class="step-icon">🧭</div>
+        <div class="step-title">Designing the Future of Personalized Learning</div>
+        <div class="step-sub">Thank you for helping us build ParthOS — an operating system for learning that aims to understand every child, not just teach them.</div>
+        <div class="intro-pillars">
+          <div class="pillar"><span class="p-icon">📚</span><div class="p-text"><b>Learning</b><span>Understanding how each child learns.</span></div></div>
+          <div class="pillar"><span class="p-icon">🤝</span><div class="p-text"><b>Relationship</b><span>Building trust and meaningful interactions.</span></div></div>
+          <div class="pillar"><span class="p-icon">🔐</span><div class="p-text"><b>Trust</b><span>Respecting privacy, safety, and human judgment.</span></div></div>
+        </div>
+        <div class="step-sub">There are no right or wrong answers. We are interested in your experience as an educator. This questionnaire adapts as you answer — a handful of small "agent" modules read your answers and decide what to ask next, so two teachers rarely see the exact same path.</div>
+        <div class="btn-row"><button class="btn btn-primary" id="btn-begin">Begin →</button></div>
+      </div>
+    `;
+    document.getElementById('btn-begin').addEventListener('click', () => this.enterSection(0));
+  },
+
+  enterSection(idx) {
+    if (idx >= AGENTS.length) { this.showSummary(); return; }
+    this.sectionIndex = idx;
+    const agent = AGENTS[idx];
+    logStaticAdaptations(state);
+    this.queue = agent.decideNext(state, [...agent.baseOrder], null);
+    this.pointer = 0;
+    document.getElementById('progressWrap').style.display = '';
+    this.renderScreen();
+  },
+
+  currentAgent() { return AGENTS[this.sectionIndex]; },
+  currentScreenId() { return this.queue[this.pointer]; },
+
+  renderScreen() {
+    const screenId = this.currentScreenId();
+    const def = SCREENS[screenId];
+    const agent = this.currentAgent();
+    const root = document.getElementById('screen-root');
+    root.innerHTML = `
+      <div class="step-card">
+        <div class="agent-badge"><span class="dot-live"></span>${esc(agent.name)} · ${esc(agent.sectionLabel)}</div>
+        ${def.followUp ? `<div class="followup-banner">⚡ Adaptive follow-up — shown because of one of your last answers</div>` : ''}
+        <div class="step-icon">${def.icon}</div>
+        <div class="step-title">${esc(def.title)}</div>
+        ${def.subtitle ? `<div class="step-sub">${esc(def.subtitle)}</div>` : ''}
+        <div class="divider"></div>
+        <div id="screen-body">${def.render(state)}</div>
+        <div class="btn-row">
+          <button class="btn btn-back" id="btn-back">←</button>
+          <button class="btn btn-primary" id="btn-next">${this.isVeryLastScreen() ? 'Finish →' : 'Next →'}</button>
+        </div>
+      </div>
+    `;
+    def.bind(root, state);
+    document.getElementById('btn-back').addEventListener('click', () => this.goBack());
+    document.getElementById('btn-next').addEventListener('click', () => this.goNext());
+    this.renderProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  },
+
+  isVeryLastScreen() {
+    return this.sectionIndex === AGENTS.length - 1 && this.pointer === this.queue.length - 1;
+  },
+
+  async goNext() {
+    const root = document.getElementById('screen-root');
+    const screenId = this.currentScreenId();
+    const def = SCREENS[screenId];
+    const result = def.collect(root, state);
+    if (!result.valid) return;
+
+    this.history.push({ sectionIndex: this.sectionIndex, screenId });
+
+    // Let the current section's agent re-decide the remaining queue based on
+    // the answer just collected (this is what injects same-section follow-ups).
+    const agent = this.currentAgent();
+    this.queue = agent.decideNext(state, this.queue, screenId);
+
+    // Special case: reflection section may trigger an async smart-mode follow-up.
+    if (screenId === 'reflection_all' && !this.queue.includes('reflection_ai_followup')) {
+      const followUp = await requestAIFollowUp('A truly intelligent learning system should...', state.reflection.s1);
+      if (followUp) {
+        state.reflection.aiFollowupQuestion = followUp;
+        state.meta.smartModeUsed = true;
+        this.queue = [...this.queue, 'reflection_ai_followup'];
+        logAgent('ReflectionAgent', 'Smart mode generated one AI follow-up question from your first reflection answer.');
+      }
+    }
+
+    if (this.pointer < this.queue.length - 1) {
+      this.pointer += 1;
+      this.renderScreen();
+    } else {
+      this.enterSection(this.sectionIndex + 1);
+    }
+  },
+
+  goBack() {
+    if (this.pointer > 0) {
+      this.pointer -= 1;
+      this.renderScreen();
+      return;
+    }
+    if (this.sectionIndex > 0) {
+      // Re-enter previous section at its last screen.
+      const prevIdx = this.sectionIndex - 1;
+      const prevAgent = AGENTS[prevIdx];
+      this.sectionIndex = prevIdx;
+      this.queue = prevAgent.decideNext(state, [...prevAgent.baseOrder], null);
+      this.pointer = this.queue.length - 1;
+      this.renderScreen();
+      return;
+    }
+    this.sectionIndex = -1;
+    this.renderIntro();
+  },
+
+  renderProgress() {
+    const dotsEl = document.getElementById('progressDots');
+    const labelEl = document.getElementById('progressLabel');
+    dotsEl.innerHTML = '';
+    AGENTS.forEach((a, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i < this.sectionIndex ? ' done' : i === this.sectionIndex ? ' active' : '');
+      dotsEl.appendChild(d);
+    });
+    labelEl.textContent = `${this.currentAgent().sectionLabel} · ${this.pointer + 1} of ${this.queue.length}`;
+  },
+
+  showSummary() {
+    state.meta.completedAt = new Date().toISOString();
+    document.getElementById('progressWrap').style.display = 'none';
+    const root = document.getElementById('screen-root');
+    const json = JSON.stringify(state, null, 2);
+    const logHtml = state.agentLog.length
+      ? state.agentLog.map(l => `<div class="agent-log-item"><b>${esc(l.agent)}</b> — ${esc(l.note)}</div>`).join('')
+      : `<div class="agent-log-item">No adaptive branches were triggered on this path — a good sign the base flow itself covers most teachers.</div>`;
+    root.innerHTML = `
+      <div class="step-card">
+        <div class="step-icon">✅</div>
+        <div class="step-title">Thank you</div>
+        <div class="step-sub">Your responses are saved only in this browser tab. Export them below to share.</div>
+        <div class="divider"></div>
+        <div class="summary-block">
+          <h3>Adaptive decisions on your path</h3>
+          ${logHtml}
+        </div>
+        <div class="summary-block">
+          <h3>Exported JSON</h3>
+          <pre class="json-pre" id="json-pre">${esc(json)}</pre>
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="btn-copy">Copy JSON</button>
+            <button class="btn btn-primary" id="btn-download">Download JSON</button>
+          </div>
+          <div class="copy-flash" id="copy-flash">Copied to clipboard ✓</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" id="btn-restart">Start over</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(json);
+      } catch (e) {
+        // Fallback for contexts without clipboard API (e.g. plain file:// in some browsers)
+        const ta = document.createElement('textarea');
+        ta.value = json;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e2) { console.warn('Copy fallback failed', e2); }
+        document.body.removeChild(ta);
+      }
+      const flash = document.getElementById('copy-flash');
+      flash.style.display = 'block';
+      setTimeout(() => { flash.style.display = 'none'; }, 1800);
+    });
+    document.getElementById('btn-download').addEventListener('click', () => {
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `parthos_teacher_discovery_${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+    document.getElementById('btn-restart').addEventListener('click', () => location.reload());
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  },
+};
+
+document.addEventListener('DOMContentLoaded', () => coordinator.start());
+</script>
+</body>
+</html>
