@@ -137,6 +137,6 @@ Language rule: reply in English by default; if the student writes in Hindi, repl
             base += f"\n\nWhat you know about this child:\n{learner_context}"
 
         if context:
-            base += f"\n\nRelevant NCERT curriculum content (use this to ground your answer):\n{context}"
+            base += f"\n\nRelevant teaching context (curriculum passages, graph hints, and story bridges; use only when helpful):\n{context}"
 
         return base
