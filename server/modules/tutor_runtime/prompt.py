@@ -3,10 +3,16 @@ from config import Config
 
 
 def build_system_prompt(ctx) -> str:
-    """ctx is a KernelContext with learner_context and curriculum_context filled in."""
+    """ctx is a KernelContext with learner, curriculum, and optional graph context."""
+    context_parts = []
+    if ctx.curriculum_context:
+        context_parts.append(ctx.curriculum_context)
+    meaning_context = ctx.module_data.get("meaning.graph", {}).get("meaning_context", "")
+    if meaning_context:
+        context_parts.append(meaning_context)
     return Config.system_prompt(
         subject=ctx.subject,
-        context=ctx.curriculum_context,
+        context="\n\n".join(context_parts),
         learner_context=ctx.learner_context,
     )
 

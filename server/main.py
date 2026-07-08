@@ -38,6 +38,7 @@ from kernel.router import Router
 from modules.moderation_ops.module import ModerationOpsModule
 from modules.learner_state.module import LearnerStateModule
 from modules.curriculum_graph.module import CurriculumGraphModule
+from modules.meaning_graph.module import MeaningGraphModule
 from modules.tutor_runtime.module import TutorRuntimeModule
 from modules.practice_engine.module import PracticeEngineModule
 from modules.parent_dashboard.module import ParentDashboardModule
@@ -72,6 +73,7 @@ _modules_list = [
     ModerationOpsModule(),
     LearnerStateModule(),
     CurriculumGraphModule(),
+    MeaningGraphModule(),
     TutorRuntimeModule(),
     PracticeEngineModule(),
     ParentDashboardModule(),
@@ -109,9 +111,9 @@ def _sanitize(s: str, max_len: int = 200) -> str:
 # Admin-gated paths: require X-Admin-Key header or ?admin_key= query param.
 _ADMIN_EXACT = frozenset({
     "/monitor", "/demo", "/mirror", "/graph", "/models",
-    "/playground", "/observer", "/onboarding",
+    "/meaning", "/playground", "/observer", "/onboarding",
 })
-_ADMIN_PREFIXES = ("/monitor/", "/graph/", "/api/trace/")
+_ADMIN_PREFIXES = ("/monitor/", "/graph/", "/meaning/", "/api/trace/")
 
 
 def _is_admin_path(path: str) -> bool:
@@ -1036,6 +1038,76 @@ async def graph_data(learner_id: str | None = None):
     nodes = [{**c, "video_count": 0, "video_ids": []} for c in NCERT_CONCEPTS]
     edges = [{"source": f, "target": t, "type": tp} for f, t, tp in NCERT_EDGES]
     return {"nodes": nodes, "edges": edges, "source": "hardcoded"}
+
+
+# ── Meaning Graph UI & API ──────────────────────────────────────────────────
+@app.get("/meaning")
+async def meaning_ui():
+    return FileResponse("static/meaning_graph.html")
+
+
+@app.get("/meaning/graph")
+async def meaning_graph_data(
+    age: int = 8,
+    tradition: str | None = None,
+    limit: int = 260,
+):
+    from modules.meaning_graph.service import get_graph
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        return await get_graph(
+            conn,
+            age=age,
+            tradition=tradition,
+            limit=max(1, min(int(limit), 400)),
+        )
+
+
+@app.get("/meaning/puzzles")
+async def meaning_puzzles(
+    age: int = 8,
+    tradition: str | None = None,
+    motif: str | None = None,
+    limit: int = 12,
+):
+    from modules.meaning_graph.service import get_puzzles
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        return {
+            "age": age,
+            "tradition": tradition or "all",
+            "motif": motif or "all",
+            "puzzles": await get_puzzles(
+                conn,
+                age=age,
+                tradition=tradition,
+                motif=motif,
+                limit=max(1, min(int(limit), 40)),
+            ),
+        }
+
+
+@app.get("/meaning/puzzle/{puzzle_id}")
+async def meaning_puzzle_detail(puzzle_id: str):
+    from modules.meaning_graph.service import get_puzzle
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        puzzle = await get_puzzle(conn, puzzle_id)
+    if puzzle is None:
+        raise HTTPException(status_code=404, detail="Unknown meaning puzzle")
+    return puzzle
+
+
+@app.get("/meaning/neo4j/export")
+async def meaning_neo4j_export():
+    from modules.meaning_graph.service import neo4j_export
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        return await neo4j_export(conn)
 
 
 # ── Model list ────────────────────────────────────────────────────────────────

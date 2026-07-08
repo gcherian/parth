@@ -33,7 +33,7 @@ class Sequential:
 # pre/post phases add negligible overhead.
 ROUTING_TABLE: dict[str, list[Parallel | Sequential]] = {
     "interaction.requested": [
-        Sequential(["moderation.ops", "learner.state", "curriculum.graph"]),
+        Sequential(["moderation.ops", "learner.state", "curriculum.graph", "meaning.graph"]),
         Sequential(["tutor.runtime"]),
         Sequential(["moderation.ops", "learner.state", "practice.engine"]),
     ],
