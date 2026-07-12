@@ -29,6 +29,9 @@ app/pubspec.lock
 # macOS
 .DS_Store
 **/.DS_Store
+._*
+.AppleDouble/
+.LSOverride
 
 # Logs
 *.log

@@ -26,6 +26,16 @@ async def build_report(conn, learner_id: str) -> dict:
         """,
         learner_id,
     )
+    concept_rows = await conn.fetch(
+        """
+        SELECT concept_id, p_mastery, exposures, misconceptions, last_updated
+        FROM learner_state.knowledge
+        WHERE learner_id = $1
+        ORDER BY last_updated DESC
+        LIMIT 20
+        """,
+        learner_id,
+    )
     strong = await conn.fetch(
         """
         SELECT concept_id, p_mastery FROM learner_state.knowledge
@@ -51,6 +61,28 @@ async def build_report(conn, learner_id: str) -> dict:
         """,
         learner_id,
     )
+    recall_due = await conn.fetch(
+        """
+        SELECT concept_id, next_review, repetitions
+        FROM practice_engine.cards
+        WHERE learner_id = $1 AND next_review <= now()
+        ORDER BY next_review ASC
+        LIMIT 5
+        """,
+        learner_id,
+    )
+    recent_misconceptions = await conn.fetch(
+        """
+        SELECT misconception, subject, created_at
+        FROM learner_state.interactions
+        WHERE learner_id = $1
+          AND misconception IS NOT NULL
+          AND misconception <> ''
+        ORDER BY created_at DESC
+        LIMIT 5
+        """,
+        learner_id,
+    )
 
     avg_engagement = sum(r["engagement"] for r in rows) / len(rows) if rows else 5.0
     subjects_covered = list({r["subject"] for r in rows if r["subject"]})
@@ -60,10 +92,56 @@ async def build_report(conn, learner_id: str) -> dict:
         learner_id,
     ) or 0
     profile_row = await conn.fetchrow(
-        "SELECT name, grade, streak_days, last_seen FROM learner_state.profiles WHERE learner_id = $1",
+        """
+        SELECT name, grade, streak_days, last_seen, analogy_scores
+        FROM learner_state.profiles
+        WHERE learner_id = $1
+        """,
         learner_id,
     )
     profile_info = dict(profile_row) if profile_row else {}
+    concepts = [dict(r) for r in concept_rows]
+    concept_count = len(concepts)
+    avg_mastery = (
+        sum(float(c["p_mastery"] or 0.0) for c in concepts) / concept_count
+        if concept_count else 0.0
+    )
+    readiness_score = round(avg_mastery * 100)
+    if concept_count == 0:
+        readiness_label = "Needs diagnostic"
+    elif readiness_score >= 75:
+        readiness_label = "Test-ready"
+    elif readiness_score >= 55:
+        readiness_label = "Close, with risks"
+    else:
+        readiness_label = "Needs guided practice"
+
+    top_risks = [
+        {
+            "concept_id": c["concept_id"],
+            "p_mastery": c["p_mastery"],
+            "misconceptions": c["misconceptions"],
+        }
+        for c in sorted(
+            concepts,
+            key=lambda c: (float(c["p_mastery"] or 0.0), -int(c["misconceptions"] or 0)),
+        )[:3]
+        if float(c["p_mastery"] or 0.0) < 0.65
+    ]
+    analogy_scores = profile_info.get("analogy_scores") or {}
+    if isinstance(analogy_scores, str):
+        try:
+            analogy_scores = json.loads(analogy_scores)
+        except json.JSONDecodeError:
+            analogy_scores = {}
+    preferred_anchors = [
+        {"anchor": k, "score": v}
+        for k, v in sorted(
+            analogy_scores.items(),
+            key=lambda item: float(item[1] or 0.0),
+            reverse=True,
+        )[:3]
+    ]
 
     report = {
         "learner_id": learner_id,
@@ -80,6 +158,31 @@ async def build_report(conn, learner_id: str) -> dict:
         "strong_concepts": [dict(r) for r in strong],
         "weak_concepts": [dict(r) for r in weak],
         "recent_alerts": [dict(r) for r in alerts],
+        "school_readiness": {
+            "score": readiness_score,
+            "label": readiness_label,
+            "concepts_seen": concept_count,
+            "ready_topics_count": len(strong),
+            "risk_topics_count": len(top_risks),
+            "recall_due_count": len(recall_due),
+            "top_risks": top_risks,
+            "recall_due": [dict(r) for r in recall_due],
+            "test_focus": (
+                "Start with a short diagnostic."
+                if concept_count == 0
+                else "Revise the risk topics first, then test recall without hints."
+            ),
+        },
+        "learning_ledger": {
+            "concepts_tracked": concept_count,
+            "misconceptions_seen": len(recent_misconceptions),
+            "recent_misconceptions": [dict(r) for r in recent_misconceptions],
+            "preferred_anchors": preferred_anchors,
+            "explanation": (
+                "Marks are the output signal. Parth tracks the causes underneath: "
+                "mastery, recall, misconceptions, and examples that actually land."
+            ),
+        },
     }
 
     await conn.execute(

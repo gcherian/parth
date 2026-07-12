@@ -24,7 +24,7 @@ class ProgressScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Progress'),
+        title: const Text('My Learning'),
         automaticallyImplyLeading: false,
       ),
       body: messages.isEmpty
@@ -32,16 +32,61 @@ class ProgressScreen extends ConsumerWidget {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                const _LearningFrameCard(),
+                const SizedBox(height: 16),
                 _StatsRow(questions: userCount, answers: aiCount),
                 const SizedBox(height: 16),
                 if (subjectCounts.isNotEmpty) ...[
                   _SubjectPieChart(subjectCounts: subjectCounts),
                   const SizedBox(height: 16),
                 ],
-                _AchievementsList(questions: userCount),
+                _LearningSignalsCard(
+                    questions: userCount, subjects: subjectCounts.length),
                 const SizedBox(height: 24),
               ],
             ),
+    );
+  }
+}
+
+class _LearningFrameCard extends StatelessWidget {
+  const _LearningFrameCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.deepBlue.withAlpha(31)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(13),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Marks show the result. Understanding explains the result.',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: AppTheme.darkText,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            'Parth tracks what you understood, what needs another try, and what should be tested again before school tests.',
+            style: TextStyle(
+                fontSize: 13, color: AppTheme.lightText, height: 1.45),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -58,7 +103,7 @@ class _StatsRow extends StatelessWidget {
       children: [
         Expanded(
           child: _StatTile(
-            label: 'Questions\nAsked',
+            label: 'Questions\nUnpacked',
             value: '$questions',
             icon: Icons.help_outline_rounded,
             color: AppTheme.saffron,
@@ -67,7 +112,7 @@ class _StatsRow extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: _StatTile(
-            label: 'Answers\nReceived',
+            label: 'Answers\nTested',
             value: '$answers',
             icon: Icons.lightbulb_outline_rounded,
             color: AppTheme.deepBlue,
@@ -96,9 +141,9 @@ class _StatTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.07),
+        color: color.withAlpha(18),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.18)),
+        border: Border.all(color: color.withAlpha(46)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +159,9 @@ class _StatTile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text(label, style: const TextStyle(fontSize: 12, color: AppTheme.lightText, height: 1.3)),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 12, color: AppTheme.lightText, height: 1.3)),
         ],
       ),
     );
@@ -143,7 +190,7 @@ class _SubjectPieChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(13),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -153,8 +200,11 @@ class _SubjectPieChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Topics Explored',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppTheme.darkText),
+            'Subjects Connected',
+            style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.darkText),
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -193,12 +243,14 @@ class _SubjectPieChart extends StatelessWidget {
                   Container(
                     width: 10,
                     height: 10,
-                    decoration: BoxDecoration(color: subj.color, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                        color: subj.color, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: 5),
                   Text(
                     '${subj.name} (${e.value})',
-                    style: const TextStyle(fontSize: 12, color: AppTheme.lightText),
+                    style: const TextStyle(
+                        fontSize: 12, color: AppTheme.lightText),
                   ),
                 ],
               );
@@ -210,20 +262,38 @@ class _SubjectPieChart extends StatelessWidget {
   }
 }
 
-class _AchievementsList extends StatelessWidget {
+class _LearningSignalsCard extends StatelessWidget {
   final int questions;
+  final int subjects;
 
-  const _AchievementsList({required this.questions});
+  const _LearningSignalsCard({required this.questions, required this.subjects});
 
-  // Milestones are positive-only: no locks, no shame, no count-shaming copy.
-  // Unearned milestones are shown dimly — visible as future moments, not failures.
-  static const _milestones = [
-    (emoji: '🌱', title: 'Curious', desc: 'Your learning journey has begun', threshold: 1),
-    (emoji: '🔍', title: 'Explorer', desc: 'You keep coming back with new questions', threshold: 10),
-    (emoji: '📚', title: 'Deep Thinker', desc: 'You go beyond the obvious', threshold: 25),
-    (emoji: '🌟', title: 'Knowledge Builder', desc: 'Your questions are getting sharper', threshold: 50),
-    (emoji: '🦅', title: 'Independent Mind', desc: 'You trust your own thinking now', threshold: 100),
-  ];
+  List<_Signal> get _signals => [
+        _Signal(
+          icon: Icons.psychology_alt_outlined,
+          title: 'Understanding map',
+          desc: questions == 0
+              ? 'Parth needs a few questions to see how you think.'
+              : 'Parth is learning which explanations make concepts click.',
+          active: questions >= 1,
+        ),
+        _Signal(
+          icon: Icons.replay_circle_filled_outlined,
+          title: 'Recall to test again',
+          desc: questions >= 5
+              ? 'Some ideas should be checked later so they stick for tests.'
+              : 'After a few more questions, Parth can start planning recall.',
+          active: questions >= 5,
+        ),
+        _Signal(
+          icon: Icons.school_outlined,
+          title: 'School readiness',
+          desc: subjects >= 1
+              ? 'Your school result improves when weak steps are found early.'
+              : 'Choose a subject to begin building test readiness.',
+          active: subjects >= 1,
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +304,7 @@ class _AchievementsList extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(13),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -244,12 +314,14 @@ class _AchievementsList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Your Journey',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppTheme.darkText),
+            'Learning Signals',
+            style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.darkText),
           ),
           const SizedBox(height: 8),
-          ..._milestones.map((a) {
-            final reached = questions >= a.threshold;
+          ..._signals.map((signal) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
@@ -258,28 +330,23 @@ class _AchievementsList extends StatelessWidget {
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(
-                      color: reached
-                          ? AppTheme.saffron.withOpacity(0.1)
+                      color: signal.active
+                          ? AppTheme.saffron.withAlpha(26)
                           : Colors.grey.shade50,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: reached
-                            ? AppTheme.saffron.withOpacity(0.3)
+                        color: signal.active
+                            ? AppTheme.saffron.withAlpha(77)
                             : Colors.grey.shade200,
                       ),
                     ),
                     child: Center(
-                      child: Text(
-                        a.emoji,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: reached ? null : const Color(0x00000000),
-                        ).copyWith(
-                          // Dim unearned milestones without hiding them
-                          shadows: reached
-                              ? null
-                              : [const Shadow(color: Colors.transparent)],
-                        ),
+                      child: Icon(
+                        signal.icon,
+                        color: signal.active
+                            ? AppTheme.saffron
+                            : AppTheme.lightText,
+                        size: 22,
                       ),
                     ),
                   ),
@@ -289,25 +356,30 @@ class _AchievementsList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          a.title,
+                          signal.title,
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: reached ? AppTheme.darkText : AppTheme.lightText,
+                            color: signal.active
+                                ? AppTheme.darkText
+                                : AppTheme.lightText,
                           ),
                         ),
                         Text(
-                          a.desc,
+                          signal.desc,
                           style: TextStyle(
                             fontSize: 12,
-                            color: reached ? AppTheme.lightText : AppTheme.lightText.withOpacity(0.5),
+                            color: signal.active
+                                ? AppTheme.lightText
+                                : AppTheme.lightText.withAlpha(153),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  if (reached)
-                    const Icon(Icons.check_circle_rounded, color: AppTheme.success, size: 20),
+                  if (signal.active)
+                    const Icon(Icons.check_circle_rounded,
+                        color: AppTheme.success, size: 20),
                 ],
               ),
             );
@@ -316,6 +388,20 @@ class _AchievementsList extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Signal {
+  final IconData icon;
+  final String title;
+  final String desc;
+  final bool active;
+
+  const _Signal({
+    required this.icon,
+    required this.title,
+    required this.desc,
+    required this.active,
+  });
 }
 
 class _EmptyState extends StatelessWidget {
@@ -330,7 +416,7 @@ class _EmptyState extends StatelessWidget {
           Text('📊', style: TextStyle(fontSize: 60)),
           SizedBox(height: 16),
           Text(
-            'No progress yet!',
+            'No learning map yet',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -339,9 +425,10 @@ class _EmptyState extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            'Start chatting with Parth to track\nyour learning journey!',
+            'Start with one school topic.\nParth will map what is clear and what needs testing again.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, color: AppTheme.lightText, height: 1.5),
+            style:
+                TextStyle(fontSize: 14, color: AppTheme.lightText, height: 1.5),
           ),
         ],
       ),
