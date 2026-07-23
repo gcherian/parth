@@ -219,6 +219,26 @@ textarea::placeholder { color: var(--dim); }
 .sphere-bar-bg { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
 .sphere-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease, background .5s; width: 50%; }
 
+/* ─ Emotion spectrum ─ */
+#emotion-section {
+  border-top: 1px solid var(--border); background: var(--bg2);
+  flex-shrink: 0; padding: 10px 18px; display: flex; align-items: center; gap: 18px;
+}
+.emotion-plot-wrap { position: relative; width: 132px; height: 92px; flex-shrink: 0; }
+.emotion-plot-wrap svg { width: 100%; height: 100%; display: block; }
+.emotion-quadrant { opacity: .5; }
+.emotion-axis-line { stroke: var(--border2); stroke-width: 1; }
+.emotion-trail { fill: none; stroke: var(--cyan); stroke-width: 1.4; opacity: .55; }
+.emotion-dot { transition: cx .55s ease, cy .55s ease, fill .4s; }
+.emotion-dot-glow { transition: cx .55s ease, cy .55s ease; opacity: .35; }
+.emotion-readout { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
+.emotion-label-row { display: flex; align-items: center; gap: 8px; }
+.emotion-emoji { font-size: 1.15rem; }
+.emotion-label { font-size: 0.85rem; font-weight: 800; color: var(--text); text-transform: capitalize; }
+.emotion-coords { font-size: 0.62rem; color: var(--dim); font-family: 'SF Mono','Fira Code',monospace; }
+.emotion-gear { font-size: 0.72rem; color: var(--muted); line-height: 1.4; max-width: 420px; }
+.emotion-gear.active { color: var(--orange); font-weight: 600; }
+
 /* ─ Kernel trace ─ */
 #trace-section {
   border-top: 1px solid var(--border); background: var(--bg2);
@@ -372,6 +392,32 @@ textarea::placeholder { color: var(--dim); }
 
 </div>
 
+<!-- Emotion spectrum -->
+<div id="emotion-section">
+  <div class="emotion-plot-wrap">
+    <svg viewBox="0 0 132 92">
+      <!-- quadrants: top=high intensity, bottom=low; left=negative valence, right=positive -->
+      <rect class="emotion-quadrant" x="6"  y="6"  width="60" height="40" fill="#ef444422" />
+      <rect class="emotion-quadrant" x="66" y="6"  width="60" height="40" fill="#22c55e22" />
+      <rect class="emotion-quadrant" x="6"  y="46" width="60" height="40" fill="#33415522" />
+      <rect class="emotion-quadrant" x="66" y="46" width="60" height="40" fill="#3b82f622" />
+      <line class="emotion-axis-line" x1="66" y1="6" x2="66" y2="86" />
+      <line class="emotion-axis-line" x1="6"  y1="46" x2="126" y2="46" />
+      <polyline class="emotion-trail" id="emotion-trail" points="" />
+      <circle class="emotion-dot-glow" id="emotion-dot-glow" cx="66" cy="46" r="9" fill="#94a3b8" />
+      <circle class="emotion-dot" id="emotion-dot" cx="66" cy="46" r="4" fill="#94a3b8" />
+    </svg>
+  </div>
+  <div class="emotion-readout">
+    <div class="emotion-label-row">
+      <span class="emotion-emoji" id="emotion-emoji">😐</span>
+      <span class="emotion-label" id="emotion-label">Neutral</span>
+      <span class="emotion-coords" id="emotion-coords">v=0.00 · i=0.00</span>
+    </div>
+    <div class="emotion-gear" id="emotion-gear">Emotion spectrum — valence (← unpleasant / pleasant →) × intensity (↓ calm / activated ↑)</div>
+  </div>
+</div>
+
 <!-- Kernel trace -->
 <div id="trace-section">
   <div class="trace-hdr">
@@ -462,6 +508,26 @@ const REG_COLORS = {
   technology:"#607D8B", mathematics:"#FF5722",
 };
 
+const EMOTION_MAP = {
+  distressed: { emoji:"😣", color:"#ef4444" },
+  frustrated: { emoji:"😤", color:"#f97316" },
+  anxious:    { emoji:"😟", color:"#f59e0b" },
+  confused:   { emoji:"🤔", color:"#a855f7" },
+  curious:    { emoji:"🧐", color:"#3b82f6" },
+  excited:    { emoji:"🤩", color:"#22c55e" },
+  disengaged: { emoji:"😴", color:"#64748b" },
+  neutral:    { emoji:"😐", color:"#94a3b8" },
+};
+
+const GEAR_SHIFT_COPY = {
+  "frustration_ramp -> simplify_or_hint_now": "Getting stuck — Parth will simplify or offer a hint",
+  "boredom_drift -> inject_novelty":          "Interest fading — Parth will mix things up",
+  "curiosity_building -> lean_in_deepen":     "Curiosity building — Parth will lean in and go deeper",
+  "satisfied_winddown -> consolidate_praise": "Feeling good — Parth will consolidate and celebrate",
+  "resolved_from_negative -> reinforce_and_cement": "Just broke through — Parth will reinforce this moment",
+  "hold_steady": "Steady — no gear change needed",
+};
+
 // Canned responses for auto-demo mode (designed to score quality 2-3)
 const AUTO_RESPONSES = [
   // probe 0 (choice) — handled by click
@@ -547,6 +613,70 @@ function updateSphereBars(affinity) {
       valEl.className = 'sphere-val' + (val > 6.5 ? ' hot' : '');
     }
   });
+}
+
+// ── Emotion spectrum ─────────────────────────────────────────────────────────
+// Plot area: x 6..126 maps valence -1..+1, y 6..86 maps intensity 1..0 (top = high).
+
+function emotionToXY(v, i) {
+  return { x: 66 + v * 60, y: 86 - i * 80 };
+}
+
+async function updateEmotionSpectrum(text) {
+  let data;
+  try {
+    const r = await fetch('/mirror/emotion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ learner_id: learnerId, text }),
+    });
+    data = await r.json();
+  } catch (e) {
+    return;
+  }
+
+  const meta = EMOTION_MAP[data.label] || EMOTION_MAP.neutral;
+  const { x, y } = emotionToXY(data.valence, data.intensity);
+
+  const dot = document.getElementById('emotion-dot');
+  const glow = document.getElementById('emotion-dot-glow');
+  dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('fill', meta.color);
+  glow.setAttribute('cx', x); glow.setAttribute('cy', y); glow.setAttribute('fill', meta.color);
+
+  const trail = (data.trail || []).map(p => emotionToXY(p.valence, p.intensity));
+  document.getElementById('emotion-trail').setAttribute(
+    'points', trail.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+  );
+
+  document.getElementById('emotion-emoji').textContent = meta.emoji;
+  document.getElementById('emotion-label').textContent = data.label;
+  document.getElementById('emotion-coords').textContent =
+    `v=${data.valence.toFixed(2)} · i=${data.intensity.toFixed(2)}`;
+
+  const gearEl = document.getElementById('emotion-gear');
+  const gearCopy = GEAR_SHIFT_COPY[data.gear_shift] || data.gear_shift;
+  gearEl.textContent = gearCopy;
+  gearEl.classList.toggle('active', data.gear_shift !== 'hold_steady');
+
+  traceLog('emotion.updated',
+    `v=${data.valence.toFixed(2)} i=${data.intensity.toFixed(2)} · label=<span class="hi">${data.label}</span> · gear=<span class="hi2">${data.gear_shift}</span>`);
+}
+
+function resetEmotionSpectrum() {
+  const { x, y } = emotionToXY(0, 0.2);
+  document.getElementById('emotion-dot').setAttribute('cx', x);
+  document.getElementById('emotion-dot').setAttribute('cy', y);
+  document.getElementById('emotion-dot').setAttribute('fill', '#94a3b8');
+  document.getElementById('emotion-dot-glow').setAttribute('cx', x);
+  document.getElementById('emotion-dot-glow').setAttribute('cy', y);
+  document.getElementById('emotion-dot-glow').setAttribute('fill', '#94a3b8');
+  document.getElementById('emotion-trail').setAttribute('points', '');
+  document.getElementById('emotion-emoji').textContent = '😐';
+  document.getElementById('emotion-label').textContent = 'Neutral';
+  document.getElementById('emotion-coords').textContent = 'v=0.00 · i=0.00';
+  const gearEl = document.getElementById('emotion-gear');
+  gearEl.textContent = 'Emotion spectrum — valence (← unpleasant / pleasant →) × intensity (↓ calm / activated ↑)';
+  gearEl.classList.remove('active');
 }
 
 // ── Portrait display update ──────────────────────────────────────────────────
@@ -748,6 +878,9 @@ async function recordAndAdvance(puzzleId, response, elapsed, reachedDeeper) {
     updatePortraitDisplay(pd.portrait, pd.register);
   } catch(e) {}
 
+  // Fold this turn's text into the continuous emotion trajectory
+  await updateEmotionSpectrum(response);
+
   probeCount++;
   dot: for (let i = 0; i < probeCount; i++) {
     const d = document.getElementById(`dot-${i}`);
@@ -880,6 +1013,7 @@ function resetAll() {
   document.getElementById('reg-wrap').innerHTML = '<div class="reg-bubble" style="color:#94a3b8;border-color:#94a3b840">building…</div>';
   document.getElementById('portrait-probe-label').textContent = 'waiting…';
   buildSphereBars();
+  resetEmotionSpectrum();
 
   // Reset puzzle panel
   document.getElementById('puzzle-body').innerHTML = `

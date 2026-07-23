@@ -4,7 +4,7 @@ import logging
 import re
 import time
 import uuid as _uuid_mod
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -934,6 +934,51 @@ async def demo_ui():
 @app.get("/mirror")
 async def mirror_ui():
     return FileResponse("static/portrait_demo.html")
+
+
+class MirrorEmotionRequest(BaseModel):
+    learner_id: str = Field(..., max_length=100)
+    text: str = Field(..., max_length=2000)
+
+
+# In-memory only, keyed by the mirror's per-page-load learner_id — this is the
+# demo surface, not the production learner_state pipeline (see
+# modules/learner_state/EMOTION_MODEL_V2_DESIGN.md for the production
+# integration plan, deliberately not wired in yet). Capped FIFO so a
+# long-running server doesn't accumulate unbounded demo sessions.
+_MIRROR_EMOTION_ENGINES: "OrderedDict[str, object]" = OrderedDict()
+_MIRROR_EMOTION_CAP = 500
+
+
+@app.post("/mirror/emotion")
+async def mirror_emotion(req: MirrorEmotionRequest, _: None = Depends(rate_limit)):
+    """Continuous valence/intensity emotion trajectory for the Magic Mirror's
+    live emotion-spectrum panel. Each call folds one turn of text into the
+    child's running trajectory and returns the point, discrete-label
+    projection, and gear-shift read."""
+    from modules.learner_state.emotion_engine import StudentEmotionEngine
+
+    _require_uuid(req.learner_id)
+
+    engine = _MIRROR_EMOTION_ENGINES.get(req.learner_id)
+    if engine is None:
+        if len(_MIRROR_EMOTION_ENGINES) >= _MIRROR_EMOTION_CAP:
+            _MIRROR_EMOTION_ENGINES.popitem(last=False)
+        engine = StudentEmotionEngine(student_id=req.learner_id)
+        _MIRROR_EMOTION_ENGINES[req.learner_id] = engine
+
+    engine.absorb_text(req.text)
+
+    return {
+        "valence": round(engine.state.valence, 3),
+        "intensity": round(engine.state.intensity, 3),
+        "label": engine.label,
+        "gear_shift": engine.gear_shift(),
+        "trail": [
+            {"valence": round(s.valence, 3), "intensity": round(s.intensity, 3)}
+            for s in engine.history[-8:]
+        ],
+    }
 
 
 # ── Knowledge Graph UI & API ─────────────────────────────────────────────────
