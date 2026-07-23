@@ -955,7 +955,7 @@ async function showReveal() {
       `<strong>${bridge.hook || 'No bridge found — try again after more interactions.'}</strong>` +
       (bridge.example ? `<br><br>${bridge.example}` : '');
     traceLog('puzzle.bridge.selected',
-      `concept=pi · learner=${learnerId.slice(0,8)}… · domain=${bridge.domain||'?'} · best_for=${JSON.stringify(bridge.best_for_telos||[])}`);
+      `concept=pi · learner=${learnerId.slice(0,8)}… · domain=${bridge.domain||'?'} · telos_fit=${JSON.stringify(bridge.telos_fit||[])}`);
   } catch(e) {
     // Fallback: pick bridge from telos
     const FALLBACK = {

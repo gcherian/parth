@@ -16,9 +16,9 @@ class PuzzleService {
   }
 
   Map<String, String> get _headers => {
-    'Content-Type': 'application/json',
-    if (_appKey.isNotEmpty) 'X-Parth-Key': _appKey,
-  };
+        'Content-Type': 'application/json',
+        if (_appKey.isNotEmpty) 'X-Parth-Key': _appKey,
+      };
 
   Map<String, String> get _getHeaders =>
       _appKey.isNotEmpty ? {'X-Parth-Key': _appKey} : {};
@@ -111,6 +111,25 @@ class PuzzleService {
       throw Exception('Server returned ${r.statusCode}');
     }
     return PuzzlePortrait.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
+  }
+
+  Future<PuzzleBridge> getBridge({
+    required String conceptId,
+    required String learnerId,
+    required String serverUrl,
+  }) async {
+    final r = await http
+        .get(
+          Uri.parse(
+            '${_base(serverUrl)}/puzzle/bridge/$conceptId?learner_id=$learnerId',
+          ),
+          headers: _getHeaders,
+        )
+        .timeout(const Duration(seconds: 15));
+    if (r.statusCode != 200) {
+      throw Exception('Server returned ${r.statusCode}');
+    }
+    return PuzzleBridge.fromJson(jsonDecode(r.body) as Map<String, dynamic>);
   }
 
   String _detailFrom(http.Response response, {required String fallback}) {
