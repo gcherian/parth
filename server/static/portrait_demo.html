@@ -273,6 +273,7 @@ textarea::placeholder { color: var(--dim); }
 .reveal-card {
   max-width: 640px; width: 90%; background: var(--bg2); border: 1px solid var(--border2);
   border-radius: 16px; overflow: hidden; box-shadow: 0 40px 80px #0008;
+  max-height: 90vh; display: flex; flex-direction: column;
   animation: slideUp .4s ease-out;
 }
 @keyframes slideUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
@@ -282,14 +283,70 @@ textarea::placeholder { color: var(--dim); }
 }
 .reveal-head h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); }
 .reveal-head p  { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.reveal-body { overflow-y: auto; }
+.reveal-body::-webkit-scrollbar { width: 4px; }
+.reveal-body::-webkit-scrollbar-thumb { background: var(--border2); }
+.reveal-section {
+  padding: 16px 24px; border-bottom: 1px solid var(--border);
+}
+.reveal-section-title {
+  font-size: 0.67rem; font-weight: 800; color: var(--orange);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 9px;
+}
+.reveal-step {
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .55s ease, transform .55s ease;
+}
+#reveal.open .reveal-step { opacity: 1; transform: translateY(0); }
+#reveal.open #rv-confidence { transition-delay: .05s; }
+#reveal.open #rv-telos { transition-delay: .18s; }
+#reveal.open #rv-error { transition-delay: .31s; }
+#reveal.open #rv-register { transition-delay: .44s; }
+#reveal.open #rv-spheres { transition-delay: .57s; }
+#reveal.open #rv-bridge { transition-delay: .70s; }
+.reveal-confidence-row {
+  display: flex; align-items: center; gap: 16px;
+}
+.reveal-ring-mini {
+  width: 70px; height: 70px; flex-shrink: 0; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 7px solid var(--orange); background: var(--bg3);
+}
+.reveal-ring-mini strong { font-size: 1.05rem; color: var(--text); }
+.reveal-ring-mini span {
+  font-size: .53rem; color: var(--muted); font-weight: 800;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.reveal-confidence-copy {
+  font-size: .88rem; line-height: 1.55; color: #cbd5e1; font-weight: 600;
+}
 .reveal-telos {
-  padding: 22px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 18px;
+  display: flex; align-items: center; gap: 18px;
 }
 .reveal-telos-icon { font-size: 3rem; }
 .reveal-telos-text h3 { font-size: 1.2rem; font-weight: 800; }
 .reveal-telos-text p  { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-top: 4px; max-width: 380px; }
-.reveal-bridge { padding: 16px 24px; border-bottom: 1px solid var(--border); }
-.reveal-bridge h4 { font-size: 0.67rem; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+.reveal-error-row {
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.reveal-error-icon {
+  width: 38px; height: 38px; display: grid; place-items: center; flex-shrink: 0;
+  border-radius: 8px; background: var(--bg3); border: 1px solid var(--border2);
+}
+.reveal-error-text strong { display: block; font-size: .9rem; color: var(--text); }
+.reveal-error-text span { display: block; font-size: .76rem; line-height: 1.55; color: var(--muted); margin-top: 4px; }
+.reveal-register-copy { font-size: .86rem; color: #cbd5e1; font-weight: 700; margin-bottom: 10px; }
+.reveal-register-bubbles { display: flex; flex-wrap: wrap; gap: 7px; }
+.reveal-register-bubble {
+  padding: 4px 10px; border-radius: 20px; font-size: .67rem; font-weight: 800;
+  border: 1px solid;
+}
+.reveal-sphere-list { display: flex; flex-direction: column; gap: 9px; }
+.reveal-sphere-row { display: flex; align-items: center; gap: 10px; }
+.reveal-sphere-name { flex: 1; min-width: 0; font-size: .78rem; color: #cbd5e1; font-weight: 700; }
+.reveal-sphere-bar { width: 130px; height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.reveal-sphere-fill { height: 100%; border-radius: 4px; }
+.reveal-sphere-val { width: 82px; text-align: right; font-size: .67rem; color: var(--muted); font-family: 'SF Mono','Fira Code',monospace; }
 .reveal-bridge-concept {
   padding: 14px 16px; background: var(--bg3); border-radius: 10px;
   border-left: 3px solid var(--orange); font-size: 0.82rem; color: #94a3b8; line-height: 1.7;
@@ -438,19 +495,53 @@ textarea::placeholder { color: var(--dim); }
   <div class="reveal-card">
     <div class="reveal-head">
       <h2>✦ Portrait Complete ✦</h2>
-      <p>From 5 interactions. No form. No test. Just curiosity.</p>
+      <p>From <span id="rv-signal-count">5 interactions</span>. No form. No test. Just curiosity.</p>
     </div>
-    <div class="reveal-telos">
-      <div class="reveal-telos-icon" id="rv-telos-icon">🔭</div>
-      <div class="reveal-telos-text">
-        <h3 id="rv-telos-label">Explorer</h3>
-        <p id="rv-telos-desc">Portrait description here.</p>
+    <div class="reveal-body">
+      <div class="reveal-section reveal-step" id="rv-confidence">
+        <div class="reveal-section-title">Portrait Confidence</div>
+        <div class="reveal-confidence-row">
+          <div class="reveal-ring-mini">
+            <strong id="rv-confidence-pct">0%</strong>
+            <span id="rv-confidence-word">Learning</span>
+          </div>
+          <div class="reveal-confidence-copy" id="rv-confidence-copy">
+            Signals shaped this first portrait. Parth can personalize now, and it will sharpen with every session.
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="reveal-bridge">
-      <h4 id="rv-bridge-label">How Parth would explain π to you</h4>
-      <div class="reveal-bridge-concept" id="rv-bridge-content">
-        Loading personalized bridge…
+      <div class="reveal-section reveal-step reveal-telos" id="rv-telos">
+        <div class="reveal-telos-icon" id="rv-telos-icon">🔭</div>
+        <div class="reveal-telos-text">
+          <div class="reveal-section-title">Provisional Telos</div>
+          <h3 id="rv-telos-label">Explorer</h3>
+          <p id="rv-telos-desc">Portrait description here.</p>
+        </div>
+      </div>
+      <div class="reveal-section reveal-step" id="rv-error">
+        <div class="reveal-section-title">Error Response Pattern</div>
+        <div class="reveal-error-row">
+          <div class="reveal-error-icon" id="rv-error-icon">···</div>
+          <div class="reveal-error-text">
+            <strong id="rv-error-label">Observing…</strong>
+            <span id="rv-error-desc">Parth is still watching how difficulty changes the learning path.</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-section reveal-step" id="rv-register">
+        <div class="reveal-section-title">Language Register</div>
+        <div class="reveal-register-copy" id="rv-register-copy">Parth is still finding the language that feels natural.</div>
+        <div class="reveal-register-bubbles" id="rv-register-bubbles"></div>
+      </div>
+      <div class="reveal-section reveal-step" id="rv-spheres">
+        <div class="reveal-section-title">Sphere Affinity</div>
+        <div class="reveal-sphere-list" id="rv-sphere-list"></div>
+      </div>
+      <div class="reveal-section reveal-step" id="rv-bridge">
+        <div class="reveal-section-title" id="rv-bridge-label">How Parth would explain π to you</div>
+        <div class="reveal-bridge-concept" id="rv-bridge-content">
+          Loading personalized bridge…
+        </div>
       </div>
     </div>
     <div class="reveal-foot">
@@ -938,10 +1029,30 @@ async function runAuto() {
 
 async function showReveal() {
   await sleep(600);
+  const signals = portrait.interactions_used ?? probeCount;
+  const signalCount = signals > 0 ? signals : 5;
+  const conf = portrait.confidence ?? 0;
+  const confWord = conf < .2 ? 'Learning' : conf < .5 ? 'Forming' : conf < .8 ? 'Confident' : 'Sharp';
+  document.getElementById('rv-signal-count').textContent =
+    `${signalCount} interaction${signalCount === 1 ? '' : 's'}`;
+  document.getElementById('rv-confidence-pct').textContent = `${Math.round(conf * 100)}%`;
+  document.getElementById('rv-confidence-word').textContent = confWord;
+  document.getElementById('rv-confidence-copy').textContent =
+    `${signalCount} signal${signalCount === 1 ? '' : 's'} shaped this first portrait. Parth can personalize now, and the portrait will sharpen with every session.`;
+
   const t = TELOS_MAP[portrait.provisional_telos] || TELOS_MAP.explorer;
   document.getElementById('rv-telos-icon').textContent  = t.icon;
-  document.getElementById('rv-telos-label').textContent = `You are a${['a','e','i','o','u'].includes(t.label[0].toLowerCase()) ? 'n' : ''} ${t.label}`;
+  document.getElementById('rv-telos-label').textContent =
+    `You are ${articleFor(t.label)} ${t.label}`;
   document.getElementById('rv-telos-desc').textContent  = t.desc;
+
+  const e = ERR_MAP[portrait.error_response] || ERR_MAP.unknown;
+  document.getElementById('rv-error-icon').textContent = e.icon;
+  document.getElementById('rv-error-label').textContent = e.label;
+  document.getElementById('rv-error-desc').textContent = e.desc;
+
+  renderRevealRegister(register);
+  renderRevealSpheres(portrait);
 
   // Fetch concept bridge for the learner's telos
   const concept = 'pi';
@@ -952,8 +1063,8 @@ async function showReveal() {
     document.getElementById('rv-bridge-label').textContent =
       `How Parth would explain π to you (via your ${bridge.domain || 'register'})`;
     document.getElementById('rv-bridge-content').innerHTML =
-      `<strong>${bridge.hook || 'No bridge found — try again after more interactions.'}</strong>` +
-      (bridge.example ? `<br><br>${bridge.example}` : '');
+      `<strong>${escHtml(bridge.hook || 'No bridge found — try again after more interactions.')}</strong>` +
+      (bridge.example ? `<br><br>${escHtml(bridge.example)}` : '');
     traceLog('puzzle.bridge.selected',
       `concept=pi · learner=${learnerId.slice(0,8)}… · domain=${bridge.domain||'?'} · telos_fit=${JSON.stringify(bridge.telos_fit||[])}`);
   } catch(e) {
@@ -968,7 +1079,7 @@ async function showReveal() {
     const f = FALLBACK[portrait.provisional_telos] || FALLBACK.explorer;
     document.getElementById('rv-bridge-label').textContent = 'How Parth would explain π to you';
     document.getElementById('rv-bridge-content').innerHTML =
-      `<strong>${f.h}</strong><br><br>${f.d}`;
+      `<strong>${escHtml(f.h)}</strong><br><br>${escHtml(f.d)}`;
   }
 
   traceLog('portrait.complete',
@@ -984,6 +1095,52 @@ function closeReveal() {
 function showError(msg) {
   const body = document.getElementById('puzzle-body');
   body.innerHTML = `<div class="idle-state"><p style="color:#ef4444">${msg}</p></div>`;
+}
+
+function renderRevealRegister(reg) {
+  const dominant = reg?.dominant_domain || '';
+  const bubbles = Array.isArray(reg?.bubbles) ? reg.bubbles.slice(0, 6) : [];
+  document.getElementById('rv-register-copy').textContent = dominant
+    ? `Parth can bridge through ${dominant}.`
+    : 'Parth is still finding the language that feels natural.';
+
+  const bubbleWrap = document.getElementById('rv-register-bubbles');
+  if (!bubbles.length) {
+    bubbleWrap.innerHTML = '<span style="font-size:.76rem;color:var(--muted)">Register bubbles will appear as responses accumulate.</span>';
+    return;
+  }
+
+  bubbleWrap.innerHTML = bubbles.map(b => {
+    const color = b.color || REG_COLORS[b.domain] || '#94a3b8';
+    const isDominant = b.domain === dominant;
+    return `<span class="reveal-register-bubble"
+      style="color:${color};border-color:${color}${isDominant ? 'dd' : '70'};background:${color}${isDominant ? '28' : '12'}">${escHtml(b.domain)}</span>`;
+  }).join('');
+}
+
+function renderRevealSpheres(p) {
+  const affinity = p?.sphere_affinity || {};
+  const levels = p?.zpd_levels || {};
+  const list = Object.entries(affinity)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+  const target = document.getElementById('rv-sphere-list');
+  if (!list.length) {
+    target.innerHTML = '<span style="font-size:.76rem;color:var(--muted)">Your curiosity is wide open. The next session will add stronger signals.</span>';
+    return;
+  }
+
+  target.innerHTML = list.map(([id, raw]) => {
+    const value = Math.max(0, Math.min(10, Number(raw) || 0));
+    const sphere = SPHERES.find(s => s.id === id);
+    const color = sphere?.color || '#06b6d4';
+    const level = levels[id] || 'beginner';
+    return `<div class="reveal-sphere-row">
+      <div class="reveal-sphere-name">${escHtml(sphere?.label || id.replace(/_/g, ' '))}</div>
+      <div class="reveal-sphere-bar"><div class="reveal-sphere-fill" style="width:${value * 10}%;background:${color}"></div></div>
+      <div class="reveal-sphere-val">${value.toFixed(1)} · ${escHtml(level)}</div>
+    </div>`;
+  }).join('');
 }
 
 // ── Reset ────────────────────────────────────────────────────────────────────
@@ -1037,6 +1194,14 @@ function resetAll() {
 
 // ── Util ─────────────────────────────────────────────────────────────────────
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function articleFor(label) {
+  return ['a','e','i','o','u'].includes((label || '').charAt(0).toLowerCase()) ? 'an' : 'a';
+}
+function escHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[c]));
+}
 </script>
 </body>
 </html>

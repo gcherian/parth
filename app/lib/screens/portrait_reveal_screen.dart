@@ -728,7 +728,8 @@ class _RegisterPanel extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           if (bubbles.isEmpty)
-            _SoftText('Register bubbles will appear as responses accumulate.')
+            const _SoftText(
+                'Register bubbles will appear as responses accumulate.')
           else
             Wrap(
               spacing: 8,
@@ -781,7 +782,7 @@ class _SpherePanel extends StatelessWidget {
           const _SectionLabel('Sphere Affinity'),
           const SizedBox(height: 9),
           if (shown.isEmpty)
-            _SoftText(
+            const _SoftText(
                 'Your curiosity is wide open. The next session will add stronger signals.')
           else
             ...shown.map((entry) {
