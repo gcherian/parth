@@ -8,14 +8,11 @@ This is the "enzyme consulting DNA" surface the agents would call —
 not yet wired into the live 15-agent pipeline (see design note), but
 every function here is real and tested against the live graph.
 """
-import os
 from typing import Optional
 
 from neo4j import GraphDatabase
 
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "parth_story_dev")
+from config import Config
 
 _driver = None
 
@@ -23,7 +20,9 @@ _driver = None
 def _get_driver():
     global _driver
     if _driver is None:
-        _driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+        _driver = GraphDatabase.driver(
+            Config.NEO4J_URI, auth=(Config.NEO4J_USER, Config.NEO4J_PASSWORD)
+        )
     return _driver
 
 

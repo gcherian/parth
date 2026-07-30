@@ -6,15 +6,10 @@ Usage:
     source venv/bin/activate
     python3 -m modules.story_graph.load_seed
 """
-import os
-
 from neo4j import GraphDatabase
 
+from config import Config
 from modules.story_graph import seed_data as sd
-
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "parth_story_dev")
 
 
 def load(tx):
@@ -89,7 +84,9 @@ def load(tx):
 
 
 def main():
-    driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+    driver = GraphDatabase.driver(
+        Config.NEO4J_URI, auth=(Config.NEO4J_USER, Config.NEO4J_PASSWORD)
+    )
     with driver.session() as session:
         session.execute_write(load)
 

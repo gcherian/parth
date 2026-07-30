@@ -1,5 +1,6 @@
 # Python
 server/venv/
+server/venv.*/
 **/__pycache__/
 *.pyc
 *.pyo
