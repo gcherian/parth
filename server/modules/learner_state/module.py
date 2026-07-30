@@ -200,6 +200,7 @@ class LearnerStateModule(Module):
 
             # ── Pilot metrics (fire-and-forget, never block) ───────────────
             try:
+                await metrics_mod.record_pretest_baseline(conn, ctx.learner_id)
                 await metrics_mod.record_interaction(
                     conn,
                     learner_id=ctx.learner_id,
