@@ -97,6 +97,9 @@ class _FakeConn:
         if "SELECT type FROM foundation.identities" in sql:
             row = self.identities.get(args[0])
             return {"type": row["type"]} if row else None
+        if "SELECT 1 FROM foundation.identities" in sql:
+            row = self.identities.get(args[0])
+            return {"?column?": 1} if row and row["type"] == "child" else None
         if "SELECT consent_given, scope" in sql:
             return self.guardian_links.get(args[0])
         return None
@@ -146,7 +149,9 @@ class ColdStartHandoffTests(unittest.TestCase):
 
 
 class PilotRegistrationTests(unittest.IsolatedAsyncioTestCase):
-    async def test_register_pilot_learner_grants_ai_consent(self):
+    async def test_register_pilot_learner_does_not_grant_consent(self):
+        """register_pilot_learner only creates the identity/profile — consent
+        must never be a silent side effect of registration."""
         conn = _FakeConn()
         learner_id = str(uuid.uuid4()).upper()
 
@@ -156,7 +161,7 @@ class PilotRegistrationTests(unittest.IsolatedAsyncioTestCase):
         with patch.object(identity, "get_pool", fake_get_pool):
             ok = await identity.register_pilot_learner(learner_id, "", 7)
             self.assertTrue(ok)
-            self.assertTrue(
+            self.assertFalse(
                 await identity.check_consent(
                     learner_id,
                     identity.SCOPE_AI_INTERACTION,
@@ -166,6 +171,49 @@ class PilotRegistrationTests(unittest.IsolatedAsyncioTestCase):
         canonical_id = str(uuid.UUID(learner_id))
         self.assertEqual(conn.profiles[canonical_id]["name"], "Student")
         self.assertEqual(conn.profiles[canonical_id]["grade"], 7)
+
+    async def test_grant_pilot_consent_requires_existing_identity(self):
+        """Consent can't be granted for a learner who was never registered —
+        there must be a real (pilot) identity behind the grant."""
+        conn = _FakeConn()
+        learner_id = str(uuid.uuid4()).upper()
+
+        async def fake_get_pool():
+            return _FakePool(conn)
+
+        with patch.object(identity, "get_pool", fake_get_pool):
+            ok = await identity.grant_pilot_consent(learner_id)
+            self.assertFalse(ok)
+            self.assertFalse(
+                await identity.check_consent(
+                    learner_id,
+                    identity.SCOPE_AI_INTERACTION,
+                )
+            )
+
+    async def test_register_then_grant_consent_is_explicit_two_step(self):
+        """The real flow: register the identity, then a separate, deliberate
+        grant_pilot_consent() call is what actually unlocks data collection."""
+        conn = _FakeConn()
+        learner_id = str(uuid.uuid4()).upper()
+
+        async def fake_get_pool():
+            return _FakePool(conn)
+
+        with patch.object(identity, "get_pool", fake_get_pool):
+            await identity.register_pilot_learner(learner_id, "Aarav", 6)
+            self.assertFalse(
+                await identity.check_consent(learner_id, identity.SCOPE_AI_INTERACTION)
+            )
+
+            ok = await identity.grant_pilot_consent(learner_id)
+            self.assertTrue(ok)
+            self.assertTrue(
+                await identity.check_consent(learner_id, identity.SCOPE_AI_INTERACTION)
+            )
+            self.assertTrue(
+                await identity.check_consent(learner_id, identity.SCOPE_LEARNER_DATA)
+            )
 
 
 if __name__ == "__main__":

@@ -95,19 +95,19 @@ async def register_pilot_learner(
     learner_id: str, name: str, grade: int, school_id: str | None = None
 ) -> bool:
     """
-    Register a new learner and auto-grant pilot consent (no OTP yet).
-    Idempotent — safe to call again if the learner already exists.
-    Returns True on success, False if learner_id is not a valid UUID.
+    Create or update a learner's child identity + profile row. Idempotent —
+    safe to call again if the learner already exists.
+
+    Does NOT grant consent. Call grant_pilot_consent() separately, as its own
+    deliberate action, before any puzzle probe or chat data is collected for
+    this learner — consent must never be a silent side effect of registering
+    a profile. Returns True on success, False if learner_id is not a valid UUID.
     """
     try:
         child_uuid = _uuid.UUID(learner_id)
     except (AttributeError, TypeError, ValueError):
         return False
     child_name = (name or "Student")[:100]
-
-    # Deterministic guardian UUID derived from the child's UUID.
-    # Each child gets their own synthetic guardian record.
-    guardian_uuid = _uuid.uuid5(_uuid.NAMESPACE_DNS, f"pilot-guardian:{child_uuid}")
 
     pool = await get_pool()
     async with pool.acquire() as conn:
@@ -120,23 +120,6 @@ async def register_pilot_learner(
                        SET name=$2, grade=$3,
                            school_id=COALESCE($4, foundation.identities.school_id)""",
                 child_uuid, child_name, grade, school_id,
-            )
-            # Synthetic pilot guardian
-            await conn.execute(
-                """INSERT INTO foundation.identities (id, type, name)
-                   VALUES ($1, 'guardian', 'Pilot Guardian')
-                   ON CONFLICT (id) DO NOTHING""",
-                guardian_uuid,
-            )
-            # Consent grant
-            await conn.execute(
-                """INSERT INTO foundation.guardian_links
-                       (guardian_id, child_id, consent_given, consent_ts, scope)
-                   VALUES ($1, $2, true, now(), $3)
-                   ON CONFLICT (guardian_id, child_id) DO UPDATE
-                       SET consent_given=true, consent_ts=now(), scope=$3""",
-                guardian_uuid, child_uuid,
-                ["ai_interaction", "learner_data", "progress_report"],
             )
             # Ensure a profile row exists in learner_state
             await conn.execute(
@@ -155,6 +138,63 @@ async def register_pilot_learner(
         log.warning("did_creation_skipped", learner_id=str(child_uuid), reason=str(_did_exc))
 
     log.info("pilot_learner_registered", learner_id=str(child_uuid), name=child_name, grade=grade)
+    return True
+
+
+async def grant_pilot_consent(learner_id: str) -> bool:
+    """
+    Explicit pilot consent grant (synthetic guardian, no OTP/DigiLocker yet —
+    see modules/iam/routes.py's /consent/request + /consent/verify for the
+    real OTP-verified guardian flow this should graduate to before a
+    non-pilot launch).
+
+    Must be called as its own deliberate action, triggered by a real UI
+    consent step, BEFORE any puzzle probe or chat data is collected for this
+    learner — never automatically as a side effect of registration or of
+    cold-start completing. Idempotent.
+
+    Returns False if learner_id is not a valid UUID, or if the child identity
+    doesn't exist yet (call register_pilot_learner first).
+    """
+    try:
+        child_uuid = _uuid.UUID(learner_id)
+    except (AttributeError, TypeError, ValueError):
+        return False
+
+    # Deterministic guardian UUID derived from the child's UUID.
+    # Each child gets their own synthetic guardian record.
+    guardian_uuid = _uuid.uuid5(_uuid.NAMESPACE_DNS, f"pilot-guardian:{child_uuid}")
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        child_row = await conn.fetchrow(
+            "SELECT 1 FROM foundation.identities WHERE id = $1 AND type = 'child'",
+            child_uuid,
+        )
+        if child_row is None:
+            log.warning("consent_grant_missing_identity", learner_id=str(child_uuid))
+            return False
+
+        async with conn.transaction():
+            # Synthetic pilot guardian
+            await conn.execute(
+                """INSERT INTO foundation.identities (id, type, name)
+                   VALUES ($1, 'guardian', 'Pilot Guardian')
+                   ON CONFLICT (id) DO NOTHING""",
+                guardian_uuid,
+            )
+            # Consent grant
+            await conn.execute(
+                """INSERT INTO foundation.guardian_links
+                       (guardian_id, child_id, consent_given, consent_ts, scope)
+                   VALUES ($1, $2, true, now(), $3)
+                   ON CONFLICT (guardian_id, child_id) DO UPDATE
+                       SET consent_given=true, consent_ts=now(), scope=$3""",
+                guardian_uuid, child_uuid,
+                ["ai_interaction", "learner_data", "progress_report"],
+            )
+
+    log.info("pilot_consent_granted", learner_id=str(child_uuid))
     return True
 
 

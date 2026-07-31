@@ -22,7 +22,9 @@ from foundation.db import get_pool, apply_schema, close_pool
 from foundation.identity import (
     check_consent,
     register_pilot_learner,
+    grant_pilot_consent,
     SCOPE_AI_INTERACTION,
+    SCOPE_LEARNER_DATA,
 )
 from foundation import metrics as metrics_mod
 from foundation.observability import configure_logging, get_logger
@@ -317,12 +319,12 @@ async def chat(
 ):
     _require_uuid(req.learner_id)
 
-    # Consent gate — /learner/register normally creates this row after cold start.
-    # Keep pilot auto-registration as a fallback for older clients.
+    # Consent gate — consent is granted explicitly via /learner/consent before
+    # the puzzle probes ever start, so cold-start completing implies consent
+    # already exists. This repair path only refreshes a stale name/grade if
+    # /learner/register failed on the client; it can no longer grant consent.
     consent_ok = await check_consent(req.learner_id, SCOPE_AI_INTERACTION)
     if not consent_ok:
-        # Repair the handoff if the fifth puzzle saved but /learner/register
-        # failed on the client. Do not bypass the cold-start contract.
         try:
             if await _cold_start_complete(req.learner_id):
                 await register_pilot_learner(
@@ -454,8 +456,15 @@ async def consent_grant(req: ConsentGrantRequest, _: None = Depends(rate_limit))
     return {"status": "consent_granted"}
 
 
-# ── Learner registration (pilot — auto-grants consent, no OTP yet) ────────────
+# ── Learner registration & consent ────────────────────────────────────────────
 class LearnerRegisterRequest(BaseModel):
+    learner_id: str = Field(..., max_length=100)
+    name: str = Field(..., max_length=100)
+    grade: int = Field(..., ge=1, le=12)
+    school_id: str | None = Field(None, max_length=100)
+
+
+class LearnerConsentRequest(BaseModel):
     learner_id: str = Field(..., max_length=100)
     name: str = Field(..., max_length=100)
     grade: int = Field(..., ge=1, le=12)
@@ -468,12 +477,35 @@ class ValueReflectionRequest(BaseModel):
     response_text: str = Field(..., max_length=2000)
 
 
+@app.post("/learner/consent")
+async def learner_consent(req: LearnerConsentRequest, _: None = Depends(rate_limit)):
+    """
+    Explicit pilot consent grant (synthetic guardian, no OTP/DigiLocker yet).
+    Must be called — as a deliberate, visible consent step in the app — before
+    the five cold-start puzzle probes begin. /puzzle/next and /puzzle/respond
+    both require this to have happened first; nothing about this child is
+    collected before it. Idempotent — safe to call multiple times.
+    """
+    _require_uuid(req.learner_id)
+    ok = await register_pilot_learner(
+        learner_id=req.learner_id,
+        name=_sanitize(req.name, max_len=100),
+        grade=req.grade,
+        school_id=req.school_id,
+    )
+    if not ok:
+        raise HTTPException(status_code=400, detail="Invalid learner ID format")
+    await grant_pilot_consent(req.learner_id)
+    return {"status": "consent_granted", "learner_id": req.learner_id}
+
+
 @app.post("/learner/register")
 async def learner_register(req: LearnerRegisterRequest, _: None = Depends(rate_limit)):
     """
-    Register a new learner and auto-grant pilot consent.
+    Finalize a learner's profile (name/grade may have changed since consent).
     Must be called after cold-start completes and before /chat can be used.
-    Idempotent — safe to call multiple times.
+    Consent must already exist — granted via /learner/consent before the
+    puzzle probes started — this endpoint no longer grants it. Idempotent.
     """
     _require_uuid(req.learner_id)
     if not await _cold_start_complete(req.learner_id):
@@ -482,6 +514,14 @@ async def learner_register(req: LearnerRegisterRequest, _: None = Depends(rate_l
             detail={
                 "error": "cold_start_incomplete",
                 "message": "Complete the five puzzle probes before entering chat.",
+            },
+        )
+    if not await check_consent(req.learner_id, SCOPE_AI_INTERACTION):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": "A parent or guardian must give consent before Parth can begin.",
             },
         )
     ok = await register_pilot_learner(
@@ -659,6 +699,17 @@ async def puzzle_next(
     _: None = Depends(rate_limit),
 ):
     _require_uuid(learner_id)
+    if not await check_consent(learner_id, SCOPE_LEARNER_DATA):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": (
+                    "A parent or guardian must give consent before the puzzle "
+                    "probes can begin. Call /learner/consent first."
+                ),
+            },
+        )
     grade = max(1, min(12, grade))
     from kernel.context import Event, KernelContext
     pool = await get_pool()
@@ -693,6 +744,17 @@ async def puzzle_respond(
     from modules.moderation_ops.module import moderate_text, _BLOCK_RESPONSE
 
     _require_uuid(req.learner_id)
+    if not await check_consent(req.learner_id, SCOPE_LEARNER_DATA):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": (
+                    "A parent or guardian must give consent before the puzzle "
+                    "probes can begin. Call /learner/consent first."
+                ),
+            },
+        )
 
     puzzle = loader.get(req.puzzle_id)
     if puzzle is None:
