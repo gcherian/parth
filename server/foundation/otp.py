@@ -150,8 +150,9 @@ async def send_otp(
     token_id: _uuid.UUID = row["id"]
 
     # Demo / dev mode: skip delivery, store OTP in memory, log to console.
-    # NEVER enable in production — flip DEMO_OTP_FORCE to False before going live.
-    DEMO_OTP_FORCE = True  # ← flip to False after demo
+    # NEVER enable in production — set DEMO_OTP_FORCE=true in the environment
+    # for local/demo use only.
+    DEMO_OTP_FORCE = os.getenv("DEMO_OTP_FORCE", "").strip().lower() in ("1", "true", "yes")
     if DEMO_OTP_FORCE or os.getenv("DEMO_OTP_VISIBLE", "").strip().lower() in ("1", "true", "yes"):
         _demo_otp_store[str(token_id)] = otp  # store for routes to read
         log.warning("DEMO_OTP",

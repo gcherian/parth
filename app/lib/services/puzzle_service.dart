@@ -72,6 +72,34 @@ class PuzzleService {
     }
   }
 
+  /// Must be called — after an explicit, visible parent/guardian consent
+  /// step — before the puzzle probes begin. /puzzle/next and /puzzle/respond
+  /// both reject requests for a learner who hasn't been granted consent yet.
+  Future<void> grantConsent({
+    required String learnerId,
+    required String name,
+    required int grade,
+    required String serverUrl,
+  }) async {
+    if (serverUrl.isEmpty) {
+      throw Exception('No server configured');
+    }
+    final r = await http
+        .post(
+          Uri.parse('${_base(serverUrl)}/learner/consent'),
+          headers: _headers,
+          body: jsonEncode({
+            'learner_id': learnerId,
+            'name': name,
+            'grade': grade,
+          }),
+        )
+        .timeout(const Duration(seconds: 15));
+    if (r.statusCode < 200 || r.statusCode >= 300) {
+      throw Exception(_detailFrom(r, fallback: 'Consent grant failed'));
+    }
+  }
+
   Future<void> registerLearner({
     required String learnerId,
     required String name,

@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../services/puzzle_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/server_config.dart';
 import 'puzzle_onboarding_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -14,13 +16,17 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+  final _service = PuzzleService();
   final _nameController = TextEditingController();
   int _grade = 6; // default to Grade 6 — deck's primary target
   bool _loading = false;
 
-  // Step 1 = child name/grade; Step 2 = parent invite nudge
+  // Step 1 = child name/grade; Step 2 = parent consent (required, not a nudge)
   int _step = 1;
   String _learnerId = '';
+  String _serverUrl = '';
+  bool _consenting = false;
+  String? _consentError;
 
   @override
   void dispose() {
@@ -51,17 +57,58 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await prefs.setString('user_name', name);
     await prefs.setInt('grade', _grade);
 
+    final savedUrl = prefs.getString('server_url') ?? '';
+    final serverUrl = resolveServerUrl(savedUrl);
+    if (serverUrl != savedUrl) await prefs.setString('server_url', serverUrl);
+
     setState(() {
       _learnerId = id;
+      _serverUrl = serverUrl;
       _loading = false;
       _step = 2;
     });
   }
 
-  Future<void> _finish() async {
+  /// The consent gate: nothing about this child is collected — no puzzle
+  /// probes, no data — until this succeeds. /learner/consent must be called
+  /// before /puzzle/next or /puzzle/respond will accept anything for this
+  /// learner_id.
+  Future<void> _grantConsentAndBegin() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboarded', true);
-    if (!mounted) return;
+
+    // No server configured — nothing is collected anywhere yet, so there's
+    // nothing to gate. Match the existing "skip puzzle onboarding when no
+    // server configured" behavior rather than blocking on an unreachable call.
+    if (_serverUrl.isEmpty) {
+      await prefs.setBool('onboarded', true);
+      if (!mounted) return;
+      _navigateToPuzzles();
+      return;
+    }
+
+    setState(() {
+      _consenting = true;
+      _consentError = null;
+    });
+    try {
+      await _service.grantConsent(
+        learnerId: _learnerId,
+        name: _nameController.text.trim(),
+        grade: _grade,
+        serverUrl: _serverUrl,
+      );
+      await prefs.setBool('onboarded', true);
+      if (!mounted) return;
+      _navigateToPuzzles();
+    } catch (e) {
+      setState(() {
+        _consenting = false;
+        _consentError = 'Could not save consent. Please check your connection and try again.';
+      });
+    }
+  }
+
+  void _navigateToPuzzles() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (_, __, ___) => const PuzzleOnboardingScreen(),
@@ -305,22 +352,43 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 20),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.deepBlue.withOpacity(0.04),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              'Parent or guardian: by tapping below, you agree to let '
+              '${_nameController.text.trim().isEmpty ? "your child" : _nameController.text.trim()} '
+              'use Parth, including AI conversations and progress tracking. '
+              'You can review or withdraw this anytime from the parent dashboard.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13, color: AppTheme.darkText.withOpacity(0.85), height: 1.5),
+            ),
+          ),
+          if (_consentError != null) ...[
+            const SizedBox(height: 12),
+            Text(
+              _consentError!,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 13, color: Colors.red),
+            ),
+          ],
           const Spacer(),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _finish,
-              child: const Text("Let's begin →"),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Center(
-            child: GestureDetector(
-              onTap: _finish,
-              child: const Text(
-                "Skip — I'll do this later",
-                style: TextStyle(fontSize: 13, color: AppTheme.lightText),
-              ),
+              onPressed: _consenting ? null : _grantConsentAndBegin,
+              child: _consenting
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Text('I agree — let\'s begin →'),
             ),
           ),
         ],
