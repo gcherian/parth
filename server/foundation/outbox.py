@@ -22,16 +22,23 @@ async def publish(
     payload: dict,
     aggregate: str = "",
     aggregate_id: str = "",
+    purpose: str | None = None,
 ) -> str:
-    """Write an outbox row inside caller's open transaction."""
+    """Write an outbox row inside caller's open transaction.
+
+    purpose is optional and unread by anything today — no call site is
+    required to pass it. It exists so callers that already know why an
+    event is being published (e.g. a future consent-scoped Action) have
+    somewhere to record that now, instead of retrofitting it later.
+    """
     row_id = str(uuid.uuid4())
     await conn.execute(
         """
         INSERT INTO foundation.outbox
-            (id, event_type, aggregate, aggregate_id, payload)
-        VALUES ($1, $2, $3, $4, $5)
+            (id, event_type, aggregate, aggregate_id, payload, purpose)
+        VALUES ($1, $2, $3, $4, $5, $6)
         """,
-        row_id, event_type, aggregate, aggregate_id, payload,
+        row_id, event_type, aggregate, aggregate_id, payload, purpose,
     )
     return row_id
 

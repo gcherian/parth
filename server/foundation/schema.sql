@@ -42,6 +42,12 @@ CREATE TABLE IF NOT EXISTS foundation.outbox (
     delivered_at TIMESTAMPTZ
 );
 
+-- Unused by anything yet — added ahead of need because it's cheap now and
+-- expensive to retrofit once outbox rows accumulate without it. This is the
+-- data shape the future Trust Plane purpose-limitation check will need (see
+-- ParthOS/docs/IMPLEMENTATION_ROADMAP.md Track A item 4).
+ALTER TABLE foundation.outbox ADD COLUMN IF NOT EXISTS purpose TEXT;
+
 CREATE INDEX IF NOT EXISTS outbox_pending_idx
     ON foundation.outbox (created_at)
     WHERE status = 'pending';
