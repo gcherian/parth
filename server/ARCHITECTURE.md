@@ -125,6 +125,11 @@ or revoked, the write is blocked and a `consent.required` event is published.
 **Right to erasure:** `identity.erase(learner_id)` cascades through all module
 schemas via FK constraints + a dedicated `on_erase` hook each module registers.
 
+**Convention for any new operation shaped like this:** see
+[CONVENTIONS.md](CONVENTIONS.md) — a one-page checklist (precondition,
+single responsibility, idempotency, one log line, consent-before-write)
+distilled from `grant_pilot_consent()` / `register_pilot_learner()` below.
+
 ### 1.4 Observability
 
 All L2 and L3 code emits structured telemetry via three channels:
