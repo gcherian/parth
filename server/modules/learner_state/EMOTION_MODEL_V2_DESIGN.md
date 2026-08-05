@@ -175,27 +175,40 @@ simulation output before any of this touches production.
 
 ## What's built now vs. next
 
-**Built in this pass** (additive, no schema/DB changes, no production wiring):
+**Built and wired into production** (as of the Parth deployability hygiene
+pass that landed this):
 
 - `emotion_engine.py` — `EmotionState`, appraisal-from-heuristics, the
   transition-graph-weighted update rule, discrete-label projection, and the
-  gear-shift policy. Pure Python, no dependencies, unit-testable in isolation.
+  gear-shift policy. Pure Python, no dependencies, unit-testable in isolation
+  — unchanged by the wiring below; it's still the dependency-free core.
 - `tests/simulate_peer_emotion.py` — runs pairs of existing personas through a
   scripted or alternating exchange, prints the valence/intensity trajectory,
-  gear-shift events, and trust-scaled convergence, entirely offline (no
-  server/DB/LLM required, so it's runnable right now).
+  gear-shift events, and trust-scaled convergence, entirely offline.
+- `affect_v2.py` — the DB-touching bridge. `learner_state.affect_state`
+  gained `valence`/`intensity`/`affect_history`/`affect_gear_shift` columns
+  (additive — the existing discrete probability-vector columns are
+  untouched). `learner_state/module.py`'s post-generation phase calls
+  `absorb_turn()` every turn, non-fatally, independent of the discrete
+  `emotion` label the LLM evaluator still produces.
+- `agents/emotion_compass.py`'s `_read()` now appends a one-line trajectory
+  hint (from `affect_gear_shift`) to the context string injected into the
+  tutor prompt each turn — the "switch gears" policy actually reaching the
+  response-generation path, not just being computed and discarded.
+- `tests/test_affect_v2.py` — covers state carrying across turns (vs. the
+  old overwrite), first-turn persistence for a new learner, and gear-shift
+  firing on a sustained frustration ramp, using a fake connection (no DB
+  required).
 
-**Deliberately not done yet** (needs a decision + touches production behavior):
+**Deliberately still not done** (needs a decision, not just wiring):
 
-- Swapping `emotion_compass.py` / `sessional_emotion.py` to store
-  `EmotionState` instead of overwriting `last_emotion` (schema change:
-  `learner_state.affect_state` would need `valence`/`intensity`/`updated_at`
-  columns and a migration).
 - Changing the `evaluator.py` LLM prompt from "pick one label" to "estimate
-  control/value appraisal features" (changes model cost/latency profile,
-  worth A/B'ing before committing).
-- Wiring the gear-shift policy's output into the response-generation prompt
-  (`kernel/orchestrator.py`) so the tutor actually acts on it.
-
-Recommend validating the engine + peer-simulation behavior first, then doing
-the production integration as a second, separately-reviewable change.
+  control/value appraisal features" directly. The appraisal impulse in
+  production still comes only from `appraise_text()`'s regex lexicon over
+  the raw message — the same signal the discrete heuristic already sees —
+  not from the LLM. Changing the LLM prompt changes its cost/latency
+  profile and is worth A/B'ing before committing, exactly as originally
+  scoped here; not done as part of this wiring pass.
+- Peer-contagion (`contagion_step`) is exercised by the simulation only —
+  there's no live peer-interaction surface in the product yet for it to
+  wire into.

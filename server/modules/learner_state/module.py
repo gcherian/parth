@@ -18,6 +18,7 @@ from foundation import metrics as metrics_mod
 from modules.learner_state import profile as prof
 from modules.learner_state import knowledge as know
 from modules.learner_state.signals import extract as extract_signals
+from modules.learner_state.affect_v2 import absorb_turn as absorb_affect_turn
 from modules.learner_state import psyche as psy
 from modules.learner_state import curiosity as cur
 from modules.learner_state import episodes as epi
@@ -165,6 +166,17 @@ class LearnerStateModule(Module):
                 "language_ratio": agent_signals.language_ratio,
                 "events":     dict(agent_signals.events),
             }
+
+            # ── Emotion Model v2 — continuous (valence, intensity) trajectory ──
+            # Independent of the discrete `emotion` label above (still the
+            # system of record for existing consumers); read back via
+            # agents/emotion_compass.py's _read() on the next turn's prompt.
+            try:
+                ctx.module_data["learner.state.affect_v2"] = await absorb_affect_turn(
+                    conn, ctx.learner_id, ctx.message
+                )
+            except Exception as _affect_exc:
+                log.warning("affect_v2_absorb_failed", error=str(_affect_exc))
 
             # Convenience aliases (used below)
             misconception = agent_signals.misconception

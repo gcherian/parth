@@ -5,6 +5,23 @@ from kernel.agent import BaseAgent, AgentSignals
 
 _NEGATIVE = {"frustrated", "anxious", "distressed", "sad"}
 
+# Emotion Model v2's gear-shift policy (emotion_engine.gear_shift) reads a
+# trajectory, not a point value, and can fire while a shift is still in
+# motion. "hold_steady" is the common case and adds no prompt line — only
+# a real trajectory shift is worth surfacing. See EMOTION_MODEL_V2_DESIGN.md.
+_GEAR_SHIFT_HINTS = {
+    "frustration_ramp -> simplify_or_hint_now":
+        "Trajectory: frustration is ramping up — simplify or offer a hint now, before it consolidates.",
+    "boredom_drift -> inject_novelty":
+        "Trajectory: engagement is drifting down — inject novelty or raise the stakes.",
+    "curiosity_building -> lean_in_deepen":
+        "Trajectory: curiosity is building — lean in and go deeper, don't interrupt.",
+    "satisfied_winddown -> consolidate_praise":
+        "Trajectory: winding down satisfied — consolidate, praise, close the loop.",
+    "resolved_from_negative -> reinforce_and_cement":
+        "Trajectory: just resolved from a negative state — reinforce this moment.",
+}
+
 
 def _build_probs(emotion: str) -> dict[str, float]:
     e = emotion
@@ -66,8 +83,8 @@ class EmotionCompassAgent(BaseAgent):
 
     async def _read(self, conn, learner_id: str) -> str:
         row = await conn.fetchrow(
-            "SELECT frustration, confusion, boredom, curiosity, delight, uncertainty "
-            "FROM learner_state.affect_state WHERE learner_id=$1",
+            "SELECT frustration, confusion, boredom, curiosity, delight, uncertainty, "
+            "affect_gear_shift FROM learner_state.affect_state WHERE learner_id=$1",
             learner_id,
         )
         if not row:
@@ -81,7 +98,11 @@ class EmotionCompassAgent(BaseAgent):
         labels = {"frustrated": row["frustration"], "confused": row["confusion"],
                   "bored": row["boredom"], "curious": row["curiosity"], "delighted": row["delight"]}
         dominant = max(labels, key=labels.get)
-        return (
+        line = (
             f"Affect: {dominant} (p={labels[dominant]:.2f}, uncertainty={row['uncertainty']:.2f}). "
             "Back off if distress; lean in if curious."
         )
+        hint = _GEAR_SHIFT_HINTS.get(row["affect_gear_shift"])
+        if hint:
+            line = f"{line} {hint}"
+        return line

@@ -465,6 +465,17 @@ CREATE TABLE IF NOT EXISTS learner_state.affect_state (
     updated_at  TIMESTAMPTZ DEFAULT now()
 );
 
+-- Emotion Model v2: continuous (valence, intensity) state, additive alongside
+-- the discrete probability vector above — same table, not a second one, per
+-- Design Principle 2. `history` is a capped rolling window (see
+-- emotion_engine.gear_shift's window) of recent [valence, intensity] points,
+-- needed to read trajectory/slope rather than just the current point.
+-- See modules/learner_state/EMOTION_MODEL_V2_DESIGN.md.
+ALTER TABLE learner_state.affect_state ADD COLUMN IF NOT EXISTS valence   REAL DEFAULT 0.0;
+ALTER TABLE learner_state.affect_state ADD COLUMN IF NOT EXISTS intensity REAL DEFAULT 0.2;
+ALTER TABLE learner_state.affect_state ADD COLUMN IF NOT EXISTS affect_history JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE learner_state.affect_state ADD COLUMN IF NOT EXISTS affect_gear_shift TEXT DEFAULT 'hold_steady';
+
 -- Curriculum Cartographer: seen concepts per learner
 CREATE TABLE IF NOT EXISTS learner_state.curriculum_map (
     learner_id   TEXT NOT NULL,
