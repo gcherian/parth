@@ -11,6 +11,7 @@ Flow:
   the student's learner_id is linked to the teacher's phone.
 """
 import json
+from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
@@ -137,6 +138,25 @@ async def submit_feedback(body: TeacherFeedbackRequest):
 
 # ── Portrait context builder — called by learner_state module ────────────────
 
+def _staleness_note(submitted_at) -> str:
+    """Same decay thinking as the BKT/SM-2 curves elsewhere in learner_state
+    (see modules/practice_engine's ease_factor/interval_days, modules/lens/
+    cognitive.py's half-life estimate): an old, unconfirmed observation
+    should read with less certainty than a fresh one, not be asserted flatly
+    forever. Scoped narrowly to this one function, not a general staleness
+    framework — see server/CONVENTIONS.md's closing note on that distinction.
+    """
+    if submitted_at is None:
+        return ""
+    now = datetime.now(timezone.utc)
+    age_days = (now - submitted_at).days
+    if age_days < 30:
+        return ""
+    if age_days < 90:
+        return f" (observed ~{age_days // 7} weeks ago)"
+    return f" (observed ~{age_days // 30} months ago — may be outdated; confirm before relying on it heavily)"
+
+
 async def get_teacher_portrait_context(conn, learner_id: str) -> str:
     """
     Return a compact teacher portrait string for injection into the tutor prompt.
@@ -144,7 +164,7 @@ async def get_teacher_portrait_context(conn, learner_id: str) -> str:
     """
     rows = await conn.fetch(
         """
-        SELECT teacher_name, subject, payload
+        SELECT teacher_name, subject, payload, submitted_at
         FROM teacher.portraits
         WHERE learner_id = $1
         ORDER BY submitted_at DESC
@@ -158,7 +178,7 @@ async def get_teacher_portrait_context(conn, learner_id: str) -> str:
     for row in rows:
         p = row["payload"] if isinstance(row["payload"], dict) else json.loads(row["payload"])
         subj = row["subject"].capitalize()
-        lines = [f"Subject: {subj} (from {row['teacher_name']})"]
+        lines = [f"Subject: {subj} (from {row['teacher_name']}){_staleness_note(row['submitted_at'])}"]
 
         if p.get("performance"):
             lines.append(f"Performance: {p['performance'].replace('_', ' ')}")
