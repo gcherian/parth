@@ -260,6 +260,76 @@ async def context_for_message(conn, message: str, age: int | str | None = 8) -> 
     return build_context(scored[:3])
 
 
+def bfs_related(
+    edges: list[dict[str, Any]],
+    start_id: str,
+    relation: str = "echoes",
+    max_hops: int = 2,
+) -> list[dict[str, Any]]:
+    """Multi-hop traversal over an already-fetched edge list, filtered to one
+    relation type — undirected, since 'echoes' has no natural direction.
+
+    This is the same multi-hop capability that motivated story_graph's
+    now-retired Neo4j ECHOES traversal (see DESIGN_BASIS.md §6 / Design
+    Principle 2): a plain BFS over edges the Ontology Plane already has,
+    not a second, disconnected graph database.
+    """
+    adjacency: dict[str, list[str]] = {}
+    for edge in edges:
+        if edge.get("relation") != relation:
+            continue
+        adjacency.setdefault(edge["source"], []).append(edge["target"])
+        adjacency.setdefault(edge["target"], []).append(edge["source"])
+
+    hops_from_start: dict[str, int] = {start_id: 0}
+    frontier = [start_id]
+    for hop in range(1, max_hops + 1):
+        next_frontier = []
+        for node_id in frontier:
+            for neighbour in adjacency.get(node_id, []):
+                if neighbour not in hops_from_start:
+                    hops_from_start[neighbour] = hop
+                    next_frontier.append(neighbour)
+        frontier = next_frontier
+        if not frontier:
+            break
+
+    return [
+        {"id": node_id, "hops": hops}
+        for node_id, hops in hops_from_start.items()
+        if node_id != start_id
+    ]
+
+
+async def related_stories(
+    conn, story_id: str, relation: str = "echoes", max_hops: int = 2
+) -> list[dict[str, Any]]:
+    """Stories reachable from story_id within max_hops via `relation` edges —
+    'show me the same pattern from a different tradition.'"""
+    edge_rows = await conn.fetch(
+        "SELECT from_id AS source, to_id AS target, relation "
+        "FROM meaning_graph.edges WHERE relation = $1",
+        relation,
+    )
+    reached = bfs_related([dict(r) for r in edge_rows], story_id, relation, max_hops)
+    if not reached:
+        return []
+    node_rows = await conn.fetch(
+        "SELECT id, label, tradition FROM meaning_graph.nodes WHERE id = ANY($1::text[])",
+        [r["id"] for r in reached],
+    )
+    node_by_id = {r["id"]: r for r in node_rows}
+    return [
+        {
+            "id": r["id"],
+            "title": node_by_id[r["id"]]["label"] if r["id"] in node_by_id else r["id"],
+            "tradition": node_by_id[r["id"]]["tradition"] if r["id"] in node_by_id else "",
+            "hops": r["hops"],
+        }
+        for r in reached
+    ]
+
+
 async def neo4j_export(conn) -> dict[str, Any]:
     node_rows = await conn.fetch(
         """

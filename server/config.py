@@ -19,9 +19,6 @@ Environment variables:
   AGENT_TRACE_HISTORY Interactions kept in the in-memory observer cache
   DATA_DIR            Path to persistent data (ChromaDB, etc.). Default: ~/.parth
   MAX_HISTORY_TURNS   Chat turns included in prompt context (default: 16)
-  NEO4J_URI           Bolt URI for the story graph (default: bolt://localhost:7687)
-  NEO4J_USER          Neo4j username (default: neo4j)
-  NEO4J_PASSWORD      Neo4j password (default: parth_story_dev)
 """
 import os
 import socket
@@ -68,11 +65,6 @@ class Config:
     PARTH_API_KEY: str = os.getenv("PARTH_API_KEY", "")
     # Admin key — for monitor, observer, playground, graph etc.
     ADMIN_KEY: str = os.getenv("ADMIN_KEY", "")
-
-    # ── Story graph (Neo4j) ───────────────────────────────────────────────────
-    NEO4J_URI:      str = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-    NEO4J_USER:     str = os.getenv("NEO4J_USER", "neo4j")
-    NEO4J_PASSWORD: str = os.getenv("NEO4J_PASSWORD", "parth_story_dev")
 
     # ── Notify / survey links ─────────────────────────────────────────────────
     # Twilio WhatsApp-enabled sender, e.g. "whatsapp:+14155238886" (Twilio's

@@ -8,6 +8,7 @@ if str(SERVER_ROOT) not in sys.path:
 
 from modules.meaning_graph.service import (  # noqa: E402
     age_for_grade,
+    bfs_related,
     build_context,
     graph_to_cypher,
     score_candidate,
@@ -93,6 +94,29 @@ class MeaningGraphTests(unittest.TestCase):
         self.assertIn("Quiet truth\\nloud praise", cypher)
         self.assertIn("[r:TEACHES]", cypher)
         self.assertIn("r.weight = 0.9000", cypher)
+
+    def test_bfs_related_finds_multi_hop_echoes_and_ignores_other_relations(self):
+        edges = [
+            {"source": "story_a", "target": "story_b", "relation": "echoes"},
+            {"source": "story_b", "target": "story_c", "relation": "echoes"},
+            {"source": "story_a", "target": "motif_x", "relation": "teaches"},
+        ]
+
+        reached = bfs_related(edges, "story_a", relation="echoes", max_hops=2)
+
+        reached_by_id = {r["id"]: r["hops"] for r in reached}
+        self.assertEqual(reached_by_id, {"story_b": 1, "story_c": 2})
+        self.assertNotIn("motif_x", reached_by_id)
+
+    def test_bfs_related_respects_max_hops(self):
+        edges = [
+            {"source": "story_a", "target": "story_b", "relation": "echoes"},
+            {"source": "story_b", "target": "story_c", "relation": "echoes"},
+        ]
+
+        reached = bfs_related(edges, "story_a", relation="echoes", max_hops=1)
+
+        self.assertEqual({r["id"] for r in reached}, {"story_b"})
 
 
 if __name__ == "__main__":

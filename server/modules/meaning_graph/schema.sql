@@ -288,7 +288,11 @@ VALUES
     ('motif_consequence', 'concept_cause_effect', 'bridges_to', 0.9, 'Consequences are cause and effect in moral time.', '{}'::jsonb),
     ('motif_courage', 'concept_moral_courage', 'bridges_to', 0.95, 'Courage becomes moral when it serves the right thing.', '{}'::jsonb),
     ('concept_self_control', 'nature_pattern_neural_rewiring', 'bridges_to', 0.75, 'Practice makes pausing more available.', '{}'::jsonb),
-    ('question_how_mind_changes', 'nature_pattern_neural_rewiring', 'bridges_to', 0.95, 'The brain pattern answers the question through practice and attention.', '{}'::jsonb)
+    ('question_how_mind_changes', 'nature_pattern_neural_rewiring', 'bridges_to', 0.95, 'The brain pattern answers the question through practice and attention.', '{}'::jsonb),
+
+    ('story_aesop_fox_grapes', 'story_shakespeare_macbeth_ambition', 'echoes', 0.8, 'Both stories show desire distorting judgment — one wanting frustrated and re-storied as not-wanted, one wanting granted and still not satisfied.', '{}'::jsonb),
+    ('story_aesop_tortoise_hare', 'story_bible_lost_sheep', 'echoes', 0.75, 'Both turn on what attention notices or misses — a runner''s attention lapsing before the finish, a shepherd''s attention catching the one that is missing.', '{}'::jsonb),
+    ('story_bible_good_samaritan', 'story_panchatantra_monkey_crocodile', 'echoes', 0.75, 'Both ask the child to imagine a situation from another''s point of view before acting — a wounded stranger''s view, a supposed friend''s hidden intent.', '{}'::jsonb)
 ON CONFLICT (from_id, to_id, relation) DO UPDATE SET
     weight = EXCLUDED.weight,
     rationale = EXCLUDED.rationale,
