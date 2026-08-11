@@ -96,6 +96,59 @@ class AiService {
     }
   }
 
+  // ── Observation → cross-domain probes (local server only) ──────────────────
+  // No client-side Anthropic-fallback equivalent exists for this endpoint —
+  // it needs episodes/open_loops storage, which only the local server has.
+  Future<ObservationResult> sendObservation({
+    required String serverUrl,
+    required String observationText,
+    String learnerId = 'anonymous',
+    int grade = 6,
+  }) async {
+    if (serverUrl.isEmpty) {
+      throw Exception(
+          'This needs the Parth server connected — set it up in Settings first.');
+    }
+    final base =
+        serverUrl.endsWith('/') ? serverUrl.substring(0, serverUrl.length - 1) : serverUrl;
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$base/observation'),
+            headers: {
+              'Content-Type': 'application/json',
+              if (_appKey.isNotEmpty) 'X-Parth-Key': _appKey,
+            },
+            body: jsonEncode({
+              'learner_id': learnerId,
+              'grade': grade,
+              'observation_text': observationText,
+            }),
+          )
+          .timeout(const Duration(seconds: 60));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        return ObservationResult.fromJson(data);
+      } else {
+        String detail = 'Server error ${response.statusCode}';
+        try {
+          final data = jsonDecode(response.body) as Map<String, dynamic>;
+          final rawDetail = data['detail'];
+          if (rawDetail is String && rawDetail.isNotEmpty) detail = rawDetail;
+        } catch (_) {}
+        throw Exception(detail);
+      }
+    } on SocketException {
+      throw Exception('Connection lost — check your network and try again.');
+    } on TimeoutException {
+      throw Exception('That one needed real thought — please try again in a moment.');
+    } on FormatException {
+      throw Exception('Received an unexpected response — please try again.');
+    }
+  }
+
   // ── Anthropic Claude API (fallback) ────────────────────────────────────────
   static const String _anthropicUrl = 'https://api.anthropic.com/v1/messages';
   static const String _anthropicModel = 'claude-sonnet-4-6';
@@ -206,4 +259,36 @@ Your teaching style:
 
 extension<T> on List<T> {
   List<T> takeLast(int n) => length <= n ? this : sublist(length - n);
+}
+
+class ObservationProbe {
+  final String domain;
+  final String openingQuestion;
+  final String whyThisAngle;
+
+  ObservationProbe({
+    required this.domain,
+    required this.openingQuestion,
+    required this.whyThisAngle,
+  });
+
+  factory ObservationProbe.fromJson(Map<String, dynamic> json) => ObservationProbe(
+        domain: json['domain'] as String? ?? '',
+        openingQuestion: json['opening_question'] as String? ?? '',
+        whyThisAngle: json['why_this_angle'] as String? ?? '',
+      );
+}
+
+class ObservationResult {
+  final List<ObservationProbe> probes;
+  final String openingMessage;
+
+  ObservationResult({required this.probes, required this.openingMessage});
+
+  factory ObservationResult.fromJson(Map<String, dynamic> json) => ObservationResult(
+        probes: (json['probes'] as List<dynamic>? ?? [])
+            .map((p) => ObservationProbe.fromJson(p as Map<String, dynamic>))
+            .toList(),
+        openingMessage: json['opening_message'] as String? ?? '',
+      );
 }

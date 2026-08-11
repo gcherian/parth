@@ -164,6 +164,54 @@ class ChatNotifier extends StateNotifier<ChatState> {
     }
   }
 
+  /// A student volunteers something they noticed in real life. Unlike
+  /// sendMessage(), the assistant reply here isn't a direct answer to what
+  /// the student said — it's the strongest of several genuinely cross-domain
+  /// Socratic questions the server generated from it. Storage (episodes +
+  /// an open_loop) happens server-side; every /chat turn from here on
+  /// already knows about this observation with no further client work.
+  Future<void> sendObservation(String observationText) async {
+    if (observationText.trim().isEmpty) return;
+    await _initFuture;
+
+    final userMsg = Message(
+      id: _uuid.v4(),
+      content: observationText.trim(),
+      isUser: true,
+      timestamp: DateTime.now(),
+      subject: state.currentSubject?.id,
+    );
+
+    final withUser = [...state.messages, userMsg];
+    state = state.copyWith(messages: withUser, isLoading: true, clearError: true);
+
+    try {
+      final result = await _ai.sendObservation(
+        serverUrl: state.serverUrl ?? '',
+        observationText: observationText,
+        learnerId: state.learnerId,
+        grade: state.grade,
+      );
+
+      final aiMsg = Message(
+        id: _uuid.v4(),
+        content: result.openingMessage,
+        isUser: false,
+        timestamp: DateTime.now(),
+        subject: state.currentSubject?.id,
+      );
+
+      final finalMsgs = [...withUser, aiMsg];
+      state = state.copyWith(messages: finalMsgs, isLoading: false);
+      _persist(finalMsgs);
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString().replaceFirst('Exception: ', ''),
+      );
+    }
+  }
+
   void clearChat() {
     state = ChatState(
       serverUrl: state.serverUrl,

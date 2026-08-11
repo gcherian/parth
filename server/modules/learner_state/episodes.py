@@ -43,7 +43,7 @@ from foundation.observability import get_logger
 
 log = get_logger("learner.state.episodes")
 
-EpisodeType = Literal["breakthrough", "belief", "question", "struggle", "connection", "awe"]
+EpisodeType = Literal["breakthrough", "belief", "question", "struggle", "connection", "awe", "observation"]
 
 
 class Episode(TypedDict):
@@ -148,6 +148,7 @@ def _summarise(episode_type: EpisodeType, verbatim: str, concepts: list[str]) ->
         "struggle":     "Struggled with",
         "connection":   "Connected",
         "awe":          "Amazed by",
+        "observation":  "Noticed",
     }
     return f'{prefixes[episode_type]}: "{short}"{concept_hint}'
 

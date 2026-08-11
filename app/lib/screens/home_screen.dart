@@ -355,7 +355,7 @@ class _AskParthBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Ask Parth Anything! 🚀',
+                    'Ask Parth Anything',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -364,7 +364,7 @@ class _AskParthBanner extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    'Your AI mentor is ready to help you learn',
+                    'Your mentor is ready to think it through with you',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.88),
                       fontSize: 13,
@@ -382,7 +382,7 @@ class _AskParthBanner extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
               child: const Center(
-                child: Text('🧠', style: TextStyle(fontSize: 30)),
+                child: Icon(Icons.explore_outlined, color: Colors.white, size: 28),
               ),
             ),
           ],

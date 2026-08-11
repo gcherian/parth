@@ -125,6 +125,16 @@ CREATE TABLE IF NOT EXISTS learner_state.episodes (
     created_at       TIMESTAMPTZ DEFAULT now()
 );
 
+-- 'observation' — a child volunteering something they noticed in real
+-- life (modules/observation_engine), distinct from the other six types
+-- which are all passively detected from chat text by episodes.detect_type().
+-- Idempotent re-apply: drop-then-recreate rather than IF NOT EXISTS,
+-- since Postgres has no ADD CONSTRAINT IF NOT EXISTS for CHECK.
+ALTER TABLE learner_state.episodes DROP CONSTRAINT IF EXISTS episodes_episode_type_check;
+ALTER TABLE learner_state.episodes ADD CONSTRAINT episodes_episode_type_check
+    CHECK (episode_type IN
+        ('breakthrough','belief','question','struggle','connection','awe','observation'));
+
 CREATE INDEX IF NOT EXISTS episodes_learner_recent_idx
     ON learner_state.episodes (learner_id, created_at DESC);
 

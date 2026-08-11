@@ -50,6 +50,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _scrollToBottom();
   }
 
+  Future<void> _openObservationSheet() async {
+    final text = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const _ObservationSheet(),
+    );
+    if (text != null && text.trim().isNotEmpty) {
+      ref.read(chatProvider.notifier).sendObservation(text);
+      _scrollToBottom();
+    }
+  }
+
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollCtrl.hasClients) {
@@ -106,7 +119,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ),
           ),
           if (state.error != null) _ErrorBanner(error: state.error!),
-          _InputBar(controller: _inputCtrl, onSend: _send, isLoading: state.isLoading),
+          _InputBar(
+            controller: _inputCtrl,
+            onSend: _send,
+            onObserve: _openObservationSheet,
+            isLoading: state.isLoading,
+          ),
         ],
       ),
     );
@@ -181,7 +199,7 @@ class _WelcomeBanner extends StatelessWidget {
           Text(
             subject != null
                 ? "I'll explain ${subject!.name} step by step with examples you'll love!"
-                : "I'm Parth, your personal AI mentor. Ask me any question!",
+                : "I'm Parth, your thinking partner. Ask me anything, or tell me what you noticed today.",
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 13, color: AppTheme.lightText, height: 1.5),
           ),
@@ -296,6 +314,110 @@ class _AnimatedDotState extends State<_AnimatedDot> with SingleTickerProviderSta
   }
 }
 
+class _ObservationSheet extends StatefulWidget {
+  const _ObservationSheet();
+
+  @override
+  State<_ObservationSheet> createState() => _ObservationSheetState();
+}
+
+class _ObservationSheetState extends State<_ObservationSheet> {
+  final _ctrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final text = _ctrl.text.trim();
+    if (text.length < 5) return;
+    Navigator.pop(context, text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            const Text(
+              'What did you notice today?',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.deepBlue,
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              "Something you saw, heard about, or wondered about — big or small. "
+              "Parth will find a few different angles worth thinking about.",
+              style: TextStyle(fontSize: 13, color: AppTheme.lightText, height: 1.4),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _ctrl,
+              autofocus: true,
+              minLines: 3,
+              maxLines: 6,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: 'e.g. Two dogs chased a cat and her kitten today...',
+                filled: true,
+                fillColor: AppTheme.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: const EdgeInsets.all(14),
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.deepBlue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: const Text('Share it'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ErrorBanner extends StatelessWidget {
   final String error;
   const _ErrorBanner({required this.error});
@@ -321,11 +443,13 @@ class _ErrorBanner extends StatelessWidget {
 class _InputBar extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSend;
+  final VoidCallback onObserve;
   final bool isLoading;
 
   const _InputBar({
     required this.controller,
     required this.onSend,
+    required this.onObserve,
     required this.isLoading,
   });
 
@@ -351,6 +475,11 @@ class _InputBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          IconButton(
+            icon: const Icon(Icons.explore_outlined, color: AppTheme.deepBlue),
+            tooltip: 'Tell Parth something you noticed',
+            onPressed: isLoading ? null : onObserve,
+          ),
           Expanded(
             child: TextField(
               controller: controller,

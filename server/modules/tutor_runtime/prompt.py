@@ -14,17 +14,20 @@ def build_system_prompt(ctx) -> str:
         subject=ctx.subject,
         context="\n\n".join(context_parts),
         learner_context=ctx.learner_context,
+        grade=ctx.grade,
     )
 
 
 def build_messages(ctx, system_prompt: str) -> list[dict]:
     """Ollama-format: system prompt embedded as the first user turn."""
+    greeting = (
+        "Understood. I'm ready to work through this with you."
+        if ctx.grade >= 11
+        else "Namaste! I'm Parth, your personal AI mentor. Ask me anything!"
+    )
     messages = [
         {"role": "user", "content": system_prompt},
-        {
-            "role": "assistant",
-            "content": "Namaste! I'm Parth, your personal AI mentor. Ask me anything!",
-        },
+        {"role": "assistant", "content": greeting},
     ]
     for m in ctx.history[-Config.MAX_HISTORY_TURNS:]:
         role = m.get("role", "user") if isinstance(m, dict) else m.role

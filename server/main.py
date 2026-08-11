@@ -301,6 +301,24 @@ class ChatResponse(BaseModel):
     request_id: str
 
 
+class ObservationRequest(BaseModel):
+    learner_id: str = Field(..., max_length=100)
+    grade: int = Field(default=6, ge=1, le=12)
+    observation_text: str = Field(..., min_length=5, max_length=1000)
+
+
+class ProbeOut(BaseModel):
+    domain: str
+    opening_question: str
+    why_this_angle: str
+    concept_ids: list[str] = []
+
+
+class ObservationResponse(BaseModel):
+    probes: list[ProbeOut]
+    opening_message: str
+
+
 # ── Consent grant request model ───────────────────────────────────────────────
 class ConsentGrantRequest(BaseModel):
     guardian_id: str = Field(..., max_length=100)
@@ -420,6 +438,64 @@ async def chat(
         model=result["model"],
         duration_ms=result["duration_ms"],
         request_id=result["request_id"],
+    )
+
+
+# ── Observation endpoint ──────────────────────────────────────────────────────
+@app.post("/observation", response_model=ObservationResponse)
+async def observation(req: ObservationRequest, _: None = Depends(rate_limit)):
+    """
+    A student volunteers something they noticed in real life. Generates
+    3-5 genuinely cross-domain Socratic openings (never a lecture — one
+    question per angle), stores them via the existing episodes/open_loops
+    mechanisms (unchanged, already live in every /chat turn), and returns
+    the strongest one ready to drop into the chat thread as Parth's next
+    message. Same consent gate as /chat — an observation is learner data
+    like any other turn.
+    """
+    _require_uuid(req.learner_id)
+    if not await check_consent(req.learner_id, SCOPE_AI_INTERACTION):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": "A parent or guardian must give consent before Parth can begin.",
+            },
+        )
+
+    from modules.observation_engine.service import generate_cross_domain_probes, store_observation
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        try:
+            result = await generate_cross_domain_probes(
+                conn, req.observation_text, req.grade,
+            )
+        except httpx.ConnectError:
+            raise HTTPException(
+                status_code=503,
+                detail="Ollama is not running. Please start it with: ollama serve",
+            )
+        except httpx.TimeoutException:
+            raise HTTPException(
+                status_code=504,
+                detail="Parth is thinking hard about that — please try again in a moment!",
+            )
+        except Exception as e:
+            log.error("observation_error", error=str(e))
+            raise HTTPException(status_code=503, detail=str(e))
+
+        if not result.probes:
+            raise HTTPException(
+                status_code=502,
+                detail="Couldn't find a good angle on that one — try describing it with a bit more detail.",
+            )
+
+        await store_observation(conn, req.learner_id, req.observation_text, result)
+
+    return ObservationResponse(
+        probes=[ProbeOut(**vars(p)) for p in result.probes],
+        opening_message=result.opening_message,
     )
 
 
