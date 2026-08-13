@@ -44,8 +44,17 @@ class CurriculumGraphModule(Module):
         except Exception as e:
             log.warning("get_next_concept_failed", error=str(e))
             next_concept = None
+        # learner.state runs before curriculum.graph in the router's
+        # Sequential(...) ordering, so this is already populated.
+        learner_state_data = ctx.module_data.get("learner.state", {})
+        weak_topics = learner_state_data.get("weak_topics", [])
+        misconception_hint = learner_state_data.get("misconception_hint", "")
+
         try:
-            rag_text = await retrieve_semantic(ctx.message, ctx.subject, ctx.grade)
+            rag_text = await retrieve_semantic(
+                ctx.message, ctx.subject, ctx.grade,
+                weak_concepts=weak_topics, misconception_hint=misconception_hint,
+            )
         except Exception as e:
             log.warning("rag_retrieval_failed", error=str(e))
             rag_text = ""

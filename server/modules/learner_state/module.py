@@ -122,10 +122,25 @@ class LearnerStateModule(Module):
             except Exception as _teacher_exc:
                 log.debug("teacher_portrait_skipped", error=str(_teacher_exc))
 
+            # ── weak_topics / misconception_hint for curriculum_graph's RAG ─
+            # Non-fatal: retrieval degrading to its unweighted default is
+            # fine, learner_context assembly failing is not.
+            weak_topics: list[str] = []
+            misconception_hint = ""
+            try:
+                weak_topics = await know.weak_concepts(conn, ctx.learner_id)
+                misc_rows = await prof.get_recent_misconceptions(conn, ctx.learner_id, n=1)
+                if misc_rows:
+                    misconception_hint = misc_rows[0]["misconception"]
+            except Exception as _weak_exc:
+                log.debug("weak_topics_skipped", error=str(_weak_exc))
+
             return ModuleResult(data={
                 "learner_context": learner_ctx,
                 "profile": profile,
                 "psyche": psyche,
+                "weak_topics": weak_topics,
+                "misconception_hint": misconception_hint,
             })
 
         else:

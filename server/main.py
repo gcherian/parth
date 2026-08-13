@@ -179,6 +179,19 @@ async def startup():
     except Exception as exc:
         # IAM schema errors are non-fatal so the demo keeps working
         log.warning("iam_startup_error", error=str(exc))
+
+    try:
+        from modules.curriculum_graph.graph import _get_collection
+        rag_chunks = _get_collection().count()
+        if rag_chunks == 0:
+            log.warning(
+                "rag_index_empty",
+                hint="curriculum_context will never contain retrieved NCERT text "
+                     "until this is populated — run: python -m ingest.build_index",
+            )
+    except Exception as exc:
+        log.warning("rag_startup_check_failed", error=str(exc))
+
     asyncio.create_task(relay_loop(interval_ms=200))
     log.info("parth_started", version="4.0.0", modules=list(_module_registry.keys()))
 
@@ -1103,6 +1116,14 @@ async def monitor_stats():
 
 
 # ── Health check ──────────────────────────────────────────────────────────────
+def _health_status(tutor_ok: bool, pg_ok: bool, rag_chunks: int) -> str:
+    """Pure so it's directly unit-testable without spinning up the app.
+    An empty RAG index degrades tutoring quality silently if not surfaced
+    here — curriculum_context would simply never contain retrieved NCERT
+    text, with no error anywhere to notice it by."""
+    return "ok" if (tutor_ok and pg_ok and rag_chunks > 0) else "degraded"
+
+
 @app.get("/health")
 async def health():
     # Tutor backend liveness
@@ -1133,7 +1154,7 @@ async def health():
 
     # Minimal public response — no IPs, no internal model names.
     return {
-        "status": "ok" if (tutor_ok and pg_ok) else "degraded",
+        "status": _health_status(tutor_ok, pg_ok, rag_chunks),
         "version": "4.0.0",
         "tutor_backend": "anthropic" if Config.use_anthropic_tutor() else "ollama",
         "tutor": tutor_ok,
@@ -1277,7 +1298,7 @@ async def graph_data(learner_id: str | None = None):
         return data
 
     # ── Fallback: hardcoded structure (first run before any ingest) ───────
-    from rag.ingest_graph import NCERT_CONCEPTS, NCERT_EDGES
+    from ingest.concept_graph_data import NCERT_CONCEPTS, NCERT_EDGES
     nodes = [{**c, "video_count": 0, "video_ids": []} for c in NCERT_CONCEPTS]
     edges = [{"source": f, "target": t, "type": tp} for f, t, tp in NCERT_EDGES]
     return {"nodes": nodes, "edges": edges, "source": "hardcoded"}

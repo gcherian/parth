@@ -189,6 +189,21 @@ async def update_misconception_map(conn, learner_id: str, concept_id: str, misco
         )
 
 
+async def get_recent_misconceptions(conn, learner_id: str, n: int = 2) -> list:
+    """Extracted from build_learner_context so curriculum_graph can reuse
+    the same query for its RAG misconception_hint instead of issuing a
+    second, identical one (modules/curriculum_graph/module.py)."""
+    return await conn.fetch(
+        """
+        SELECT concept_id, misconception FROM learner_state.misconception_map
+        WHERE learner_id = $1
+        ORDER BY last_seen DESC
+        LIMIT $2
+        """,
+        learner_id, n,
+    )
+
+
 async def build_learner_context(
     conn, learner_id: str, profile: dict, psyche: dict | None = None
 ) -> str:
@@ -235,15 +250,7 @@ async def build_learner_context(
     high_subjects = [s for s, v in sorted(motiv.items(), key=lambda x: -x[1]) if v >= 6.5][:2]
 
     # Recent misconceptions to watch
-    misc_rows = await conn.fetch(
-        """
-        SELECT concept_id, misconception FROM learner_state.misconception_map
-        WHERE learner_id = $1
-        ORDER BY last_seen DESC
-        LIMIT 2
-        """,
-        learner_id,
-    )
+    misc_rows = await get_recent_misconceptions(conn, learner_id)
     misc_lines = [f"{r['concept_id']}: {r['misconception'][:60]}" for r in misc_rows]
 
     # Immediate tone from emotion

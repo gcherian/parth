@@ -18,6 +18,15 @@ log = get_logger("curriculum.graph")
 _chroma_collection = None
 
 
+EMBED_MODEL = "bge-m3"   # materially better Hindi/Hinglish retrieval than
+                          # nomic-embed-text — matters given Parth's code-
+                          # switching design. Must match ingest/build_index.py's
+                          # EMBED_MODEL exactly, or ingestion and retrieval sit
+                          # in different, incompatible vector spaces.
+BOARD = "cbse"            # matches ingest/build_index.py's BOARD; the only
+                          # board with content ingested this pass
+
+
 def _get_collection():
     global _chroma_collection
     if _chroma_collection is None:
@@ -29,7 +38,7 @@ def _get_collection():
         client = chromadb.PersistentClient(path=str(chroma_path))
         embed_fn = OllamaEmbeddingFunction(
             url=f"{Config.OLLAMA_URL}/api/embeddings",
-            model_name="nomic-embed-text",
+            model_name=EMBED_MODEL,
         )
         _chroma_collection = client.get_or_create_collection(
             "ncert",
@@ -39,33 +48,101 @@ def _get_collection():
     return _chroma_collection
 
 
-async def retrieve_semantic(query: str, subject: str, grade: int, n_results: int = 3) -> str:
-    """Vector search over NCERT chunks — runs in thread pool to avoid blocking."""
+async def retrieve_semantic(
+    query: str,
+    subject: str,
+    grade: int,
+    n_results: int = 3,
+    weak_concepts: list[str] | None = None,
+    misconception_hint: str = "",
+) -> str:
+    """Vector search over NCERT chunks — runs in thread pool to avoid blocking.
+
+    weak_concepts/misconception_hint bias retrieval by augmenting the query
+    text before embedding (a "boost" implemented as query augmentation, not
+    post-hoc re-ranking — the existing design already does one embedding
+    call per query, and individual chunks don't reliably carry a concept_id
+    to re-rank against)."""
     loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(None, _retrieve_sync, query, subject, grade, n_results)
+    return await loop.run_in_executor(
+        None, _retrieve_sync, query, subject, grade, n_results, weak_concepts, misconception_hint
+    )
 
 
-def _retrieve_sync(query: str, subject: str, grade: int, n_results: int) -> str:
+def _build_where_tiers(subject_norm: str | None, grade: int | None) -> list[dict | None]:
+    """Most-specific to least-specific filter tiers. A facet is omitted
+    (not stacked as an always-true clause) when it isn't available, so a
+    "general" subject with a real grade still gets a grade+board tier
+    instead of silently skipping straight to unfiltered."""
+    def combine(*clauses: dict | None) -> dict | None:
+        present = [c for c in clauses if c]
+        if not present:
+            return None
+        return present[0] if len(present) == 1 else {"$and": present}
+
+    subject_clause = {"subject": {"$eq": subject_norm}} if subject_norm else None
+    grade_clause = {"grade": {"$lte": grade + 1}} if grade is not None else None
+    board_clause = {"board": {"$eq": BOARD}}
+
+    tiers = [
+        combine(subject_clause, grade_clause, board_clause),
+        combine(subject_clause, board_clause),
+        None,  # unfiltered
+    ]
+    # De-dup adjacent tiers that collapse to the same clause (e.g. no
+    # subject given, so tier 1 and tier 2 are identical).
+    deduped: list[dict | None] = []
+    for t in tiers:
+        if not deduped or t != deduped[-1]:
+            deduped.append(t)
+    return deduped
+
+
+def _retrieve_sync(
+    query: str, subject: str, grade: int, n_results: int,
+    weak_concepts: list[str] | None = None, misconception_hint: str = "",
+) -> str:
+    from config import Config
+
     try:
         collection = _get_collection()
         count = collection.count()
         if count == 0:
             return ""
 
-        where = {}
-        if subject and subject.lower() != "general":
-            where["subject"] = {"$eq": subject.lower()}
+        query_text = query
+        if weak_concepts:
+            query_text = f"{query_text}. Related to: {weak_concepts[0]}"
+        if misconception_hint:
+            query_text = f"{query_text}. Common misconception: {misconception_hint}"
 
-        results = collection.query(
-            query_texts=[query],
-            n_results=min(n_results, count),
-            where=where if where else None,
-            include=["documents"],
-        )
-        docs = results.get("documents", [[]])[0]
+        subject_norm = subject.lower() if subject and subject.lower() != "general" else None
+        n = min(n_results, count)
+
+        results = None
+        docs: list[str] = []
+        for where in _build_where_tiers(subject_norm, grade):
+            results = collection.query(
+                query_texts=[query_text],
+                n_results=n,
+                where=where,
+                include=["documents", "distances"],
+            )
+            docs = results.get("documents", [[]])[0]
+            if len(docs) >= 2:
+                break
+
         if not docs:
             return ""
-        return "\n\n---\n\n".join(docs[:n_results])
+
+        distances = results.get("distances", [[]])[0]
+        good = [
+            doc for doc, dist in zip(docs, distances)
+            if (1 - dist) > Config.RAG_SCORE_THRESHOLD
+        ]
+        if not good:
+            return ""
+        return "\n\n---\n\n".join(good[:n_results])
     except Exception as e:
         log.warning("chroma_query_failed", error=str(e))
         return ""
