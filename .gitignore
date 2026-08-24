@@ -42,3 +42,6 @@ app/pubspec.lock
 .vscode/
 .idea/
 *.swp
+
+# ctags index (generated, large — regenerate locally with `ctags -R`)
+/tags
