@@ -10,6 +10,9 @@ def build_system_prompt(ctx) -> str:
     meaning_context = ctx.module_data.get("meaning.graph", {}).get("meaning_context", "")
     if meaning_context:
         context_parts.append(meaning_context)
+    memory_context = ctx.module_data.get("mag.memory", {}).get("memory_context", "")
+    if memory_context:
+        context_parts.append(memory_context)
     return Config.system_prompt(
         subject=ctx.subject,
         context="\n\n".join(context_parts),

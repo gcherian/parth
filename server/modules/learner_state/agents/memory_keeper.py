@@ -50,10 +50,10 @@ class MemoryKeeperAgent(BaseAgent):
                 await conn.execute(
                     """INSERT INTO practice_engine.cards
                        (learner_id, concept_id, repetitions, ease_factor, interval_days, next_review)
-                       VALUES ($1,$2,$3,$4,$5, now() + ($5 || ' days')::interval)
+                       VALUES ($1,$2,$3,$4,$5::real, now() + $5::real * interval '1 day')
                        ON CONFLICT (learner_id, concept_id) DO UPDATE
-                       SET repetitions=$3, ease_factor=$4, interval_days=$5,
-                           next_review=now() + ($5 || ' days')::interval""",
+                       SET repetitions=$3, ease_factor=$4, interval_days=$5::real,
+                           next_review=now() + $5::real * interval '1 day'""",
                     signals.learner_id, concept_id, reps, ease, new_int,
                 )
 

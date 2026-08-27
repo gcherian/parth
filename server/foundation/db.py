@@ -57,6 +57,7 @@ async def apply_schema():
         module_schemas = [
             Path(__file__).parents[1] / "modules" / "puzzle_engine" / "schema.sql",
             Path(__file__).parents[1] / "modules" / "meaning_graph" / "schema.sql",
+            Path(__file__).parents[1] / "modules" / "mag_memory" / "schema.sql",
         ]
         for p in module_schemas:
             if p.exists():
