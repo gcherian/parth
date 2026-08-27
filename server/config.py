@@ -102,6 +102,17 @@ class Config:
     # Belief Coach: psyche sample count before trusting the model
     PSYCHE_MIN_SAMPLES        = int(os.getenv("PSYCHE_MIN_SAMPLES", "3"))
 
+    # ── MAG (Memory-Augmented Generation) — graph memory of the learner's own
+    # interaction history, complementing curriculum_graph's RAG (static NCERT
+    # retrieval). See modules/mag_memory/.
+    MAG_ENABLED           = os.getenv("MAG_ENABLED", "true").lower() not in ("0", "false", "no")
+    # Max graph hops from an anchor node during retrieval traversal
+    MAG_MAX_HOPS          = int(os.getenv("MAG_MAX_HOPS", "2"))
+    # Max memory nodes included in a single prompt's memory_context
+    MAG_CONTEXT_BUDGET    = int(os.getenv("MAG_CONTEXT_BUDGET", "6"))
+    # Min cosine similarity to materialise a semantic edge between two events
+    MAG_SEMANTIC_THRESHOLD = float(os.getenv("MAG_SEMANTIC_THRESHOLD", "0.55"))
+
     @staticmethod
     def local_ip() -> str:
         try:
