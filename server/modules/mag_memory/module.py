@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import asyncio
 
+from config import Config
 from kernel.context import Event, KernelContext, ModuleResult
 from kernel.module import Module
 from foundation.observability import get_logger
@@ -57,6 +58,12 @@ class MagMemoryModule(Module):
     handles = ["interaction.requested"]
 
     async def handle(self, event: Event, ctx: KernelContext) -> ModuleResult:
+        if not Config.MAG_ENABLED:
+            # Full kill switch — retrieval.build_memory_context already checks
+            # this too, but skip ingestion entirely as well so disabling MAG
+            # actually stops all writes/Ollama calls, not just prompt use.
+            return ModuleResult(data={})
+
         if not ctx.response_text:
             # ── Phase 1: pre-generation ────────────────────────────────────
             memory_context = await retrieval.build_memory_context(ctx.db, ctx.learner_id, ctx.message)
