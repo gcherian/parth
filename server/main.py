@@ -42,6 +42,7 @@ from modules.learner_state.module import LearnerStateModule
 from modules.curriculum_graph.module import CurriculumGraphModule
 from modules.meaning_graph.module import MeaningGraphModule
 from modules.mag_memory.module import MagMemoryModule
+from modules.wonder_engine.module import WonderEngineModule
 from modules.tutor_runtime.module import TutorRuntimeModule
 from modules.practice_engine.module import PracticeEngineModule
 from modules.parent_dashboard.module import ParentDashboardModule
@@ -78,6 +79,7 @@ _modules_list = [
     CurriculumGraphModule(),
     MeaningGraphModule(),
     MagMemoryModule(),
+    WonderEngineModule(),
     TutorRuntimeModule(),
     PracticeEngineModule(),
     ParentDashboardModule(),
