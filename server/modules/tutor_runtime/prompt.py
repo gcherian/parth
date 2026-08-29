@@ -13,6 +13,9 @@ def build_system_prompt(ctx) -> str:
     memory_context = ctx.module_data.get("mag.memory", {}).get("memory_context", "")
     if memory_context:
         context_parts.append(memory_context)
+    wonder_context = ctx.module_data.get("wonder.engine", {}).get("wonder_context", "")
+    if wonder_context:
+        context_parts.append(wonder_context)
     return Config.system_prompt(
         subject=ctx.subject,
         context="\n\n".join(context_parts),
