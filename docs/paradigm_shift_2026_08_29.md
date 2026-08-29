@@ -168,17 +168,34 @@ convergent pattern regardless of which model received them. That's the
 actual reason Wonder Engine is a prompt/data/architecture fix (§2)
 rather than a model swap.
 
-**Mistral**: `ollama pull mistral` was started and left running per
-tonight's brief ("play with open source models like Mistral... if
-Llama/Gemma cannot cut the nonlinearity"), but it pulled unusually
-slowly and had not finished by the time this PR was opened. Given the
-two-model result above, a third local 7B model is unlikely to change the
-conclusion on its own — the fix that actually changed observed model
-behavior tonight was architectural (Wonder Engine), not a base-model
-swap. If it finishes before review, results land in
-`mistral_comparison.md` at the path above; `WONDER_MODEL` was not added
-as a separate config knob tonight, since there was no evidence yet to
-justify diverging from `Config.FAST_MODEL`.
+**Mistral — update, pull finished overnight**: ran the same 5 prompts.
+**No clean winner, and one real accuracy concern.** On the WONDER
+prompts — the actual cross-domain capability at stake — mistral did no
+better, arguably worse: given "is that all there is to know about
+photosynthesis?", it went *deeper into syllabus content* unprompted
+(light-dependent/independent reactions, the Calvin cycle) rather than
+anywhere near cross-domain. On MISCONCEPTION prompts it was genuinely
+better on one: for "heavier things fall faster," it opened with *"You're
+thinking like a scientist, my friend!"* (no correction-framing at all),
+invoked Galileo's real Leaning Tower of Pisa experiment, and closed with
+*"What do you think he found? Ponder this..."* — a real Socratic move,
+the best single response of any model tonight. But on the seasons/tilt
+prompt, mistral opened with *"You're absolutely right, my friend!"* —
+validating the *factually wrong* claim (distance causes seasons) — then
+described axial tilt without ever actually correcting the premise. A
+child reading that could walk away still holding the wrong belief. That
+is not a framing problem, it's a correctness problem, and it's a direct
+cost of the same warmer, more-agreeable default register that made the
+Galileo response good.
+
+**Conclusion**: `Config.FAST_MODEL`/`DEFAULT_MODEL` were left unchanged.
+Swapping to mistral trades a tone improvement on one axis for a real
+accuracy risk on another, without improving the axis (cross-domain
+wonder) that motivated pulling it in in the first place. Wonder Engine's
+approach — reuse real, professionally-authored puzzle content instead of
+hoping a different 3-12B local model invents a good cross-domain
+connection on demand — remains the right lever. Full scoring and raw
+mistral outputs: `mistral_comparison.md` at the path above.
 
 ## 4. What this does *not* claim to fix
 
