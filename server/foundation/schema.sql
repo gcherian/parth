@@ -29,6 +29,14 @@ CREATE TABLE IF NOT EXISTS foundation.guardian_links (
     PRIMARY KEY (guardian_id, child_id)
 );
 
+-- Which mechanism actually verified this guardian: 'otp' (real, live today),
+-- 'digilocker' (Aadhaar-linked, promised in the business plan, not yet
+-- implemented — see foundation/consent_vc.verify_via_digilocker), or
+-- 'synthetic_pilot' (no verification at all — see grant_pilot_consent).
+-- NULL means the row predates this column (legacy/unknown).
+ALTER TABLE foundation.guardian_links ADD COLUMN IF NOT EXISTS consent_method TEXT
+    CHECK (consent_method IS NULL OR consent_method IN ('otp', 'digilocker', 'synthetic_pilot'));
+
 -- ── Event Outbox ────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS foundation.outbox (
