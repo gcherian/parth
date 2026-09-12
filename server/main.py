@@ -21,10 +21,12 @@ from config import Config
 from foundation.db import get_pool, apply_schema, close_pool
 from foundation.identity import (
     check_consent,
+    check_parent_access,
     register_pilot_learner,
     grant_pilot_consent,
     SCOPE_AI_INTERACTION,
     SCOPE_LEARNER_DATA,
+    SCOPE_PROGRESS_REPORT,
 )
 from foundation import metrics as metrics_mod
 from foundation.observability import configure_logging, get_logger
@@ -1035,6 +1037,69 @@ async def parent_alerts(learner_id: str, _: None = Depends(rate_limit)):
             learner_id,
         )
         return [dict(r) for r in rows]
+
+
+@app.get("/parent/{parent_id}/child/{child_id}/transcript")
+async def parent_transcript(
+    parent_id: str, child_id: str, _: None = Depends(rate_limit)
+):
+    """
+    Business-plan invariant 01 (§9): "Never hide a word from the parent" —
+    the full, real conversation log for this child, every turn, in order,
+    unsummarized. Additive to /parent/{learner_id}/report (which stays a
+    derived summary); this is the raw log underneath it.
+
+    Precondition: parent_id must be a registered guardian identity holding
+    active consent_given=true guardian_links to child_id covering
+    progress_report scope — checked via check_parent_access before any row
+    is read.
+    """
+    _require_uuid(parent_id)
+    _require_uuid(child_id)
+    if not await check_parent_access(parent_id, child_id, SCOPE_PROGRESS_REPORT):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": (
+                    "This parent_id is not a verified guardian of this "
+                    "child, or consent has not been granted."
+                ),
+            },
+        )
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT created_at, subject, question, response
+            FROM learner_state.interactions
+            WHERE learner_id = $1
+            ORDER BY created_at ASC
+            """,
+            child_id,
+        )
+
+    log.info(
+        "parent_transcript_accessed",
+        parent_id=parent_id,
+        child_id=child_id,
+        turns=len(rows),
+    )
+    return {
+        "child_id": child_id,
+        "parent_id": parent_id,
+        "turn_count": len(rows),
+        "transcript": [
+            {
+                "created_at": r["created_at"].isoformat(),
+                "subject": r["subject"],
+                "question": r["question"],
+                "response": r["response"],
+            }
+            for r in rows
+        ],
+    }
 
 
 # ── Monitor dashboard ─────────────────────────────────────────────────────────
