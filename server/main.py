@@ -100,11 +100,13 @@ app.add_middleware(
 from modules.teacher.routes import router as teacher_router
 from modules.notify.routes import router as notify_router
 from modules.survey.routes import router as survey_router
+from modules.chrono_ritual.routes import router as chrono_ritual_router
 
 app.include_router(iam_router)
 app.include_router(teacher_router)
 app.include_router(notify_router)
 app.include_router(survey_router)
+app.include_router(chrono_ritual_router)
 
 # ── Input sanitization ────────────────────────────────────────────────────────
 _CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")

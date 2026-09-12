@@ -572,6 +572,20 @@ CREATE TABLE IF NOT EXISTS learner_state.rhythm_state (
     updated_at            TIMESTAMPTZ DEFAULT now()
 );
 
+-- Chrono-learning ritual: parent-confirmed fixed session slot (business plan
+-- §8.4). rhythm_time_steward proposes peak_hour; a parent confirms or adjusts
+-- it here into a fixed "appointment". One row per child — confirming again
+-- replaces the prior slot rather than accumulating history.
+CREATE TABLE IF NOT EXISTS learner_state.session_appointment (
+    learner_id        TEXT PRIMARY KEY,
+    hour_of_day       INT NOT NULL,
+    days_of_week      INT[] NOT NULL DEFAULT '{0,1,2,3,4,5,6}',
+    source_peak_hour  INT,
+    confirmed_by      TEXT NOT NULL,
+    confirmed_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 -- Pattern & Creation Guide: cross-scale pattern encounters
 CREATE TABLE IF NOT EXISTS learner_state.pattern_state (
     learner_id             TEXT PRIMARY KEY,
