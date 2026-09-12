@@ -16,7 +16,7 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from foundation.db import get_pool
 from foundation.observability import get_logger
@@ -134,6 +134,84 @@ async def submit_feedback(body: TeacherFeedbackRequest):
                  school_id=school_id)
 
     return {"status": "ok", "learner_id": learner_id}
+
+
+# ── Teacher-set content sequence (business plan §7.2) ────────────────────────
+# teacher_id reuses the same free-text identifier teacher.portraits already
+# keys on (teacher_phone) — there is no separate teacher login yet.
+
+class TeacherSequenceRequest(BaseModel):
+    concept_ids: list[str] = Field(..., min_length=1)
+
+
+@router.put("/{teacher_id}/sequence")
+async def set_teacher_sequence(teacher_id: str, body: TeacherSequenceRequest):
+    """
+    Precondition: teacher_id is non-empty; every id in concept_ids names an
+    existing curriculum_graph.concepts row; concept_ids has no duplicates.
+    Effect: replaces this teacher's row set in curriculum_graph.teacher_sequence
+    with exactly {(teacher_id, concept_ids[i], i) for i in range(len(concept_ids))}.
+    Postcondition: reading the sequence back for teacher_id yields concept_ids
+    in the same order, and nothing else.
+    Idempotent: calling again with the same list is a no-op; calling with a
+    different list fully replaces the previous one (one teacher, one
+    sequence — not additive). Not consent-gated: this sets a teacher's own
+    instructional preference, not a specific child's data.
+    """
+    teacher_id = teacher_id.strip()
+    if not teacher_id:
+        raise HTTPException(status_code=422, detail="teacher_id required")
+
+    concept_ids = body.concept_ids
+    if len(set(concept_ids)) != len(concept_ids):
+        raise HTTPException(status_code=422, detail="concept_ids must not contain duplicates")
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        known = await conn.fetch(
+            "SELECT id FROM curriculum_graph.concepts WHERE id = ANY($1)",
+            concept_ids,
+        )
+        known_ids = {r["id"] for r in known}
+        missing = [c for c in concept_ids if c not in known_ids]
+        if missing:
+            raise HTTPException(status_code=422, detail=f"unknown concept_ids: {missing}")
+
+        async with conn.transaction():
+            await conn.execute(
+                "DELETE FROM curriculum_graph.teacher_sequence WHERE teacher_id = $1",
+                teacher_id,
+            )
+            await conn.executemany(
+                """
+                INSERT INTO curriculum_graph.teacher_sequence (teacher_id, concept_id, position)
+                VALUES ($1, $2, $3)
+                """,
+                [(teacher_id, cid, i) for i, cid in enumerate(concept_ids)],
+            )
+
+    log.info("teacher_sequence_set",
+             teacher_id=teacher_id[-4:] if len(teacher_id) >= 4 else teacher_id,
+             concept_count=len(concept_ids))
+
+    return {"status": "ok", "teacher_id": teacher_id, "sequence": concept_ids}
+
+
+@router.get("/{teacher_id}/sequence")
+async def get_teacher_sequence_route(teacher_id: str):
+    """Read-only: this teacher's declared concept order, if any (empty list
+    means no sequence has been set — the automatic order applies)."""
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT concept_id FROM curriculum_graph.teacher_sequence
+            WHERE teacher_id = $1
+            ORDER BY position ASC
+            """,
+            teacher_id.strip(),
+        )
+    return {"teacher_id": teacher_id, "sequence": [r["concept_id"] for r in rows]}
 
 
 # ── Portrait context builder — called by learner_state module ────────────────
