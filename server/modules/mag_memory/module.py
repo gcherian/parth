@@ -71,7 +71,14 @@ class MagMemoryModule(Module):
 
         # ── Phase 3: post-generation ────────────────────────────────────────
         signals = extract_signals(ctx.message)
-        concept_ids = list(dict.fromkeys(signals["concepts"] + signals["domains"]))  # dedup, keep order
+        concept_ids = signals["concepts"] + signals["domains"]
+        # wonder.engine runs before this module in both phases (kernel/router.py) —
+        # tag the node so its own consolidation can later surface whether this
+        # tangent connected back to a concept the child went on to master.
+        wonder_puzzle = ctx.module_data.get("wonder.engine", {}).get("puzzle_offered")
+        if wonder_puzzle:
+            concept_ids = concept_ids + [f"_wonder:{wonder_puzzle}"]
+        concept_ids = list(dict.fromkeys(concept_ids))  # dedup, keep order
 
         node_id, content = await ingest.ingest_turn(
             ctx.db, ctx.learner_id, ctx.request_id,

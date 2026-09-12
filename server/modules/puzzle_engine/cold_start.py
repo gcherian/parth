@@ -89,6 +89,13 @@ _BRIDGES: dict[str, str] = {
 }
 
 
+def bridge_for(sphere: str) -> str:
+    """Public accessor onto _BRIDGES — used by wonder_engine to offer the
+    same cross-domain bridge design as a standing capability, not just
+    during the 5-interaction cold-start window."""
+    return _BRIDGES.get(sphere, "arts_interdisciplinary")
+
+
 def get_probe(
     probe_number: int,
     seen_ids: set[str],
