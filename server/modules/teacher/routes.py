@@ -11,8 +11,9 @@ Flow:
   the student's learner_id is linked to the teacher's phone.
 """
 import json
+import uuid as _uuid
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
@@ -214,3 +215,52 @@ async def get_teacher_portrait_context(conn, learner_id: str) -> str:
         parts.append("\n".join(lines))
 
     return "\n\n".join(parts)
+
+
+# ── Parent weekly report (business plan §7.3) ─────────────────────────────────
+
+class WeeklyReportRequest(BaseModel):
+    teacher_name:   str
+    parent_contact: str                              # email address or phone, per `channel`
+    channel:        Literal["email", "sms", "whatsapp"] = "email"
+
+
+@router.post("/{teacher_phone}/children/{learner_id}/weekly-report")
+async def weekly_report(teacher_phone: str, learner_id: str, body: WeeklyReportRequest):
+    """
+    Generate this week's plain-English, teacher-attributed parent report for
+    (learner_id, teacher_phone) and hand it to notify for delivery.
+
+    No scheduler triggers this yet — it's a manual/admin-triggered call today;
+    see modules.parent_dashboard.weekly_report.generate_and_send's docstring
+    and the PR description for what a future cron wiring would look like.
+    """
+    try:
+        _uuid.UUID(learner_id)
+    except (AttributeError, TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="Invalid learner ID format")
+    if not teacher_phone.strip():
+        raise HTTPException(status_code=422, detail="teacher_phone required")
+
+    from modules.parent_dashboard.weekly_report import generate_and_send
+
+    pool = await get_pool()
+    try:
+        result = await generate_and_send(
+            pool,
+            learner_id=learner_id,
+            teacher_name=body.teacher_name,
+            teacher_phone=teacher_phone,
+            parent_contact=body.parent_contact,
+            channel=body.channel,
+        )
+    except PermissionError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": str(exc),
+            },
+        )
+
+    return result

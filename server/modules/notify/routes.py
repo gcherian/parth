@@ -41,6 +41,13 @@ TEMPLATES: dict[str, dict[str, str]] = {
             "— The Parth Team"
         ),
     },
+    "parent_weekly_report": {
+        "subject": "{student_name}'s week, from {teacher_name}",
+        # narrative is written in the teacher's voice and already signs off as
+        # them (see modules.parent_dashboard.weekly_report) — no extra
+        # signature appended here, to avoid double-signing.
+        "body": "Namaste,\n\n{narrative}",
+    },
 }
 
 
@@ -59,21 +66,37 @@ async def list_templates():
     }
 
 
-@router.post("/send")
-async def send_notification(body: NotifySendRequest):
-    template = TEMPLATES.get(body.template)
-    if template is None:
-        raise HTTPException(status_code=422, detail=f"unknown template: {body.template}")
+async def send_via_template(
+    to: str, channel: str, template: str, params: Optional[dict] = None
+) -> dict:
+    """
+    Render `template` from the registry with `params`, send it over `channel`,
+    and log the attempt to notify.log.
 
-    params = body.params or {}
+    Precondition: template must be a key in TEMPLATES; params must supply
+    every placeholder the template's subject/body reference.
+    Effect: exactly one send attempt via CHANNELS[channel], then exactly one
+    row appended to notify.log recording its outcome.
+    Postcondition: returns {"status": "sent"|"failed", "channel", "to",
+    "subject", "body"} — "body" is the rendered message, useful to callers
+    (e.g. the weekly-report generator) that want to show what was actually
+    sent. Raises ValueError for an unknown template or a missing param —
+    callers map that to their own error handling (the /notify/send route
+    below turns it into a 422).
+    """
+    tmpl = TEMPLATES.get(template)
+    if tmpl is None:
+        raise ValueError(f"unknown template: {template}")
+
+    params = params or {}
     try:
-        subject = template["subject"].format(**params)
-        message = template["body"].format(**params)
+        subject = tmpl["subject"].format(**params)
+        message = tmpl["body"].format(**params)
     except KeyError as exc:
-        raise HTTPException(status_code=422, detail=f"missing template param: {exc}")
+        raise ValueError(f"missing template param: {exc}")
 
-    sender = CHANNELS[body.channel]
-    delivered = await sender(body.to, subject, message)
+    sender = CHANNELS[channel]
+    delivered = await sender(to, subject, message)
 
     pool = await get_pool()
     async with pool.acquire() as conn:
@@ -82,12 +105,31 @@ async def send_notification(body: NotifySendRequest):
             INSERT INTO notify.log (recipient, channel, template, status, error)
             VALUES ($1, $2, $3, $4, $5)
             """,
-            body.to, body.channel, body.template,
+            to, channel, template,
             "sent" if delivered else "failed",
             None if delivered else "delivery_failed",
         )
+    log.info(
+        "notify_dispatched",
+        channel=channel, template=template,
+        status="sent" if delivered else "failed",
+    )
 
-    if not delivered:
+    return {
+        "status": "sent" if delivered else "failed",
+        "channel": channel, "to": to,
+        "subject": subject, "body": message,
+    }
+
+
+@router.post("/send")
+async def send_notification(body: NotifySendRequest):
+    try:
+        result = await send_via_template(body.to, body.channel, body.template, body.params)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+    if result["status"] != "sent":
         raise HTTPException(status_code=502, detail="delivery failed — check server logs")
 
     return {"status": "sent", "channel": body.channel, "to": body.to}
