@@ -113,6 +113,16 @@ class Config:
     # Min cosine similarity to materialise a semantic edge between two events
     MAG_SEMANTIC_THRESHOLD = float(os.getenv("MAG_SEMANTIC_THRESHOLD", "0.55"))
 
+    # ── Wonder Engine — cross-domain discovery detours during ordinary chat,
+    # bridging the existing 300-puzzle library (data/puzzles/v2/) into the
+    # main tutoring loop instead of only puzzle_engine's cold-start window.
+    # See modules/wonder_engine/.
+    WONDER_ENABLED                    = os.getenv("WONDER_ENABLED", "true").lower() not in ("0", "false", "no")
+    # Curiosity thread heat (curiosity.py's own "high" label) required to offer a detour
+    WONDER_HEAT_THRESHOLD             = float(os.getenv("WONDER_HEAT_THRESHOLD", "0.55"))
+    # Minimum minutes between two wonder offers to the same learner
+    WONDER_MIN_MINUTES_BETWEEN_OFFERS = int(os.getenv("WONDER_MIN_MINUTES_BETWEEN_OFFERS", "20"))
+
     @staticmethod
     def local_ip() -> str:
         try:
