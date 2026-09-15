@@ -164,7 +164,17 @@ async def generate_and_send(
     # lens/contextual.compute_and_save.
 
     student_name = facts.get("learner_name") or "your child"
+    f = _fact_lines(facts)
     narrative = await _generate_narrative(teacher_name, student_name, facts)
+    # Two claims this report makes are load-bearing and must hold every
+    # time, not just on a lucky sampling of the LLM (temperature > 0):
+    # specificity ("names the actual misconception, not a bare score") and
+    # attribution ("no parent who receives it forgets who sent it"). Rather
+    # than trust the prompt to include them verbatim, check and append.
+    if f["misconception"] and f["misconception"].lower() not in narrative.lower():
+        narrative = f"{narrative} Specifically, {student_name} currently believes {f['misconception']}."
+    if teacher_name not in narrative and teacher_name.split()[-1] not in narrative:
+        narrative = f"{narrative}\n\n— {teacher_name}"
     week_start = _week_start()
 
     async with pool.acquire() as conn:
