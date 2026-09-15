@@ -1,9 +1,14 @@
 import uuid as _uuid
 
+from config import Config
 from foundation.db import get_pool
 from foundation.observability import get_logger
 
 log = get_logger("foundation.identity")
+
+
+class SyntheticConsentDisabledError(RuntimeError):
+    """Raised when grant_pilot_consent() is called without ALLOW_SYNTHETIC_CONSENT=true."""
 
 # Scopes required for different operations
 SCOPE_AI_INTERACTION = "ai_interaction"
@@ -72,10 +77,10 @@ async def check_parent_access(parent_id: str, child_id: str, scope: str) -> bool
     Unlike check_consent (which only asks "does *some* guardian consent
     exist for this child"), this binds the check to the caller's own claimed
     identity — required wherever a specific parent_id appears in the URL,
-    e.g. GET /parent/{parent_id}/child/{child_id}/report. Unknown or
-    non-guardian parent_ids, and guardian_ids with no active link to this
-    specific child, are both denied. Read-only; no postcondition beyond the
-    boolean result.
+    e.g. GET /parent/{parent_id}/child/{child_id}/report or .../transcript.
+    Unknown or non-guardian parent_ids, and guardian_ids with no active link
+    to this specific child, are both denied. Read-only; no postcondition
+    beyond the boolean result.
     """
     try:
         parent_uuid = _uuid.UUID(parent_id)
@@ -200,19 +205,43 @@ async def register_pilot_learner(
 
 async def grant_pilot_consent(learner_id: str) -> bool:
     """
-    Explicit pilot consent grant (synthetic guardian, no OTP/DigiLocker yet —
-    see modules/iam/routes.py's /consent/request + /consent/verify for the
-    real OTP-verified guardian flow this should graduate to before a
-    non-pilot launch).
+    Explicit pilot consent grant — synthetic guardian, NO real verification
+    (no OTP, no DigiLocker). See modules/iam/routes.py's /consent/request +
+    /consent/verify for the real OTP-verified guardian flow, and
+    foundation/consent_vc.verify_via_digilocker for the not-yet-implemented
+    Aadhaar-linked flow the business plan promises. This function must
+    graduate to one of those before a non-pilot launch.
+
+    Precondition: the child identity must already exist (call
+    register_pilot_learner first) AND Config.ALLOW_SYNTHETIC_CONSENT must be
+    explicitly true — this is a deliberately-configured dev/test/pilot
+    escape hatch, not a production consent mechanism, and it is structurally
+    refused otherwise (raises SyntheticConsentDisabledError, does not
+    silently no-op).
 
     Must be called as its own deliberate action, triggered by a real UI
     consent step, BEFORE any puzzle probe or chat data is collected for this
     learner — never automatically as a side effect of registration or of
     cold-start completing. Idempotent.
 
+    Postcondition: a foundation.guardian_links row exists for this child with
+    consent_given=true and consent_method='synthetic_pilot' — never 'otp' or
+    'digilocker', so this grant is never mistaken for a verified one.
+
     Returns False if learner_id is not a valid UUID, or if the child identity
     doesn't exist yet (call register_pilot_learner first).
+    Raises SyntheticConsentDisabledError if ALLOW_SYNTHETIC_CONSENT is not
+    explicitly enabled.
     """
+    if not Config.ALLOW_SYNTHETIC_CONSENT:
+        log.warning("synthetic_consent_refused", learner_id=learner_id)
+        raise SyntheticConsentDisabledError(
+            "grant_pilot_consent() is disabled: this is a synthetic-guardian "
+            "bypass with no real OTP/DigiLocker verification behind it. Set "
+            "ALLOW_SYNTHETIC_CONSENT=true in a deliberately-configured "
+            "dev/test/pilot environment to use it — never in production."
+        )
+
     try:
         child_uuid = _uuid.UUID(learner_id)
     except (AttributeError, TypeError, ValueError):
@@ -243,15 +272,16 @@ async def grant_pilot_consent(learner_id: str) -> bool:
             # Consent grant
             await conn.execute(
                 """INSERT INTO foundation.guardian_links
-                       (guardian_id, child_id, consent_given, consent_ts, scope)
-                   VALUES ($1, $2, true, now(), $3)
+                       (guardian_id, child_id, consent_given, consent_ts, scope, consent_method)
+                   VALUES ($1, $2, true, now(), $3, 'synthetic_pilot')
                    ON CONFLICT (guardian_id, child_id) DO UPDATE
-                       SET consent_given=true, consent_ts=now(), scope=$3""",
+                       SET consent_given=true, consent_ts=now(), scope=$3,
+                           consent_method='synthetic_pilot'""",
                 guardian_uuid, child_uuid,
                 ["ai_interaction", "learner_data", "progress_report"],
             )
 
-    log.info("pilot_consent_granted", learner_id=str(child_uuid))
+    log.info("pilot_consent_granted", learner_id=str(child_uuid), consent_method="synthetic_pilot")
     return True
 
 

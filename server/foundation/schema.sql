@@ -29,6 +29,14 @@ CREATE TABLE IF NOT EXISTS foundation.guardian_links (
     PRIMARY KEY (guardian_id, child_id)
 );
 
+-- Which mechanism actually verified this guardian: 'otp' (real, live today),
+-- 'digilocker' (Aadhaar-linked, promised in the business plan, not yet
+-- implemented — see foundation/consent_vc.verify_via_digilocker), or
+-- 'synthetic_pilot' (no verification at all — see grant_pilot_consent).
+-- NULL means the row predates this column (legacy/unknown).
+ALTER TABLE foundation.guardian_links ADD COLUMN IF NOT EXISTS consent_method TEXT
+    CHECK (consent_method IS NULL OR consent_method IN ('otp', 'digilocker', 'synthetic_pilot'));
+
 -- ── Event Outbox ────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS foundation.outbox (
@@ -572,6 +580,20 @@ CREATE TABLE IF NOT EXISTS learner_state.rhythm_state (
     updated_at            TIMESTAMPTZ DEFAULT now()
 );
 
+-- Chrono-learning ritual: parent-confirmed fixed session slot (business plan
+-- §8.4). rhythm_time_steward proposes peak_hour; a parent confirms or adjusts
+-- it here into a fixed "appointment". One row per child — confirming again
+-- replaces the prior slot rather than accumulating history.
+CREATE TABLE IF NOT EXISTS learner_state.session_appointment (
+    learner_id        TEXT PRIMARY KEY,
+    hour_of_day       INT NOT NULL,
+    days_of_week      INT[] NOT NULL DEFAULT '{0,1,2,3,4,5,6}',
+    source_peak_hour  INT,
+    confirmed_by      TEXT NOT NULL,
+    confirmed_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 -- Pattern & Creation Guide: cross-scale pattern encounters
 CREATE TABLE IF NOT EXISTS learner_state.pattern_state (
     learner_id             TEXT PRIMARY KEY,
@@ -710,6 +732,28 @@ CREATE TABLE IF NOT EXISTS parent_dashboard.views (
 CREATE INDEX IF NOT EXISTS parent_dashboard_views_learner_idx
     ON parent_dashboard.views (learner_id, viewed_at DESC);
 
+-- ── Parent weekly report ─────────────────────────────────────────────────────
+-- One row per (learner, teacher, week) — the plain-English, teacher-attributed
+-- report described in the business plan (§7.3). week_start pins the row to a
+-- calendar week (Monday) so re-running generation for the same week updates
+-- the existing narrative instead of piling up duplicates.
+CREATE TABLE IF NOT EXISTS parent_dashboard.weekly_reports (
+    id              BIGSERIAL PRIMARY KEY,
+    learner_id      TEXT NOT NULL,
+    teacher_phone   TEXT NOT NULL DEFAULT '',
+    teacher_name    TEXT NOT NULL DEFAULT '',
+    week_start      DATE NOT NULL,
+    narrative       TEXT NOT NULL,
+    facts           JSONB NOT NULL DEFAULT '{}',
+    notified        BOOLEAN NOT NULL DEFAULT false,
+    notified_at     TIMESTAMPTZ,
+    created_at      TIMESTAMPTZ DEFAULT now(),
+    updated_at      TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT parent_weekly_reports_uq UNIQUE (learner_id, teacher_phone, week_start)
+);
+CREATE INDEX IF NOT EXISTS parent_weekly_reports_learner_idx
+    ON parent_dashboard.weekly_reports (learner_id, week_start DESC);
+
 -- ── Teacher portraits ────────────────────────────────────────────────────────
 -- Teachers may not have the student's join code. Primary key is
 -- (teacher_phone, student_name, subject) so a teacher can submit
@@ -773,3 +817,20 @@ CREATE TABLE IF NOT EXISTS notify.log (
 );
 CREATE INDEX IF NOT EXISTS notify_log_recipient_idx
     ON notify.log (recipient, sent_at DESC);
+
+-- ── Teacher-set content sequence (business plan §7.2) ───────────────────────
+-- A teacher's declared chapter/concept order for their class, so
+-- curriculum_graph.get_next_concept can follow the school's actual pace
+-- instead of only the automatic weak-concept-driven order. teacher_id is
+-- the same free-text identifier teacher.portraits already keys on
+-- (teacher_phone) — no separate teacher login exists yet. One row per
+-- (teacher_id, concept_id); position is 0-based rank in the sequence.
+CREATE TABLE IF NOT EXISTS curriculum_graph.teacher_sequence (
+    teacher_id  TEXT NOT NULL,
+    concept_id  TEXT NOT NULL REFERENCES curriculum_graph.concepts(id),
+    position    INT NOT NULL,
+    updated_at  TIMESTAMPTZ DEFAULT now(),
+    PRIMARY KEY (teacher_id, concept_id)
+);
+CREATE INDEX IF NOT EXISTS teacher_sequence_teacher_idx
+    ON curriculum_graph.teacher_sequence (teacher_id, position);

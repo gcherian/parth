@@ -24,6 +24,7 @@ from foundation.identity import (
     check_parent_access,
     register_pilot_learner,
     grant_pilot_consent,
+    SyntheticConsentDisabledError,
     SCOPE_AI_INTERACTION,
     SCOPE_LEARNER_DATA,
     SCOPE_PROGRESS_REPORT,
@@ -48,7 +49,7 @@ from modules.wonder_engine.module import WonderEngineModule
 from modules.tutor_runtime.module import TutorRuntimeModule
 from modules.practice_engine.module import PracticeEngineModule
 from modules.parent_dashboard.module import ParentDashboardModule
-from modules.attention_federated.module import AttentionFederatedModule
+from modules.population_priors.module import PopulationPriorsModule
 from modules.puzzle_engine.module import PuzzleEngineModule
 
 configure_logging("INFO")
@@ -85,7 +86,7 @@ _modules_list = [
     TutorRuntimeModule(),
     PracticeEngineModule(),
     ParentDashboardModule(),
-    AttentionFederatedModule(),
+    PopulationPriorsModule(),
     PuzzleEngineModule(),
 ]
 _module_registry = {m.name: m for m in _modules_list}
@@ -104,11 +105,15 @@ app.add_middleware(
 from modules.teacher.routes import router as teacher_router
 from modules.notify.routes import router as notify_router
 from modules.survey.routes import router as survey_router
+from modules.chrono_ritual.routes import router as chrono_ritual_router
+from modules.attention_coarse.routes import router as attention_coarse_router
 
 app.include_router(iam_router)
 app.include_router(teacher_router)
 app.include_router(notify_router)
 app.include_router(survey_router)
+app.include_router(chrono_ritual_router)
+app.include_router(attention_coarse_router)
 
 # ── Input sanitization ────────────────────────────────────────────────────────
 _CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
@@ -580,6 +585,11 @@ async def learner_consent(req: LearnerConsentRequest, _: None = Depends(rate_lim
     the five cold-start puzzle probes begin. /puzzle/next and /puzzle/respond
     both require this to have happened first; nothing about this child is
     collected before it. Idempotent — safe to call multiple times.
+
+    Only reachable when ALLOW_SYNTHETIC_CONSENT=true (see foundation.identity.
+    grant_pilot_consent) — this path has no real OTP/DigiLocker verification
+    behind it, so it is refused outside a deliberately-configured
+    dev/test/pilot environment.
     """
     _require_uuid(req.learner_id)
     ok = await register_pilot_learner(
@@ -590,7 +600,16 @@ async def learner_consent(req: LearnerConsentRequest, _: None = Depends(rate_lim
     )
     if not ok:
         raise HTTPException(status_code=400, detail="Invalid learner ID format")
-    await grant_pilot_consent(req.learner_id)
+    try:
+        await grant_pilot_consent(req.learner_id)
+    except SyntheticConsentDisabledError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "synthetic_consent_disabled",
+                "message": str(exc),
+            },
+        )
     return {"status": "consent_granted", "learner_id": req.learner_id}
 
 
@@ -1056,6 +1075,69 @@ async def parent_alerts(
             child_id,
         )
         return [dict(r) for r in rows]
+
+
+@app.get("/parent/{parent_id}/child/{child_id}/transcript")
+async def parent_transcript(
+    parent_id: str, child_id: str, _: None = Depends(rate_limit)
+):
+    """
+    Business-plan invariant 01 (§9): "Never hide a word from the parent" —
+    the full, real conversation log for this child, every turn, in order,
+    unsummarized. Additive to /parent/{learner_id}/report (which stays a
+    derived summary); this is the raw log underneath it.
+
+    Precondition: parent_id must be a registered guardian identity holding
+    active consent_given=true guardian_links to child_id covering
+    progress_report scope — checked via check_parent_access before any row
+    is read.
+    """
+    _require_uuid(parent_id)
+    _require_uuid(child_id)
+    if not await check_parent_access(parent_id, child_id, SCOPE_PROGRESS_REPORT):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "parental_consent_required",
+                "message": (
+                    "This parent_id is not a verified guardian of this "
+                    "child, or consent has not been granted."
+                ),
+            },
+        )
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT created_at, subject, question, response
+            FROM learner_state.interactions
+            WHERE learner_id = $1
+            ORDER BY created_at ASC
+            """,
+            child_id,
+        )
+
+    log.info(
+        "parent_transcript_accessed",
+        parent_id=parent_id,
+        child_id=child_id,
+        turns=len(rows),
+    )
+    return {
+        "child_id": child_id,
+        "parent_id": parent_id,
+        "turn_count": len(rows),
+        "transcript": [
+            {
+                "created_at": r["created_at"].isoformat(),
+                "subject": r["subject"],
+                "question": r["question"],
+                "response": r["response"],
+            }
+            for r in rows
+        ],
+    }
 
 
 # ── Monitor dashboard ─────────────────────────────────────────────────────────

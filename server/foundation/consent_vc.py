@@ -76,6 +76,42 @@ async def initiate_consent(
     return token_id
 
 
+# ── DigiLocker (Aadhaar-linked) — contract only, not implemented ────────────
+
+async def verify_via_digilocker(
+    guardian_did: str,
+    child_id: _uuid.UUID,
+    digilocker_auth_code: str,
+    scope: list[str],
+    guardian_ip: Optional[str] = None,
+) -> dict:
+    """
+    Business-plan Invariant 02 (Sec. 9) commits to "Aadhaar-linked parental
+    consent at sign-up, via DigiLocker." This is the contract that flow will
+    fill in: DigiLocker OAuth-style handoff — guardian consents on DigiLocker,
+    we exchange `digilocker_auth_code` for their Aadhaar-linked eKYC profile,
+    confirm it names a guardian, then issue a ParentalConsentVC and write a
+    guardian_links row with consent_method='digilocker' exactly the way
+    complete_consent() does today for consent_method='otp'.
+
+    Precondition (not yet checkable — see below): a real DigiLocker OAuth
+    client (partner API credentials, sandbox or production) would need to be
+    configured; none is wired up in this codebase yet.
+
+    Not implemented. There is no DigiLocker API integration in this codebase
+    — only OTP (see complete_consent()). Do not call this expecting it to
+    grant consent; it exists so the missing mechanism is visible in the code
+    as a stub, not silently absent.
+    """
+    raise NotImplementedError(
+        "DigiLocker verification is not implemented — only OTP-based consent "
+        "(complete_consent) is live. See Invariant 02 audit finding: the "
+        "business plan promises Aadhaar-linked DigiLocker verification; the "
+        "shipped mechanism is OTP-only. Wire up a real DigiLocker OAuth "
+        "client before removing this exception."
+    )
+
+
 # ── Step 2: Complete (OTP verification → VC issuance) ───────────────────────
 
 async def complete_consent(
@@ -176,7 +212,10 @@ async def complete_consent(
             expires_at,
         )
 
-        # Backward compat: update guardian_links
+        # Backward compat: update guardian_links. This is the OTP flow only
+        # (verify_via_digilocker() is not wired up yet), so consent_method is
+        # always 'otp' here — never claim digilocker-equivalence for an
+        # OTP-verified consent.
         guardian_row = await conn.fetchrow(
             "SELECT identity_id FROM foundation.did_documents WHERE did = $1",
             guardian_did,
@@ -186,10 +225,10 @@ async def complete_consent(
             await conn.execute(
                 """
                 INSERT INTO foundation.guardian_links
-                    (guardian_id, child_id, consent_given, consent_ts, scope)
-                VALUES ($1, $2, true, now(), $3)
+                    (guardian_id, child_id, consent_given, consent_ts, scope, consent_method)
+                VALUES ($1, $2, true, now(), $3, 'otp')
                 ON CONFLICT (guardian_id, child_id) DO UPDATE
-                    SET consent_given = true, consent_ts = now(), scope = $3
+                    SET consent_given = true, consent_ts = now(), scope = $3, consent_method = 'otp'
                 """,
                 guardian_identity_id,
                 child_id,
