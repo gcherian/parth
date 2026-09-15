@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth — Founder Demo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f1117; --panel: #131720; --panel2: #0d1018; --line: #1e2130;
+  --text: #e2e8f0; --muted: #64748b; --muted2: #94a3b8;
+  --orange: #f97316; --indigo: #6366f1; --green: #22c55e; --red: #ef4444;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text);
+  height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+}
+
+/* ── Header ── */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 22px; border-bottom: 1px solid var(--line);
+  background: #0b0d14; flex-shrink: 0; gap: 16px; flex-wrap: wrap;
+}
+.brand h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; color: #f8fafc; }
+.brand p  { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+
+.role-tabs { display: flex; gap: 6px; background: #0d1018; border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
+.role-tab {
+  padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; color: var(--muted2); transition: all 0.15s; border: none; background: transparent;
+  display: flex; align-items: center; gap: 6px;
+}
+.role-tab.active.student { background: #f9731622; color: #fdba74; }
+.role-tab.active.teacher { background: #6366f122; color: #a5b4fc; }
+.role-tab.active.parent  { background: #22c55e22; color: #4ade80; }
+
+.controls { display: flex; align-items: center; gap: 10px; }
+button.util {
+  background: transparent; color: var(--muted2); border: 1px solid var(--line);
+  border-radius: 7px; padding: 7px 12px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+}
+button.util:hover { opacity: 0.85; }
+#seedStatus { font-size: 0.72rem; color: var(--muted); }
+#seedStatus.ready { color: var(--green); }
+
+/* ── Layout ── */
+main { flex: 1; display: flex; overflow: hidden; }
+
+/* Script sidebar */
+#script-panel {
+  width: 300px; flex-shrink: 0; background: var(--panel2); border-right: 1px solid var(--line);
+  overflow-y: auto; padding: 16px;
+}
+#script-panel h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 12px; }
+.step {
+  padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--line);
+  background: var(--panel); cursor: pointer; transition: border-color 0.2s;
+}
+.step:hover { border-color: #2d3446; }
+.step.current { border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange) inset; }
+.step .step-num { font-size: 0.68rem; font-weight: 800; color: var(--orange); }
+.step .step-title { font-size: 0.82rem; font-weight: 700; color: #f1f5f9; margin: 3px 0; }
+.step .step-quote { font-size: 0.72rem; color: var(--muted2); font-style: italic; line-height: 1.4; }
+.step .step-ref { font-size: 0.62rem; color: var(--muted); margin-top: 4px; }
+
+/* Phone stage */
+#stage {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  overflow-y: auto; padding: 24px; position: relative;
+}
+.phone {
+  width: 380px; max-width: 92%; background: #000; border-radius: 34px; padding: 10px;
+  box-shadow: 0 20px 60px -10px rgba(0,0,0,0.6); position: relative;
+}
+.phone-notch { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 90px; height: 18px; background: #000; border-radius: 10px; z-index: 5; }
+.phone-screen {
+  background: var(--panel); border-radius: 26px; overflow: hidden; min-height: 640px;
+  display: flex; flex-direction: column;
+}
+.phone-header {
+  padding: 30px 16px 12px; text-align: center; border-bottom: 1px solid var(--line); background: var(--panel2);
+}
+.phone-header .who { font-size: 0.95rem; font-weight: 800; color: #f8fafc; }
+.phone-header .sub { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+.phone-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.phone-body::-webkit-scrollbar { width: 4px; }
+.phone-body::-webkit-scrollbar-thumb { background: #2d3446; border-radius: 3px; }
+
+/* Student chat */
+.bubble { max-width: 85%; padding: 10px 13px; border-radius: 14px; font-size: 0.85rem; line-height: 1.5; animation: fadeUp 0.25s ease-out; white-space: pre-wrap; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.bubble.child { align-self: flex-end; background: var(--orange); color: #1a0e02; border-bottom-right-radius: 3px; }
+.bubble.parth { align-self: flex-start; background: #1e2130; color: var(--text); border-bottom-left-radius: 3px; }
+.bubble.typing { align-self: flex-start; background: #1e2130; color: var(--muted); font-style: italic; }
+.chat-input-row { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); background: var(--panel2); }
+.chat-input-row input {
+  flex: 1; background: #0b0d14; border: 1px solid var(--line); border-radius: 20px;
+  padding: 9px 14px; color: var(--text); font-size: 0.82rem; outline: none;
+}
+.chat-input-row input:focus { border-color: var(--orange); }
+.chat-input-row button { background: var(--orange); color: #1a0e02; border: none; border-radius: 20px; padding: 9px 16px; font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+.chat-input-row button:disabled { opacity: 0.5; }
+.suggest-row { display: flex; gap: 6px; padding: 0 12px 10px; flex-wrap: wrap; }
+.suggest-chip { font-size: 0.7rem; background: #1e2130; color: var(--muted2); border: 1px solid var(--line); border-radius: 12px; padding: 5px 10px; cursor: pointer; }
+.suggest-chip:hover { border-color: var(--orange); color: #fdba74; }
+
+/* Teacher / Parent cards */
+.card { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px; }
+.card-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 700; margin-bottom: 8px; }
+.card h3 { font-size: 0.85rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+.misconception-belief { font-size: 0.78rem; color: #fdba74; background: #f9731614; border-left: 2px solid var(--orange); padding: 6px 9px; border-radius: 6px; margin: 6px 0; line-height: 1.4; }
+.child-chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
+.child-chip { font-size: 0.72rem; background: #1e2130; padding: 4px 9px; border-radius: 12px; color: var(--muted2); }
+.opener-text { font-size: 0.76rem; color: var(--muted2); line-height: 1.5; margin-top: 6px; }
+.mini-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--line); font-size: 0.78rem; }
+.mini-row:first-of-type { border-top: none; }
+.mini-name { color: #e2e8f0; font-weight: 600; }
+.mini-detail { color: var(--muted); font-size: 0.7rem; }
+.pill { font-size: 0.62rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; }
+.pill.quiet { background: #ef444422; color: #f87171; }
+.pill.ready { background: #22c55e22; color: #4ade80; }
+
+.action-btn {
+  width: 100%; background: var(--indigo); color: #fff; border: none; border-radius: 9px;
+  padding: 11px; font-size: 0.82rem; font-weight: 700; cursor: pointer; margin-top: 4px;
+}
+.action-btn:disabled { opacity: 0.5; cursor: default; }
+.action-btn.sent { background: var(--green); }
+.action-btn.secondary { background: transparent; border: 1px solid var(--line); color: var(--muted2); }
+
+.narrative-card {
+  background: #1e213022; border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+  font-size: 0.8rem; line-height: 1.55; color: #e2e8f0; white-space: pre-wrap;
+}
+.narrative-meta { font-size: 0.68rem; color: var(--muted); margin-bottom: 6px; }
+
+.transcript-turn { font-size: 0.76rem; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.transcript-turn:last-child { border-bottom: none; }
+.transcript-q { color: #fdba74; font-weight: 600; }
+.transcript-a { color: var(--muted2); margin-top: 2px; }
+
+.empty-hint { font-size: 0.76rem; color: var(--muted); text-align: center; padding: 20px 10px; }
+.loading-dots::after { content: '···'; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #1e2130; border: 1px solid var(--green); color: #4ade80;
+  padding: 10px 18px; border-radius: 10px; font-size: 0.82rem; font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 100; opacity: 0; transition: opacity 0.3s;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>Parth — Founder Demo</h1>
+    <p>One family, three screens: Aarav (student) · Priya Iyer (teacher) · Sunita Sharma (parent)</p>
+  </div>
+  <div class="role-tabs" id="roleTabs">
+    <button class="role-tab student" data-role="student">📱 Student</button>
+    <button class="role-tab teacher active" data-role="teacher">🧑‍🏫 Teacher</button>
+    <button class="role-tab parent" data-role="parent">👩‍👦 Parent</button>
+  </div>
+  <div class="controls">
+    <span id="seedStatus">seeding…</span>
+    <button class="util" id="btnReseed">↺ Reset demo data</button>
+  </div>
+</header>
+
+<main>
+  <div id="script-panel">
+    <h2>Presenter script</h2>
+    <div id="steps"></div>
+  </div>
+  <div id="stage"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '';
+let seed = null;
+let currentRole = 'teacher';
+let currentStep = 0;
+let weeklyReportCache = null; // handed off live from Teacher tab -> Parent tab, same as a real push would deliver
+let chatHistory = []; // [{role:'child'|'parth', text}]
+
+const STEPS = [
+  {
+    role: 'teacher', title: '1. Priya opens her Tuesday briefing',
+    quote: 'Six of your twenty-two are carrying the same misconception... The primary artefact.',
+    ref: 'Business plan §7.1', action: 'Click "Run briefing" — shows the real shared misconception across Priya\'s batch, named, including Aarav.',
+  },
+  {
+    role: 'teacher', title: '2. Priya sends this week\'s report',
+    quote: 'No tuition teacher in India currently sends a parent that sentence.',
+    ref: 'Business plan §7.3', action: 'Click "Send weekly report to Sunita" — a real LLM call, grounded in Aarav\'s actual tracked facts. Send this before Step 3, so the report is about the fractions misconception, not whatever Aarav asks next.',
+  },
+  {
+    role: 'student', title: '3. Aarav asks a real question',
+    quote: 'Aarav. Eleven. Class 6 in Pune. Freezes silently on multi-step word problems and never asks for help.',
+    ref: 'Business plan §2.1', action: 'Type the cricket question (or your own) and send it — this is a live model call, not a script.',
+  },
+  {
+    role: 'parent', title: '4. Sunita receives it, under Priya\'s name',
+    quote: '...and no parent who receives it forgets who sent it.',
+    ref: 'Business plan §7.3', action: 'Switch to Parent — the report sent in Step 2 is already there.',
+  },
+  {
+    role: 'parent', title: '5. Sunita checks the full transcript',
+    quote: 'Never hide a word from the parent... no privileged channel exists in the data model.',
+    ref: 'Invariant 01', action: 'Click "View full transcript" — the real conversation from Step 3, verbatim.',
+  },
+  {
+    role: 'parent', title: '6. Sunita confirms a study time',
+    quote: 'It is an appointment, not a streak.',
+    ref: 'Business plan §8.4 / Invariant 04', action: 'Click "Confirm this time" — turns the real inferred focus-window into a fixed slot.',
+  },
+];
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+function renderSteps() {
+  document.getElementById('steps').innerHTML = STEPS.map((s, i) => `
+    <div class="step ${i === currentStep ? 'current' : ''}" data-idx="${i}" data-role="${s.role}">
+      <div class="step-num">STEP ${i + 1}</div>
+      <div class="step-title">${s.title.replace(/^\d+\.\s*/, '')}</div>
+      <div class="step-quote">"${s.quote}"</div>
+      <div class="step-ref">${s.ref} — ${s.action}</div>
+    </div>
+  `).join('');
+  document.querySelectorAll('.step').forEach(el => {
+    el.addEventListener('click', () => {
+      currentStep = parseInt(el.dataset.idx);
+      setRole(el.dataset.role);
+      renderSteps();
+    });
+  });
+}
+
+function setRole(role) {
+  currentRole = role;
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.toggle('active', t.dataset.role === role));
+  renderStage();
+}
+
+document.getElementById('roleTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('.role-tab');
+  if (btn) setRole(btn.dataset.role);
+});
+
+// ── Seeding ──────────────────────────────────────────────────────────────
+async function doSeed() {
+  document.getElementById('seedStatus').textContent = 'seeding…';
+  document.getElementById('seedStatus').classList.remove('ready');
+  const resp = await fetch('/founder-demo/seed', { method: 'POST' });
+  seed = await resp.json();
+  document.getElementById('seedStatus').textContent = `ready — ${seed.child_name} / ${seed.teacher_name} / ${seed.parent_name}`;
+  document.getElementById('seedStatus').classList.add('ready');
+  chatHistory = [];
+  weeklyReportCache = null;
+  renderStage();
+}
+document.getElementById('btnReseed').addEventListener('click', doSeed);
+
+// ── Student phone ────────────────────────────────────────────────────────
+function studentPhoneHtml() {
+  const bubbles = chatHistory.map(m => `<div class="bubble ${m.role}">${escapeHtml(m.text)}</div>`).join('')
+    || `<div class="empty-hint">No messages yet — ask Aarav's mentor something below.</div>`;
+  return `
+    <div class="phone-header">
+      <div class="who">Aarav's Mentor</div>
+      <div class="sub">Class 6 · Pune · English-medium</div>
+    </div>
+    <div class="phone-body" id="chatBody">${bubbles}</div>
+    <div class="suggest-row">
+      <span class="suggest-chip" data-q="India scored 240 in 40 overs. What is the run rate?">🏏 Cricket run rate</span>
+      <span class="suggest-chip" data-q="Why does 1/2 look bigger than 1/10 even though 10 is a bigger number?">Fractions confusion</span>
+    </div>
+    <div class="chat-input-row">
+      <input id="chatInput" type="text" placeholder="Type Aarav's question…" />
+      <button id="chatSend">Send</button>
+    </div>
+  `;
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function wireStudentPhone() {
+  const input = document.getElementById('chatInput');
+  const send = document.getElementById('chatSend');
+  document.querySelectorAll('.suggest-chip').forEach(chip => {
+    chip.addEventListener('click', () => { input.value = chip.dataset.q; sendChat(); });
+  });
+  send.addEventListener('click', sendChat);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendChat(); });
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg || !seed) return;
+  input.value = '';
+  chatHistory.push({ role: 'child', text: msg });
+  renderStage();
+  const body = document.getElementById('chatBody');
+  const typing = document.createElement('div');
+  typing.className = 'bubble parth typing';
+  typing.textContent = 'thinking…';
+  body.appendChild(typing);
+  body.scrollTop = body.scrollHeight;
+
+  try {
+    const resp = await fetch('/chat', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: msg, subject: 'Math', grade: 6,
+        learner_id: seed.child_id, learner_name: seed.child_name,
+      }),
+    });
+    const data = await resp.json();
+    chatHistory.push({ role: 'parth', text: data.response || '(no response)' });
+  } catch (e) {
+    chatHistory.push({ role: 'parth', text: `[error contacting Parth: ${e}]` });
+  }
+  renderStage();
+}
+
+// ── Teacher phone ─────────────────────────────────────────────────────────
+let briefingCache = null;
+
+function teacherPhoneHtml() {
+  return `
+    <div class="phone-header">
+      <div class="who">Priya Iyer's Console</div>
+      <div class="sub">Class 6 · Mathematics batch</div>
+    </div>
+    <div class="phone-body" id="teacherBody">
+      ${briefingCache ? briefingHtml(briefingCache) : `
+        <div class="empty-hint">Tap below to open Tuesday's briefing.</div>
+        <button class="action-btn" id="btnBriefing">▶ Run briefing</button>
+      `}
+    </div>
+  `;
+}
+
+function briefingHtml(b) {
+  const sm = b.shared_misconception;
+  const smHtml = sm ? `
+    <div class="card">
+      <div class="card-label">Shared misconception</div>
+      <h3>${sm.count} of your ${b.batch_size} — ${sm.concept}</h3>
+      <div class="misconception-belief">${escapeHtml(sm.belief)}</div>
+      <div class="child-chip-row">${sm.children.map(c => `<span class="child-chip">${escapeHtml(c)}</span>`).join('')}</div>
+      <div class="opener-text"><strong>Opener:</strong> ${escapeHtml(sm.opener)}</div>
+    </div>
+  ` : '';
+
+  const quietHtml = (b.quiet_children || []).length ? `
+    <div class="card">
+      <div class="card-label">Went quiet</div>
+      ${b.quiet_children.map(q => `
+        <div class="mini-row">
+          <span class="mini-name">${escapeHtml(q.name)}</span>
+          <span class="pill quiet">${q.quiet_for_days}d — ${escapeHtml(q.concept)}</span>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  const readyHtml = (b.ready_to_advance || []).length ? `
+    <div class="card">
+      <div class="card-label">Ready to advance</div>
+      ${b.ready_to_advance.map(r => `
+        <div class="mini-row">
+          <span class="mini-name">${escapeHtml(r.name)}</span>
+          <span class="pill ready">→ ${escapeHtml(r.next)}</span>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  const sendBtn = weeklyReportCache
+    ? `<button class="action-btn sent" disabled>✓ Weekly report sent to ${escapeHtml(seed.parent_name)}</button>`
+    : `<button class="action-btn" id="btnSendReport">Send weekly report to ${seed ? escapeHtml(seed.parent_name) : 'parent'} →</button>`;
+
+  return smHtml + quietHtml + readyHtml + `<div style="height:4px"></div>` + sendBtn;
+}
+
+function wireTeacherPhone() {
+  const b = document.getElementById('btnBriefing');
+  if (b) b.addEventListener('click', runBriefing);
+  const s = document.getElementById('btnSendReport');
+  if (s) s.addEventListener('click', sendWeeklyReport);
+}
+
+async function runBriefing() {
+  if (!seed) return;
+  const bodyEl = document.getElementById('teacherBody');
+  bodyEl.innerHTML = `<div class="empty-hint loading-dots">Reading the batch</div>`;
+  const resp = await fetch(`/teacher/${seed.teacher_phone}/briefing`);
+  briefingCache = await resp.json();
+  renderStage();
+}
+
+async function sendWeeklyReport() {
+  if (!seed) return;
+  const btn = document.getElementById('btnSendReport');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  const resp = await fetch(`/teacher/${seed.teacher_phone}/children/${seed.child_id}/weekly-report`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teacher_name: seed.teacher_name,
+      parent_contact: 'sunita.sharma.demo@example.com',
+      channel: 'email',
+    }),
+  });
+  const data = await resp.json();
+  weeklyReportCache = data;
+  toast(`Report sent — switch to Parent to see it land`);
+  renderStage();
+}
+
+// ── Parent phone ──────────────────────────────────────────────────────────
+let alertsCache = null;
+let transcriptCache = null;
+let chronoCache = null;
+
+function parentPhoneHtml() {
+  const reportHtml = weeklyReportCache ? `
+    <div class="card">
+      <div class="card-label">This week's report — from ${escapeHtml(weeklyReportCache.teacher_name)}</div>
+      <div class="narrative-meta">Week of ${weeklyReportCache.week_start}</div>
+      <div class="narrative-card">${escapeHtml(weeklyReportCache.narrative)}</div>
+    </div>
+  ` : `<div class="card"><div class="empty-hint">No report yet — send one from the Teacher tab first.</div></div>`;
+
+  const alertsHtml = alertsCache ? `
+    <div class="card">
+      <div class="card-label">Alerts</div>
+      ${alertsCache.length ? alertsCache.map(a => `<div class="mini-row"><span class="mini-name">${escapeHtml(a.message)}</span></div>`).join('')
+        : `<div class="empty-hint" style="padding:6px 0">No alerts right now.</div>`}
+    </div>
+  ` : `<button class="action-btn secondary" id="btnAlerts">Check alerts</button>`;
+
+  const transcriptHtml = transcriptCache ? `
+    <div class="card">
+      <div class="card-label">Full transcript — ${transcriptCache.turn_count} turn(s)</div>
+      ${transcriptCache.transcript.filter(t => t.question).map(t => `
+        <div class="transcript-turn">
+          <div class="transcript-q">${escapeHtml(t.question)}</div>
+          <div class="transcript-a">${escapeHtml(t.response)}</div>
+        </div>
+      `).join('') || `<div class="empty-hint" style="padding:6px 0">No chat turns yet — ask something on the Student tab first.</div>`}
+    </div>
+  ` : `<button class="action-btn secondary" id="btnTranscript">View full transcript</button>`;
+
+  let chronoHtml;
+  if (chronoCache && chronoCache.confirmed_appointment) {
+    const a = chronoCache.confirmed_appointment;
+    chronoHtml = `<div class="card"><div class="card-label">Study time</div><h3>Confirmed: ${String(a.hour_of_day).padStart(2,'0')}:00, weekdays</h3></div>`;
+  } else if (chronoCache) {
+    chronoHtml = `
+      <div class="card">
+        <div class="card-label">Study time</div>
+        <h3>Parth suggests ${String(chronoCache.inferred_peak_hour).padStart(2,'0')}:00 — Aarav's real focus window</h3>
+        <button class="action-btn" id="btnConfirmChrono">Confirm this time</button>
+      </div>`;
+  } else {
+    chronoHtml = `<button class="action-btn secondary" id="btnChrono">Check suggested study time</button>`;
+  }
+
+  return `
+    <div class="phone-header">
+      <div class="who">Sunita's App</div>
+      <div class="sub">Aarav's mother</div>
+    </div>
+    <div class="phone-body" id="parentBody">
+      ${reportHtml}${alertsHtml}${transcriptHtml}${chronoHtml}
+    </div>
+  `;
+}
+
+function wireParentPhone() {
+  const a = document.getElementById('btnAlerts');
+  if (a) a.addEventListener('click', loadAlerts);
+  const t = document.getElementById('btnTranscript');
+  if (t) t.addEventListener('click', loadTranscript);
+  const c = document.getElementById('btnChrono');
+  if (c) c.addEventListener('click', loadChrono);
+  const cc = document.getElementById('btnConfirmChrono');
+  if (cc) cc.addEventListener('click', confirmChrono);
+}
+
+async function loadAlerts() {
+  const resp = await fetch(`/parent/${seed.parent_id}/child/${seed.child_id}/alerts`);
+  alertsCache = await resp.json();
+  renderStage();
+}
+async function loadTranscript() {
+  const resp = await fetch(`/parent/${seed.parent_id}/child/${seed.child_id}/transcript`);
+  transcriptCache = await resp.json();
+  renderStage();
+}
+async function loadChrono() {
+  const resp = await fetch(`/chrono-ritual/${seed.child_id}/window`);
+  chronoCache = await resp.json();
+  renderStage();
+}
+async function confirmChrono() {
+  const resp = await fetch(`/chrono-ritual/${seed.child_id}/confirm`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ confirmed_by: seed.parent_name, days_of_week: [0,1,2,3,4] }),
+  });
+  await resp.json();
+  chronoCache = await (await fetch(`/chrono-ritual/${seed.child_id}/window`)).json();
+  toast('Study time confirmed');
+  renderStage();
+}
+
+// ── Stage render ──────────────────────────────────────────────────────────
+function renderStage() {
+  const stage = document.getElementById('stage');
+  let inner;
+  if (currentRole === 'student') inner = studentPhoneHtml();
+  else if (currentRole === 'teacher') inner = teacherPhoneHtml();
+  else inner = parentPhoneHtml();
+
+  stage.innerHTML = `
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">${inner}</div>
+    </div>
+  `;
+
+  if (currentRole === 'student') {
+    wireStudentPhone();
+    const body = document.getElementById('chatBody');
+    if (body) body.scrollTop = body.scrollHeight;
+  } else if (currentRole === 'teacher') wireTeacherPhone();
+  else wireParentPhone();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+renderSteps();
+renderStage();
+doSeed();
+</script>
+
+</body>
+</html>

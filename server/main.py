@@ -108,6 +108,7 @@ from modules.survey.routes import router as survey_router
 from modules.chrono_ritual.routes import router as chrono_ritual_router
 from modules.attention_coarse.routes import router as attention_coarse_router
 from modules.master_demo.routes import router as master_demo_router
+from modules.founder_demo.routes import router as founder_demo_router
 
 app.include_router(iam_router)
 app.include_router(teacher_router)
@@ -116,6 +117,7 @@ app.include_router(survey_router)
 app.include_router(chrono_ritual_router)
 app.include_router(attention_coarse_router)
 app.include_router(master_demo_router)
+app.include_router(founder_demo_router)
 
 # ── Input sanitization ────────────────────────────────────────────────────────
 _CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
