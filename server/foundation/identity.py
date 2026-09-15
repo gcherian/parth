@@ -67,16 +67,20 @@ async def check_consent(learner_id: str, scope: str) -> bool:
 
 async def check_parent_access(parent_id: str, child_id: str, scope: str) -> bool:
     """
+    Precondition: parent_id and child_id are caller-supplied strings that may
+    be malformed, unknown, or unrelated to each other.
+
     Returns True only if parent_id is a registered 'guardian' identity AND
     holds an active (consent_given=true) foundation.guardian_links row
     linking it specifically to child_id, covering the given scope.
 
     Unlike check_consent (which only asks "does *some* guardian consent
-    exist for this child"), this binds the check to the caller's own
+    exist for this child"), this binds the check to the caller's own claimed
     identity — required wherever a specific parent_id appears in the URL,
-    e.g. GET /parent/{parent_id}/child/{child_id}/transcript. Unknown or
-    non-guardian parent_ids, and guardian_ids with no link to this child,
-    are both denied.
+    e.g. GET /parent/{parent_id}/child/{child_id}/report or .../transcript.
+    Unknown or non-guardian parent_ids, and guardian_ids with no active link
+    to this specific child, are both denied. Read-only; no postcondition
+    beyond the boolean result.
     """
     try:
         parent_uuid = _uuid.UUID(parent_id)
@@ -95,6 +99,7 @@ async def check_parent_access(parent_id: str, child_id: str, scope: str) -> bool
                 "parent_access_denied_not_guardian",
                 parent_id=parent_id,
                 child_id=child_id,
+                scope=scope,
             )
             return False
 
@@ -110,6 +115,7 @@ async def check_parent_access(parent_id: str, child_id: str, scope: str) -> bool
                 "parent_access_denied_no_link",
                 parent_id=parent_id,
                 child_id=child_id,
+                scope=scope,
             )
             return False
 

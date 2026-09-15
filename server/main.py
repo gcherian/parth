@@ -1032,19 +1032,36 @@ async def pilot_funnel(school_id: str | None = None, _: None = Depends(rate_limi
 
 
 # ── Parent dashboard endpoints ────────────────────────────────────────────────
-@app.get("/parent/{learner_id}/report")
-async def parent_report(learner_id: str, _: None = Depends(rate_limit)):
-    _require_uuid(learner_id)
+# Both endpoints below require the caller to identify themselves as a
+# specific parent_id in the URL, verified via check_parent_access() against
+# the child_id being requested. Previously these routes only took a bare
+# learner_id (the child) with no caller identity at all — any request for
+# any valid child UUID succeeded. The {parent_id}/child/{child_id} shape
+# matches the /parent/{parent_id}/child/{child_id}/transcript endpoint added
+# in the sibling invariant-01 PR.
+@app.get("/parent/{parent_id}/child/{child_id}/report")
+async def parent_report(
+    parent_id: str, child_id: str, _: None = Depends(rate_limit)
+):
+    _require_uuid(parent_id)
+    _require_uuid(child_id)
+    if not await check_parent_access(parent_id, child_id, SCOPE_PROGRESS_REPORT):
+        raise HTTPException(status_code=403, detail="Not authorized for this child")
     from modules.parent_dashboard.module import build_report
     pool = await get_pool()
     async with pool.acquire() as conn:
-        report = await build_report(conn, learner_id)
+        report = await build_report(conn, child_id)
     return report
 
 
-@app.get("/parent/{learner_id}/alerts")
-async def parent_alerts(learner_id: str, _: None = Depends(rate_limit)):
-    _require_uuid(learner_id)
+@app.get("/parent/{parent_id}/child/{child_id}/alerts")
+async def parent_alerts(
+    parent_id: str, child_id: str, _: None = Depends(rate_limit)
+):
+    _require_uuid(parent_id)
+    _require_uuid(child_id)
+    if not await check_parent_access(parent_id, child_id, SCOPE_PROGRESS_REPORT):
+        raise HTTPException(status_code=403, detail="Not authorized for this child")
     pool = await get_pool()
     async with pool.acquire() as conn:
         rows = await conn.fetch(
@@ -1055,7 +1072,7 @@ async def parent_alerts(learner_id: str, _: None = Depends(rate_limit)):
             ORDER BY created_at DESC
             LIMIT 20
             """,
-            learner_id,
+            child_id,
         )
         return [dict(r) for r in rows]
 
