@@ -88,6 +88,7 @@ class _FakeConn:
                 "guardian_id": guardian_id,
                 "consent_given": True,
                 "scope": scopes,
+                "consent_method": "synthetic_pilot",
             }
         elif "INSERT INTO learner_state.profiles" in sql:
             learner_id, name, grade = args
@@ -181,7 +182,8 @@ class PilotRegistrationTests(unittest.IsolatedAsyncioTestCase):
         async def fake_get_pool():
             return _FakePool(conn)
 
-        with patch.object(identity, "get_pool", fake_get_pool):
+        with patch.object(identity, "get_pool", fake_get_pool), \
+             patch.object(identity.Config, "ALLOW_SYNTHETIC_CONSENT", True):
             ok = await identity.grant_pilot_consent(learner_id)
             self.assertFalse(ok)
             self.assertFalse(
@@ -189,6 +191,25 @@ class PilotRegistrationTests(unittest.IsolatedAsyncioTestCase):
                     learner_id,
                     identity.SCOPE_AI_INTERACTION,
                 )
+            )
+
+    async def test_grant_pilot_consent_refuses_without_flag(self):
+        """Invariant 02 fix: the synthetic-guardian bypass must be
+        structurally unreachable unless ALLOW_SYNTHETIC_CONSENT is explicitly
+        true — it must raise, not silently no-op or silently succeed."""
+        conn = _FakeConn()
+        learner_id = str(uuid.uuid4()).upper()
+
+        async def fake_get_pool():
+            return _FakePool(conn)
+
+        with patch.object(identity, "get_pool", fake_get_pool), \
+             patch.object(identity.Config, "ALLOW_SYNTHETIC_CONSENT", False):
+            await identity.register_pilot_learner(learner_id, "Aarav", 6)
+            with self.assertRaises(identity.SyntheticConsentDisabledError):
+                await identity.grant_pilot_consent(learner_id)
+            self.assertFalse(
+                await identity.check_consent(learner_id, identity.SCOPE_AI_INTERACTION)
             )
 
     async def test_register_then_grant_consent_is_explicit_two_step(self):
@@ -200,7 +221,8 @@ class PilotRegistrationTests(unittest.IsolatedAsyncioTestCase):
         async def fake_get_pool():
             return _FakePool(conn)
 
-        with patch.object(identity, "get_pool", fake_get_pool):
+        with patch.object(identity, "get_pool", fake_get_pool), \
+             patch.object(identity.Config, "ALLOW_SYNTHETIC_CONSENT", True):
             await identity.register_pilot_learner(learner_id, "Aarav", 6)
             self.assertFalse(
                 await identity.check_consent(learner_id, identity.SCOPE_AI_INTERACTION)
@@ -213,6 +235,10 @@ class PilotRegistrationTests(unittest.IsolatedAsyncioTestCase):
             )
             self.assertTrue(
                 await identity.check_consent(learner_id, identity.SCOPE_LEARNER_DATA)
+            )
+            self.assertEqual(
+                conn.guardian_links[uuid.UUID(learner_id)]["consent_method"],
+                "synthetic_pilot",
             )
 
 

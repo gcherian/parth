@@ -19,6 +19,8 @@ Environment variables:
   AGENT_TRACE_HISTORY Interactions kept in the in-memory observer cache
   DATA_DIR            Path to persistent data (ChromaDB, etc.). Default: ~/.parth
   MAX_HISTORY_TURNS   Chat turns included in prompt context (default: 16)
+  ALLOW_SYNTHETIC_CONSENT  Pilot-only synthetic guardian consent bypass
+                      (default: false). NEVER set true in production.
 """
 import os
 import socket
@@ -65,6 +67,11 @@ class Config:
     PARTH_API_KEY: str = os.getenv("PARTH_API_KEY", "")
     # Admin key — for monitor, observer, playground, graph etc.
     ADMIN_KEY: str = os.getenv("ADMIN_KEY", "")
+
+    # Pilot-only synthetic-guardian consent bypass (foundation.identity.
+    # grant_pilot_consent). Defaults OFF. Only ever set true in a deliberately
+    # configured dev/test/pilot environment — never against real learners.
+    ALLOW_SYNTHETIC_CONSENT: bool = os.getenv("ALLOW_SYNTHETIC_CONSENT", "false").lower() in ("1", "true", "yes")
 
     # ── Notify / survey links ─────────────────────────────────────────────────
     # Twilio WhatsApp-enabled sender, e.g. "whatsapp:+14155238886" (Twilio's

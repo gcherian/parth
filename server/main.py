@@ -23,6 +23,7 @@ from foundation.identity import (
     check_consent,
     register_pilot_learner,
     grant_pilot_consent,
+    SyntheticConsentDisabledError,
     SCOPE_AI_INTERACTION,
     SCOPE_LEARNER_DATA,
 )
@@ -582,6 +583,11 @@ async def learner_consent(req: LearnerConsentRequest, _: None = Depends(rate_lim
     the five cold-start puzzle probes begin. /puzzle/next and /puzzle/respond
     both require this to have happened first; nothing about this child is
     collected before it. Idempotent — safe to call multiple times.
+
+    Only reachable when ALLOW_SYNTHETIC_CONSENT=true (see foundation.identity.
+    grant_pilot_consent) — this path has no real OTP/DigiLocker verification
+    behind it, so it is refused outside a deliberately-configured
+    dev/test/pilot environment.
     """
     _require_uuid(req.learner_id)
     ok = await register_pilot_learner(
@@ -592,7 +598,16 @@ async def learner_consent(req: LearnerConsentRequest, _: None = Depends(rate_lim
     )
     if not ok:
         raise HTTPException(status_code=400, detail="Invalid learner ID format")
-    await grant_pilot_consent(req.learner_id)
+    try:
+        await grant_pilot_consent(req.learner_id)
+    except SyntheticConsentDisabledError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "synthetic_consent_disabled",
+                "message": str(exc),
+            },
+        )
     return {"status": "consent_granted", "learner_id": req.learner_id}
 
 
