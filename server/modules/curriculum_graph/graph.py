@@ -170,14 +170,125 @@ async def get_concept_neighbourhood(conn, concept_ids: list[str]) -> list[dict]:
         return []
 
 
+async def get_teacher_ids_for_learner(conn, learner_id: str) -> list[str]:
+    """Return the distinct teacher_ids (teacher.portraits.teacher_phone)
+    linked to this learner — a learner may have one per subject. Read-only;
+    empty list means no teacher has ever submitted a portrait for them."""
+    if conn is None or not learner_id:
+        return []
+    try:
+        rows = await conn.fetch(
+            "SELECT DISTINCT teacher_phone FROM teacher.portraits WHERE learner_id = $1",
+            learner_id,
+        )
+        return [r["teacher_phone"] for r in rows]
+    except Exception as e:
+        log.warning("get_teacher_ids_for_learner_failed", error=str(e))
+        return []
+
+
+async def get_teacher_sequence(conn, teacher_id: str) -> list[str]:
+    """Return this teacher's declared concept order (position ascending).
+    Empty list means the teacher hasn't set one — callers must fall back
+    to the automatic weak-concept-driven order."""
+    if conn is None or not teacher_id:
+        return []
+    try:
+        rows = await conn.fetch(
+            """
+            SELECT concept_id FROM curriculum_graph.teacher_sequence
+            WHERE teacher_id = $1
+            ORDER BY position ASC
+            """,
+            teacher_id,
+        )
+        return [r["concept_id"] for r in rows]
+    except Exception as e:
+        log.warning("get_teacher_sequence_failed", error=str(e))
+        return []
+
+
+async def _prerequisites_met(conn, learner_id: str, concept_id: str) -> bool:
+    """True if every 'prerequisite' edge into concept_id has p_mastery > 0.45
+    for this learner (or the concept has no such edges)."""
+    row = await conn.fetchrow(
+        """
+        SELECT NOT EXISTS (
+            SELECT 1 FROM curriculum_graph.concept_edges e
+            LEFT JOIN learner_state.knowledge k2
+                ON k2.concept_id = e.from_id AND k2.learner_id = $1
+            WHERE e.to_id = $2
+              AND e.type = 'prerequisite'
+              AND COALESCE(k2.p_mastery, 0) < 0.45
+        ) AS ok
+        """,
+        learner_id, concept_id,
+    )
+    return bool(row["ok"]) if row else True
+
+
+async def _next_from_teacher_sequence(
+    conn, learner_id: str, sequence: list[str]
+) -> dict | None:
+    """Walk a teacher's declared concept order and return the first entry
+    the learner hasn't mastered yet whose prerequisites are met — same
+    mastery/prerequisite thresholds as the automatic path, but the order
+    comes from `sequence` instead of the graph/exposure heuristic. Returns
+    None if every concept in the sequence is already mastered (caller
+    should then fall back to the automatic order)."""
+    if not sequence:
+        return None
+    rows = await conn.fetch(
+        """
+        SELECT c.id, c.label,
+               COALESCE(k.p_mastery, 0.0) AS p_mastery,
+               COALESCE(k.exposures, 0)   AS exposures
+        FROM curriculum_graph.concepts c
+        LEFT JOIN learner_state.knowledge k
+            ON k.concept_id = c.id AND k.learner_id = $1
+        WHERE c.id = ANY($2)
+        """,
+        learner_id, sequence,
+    )
+    by_id = {r["id"]: r for r in rows}
+
+    for concept_id in sequence:
+        row = by_id.get(concept_id)
+        if row is None or float(row["p_mastery"]) >= 0.70:
+            continue
+        if not await _prerequisites_met(conn, learner_id, concept_id):
+            continue
+        p_mastery = float(row["p_mastery"])
+        exposures = int(row["exposures"])
+        reason = (
+            f"Your teacher has placed this next in class (mastery {p_mastery:.0%})."
+            if exposures > 0
+            else "Your teacher has set this next in your class's plan."
+        )
+        return {
+            "concept_id": concept_id,
+            "label":      row["label"],
+            "reason":     reason,
+            "p_mastery":  p_mastery,
+        }
+    return None
+
+
 async def get_next_concept(
     conn, learner_id: str, grade: int, subject: str | None = None
 ) -> dict | None:
     """
-    Return the most appropriate next concept for a learner based on the
-    curriculum prerequisite graph and current mastery levels.
+    Return the most appropriate next concept for a learner.
 
-    Selection criteria:
+    If any of the learner's teachers (via teacher.portraits) has declared a
+    concept sequence (curriculum_graph.teacher_sequence), the first
+    not-yet-mastered, prerequisite-satisfied concept in that sequence is
+    returned instead of the automatic pick (business plan §7.2 — the
+    teacher's chapter order/pace takes priority over inferred pacing). If no
+    teacher has set a sequence, or every concept in it is already mastered,
+    falls back unchanged to the automatic selection below.
+
+    Automatic selection criteria:
     - All prerequisites are sufficiently mastered (p_mastery > 0.45) or concept has none
     - Concept is not yet mastered (p_mastery < 0.70)
     - Grade-appropriate (allows one grade below for remediation)
@@ -188,6 +299,19 @@ async def get_next_concept(
     if conn is None:
         return None
     try:
+        teacher_ids = await get_teacher_ids_for_learner(conn, learner_id)
+        for teacher_id in teacher_ids:
+            sequence = await get_teacher_sequence(conn, teacher_id)
+            if not sequence:
+                continue
+            seq_result = await _next_from_teacher_sequence(conn, learner_id, sequence)
+            if seq_result:
+                log.debug(
+                    "get_next_concept_from_teacher_sequence",
+                    learner_id=learner_id, teacher_id=teacher_id, result=seq_result,
+                )
+                return seq_result
+
         row = await conn.fetchrow(
             """
             SELECT c.id, c.label, c.subject, c.grade_min,

@@ -773,3 +773,20 @@ CREATE TABLE IF NOT EXISTS notify.log (
 );
 CREATE INDEX IF NOT EXISTS notify_log_recipient_idx
     ON notify.log (recipient, sent_at DESC);
+
+-- ── Teacher-set content sequence (business plan §7.2) ───────────────────────
+-- A teacher's declared chapter/concept order for their class, so
+-- curriculum_graph.get_next_concept can follow the school's actual pace
+-- instead of only the automatic weak-concept-driven order. teacher_id is
+-- the same free-text identifier teacher.portraits already keys on
+-- (teacher_phone) — no separate teacher login exists yet. One row per
+-- (teacher_id, concept_id); position is 0-based rank in the sequence.
+CREATE TABLE IF NOT EXISTS curriculum_graph.teacher_sequence (
+    teacher_id  TEXT NOT NULL,
+    concept_id  TEXT NOT NULL REFERENCES curriculum_graph.concepts(id),
+    position    INT NOT NULL,
+    updated_at  TIMESTAMPTZ DEFAULT now(),
+    PRIMARY KEY (teacher_id, concept_id)
+);
+CREATE INDEX IF NOT EXISTS teacher_sequence_teacher_idx
+    ON curriculum_graph.teacher_sequence (teacher_id, position);
