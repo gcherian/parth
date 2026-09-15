@@ -164,7 +164,28 @@ async def generate_and_send(
     # lens/contextual.compute_and_save.
 
     student_name = facts.get("learner_name") or "your child"
+    f = _fact_lines(facts)
     narrative = await _generate_narrative(teacher_name, student_name, facts)
+    # Two claims this report makes are load-bearing and must hold every
+    # time, not just on a lucky sampling of the LLM (temperature > 0):
+    # specificity ("names the actual misconception, not a bare score") and
+    # attribution ("no parent who receives it forgets who sent it"). Rather
+    # than trust the prompt to include them verbatim, check and enforce —
+    # inserted before any sign-off (never glued on after "Best regards,"),
+    # and phrased so it never collides with a misconception string that
+    # already starts with "Believes ...". The LLM's sign-off phrasing
+    # varies too much to pattern-match reliably ("Best,", "Warmly,", "—
+    # Priya" with no "regards" at all) — instead, split off whatever the
+    # last short paragraph is and treat THAT as the sign-off, so any
+    # inserted clause always lands before it, never glued onto it.
+    body, _, signoff_para = narrative.rpartition("\n\n")
+    if not signoff_para or len(signoff_para) > 60:
+        body, signoff_para = narrative, ""
+    if f["misconception"] and f["misconception"].lower() not in body.lower():
+        body = f"{body} Specifically, the concern to watch for: {f['misconception']}"
+    if teacher_name not in signoff_para and teacher_name.split()[-1] not in signoff_para:
+        signoff_para = f"— {teacher_name}"
+    narrative = f"{body}\n\n{signoff_para}"
     week_start = _week_start()
 
     async with pool.acquire() as conn:

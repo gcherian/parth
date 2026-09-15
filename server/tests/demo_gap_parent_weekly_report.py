@@ -156,7 +156,8 @@ async def main() -> int:
         )
         report_row = await conn.fetchrow(
             """SELECT teacher_name, narrative, notified FROM parent_dashboard.weekly_reports
-               WHERE learner_id = $1 AND teacher_phone = $2""",
+               WHERE learner_id = $1 AND teacher_phone = $2
+               ORDER BY week_start DESC LIMIT 1""",
             LEARNER_ID, TEACHER_PHONE,
         )
     went_through_notify = (
