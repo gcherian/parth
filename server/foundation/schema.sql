@@ -710,6 +710,28 @@ CREATE TABLE IF NOT EXISTS parent_dashboard.views (
 CREATE INDEX IF NOT EXISTS parent_dashboard_views_learner_idx
     ON parent_dashboard.views (learner_id, viewed_at DESC);
 
+-- ── Parent weekly report ─────────────────────────────────────────────────────
+-- One row per (learner, teacher, week) — the plain-English, teacher-attributed
+-- report described in the business plan (§7.3). week_start pins the row to a
+-- calendar week (Monday) so re-running generation for the same week updates
+-- the existing narrative instead of piling up duplicates.
+CREATE TABLE IF NOT EXISTS parent_dashboard.weekly_reports (
+    id              BIGSERIAL PRIMARY KEY,
+    learner_id      TEXT NOT NULL,
+    teacher_phone   TEXT NOT NULL DEFAULT '',
+    teacher_name    TEXT NOT NULL DEFAULT '',
+    week_start      DATE NOT NULL,
+    narrative       TEXT NOT NULL,
+    facts           JSONB NOT NULL DEFAULT '{}',
+    notified        BOOLEAN NOT NULL DEFAULT false,
+    notified_at     TIMESTAMPTZ,
+    created_at      TIMESTAMPTZ DEFAULT now(),
+    updated_at      TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT parent_weekly_reports_uq UNIQUE (learner_id, teacher_phone, week_start)
+);
+CREATE INDEX IF NOT EXISTS parent_weekly_reports_learner_idx
+    ON parent_dashboard.weekly_reports (learner_id, week_start DESC);
+
 -- ── Teacher portraits ────────────────────────────────────────────────────────
 -- Teachers may not have the student's join code. Primary key is
 -- (teacher_phone, student_name, subject) so a teacher can submit
