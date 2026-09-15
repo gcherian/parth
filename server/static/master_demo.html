@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parth — Master Feature Demo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f1117; color: #e2e8f0;
+  min-height: 100vh;
+}
+
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px; border-bottom: 1px solid #1e2130;
+  background: #0b0d14; position: sticky; top: 0; z-index: 10;
+  flex-wrap: wrap; gap: 12px;
+}
+.brand h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; color: #f8fafc; }
+.brand p  { font-size: 0.78rem; color: #64748b; margin-top: 2px; }
+
+.controls { display: flex; align-items: center; gap: 12px; }
+#summary { font-size: 0.82rem; color: #94a3b8; }
+#summary strong { color: #f8fafc; }
+#summary .pass-count { color: #22c55e; font-weight: 700; }
+#summary .fail-count { color: #ef4444; font-weight: 700; }
+
+button {
+  border: none; border-radius: 7px; padding: 9px 16px;
+  font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s; white-space: nowrap;
+}
+button:hover  { opacity: 0.88; transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+button:disabled { opacity: 0.45; cursor: default; transform: none; }
+#btnRunAll { background: #f97316; color: #fff; }
+#btnResetAll { background: transparent; color: #94a3b8; border: 1px solid #2d3446; }
+
+main {
+  padding: 22px 28px 60px;
+  max-width: 1400px; margin: 0 auto;
+}
+
+#context {
+  background: #131720; border: 1px solid #1e2130; border-radius: 10px;
+  padding: 14px 18px; margin-bottom: 20px; font-size: 0.82rem; color: #94a3b8;
+  line-height: 1.55;
+}
+#context strong { color: #cbd5e1; }
+#context a { color: #f97316; text-decoration: none; }
+#context a:hover { text-decoration: underline; }
+
+#grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: #131720; border: 1px solid #1e2130; border-radius: 12px;
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.card.pass { border-color: #22c55e50; box-shadow: 0 0 16px 1px #22c55e10; }
+.card.fail { border-color: #ef444460; box-shadow: 0 0 16px 1px #ef444414; }
+.card.running { border-color: #f9731660; box-shadow: 0 0 16px 1px #f9731614; }
+
+.card-head { padding: 14px 16px 12px; border-bottom: 1px solid #1e2130; background: #0d1018; }
+.card-head-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.card-title { font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3; }
+.card-badges { display: flex; gap: 6px; flex-shrink: 0; margin-top: 1px; }
+.badge { font-size: 0.62rem; font-weight: 700; padding: 3px 6px; border-radius: 4px; white-space: nowrap; }
+.badge-pr  { background: #6366f11c; color: #a5b4fc; border: 1px solid #6366f130; }
+.badge-ref { background: #f973161c; color: #fdba74; border: 1px solid #f9731630; }
+.card-quote { font-size: 0.76rem; color: #64748b; font-style: italic; margin-top: 8px; line-height: 1.4; }
+
+.card-body { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.card-controls { display: flex; align-items: center; gap: 10px; }
+.btn-run { background: #6366f1; color: #fff; padding: 7px 14px; font-size: 0.8rem; }
+.status-pill {
+  font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.02em;
+}
+.status-idle    { background: #1e2130; color: #64748b; }
+.status-running { background: #f9731622; color: #fdba74; }
+.status-pass    { background: #22c55e22; color: #4ade80; }
+.status-fail    { background: #ef444422; color: #f87171; }
+.duration { font-size: 0.7rem; color: #475569; margin-left: auto; }
+
+.output {
+  background: #0b0d14; border: 1px solid #1e2130; border-radius: 8px;
+  padding: 10px 12px; font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.7rem; line-height: 1.5; color: #94a3b8;
+  max-height: 260px; overflow-y: auto; overflow-x: auto;
+  white-space: pre-wrap; word-break: break-word;
+  display: none;
+}
+.output.show { display: block; }
+.output .line-pass { color: #4ade80; }
+.output .line-fail { color: #f87171; }
+.output::-webkit-scrollbar { width: 6px; height: 6px; }
+.output::-webkit-scrollbar-thumb { background: #2d3446; border-radius: 3px; }
+
+.spinner {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid #f9731640; border-top-color: #f97316;
+  animation: spin 0.7s linear infinite; display: inline-block; margin-right: 6px; vertical-align: -1px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+footer { text-align: center; padding: 20px; color: #334155; font-size: 0.72rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>Parth — Master Feature Demo</h1>
+    <p>8 business-plan gaps found in the Sep 2026 audit, closed by PRs #9–#16, running live</p>
+  </div>
+  <div class="controls">
+    <span id="summary">0 / 8 run</span>
+    <button id="btnResetAll">Reset</button>
+    <button id="btnRunAll">▶ Run all 8</button>
+  </div>
+</header>
+
+<main>
+  <div id="context">
+    Each card below triggers the <strong>real, already-verified</strong> demo script for that PR —
+    live against the running Parth server and its Postgres database, not a mock. Clicking "Run"
+    re-seeds that feature's demo data and calls the actual endpoint, exactly as it was verified
+    when the PR was built. Source: <code>server/tests/demo_gap_*.py</code>, wired up via
+    <code>GET/POST /master-demo/*</code> (<code>server/modules/master_demo/</code>).
+  </div>
+
+  <div id="grid"></div>
+</main>
+
+<footer>Parth · master demo page · generated 2026-09-15</footer>
+
+<script>
+const grid = document.getElementById('grid');
+const summaryEl = document.getElementById('summary');
+let features = [];
+let state = {}; // key -> {status, output, duration_ms}
+
+function statusPillHtml(key) {
+  const s = state[key]?.status || 'idle';
+  const label = { idle: 'Idle', running: 'Running', pass: 'Pass', fail: 'Fail' }[s];
+  const spinner = s === 'running' ? '<span class="spinner"></span>' : '';
+  return `<span class="status-pill status-${s}">${spinner}${label}</span>`;
+}
+
+function durationHtml(key) {
+  const ms = state[key]?.duration_ms;
+  return ms != null ? `<span class="duration">${ms} ms</span>` : '';
+}
+
+function colorizeOutput(text) {
+  return text
+    .split('\n')
+    .map(line => {
+      const esc = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      if (/^\s*\[PASS\]/.test(line) || /^PASS[: ]/.test(line) || /ALL (CHECKS )?PASS/.test(line)) {
+        return `<span class="line-pass">${esc}</span>`;
+      }
+      if (/^\s*\[FAIL\]/.test(line) || /^FAIL[: ]/.test(line) || /SOME CHECKS FAILED/.test(line)) {
+        return `<span class="line-fail">${esc}</span>`;
+      }
+      return esc;
+    })
+    .join('\n');
+}
+
+function render() {
+  grid.innerHTML = features.map(f => {
+    const st = state[f.key] || {};
+    const cardClass = st.status === 'pass' ? 'pass' : st.status === 'fail' ? 'fail' : st.status === 'running' ? 'running' : '';
+    const outputHtml = st.output ? colorizeOutput(st.output) : '';
+    const showOutput = !!st.output;
+    return `
+      <div class="card ${cardClass}" data-key="${f.key}">
+        <div class="card-head">
+          <div class="card-head-top">
+            <div class="card-title">${f.title}</div>
+            <div class="card-badges">
+              <span class="badge badge-pr">PR #${f.pr}</span>
+              <span class="badge badge-ref">${f.ref}</span>
+            </div>
+          </div>
+          <div class="card-quote">"${f.quote}"</div>
+        </div>
+        <div class="card-body">
+          <div class="card-controls">
+            <button class="btn-run" data-key="${f.key}" ${st.status === 'running' ? 'disabled' : ''}>
+              ${st.status === 'running' ? 'Running…' : '▶ Run demo'}
+            </button>
+            ${statusPillHtml(f.key)}
+            ${durationHtml(f.key)}
+          </div>
+          <div class="output ${showOutput ? 'show' : ''}">${outputHtml}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('.btn-run').forEach(btn => {
+    btn.addEventListener('click', () => runOne(btn.dataset.key));
+  });
+
+  const passCount = Object.values(state).filter(s => s.status === 'pass').length;
+  const failCount = Object.values(state).filter(s => s.status === 'fail').length;
+  const ranCount = passCount + failCount;
+  summaryEl.innerHTML = `<strong>${ranCount} / ${features.length}</strong> run` +
+    (passCount ? ` · <span class="pass-count">${passCount} pass</span>` : '') +
+    (failCount ? ` · <span class="fail-count">${failCount} fail</span>` : '');
+}
+
+async function runOne(key) {
+  state[key] = { ...state[key], status: 'running' };
+  render();
+  try {
+    const resp = await fetch(`/master-demo/run/${key}`, { method: 'POST' });
+    const body = await resp.json();
+    state[key] = {
+      status: body.passed ? 'pass' : 'fail',
+      output: (body.output || '') + (body.error ? `\n\n[server error] ${body.error}` : ''),
+      duration_ms: body.duration_ms,
+    };
+  } catch (e) {
+    state[key] = { status: 'fail', output: `[fetch failed] ${e}`, duration_ms: null };
+  }
+  render();
+}
+
+async function runAll() {
+  document.getElementById('btnRunAll').disabled = true;
+  for (const f of features) {
+    await runOne(f.key);
+  }
+  document.getElementById('btnRunAll').disabled = false;
+}
+
+function resetAll() {
+  state = {};
+  render();
+}
+
+document.getElementById('btnRunAll').addEventListener('click', runAll);
+document.getElementById('btnResetAll').addEventListener('click', resetAll);
+
+(async function init() {
+  const resp = await fetch('/master-demo/features');
+  const body = await resp.json();
+  features = body.features;
+  render();
+})();
+</script>
+
+</body>
+</html>
