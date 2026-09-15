@@ -1,9 +1,15 @@
 """
-attention.federated — Population-level learning priors.
+population.priors — Population-level learning priors.
 
 Maintains aggregate concept difficulty and effective analogy mappings across
 all learners without exposing individual data. Currently stores local aggregates
 only; cross-deployment gradient sharing is a future Sprint 5 feature.
+
+Renamed from attention_federated (2026-09): despite the name, this module
+never inferred per-child attention or fatigue, and has nothing to do with
+Invariant 03 (business plan §9, on-device focus/fatigue signal). It is a
+plain aggregate-statistics module. See modules/attention_coarse for the
+actual Invariant 03 receiving contract.
 """
 import json
 from pathlib import Path
@@ -14,9 +20,9 @@ from kernel.module import Module
 from foundation.observability import get_logger
 from foundation.outbox import subscribe
 
-log = get_logger("attention.federated")
+log = get_logger("population.priors")
 
-_PRIORS_FILE = Config.DATA_DIR / "federated_priors.json"
+_PRIORS_FILE = Config.DATA_DIR / "population_priors.json"
 
 
 def _load_priors() -> dict:
@@ -33,8 +39,8 @@ def _save_priors(priors: dict):
     _PRIORS_FILE.write_text(json.dumps(priors, indent=2))
 
 
-class AttentionFederatedModule(Module):
-    name = "attention.federated"
+class PopulationPriorsModule(Module):
+    name = "population.priors"
     handles = []  # does not participate in the critical path
 
     def __init__(self):
