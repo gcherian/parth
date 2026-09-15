@@ -15,7 +15,19 @@ from foundation.outbox import subscribe
 log = get_logger("parent.dashboard")
 
 
-async def build_report(conn, learner_id: str) -> dict:
+async def gather_report_facts(conn, learner_id: str) -> dict:
+    """
+    Read-only: assemble the same structured facts (mastery, misconceptions,
+    alerts, recall-due) that build_report() persists, without build_report()'s
+    write side effects (parent_dashboard.reports / .views rows).
+
+    Precondition: none — returns zeroed-out fields for an unknown learner_id
+    rather than raising, same as build_report() did before the split.
+    Postcondition: no DB rows are written. Callers that need the persisted
+    report + guardian-view bookkeeping should call build_report() instead;
+    callers that only need the facts (e.g. to draft a weekly report on a
+    teacher's behalf, where no guardian view occurred) should call this.
+    """
     rows = await conn.fetch(
         """
         SELECT subject, emotion, engagement, misconception, created_at
@@ -184,6 +196,22 @@ async def build_report(conn, learner_id: str) -> dict:
             ),
         },
     }
+    return report
+
+
+async def build_report(conn, learner_id: str) -> dict:
+    """
+    Precondition: none (see gather_report_facts).
+    Effect: computes the structured parent-dashboard report, persists it to
+    parent_dashboard.reports, and records a parent_dashboard.views row (this
+    is the guardian pulling their dashboard — used by the guardian_engaged
+    pilot gate).
+    Postcondition: one new row in parent_dashboard.reports and one new row
+    in parent_dashboard.views for learner_id. Not idempotent by design —
+    each call is a distinct, timestamped "guardian viewed the dashboard"
+    event, not a single canonical report to overwrite.
+    """
+    report = await gather_report_facts(conn, learner_id)
 
     await conn.execute(
         "INSERT INTO parent_dashboard.reports (learner_id, payload) VALUES ($1, $2)",

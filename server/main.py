@@ -42,10 +42,11 @@ from modules.learner_state.module import LearnerStateModule
 from modules.curriculum_graph.module import CurriculumGraphModule
 from modules.meaning_graph.module import MeaningGraphModule
 from modules.mag_memory.module import MagMemoryModule
+from modules.wonder_engine.module import WonderEngineModule
 from modules.tutor_runtime.module import TutorRuntimeModule
 from modules.practice_engine.module import PracticeEngineModule
 from modules.parent_dashboard.module import ParentDashboardModule
-from modules.attention_federated.module import AttentionFederatedModule
+from modules.population_priors.module import PopulationPriorsModule
 from modules.puzzle_engine.module import PuzzleEngineModule
 
 configure_logging("INFO")
@@ -78,10 +79,11 @@ _modules_list = [
     CurriculumGraphModule(),
     MeaningGraphModule(),
     MagMemoryModule(),
+    WonderEngineModule(),
     TutorRuntimeModule(),
     PracticeEngineModule(),
     ParentDashboardModule(),
-    AttentionFederatedModule(),
+    PopulationPriorsModule(),
     PuzzleEngineModule(),
 ]
 _module_registry = {m.name: m for m in _modules_list}
@@ -101,12 +103,14 @@ from modules.teacher.routes import router as teacher_router
 from modules.notify.routes import router as notify_router
 from modules.survey.routes import router as survey_router
 from modules.chrono_ritual.routes import router as chrono_ritual_router
+from modules.attention_coarse.routes import router as attention_coarse_router
 
 app.include_router(iam_router)
 app.include_router(teacher_router)
 app.include_router(notify_router)
 app.include_router(survey_router)
 app.include_router(chrono_ritual_router)
+app.include_router(attention_coarse_router)
 
 # ── Input sanitization ────────────────────────────────────────────────────────
 _CTRL_RE = re.compile(r"[\x00-\x1f\x7f]")
