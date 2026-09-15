@@ -12,6 +12,8 @@ Reads from:
   learner_state.language_state       preferred_lang, language_ratio
   learner_state.rhythm_state         peak_hour, session_count_today,
                                      last_session_quality
+  learner_state.session_appointment  parent-confirmed fixed session slot,
+                                     via learner_state.chrono_ritual (§8.4)
   learner_state.child_agent_config   config JSONB per agent (guardian overrides)
   learner_state.child_global_config  exam_prep_mode, exam_date, session_persona
   learner_state.family_context       caregiver_lang, routines, home_supports
@@ -75,11 +77,12 @@ class LanguageProfile:
 
 @dataclass
 class SessionPattern:
-    typical_hour: int           # rhythm_state.peak_hour
+    typical_hour: int           # confirmed session_appointment hour if set, else rhythm_state.peak_hour
     peak_window_label: str      # human-readable time-of-day label
     avg_session_count_per_week: float
     streak_days: int
     last_active_days_ago: int
+    schedule_confirmed: bool = False   # True once a parent has confirmed a session_appointment (business plan §8.4)
 
 
 @dataclass
@@ -237,8 +240,15 @@ def _build_language_profile(
 def _build_session_pattern(
     profile: dict,
     rhythm_state: dict,
+    schedule: dict,
     period_days: int,
 ) -> SessionPattern:
+    """
+    typical_hour prefers the parent-confirmed session_appointment (schedule,
+    from chrono_ritual.get_effective_schedule) over the raw rhythm_state
+    inference — see business plan §8.4. Falls back to rhythm_state.peak_hour
+    when no appointment has been confirmed yet.
+    """
     sessions = int(profile.get("sessions") or 0)
     streak_days = int(profile.get("streak_days") or 0)
     last_seen = profile.get("last_seen")
@@ -255,8 +265,10 @@ def _build_session_pattern(
     weeks = max(period_days / 7, 1)
     avg_per_week = round(sessions / weeks, 2) if sessions > 0 else 0.0
 
-    typical_hour = int(rhythm_state.get("peak_hour") or 15)
-    peak_window_label = f"{_label_hour(typical_hour)} (peak_hour={typical_hour})"
+    confirmed = schedule.get("source") == "confirmed_appointment"
+    typical_hour = int(schedule.get("hour") if schedule.get("hour") is not None else (rhythm_state.get("peak_hour") or 15))
+    label_suffix = ", parent-confirmed" if confirmed else ""
+    peak_window_label = f"{_label_hour(typical_hour)} (peak_hour={typical_hour}{label_suffix})"
 
     return SessionPattern(
         typical_hour=typical_hour,
@@ -264,6 +276,7 @@ def _build_session_pattern(
         avg_session_count_per_week=avg_per_week,
         streak_days=streak_days,
         last_active_days_ago=last_active_days_ago,
+        schedule_confirmed=confirmed,
     )
 
 
@@ -542,10 +555,13 @@ async def compute(
     """
     log.info("contextual_lens_start", learner_id=learner_id, period_days=period_days)
 
+    from modules.learner_state.chrono_ritual import get_effective_schedule
+
     # Phase 1 — sequential DB reads (asyncpg: one operation per conn at a time)
     profile        = await _fetch_profile(conn, learner_id)
     language_state = await _fetch_language_state(conn, learner_id)
     rhythm_state   = await _fetch_rhythm_state(conn, learner_id)
+    schedule       = await get_effective_schedule(conn, learner_id)
     agent_configs  = await _fetch_child_agent_config(conn, learner_id)
     global_config  = await _fetch_child_global_config(conn, learner_id)
     family_context = await _fetch_family_context(conn, learner_id)
@@ -553,7 +569,7 @@ async def compute(
 
     # Phase 2 — pure computation (no DB, no network)
     language_profile   = _build_language_profile(profile, language_state)
-    session_pattern    = _build_session_pattern(profile, rhythm_state, period_days)
+    session_pattern    = _build_session_pattern(profile, rhythm_state, schedule, period_days)
     analogy_perf       = _build_analogy_performance(analogy_history)
     guardian_config_set = _build_guardian_config_set(agent_configs)
     home_context       = _build_home_context(family_context)
@@ -567,7 +583,9 @@ async def compute(
     )
     session_persona = global_config.get("session_persona") or "auto"
 
-    peak_hour = int(rhythm_state.get("peak_hour") or 15)
+    # Reuse session_pattern's already-resolved hour (confirmed appointment
+    # preferred, inference as fallback) rather than re-deriving it here.
+    peak_hour = session_pattern.typical_hour
     engagement_by_time = f"{_label_hour(peak_hour)} (peak_hour={peak_hour})"
 
     flags = _build_bmad_flags(

@@ -47,16 +47,18 @@ class RhythmTimeStewardAgent(BaseAgent):
         return {}
 
     async def _read(self, conn, learner_id: str) -> str:
-        row = await conn.fetchrow(
-            "SELECT peak_hour, session_count_today, last_session_quality "
-            "FROM learner_state.rhythm_state WHERE learner_id=$1",
-            learner_id,
-        )
-        if not row:
+        from modules.learner_state.chrono_ritual import get_effective_schedule, get_inferred_window
+
+        inferred = await get_inferred_window(conn, learner_id)
+        if not inferred["has_signal"]:
             return ""
-        peak  = row["peak_hour"] or 15
-        count = row["session_count_today"] or 0
-        qual  = row["last_session_quality"] or 5.0
+        count = inferred["session_count_today"]
+        qual  = inferred["last_session_quality"] if inferred["last_session_quality"] is not None else 5.0
         if count > 3:
             return f"Pacing: {count} sessions today — consider a break before continuing."
-        return f"Rhythm: peak focus ~{peak:02d}:00. Last quality={qual:.1f}/10."
+
+        schedule = await get_effective_schedule(conn, learner_id)
+        hour = schedule["hour"]
+        if schedule["source"] == "confirmed_appointment":
+            return f"Rhythm: confirmed session time ~{hour:02d}:00 (parent-set). Last quality={qual:.1f}/10."
+        return f"Rhythm: peak focus ~{hour:02d}:00. Last quality={qual:.1f}/10."
