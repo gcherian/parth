@@ -22,6 +22,7 @@ from pydantic import BaseModel, Field
 from foundation.db import get_pool
 from foundation.observability import get_logger
 from modules.survey.routes import verify_survey_token, mark_survey_link_opened
+from modules.teacher.briefing import build_teacher_briefing
 
 log = get_logger("teacher.routes")
 
@@ -135,6 +136,20 @@ async def submit_feedback(body: TeacherFeedbackRequest):
                  school_id=school_id)
 
     return {"status": "ok", "learner_id": learner_id}
+
+
+@router.get("/{teacher_id}/briefing")
+async def teacher_briefing(teacher_id: str):
+    """Business plan §7.1's "Tuesday briefing" — the one screen a teacher
+    opens before each batch. teacher_id is the same teacher_phone used to key
+    /teacher/feedback submissions."""
+    teacher_id = teacher_id.strip()
+    if len(teacher_id) < 6:
+        raise HTTPException(status_code=422, detail="teacher_id too short")
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        return await build_teacher_briefing(conn, teacher_id)
 
 
 # ── Teacher-set content sequence (business plan §7.2) ────────────────────────
