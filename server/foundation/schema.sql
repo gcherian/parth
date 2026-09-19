@@ -101,6 +101,22 @@ CREATE TABLE IF NOT EXISTS learner_state.knowledge (
     PRIMARY KEY (learner_id, concept_id)
 );
 
+-- Fitted BKT parameters (modules/learner_state/bkt.py). Row 'concept_id =
+-- _global_' is the pooled default every concept falls back to until it
+-- accumulates enough of its own kt_events to fit separately (see
+-- knowledge.get_params() and server/fit_bkt_params.py, which writes these
+-- rows — re-run that script as kt_events grows to refit).
+CREATE TABLE IF NOT EXISTS learner_state.bkt_params (
+    concept_id    TEXT PRIMARY KEY,
+    p_init        REAL NOT NULL,
+    p_transit     REAL NOT NULL,
+    p_slip        REAL NOT NULL,
+    p_guess       REAL NOT NULL,
+    n_fit         INT NOT NULL DEFAULT 0,
+    log_likelihood REAL,
+    fitted_at     TIMESTAMPTZ DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS learner_state.misconception_map (
     id            BIGSERIAL PRIMARY KEY,
     learner_id    TEXT NOT NULL,

@@ -1,0 +1,943 @@
+<title>Parth Blueprint</title>
+<meta name="description" content="Drillable map of Parth's live microkernel architecture — foundation, kernel routing, all 20 modules, 18 learner-state agents, client apps, and demo surfaces.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#eef0ec;
+  --surface:#ffffff;
+  --surface-2:#e4e7e0;
+  --border:#cdd1c6;
+  --ink:#161c17;
+  --ink-dim:#4b544a;
+  --ink-faint:#7a8277;
+  --accent:#a5651f;
+  --accent-ink:#5c3710;
+  --accent-soft:#f1e2cd;
+  --teal:#1f6f63;
+  --teal-soft:#dcece6;
+  --violet:#5b4a9c;
+  --violet-soft:#e6e2f3;
+  --rose:#a53e3e;
+  --rose-soft:#f4dfdd;
+  --code-bg:#1c231d;
+  --code-ink:#dfe6da;
+  --shadow: 0 1px 2px rgba(20,25,18,.06), 0 8px 24px -12px rgba(20,25,18,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12140f;
+    --surface:#1a1d16;
+    --surface-2:#22261c;
+    --border:#343a2c;
+    --ink:#eceee5;
+    --ink-dim:#b7bdae;
+    --ink-faint:#7d8574;
+    --accent:#d9964c;
+    --accent-ink:#f6ddb6;
+    --accent-soft:#3a2c16;
+    --teal:#5fbfa9;
+    --teal-soft:#1b3530;
+    --violet:#a79ae0;
+    --violet-soft:#2c2748;
+    --rose:#e08b8b;
+    --rose-soft:#3b2320;
+    --code-bg:#0e120d;
+    --code-ink:#d9e2d2;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 28px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12140f;
+  --surface:#1a1d16;
+  --surface-2:#22261c;
+  --border:#343a2c;
+  --ink:#eceee5;
+  --ink-dim:#b7bdae;
+  --ink-faint:#7d8574;
+  --accent:#d9964c;
+  --accent-ink:#f6ddb6;
+  --accent-soft:#3a2c16;
+  --teal:#5fbfa9;
+  --teal-soft:#1b3530;
+  --violet:#a79ae0;
+  --violet-soft:#2c2748;
+  --rose:#e08b8b;
+  --rose-soft:#3b2320;
+  --code-bg:#0e120d;
+  --code-ink:#d9e2d2;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 28px -14px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  padding:0 0 64px;
+}
+h1,h2,h3,h4{
+  font-family:'Fraunces',Georgia,serif;
+  font-weight:600;
+  text-wrap:balance;
+  margin:0;
+}
+code, .mono, .tag, .pill, table{ font-family:'IBM Plex Mono',ui-monospace,monospace; }
+
+a{ color:var(--accent-ink); }
+
+/* ---------- header ---------- */
+.hero{
+  padding:36px 20px 22px;
+  max-width:1080px;
+  margin:0 auto;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.eyebrow::before{
+  content:"";
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+.hero h1{
+  font-size:clamp(1.9rem,4vw,2.7rem);
+  margin-top:8px;
+  letter-spacing:-.01em;
+}
+.hero p{
+  color:var(--ink-dim);
+  max-width:62ch;
+  line-height:1.55;
+  margin-top:10px;
+  font-size:.98rem;
+}
+.factstrip{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+.fact{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:9px 14px;
+  box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:108px;
+}
+.fact b{ font-size:1.15rem; font-variant-numeric:tabular-nums; }
+.fact span{ font-size:.68rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.06em; }
+
+/* ---------- tabs ---------- */
+.tabbar-wrap{
+  position:sticky; top:0; z-index:20;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  padding-top:6px;
+}
+.tabbar{
+  max-width:1080px;
+  margin:0 auto;
+  display:flex;
+  gap:2px;
+  overflow-x:auto;
+  padding:0 20px;
+  scrollbar-width:none;
+}
+.tabbar::-webkit-scrollbar{display:none;}
+.tab{
+  flex:0 0 auto;
+  padding:10px 14px 12px;
+  font-size:.86rem;
+  font-weight:500;
+  color:var(--ink-faint);
+  background:none;
+  border:none;
+  border-bottom:2px solid transparent;
+  cursor:pointer;
+  white-space:nowrap;
+  font-family:'IBM Plex Sans',sans-serif;
+}
+.tab:hover{ color:var(--ink); }
+.tab.active{ color:var(--accent-ink); border-bottom-color:var(--accent); }
+
+main{ max-width:1080px; margin:0 auto; padding:28px 20px 0; }
+.panel{ display:none; animation:fade .25s ease; }
+.panel.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+section.block{ margin-bottom:38px; }
+section.block > h2{
+  font-size:1.3rem;
+  margin-bottom:6px;
+}
+section.block > .sub{
+  color:var(--ink-dim);
+  font-size:.9rem;
+  max-width:70ch;
+  line-height:1.55;
+  margin-bottom:16px;
+}
+
+/* ---------- layer diagram ---------- */
+.layers{ display:flex; flex-direction:column; gap:10px; }
+.layer{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px 18px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+}
+.layer .lhead{ display:flex; align-items:baseline; gap:10px; margin-bottom:8px; }
+.layer .lhead b{ font-family:'Fraunces',serif; font-size:1.05rem; }
+.layer .ltag{
+  font-size:.68rem; text-transform:uppercase; letter-spacing:.08em;
+  padding:2px 8px; border-radius:999px; font-family:'IBM Plex Mono',monospace;
+}
+.l1 .ltag{ background:var(--teal-soft); color:var(--teal); }
+.l2 .ltag{ background:var(--accent-soft); color:var(--accent-ink); }
+.l3 .ltag{ background:var(--violet-soft); color:var(--violet); }
+.l4 .ltag{ background:var(--rose-soft); color:var(--rose); }
+.chiprow{ display:flex; flex-wrap:wrap; gap:6px; }
+.chip{
+  font-size:.76rem;
+  padding:4px 10px;
+  border-radius:8px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  color:var(--ink-dim);
+}
+.arrowdown{ text-align:center; color:var(--ink-faint); font-size:1.1rem; margin:-2px 0; }
+
+/* ---------- flow / pipeline ---------- */
+.phase{
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+  padding:16px 18px;
+  margin-bottom:12px;
+}
+.phase .ptitle{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:10px; flex-wrap:wrap; gap:6px;
+}
+.phase .ptitle b{ font-family:'Fraunces',serif; font-size:1.02rem; }
+.phase .pnote{ font-size:.76rem; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace; }
+.steprow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.step{
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:7px 12px;
+  font-size:.82rem;
+  font-family:'IBM Plex Mono',monospace;
+}
+.step.veto{ background:var(--rose-soft); color:var(--rose); border-color:transparent; font-weight:600;}
+.seq-arrow{ color:var(--ink-faint); }
+
+.note-card{
+  border-left:3px solid var(--accent);
+  background:var(--accent-soft);
+  border-radius:0 10px 10px 0;
+  padding:10px 14px;
+  font-size:.85rem;
+  color:var(--accent-ink);
+  line-height:1.5;
+  margin-top:14px;
+}
+.note-card.rose{ border-color:var(--rose); background:var(--rose-soft); color:var(--rose); }
+.note-card b{ font-weight:600; }
+
+/* ---------- module cards ---------- */
+.filterrow{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.filterbtn{
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--ink-dim);
+  border-radius:999px;
+  padding:6px 13px;
+  font-size:.78rem;
+  cursor:pointer;
+  font-family:'IBM Plex Sans',sans-serif;
+}
+.filterbtn.on{ background:var(--accent); color:#fff; border-color:var(--accent); }
+
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+
+details.card{
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+details.card[open]{ grid-column: 1 / -1; }
+details.card summary{
+  list-style:none;
+  cursor:pointer;
+  padding:14px 16px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+details.card summary::-webkit-details-marker{ display:none; }
+.card-h{ display:flex; flex-direction:column; gap:4px; }
+.card-h .name{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:.92rem; }
+.card-h .oneliner{ font-size:.8rem; color:var(--ink-dim); line-height:1.4; }
+.chev{ color:var(--ink-faint); transition:transform .15s; flex:0 0 auto; margin-top:3px;}
+details.card[open] .chev{ transform:rotate(90deg); }
+.card-body{ padding:0 16px 16px; border-top:1px solid var(--border); }
+.card-body .kv{ display:grid; grid-template-columns:120px 1fr; gap:6px 12px; font-size:.82rem; margin-top:12px; }
+.card-body .kv dt{ color:var(--ink-faint); text-transform:uppercase; font-size:.68rem; letter-spacing:.05em; padding-top:2px; font-family:'IBM Plex Mono',monospace;}
+.card-body .kv dd{ margin:0; color:var(--ink); line-height:1.5; }
+.card-body .kv dd code{ background:var(--surface-2); padding:1px 6px; border-radius:5px; font-size:.78rem; }
+.badge{
+  display:inline-block; font-size:.66rem; text-transform:uppercase; letter-spacing:.05em;
+  padding:2px 7px; border-radius:6px; margin-right:5px; font-family:'IBM Plex Mono',monospace;
+}
+.badge.kernel{ background:var(--accent-soft); color:var(--accent-ink); }
+.badge.route{ background:var(--teal-soft); color:var(--teal); }
+.badge.veto{ background:var(--rose-soft); color:var(--rose); }
+
+/* ---------- agents ---------- */
+.agentgroup{ margin-bottom:20px; }
+.agentgroup h4{
+  font-size:.78rem; text-transform:uppercase; letter-spacing:.07em;
+  color:var(--ink-faint); margin-bottom:8px; font-family:'IBM Plex Mono',monospace;
+}
+.agentgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+.agentchip{
+  background:var(--surface); border:1px solid var(--border); border-radius:9px;
+  padding:8px 11px; font-size:.78rem; font-family:'IBM Plex Mono',monospace; color:var(--ink-dim);
+  box-shadow:var(--shadow);
+}
+
+/* ---------- table ---------- */
+.twrap{ overflow-x:auto; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); }
+table{ width:100%; border-collapse:collapse; font-size:.8rem; background:var(--surface); }
+th,td{ text-align:left; padding:9px 12px; border-bottom:1px solid var(--border); white-space:nowrap; }
+th{ background:var(--surface-2); color:var(--ink-faint); font-weight:600; text-transform:uppercase; font-size:.68rem; letter-spacing:.05em; }
+tr:last-child td{ border-bottom:none; }
+td.desc{ white-space:normal; color:var(--ink-dim); font-family:'IBM Plex Sans',sans-serif; min-width:220px; }
+.methodbadge{ font-size:.66rem; padding:2px 6px; border-radius:5px; font-weight:600; }
+.get{ background:var(--teal-soft); color:var(--teal); }
+.post{ background:var(--accent-soft); color:var(--accent-ink); }
+
+/* ---------- demo surfaces ---------- */
+.demogrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+.democard{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:14px 16px; box-shadow:var(--shadow);
+}
+.democard .route{ font-family:'IBM Plex Mono',monospace; font-size:.82rem; color:var(--accent-ink); font-weight:600;}
+.democard .file{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-faint); margin-top:2px;}
+.democard p{ font-size:.8rem; color:var(--ink-dim); margin-top:8px; line-height:1.45;}
+.democard.orphan{ opacity:.7; border-style:dashed; }
+
+footer{
+  max-width:1080px; margin:40px auto 0; padding:16px 20px 0;
+  border-top:1px solid var(--border); color:var(--ink-faint); font-size:.76rem;
+}
+</style>
+
+<div class="hero">
+  <div class="eyebrow">Parth · server v4.0.0</div>
+  <h1>The Parth Blueprint</h1>
+  <p>A microkernel with an event-driven backbone: a dumb, transactional kernel routes events between domain modules that each own their slice completely. This map reflects what's actually running in <code class="mono">server/</code> today — verified against <code class="mono">main.py</code>, <code class="mono">kernel/router.py</code>, and every module's own docstring — not the aspirational roadmap alone.</p>
+  <div class="factstrip">
+    <div class="fact"><b>20</b><span>modules</span></div>
+    <div class="fact"><b>11</b><span>kernel-routed</span></div>
+    <div class="fact"><b>18</b><span>learner agents</span></div>
+    <div class="fact"><b>3</b><span>routing events</span></div>
+    <div class="fact"><b>11</b><span>demo surfaces</span></div>
+    <div class="fact"><b>Postgres</b><span>+ outbox</span></div>
+  </div>
+</div>
+
+<div class="tabbar-wrap">
+  <div class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="flow">Request Flow</button>
+    <button class="tab" data-tab="modules">Modules</button>
+    <button class="tab" data-tab="agents">Learner Agents</button>
+    <button class="tab" data-tab="foundation">Foundation</button>
+    <button class="tab" data-tab="clients">Client Apps</button>
+    <button class="tab" data-tab="demos">Demo Surfaces</button>
+    <button class="tab" data-tab="endpoints">Endpoints</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ============ OVERVIEW ============ -->
+  <div class="panel active" id="p-overview">
+    <section class="block">
+      <h2>Three layers, one contract</h2>
+      <p class="sub">The kernel knows event types and a routing table — nothing about curriculum, psychology, or which LLM is behind <code class="mono">tutor.runtime</code>. Every module implements <code class="mono">handle(event, ctx) → ModuleResult</code> and an <code class="mono">on_erase()</code> hook for right-to-erasure.</p>
+
+      <div class="layers">
+        <div class="layer l4">
+          <div class="lhead"><span class="ltag">L4</span><b>Clients</b></div>
+          <div class="chiprow">
+            <span class="chip">Flutter app (iOS · Android · phone-first)</span>
+            <span class="chip">11 static HTML demo/investor surfaces</span>
+          </div>
+        </div>
+        <div class="arrowdown">↓ HTTP · <code class="mono">/chat</code>, <code class="mono">/puzzle/*</code>, <code class="mono">/world/*</code> …</div>
+        <div class="layer l3">
+          <div class="lhead"><span class="ltag">L3</span><b>Modules — domain-owned, pluggable</b></div>
+          <div class="chiprow">
+            <span class="chip">moderation.ops (veto)</span>
+            <span class="chip">learner.state</span>
+            <span class="chip">curriculum.graph</span>
+            <span class="chip">meaning.graph</span>
+            <span class="chip">mag.memory</span>
+            <span class="chip">wonder.engine</span>
+            <span class="chip">tutor.runtime</span>
+            <span class="chip">practice.engine</span>
+            <span class="chip">parent.dashboard</span>
+            <span class="chip">attention.federated</span>
+            <span class="chip">puzzle.engine</span>
+            <span class="chip">+ iam / teacher / notify / survey / observation.engine / shared_world / krishna_oracle / lens</span>
+          </div>
+        </div>
+        <div class="arrowdown">↓ routed by table, one Postgres tx per interaction</div>
+        <div class="layer l2">
+          <div class="lhead"><span class="ltag">L2</span><b>Microkernel — Tutor Orchestrator</b></div>
+          <div class="chiprow">
+            <span class="chip">Stateless</span><span class="chip">Transactional</span>
+            <span class="chip">Idempotent</span><span class="chip">Event-routing only</span>
+            <span class="chip"><code class="mono">kernel/orchestrator.py</code></span>
+            <span class="chip"><code class="mono">kernel/router.py</code></span>
+          </div>
+        </div>
+        <div class="arrowdown">↓ every module reads/writes here</div>
+        <div class="layer l1">
+          <div class="lhead"><span class="ltag">L1</span><b>Foundation</b></div>
+          <div class="chiprow">
+            <span class="chip">Postgres + event outbox</span>
+            <span class="chip">Identity + DPDP/COPPA consent</span>
+            <span class="chip">Idempotency table</span>
+            <span class="chip">DID-Auth + IAM (Ed25519 JWT)</span>
+            <span class="chip">Structured observability (trace_id / request_id)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-card rose">
+        <b>Design vs. reality gap:</b> <code class="mono">ARCHITECTURE.md</code> specs an S3-compatible object store (<code class="mono">object_store.put()</code>, MinIO/R2) for binary content. There is no <code class="mono">foundation/object_store.py</code> in the tree — it's speculative, not wired. NCERT PDFs and puzzle assets currently live under <code class="mono">server/data/</code> on disk.
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>What the kernel refuses to know</h2>
+      <p class="sub">Straight from <code class="mono">ARCHITECTURE.md</code> — this boundary is what keeps modules independently deployable.</p>
+      <div class="chiprow">
+        <span class="chip">✗ what a curriculum graph is</span>
+        <span class="chip">✗ what p_mastery means</span>
+        <span class="chip">✗ what Gemma, Ollama, or Claude are</span>
+        <span class="chip">✗ what a parent report contains</span>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ REQUEST FLOW ============ -->
+  <div class="panel" id="p-flow">
+    <section class="block">
+      <h2>The <code class="mono">interaction.requested</code> pipeline</h2>
+      <p class="sub">This is <code class="mono">kernel/router.py</code>'s live <code class="mono">ROUTING_TABLE</code> for <code class="mono">/chat</code> — every step is <code class="mono">Sequential</code> in practice, because all modules in one interaction share a single asyncpg connection (<code class="mono">ctx.db</code>), and Ollama's own latency dwarfs the pre/post-phase overhead anyway.</p>
+
+      <div class="phase">
+        <div class="ptitle"><b>Phase 1 — pre-generation context build</b><span class="pnote">sequential</span></div>
+        <div class="steprow">
+          <span class="step veto">moderation.ops</span><span class="seq-arrow">→</span>
+          <span class="step">learner.state</span><span class="seq-arrow">→</span>
+          <span class="step">curriculum.graph</span><span class="seq-arrow">→</span>
+          <span class="step">meaning.graph</span><span class="seq-arrow">→</span>
+          <span class="step">wonder.engine</span><span class="seq-arrow">→</span>
+          <span class="step">mag.memory</span>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="ptitle"><b>Phase 2 — generation</b><span class="pnote">critical path, synchronous</span></div>
+        <div class="steprow"><span class="step">tutor.runtime</span></div>
+      </div>
+
+      <div class="phase">
+        <div class="ptitle"><b>Phase 3 — post-generation</b><span class="pnote">sequential</span></div>
+        <div class="steprow">
+          <span class="step veto">moderation.ops</span><span class="seq-arrow">→</span>
+          <span class="step">learner.state</span><span class="seq-arrow">→</span>
+          <span class="step">wonder.engine</span><span class="seq-arrow">→</span>
+          <span class="step">mag.memory</span><span class="seq-arrow">→</span>
+          <span class="step">practice.engine</span>
+        </div>
+      </div>
+
+      <div class="note-card">
+        <b>Veto short-circuit:</b> <code class="mono">moderation.ops</code> is the only module that can return <code class="mono">ModuleResult(veto=True)</code>. The router checks <code class="mono">ctx.moderation_ok</code> after every phase and aborts the whole pipeline the instant it's tripped — the child gets a pre-approved safe message, not silence.
+      </div>
+      <div class="note-card">
+        <b>Idempotency:</b> the orchestrator checks <code class="mono">foundation.idempotency</code> by <code class="mono">request_id</code> before doing anything. A retried request replays the cached response — no module runs twice for the same interaction.
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Other routed events</h2>
+      <div class="phase">
+        <div class="ptitle"><b><code class="mono">practice.session_requested</code></b></div>
+        <div class="steprow">
+          <span class="step">learner.state</span><span class="seq-arrow">→</span>
+          <span class="step">curriculum.graph</span><span class="seq-arrow">→</span>
+          <span class="step">practice.engine</span>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="ptitle"><b><code class="mono">parent.report_requested</code></b></div>
+        <div class="steprow">
+          <span class="step">learner.state</span><span class="seq-arrow">→</span>
+          <span class="step">parent.dashboard</span>
+        </div>
+      </div>
+      <div class="note-card">
+        <b>Not in the kernel at all:</b> <code class="mono">puzzle.engine</code> doesn't run in the chat pipeline — it's driven directly by dedicated <code class="mono">/puzzle/*</code> endpoints and talks to the rest of the system via the outbox, not the router.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ MODULES ============ -->
+  <div class="panel" id="p-modules">
+    <section class="block">
+      <h2>All 20 modules</h2>
+      <p class="sub">11 are registered with the kernel (<code class="mono">main.py</code>'s <code class="mono">_modules_list</code>) and take part in routed events. The rest are FastAPI routers or services that sit beside the kernel — real, live code, just outside the event-routing contract.</p>
+
+      <div class="filterrow">
+        <button class="filterbtn on" data-filter="all">All 20</button>
+        <button class="filterbtn" data-filter="kernel">Kernel-routed (11)</button>
+        <button class="filterbtn" data-filter="route">Router / side-system (9)</button>
+      </div>
+
+      <div class="grid" id="modgrid"></div>
+    </section>
+  </div>
+
+  <!-- ============ AGENTS ============ -->
+  <div class="panel" id="p-agents">
+    <section class="block">
+      <h2>learner.state's 18 live agents</h2>
+      <p class="sub"><code class="mono">modules/learner_state/agents/__init__.py::build_agent_registry()</code> wires exactly <b>18</b> agents into the dispatch loop, dependency-ordered across 4 layers, each contributing to the 15 named learner dimensions (some dimensions are backed by more than one agent — see <code class="mono">dimensions.py</code>).</p>
+      <div id="agentwrap"></div>
+      <div class="note-card rose">
+        <b>17 more files sit in the same directory, unwired:</b> <code class="mono">analogy_domain, attribution_style, chrono_pattern, cognitive_profile, confidence_calibration, curiosity_tracker, episodic_memory, family_context, knowledge_state, learning_speed, linguistic_register, misconception_map, motivational_profile, open_loop, productive_struggle, sessional_emotion, stress_signature</code>. Not imported by <code class="mono">build_agent_registry()</code>, not dispatched, not distinguishable from the live 18 by directory structure alone — verify against <code class="mono">__init__.py</code>, not the file listing, before trusting a name. (<code class="mono">confidence_calibration.py</code> specifically is dead — its job is done instead by <code class="mono">belief_coach.py</code>, which writes the same table inline.)
+      </div>
+      <div class="note-card">
+        <b>lens/</b> sits next to this as a separate module: five read-only "portrait" computations — <code class="mono">cognitive</code>, <code class="mono">affect</code>, <code class="mono">psychological</code>, <code class="mono">contextual</code>, <code class="mono">relational</code> — exposed via <code class="mono">/api/lens/{lens_name}/{learner_id}/run</code>, distinct from the always-on agents above.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ FOUNDATION ============ -->
+  <div class="panel" id="p-foundation">
+    <section class="block">
+      <h2>L1 — what's actually under everything</h2>
+      <div class="grid" id="foundationgrid"></div>
+    </section>
+    <section class="block">
+      <h2>tutor.runtime's backend switch</h2>
+      <p class="sub"><code class="mono">Config.TUTOR_BACKEND</code> — the only module in the system that knows an LLM backend exists at all.</p>
+      <div class="twrap"><table>
+        <tr><th>Value</th><th class="desc">Behaviour</th></tr>
+        <tr><td><code class="mono">auto</code></td><td class="desc">Anthropic (Claude) if <code class="mono">ANTHROPIC_API_KEY</code> is set, else falls back to local Ollama.</td></tr>
+        <tr><td><code class="mono">anthropic</code></td><td class="desc">Always Claude — cloud / investor pilot mode.</td></tr>
+        <tr><td><code class="mono">ollama</code></td><td class="desc">Always local Ollama (gemma3:12b / llama3.2) — dev / offline, free, private.</td></tr>
+      </table></div>
+      <div class="note-card">
+        <b>Krishna Oracle</b> (<code class="mono">modules/krishna_oracle/oracle.py</code>) is a second, asynchronous LLM tier: Parth (Ollama) answers every message; Krishna (Claude/GPT-4) reads a child's full trajectory every N interactions and writes strategic guidance Parth applies afterward — never in the critical request path, silently disabled with no API key.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ CLIENT APPS ============ -->
+  <div class="panel" id="p-clients">
+    <section class="block">
+      <h2>L4 — Flutter app</h2>
+      <p class="sub"><code class="mono">app/lib/</code> — single Flutter codebase, iOS + Android, talking to the FastAPI server over <code class="mono">/chat</code> and friends.</p>
+      <div class="chiprow">
+        <span class="chip">splash_screen</span><span class="chip">onboarding_screen</span>
+        <span class="chip">puzzle_onboarding_screen</span><span class="chip">home_screen</span>
+        <span class="chip">subjects_screen</span><span class="chip">chat_screen</span>
+        <span class="chip">skills_screen</span><span class="chip">skill_puzzle_screen</span>
+        <span class="chip">progress_screen</span><span class="chip">portrait_reveal_screen</span>
+        <span class="chip">parent_dashboard_screen</span><span class="chip">settings_screen</span>
+      </div>
+      <div class="note-card">
+        <b>Two service files</b> carry all network traffic: <code class="mono">services/ai_service.dart</code> (chat) and <code class="mono">services/puzzle_service.dart</code> (cold-start puzzle probes). Everything else in <code class="mono">lib/</code> — <code class="mono">models/</code>, <code class="mono">providers/</code>, <code class="mono">theme/</code>, <code class="mono">widgets/</code> — is presentation and state, not transport.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ DEMO SURFACES ============ -->
+  <div class="panel" id="p-demos">
+    <section class="block">
+      <h2>Static HTML surfaces</h2>
+      <p class="sub"><code class="mono">server/static/</code>, served straight off disk via <code class="mono">FileResponse</code> or <code class="mono">app.mount("/static", …)</code>. These are the investor/demo/debug layer — no Flutter build needed to see the system think.</p>
+      <div class="demogrid" id="demogrid"></div>
+    </section>
+  </div>
+
+  <!-- ============ ENDPOINTS ============ -->
+  <div class="panel" id="p-endpoints">
+    <section class="block">
+      <h2>Route map</h2>
+      <p class="sub">Every path in <code class="mono">main.py</code> plus the four mounted routers (<code class="mono">/iam</code>, <code class="mono">/teacher</code>, <code class="mono">/notify</code>, <code class="mono">/survey</code>), grouped by concern.</p>
+      <div id="endpointwrap"></div>
+    </section>
+  </div>
+
+</main>
+
+<footer>Parth AI Server v4.0.0 · generated from a direct read of <code class="mono">server/</code> on 2026-09-18 · microkernel design per <code class="mono">server/ARCHITECTURE.md</code>, cross-checked against live code.</footer>
+
+<script>
+// ---------------- tabs ----------------
+document.getElementById('tabbar').addEventListener('click', e=>{
+  const btn = e.target.closest('.tab');
+  if(!btn) return;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('p-'+btn.dataset.tab).classList.add('active');
+  window.scrollTo({top:0, behavior:'instant'});
+});
+
+// ---------------- module data ----------------
+const MODULES = [
+  {name:"moderation.ops", kind:"kernel", veto:true, one:"Content safety with veto power — runs twice per interaction.",
+    owns:"Input + output safety checks", consumed:"called synchronously, pre- and post-generation",
+    published:"moderation.input_blocked, moderation.distress_detected, moderation.output_flagged",
+    detail:"Detects harmful content, PII, and distress signals in the child's message; checks Parth's response for age-appropriateness and on-curriculum content; tags against NCPCR guidelines. When distress is detected, suppresses the LLM response, returns a pre-approved safe message, and flags for human review. The only module that can abort a kernel transaction unilaterally."},
+  {name:"learner.state", kind:"kernel", one:"The growing portrait of the child — all 15 learner dimensions.",
+    owns:"learner_profile, knowledge_state, misconception_map, analogy_scores, emotion_history",
+    consumed:"interaction.completed, practice.answered",
+    published:"learner.state_updated, learner.milestone_reached, learner.struggling",
+    detail:"Loads full learner context for the kernel in O(1), dispatches to 18 live sub-agents (see Learner Agents tab — 17 more files sit unwired in the same directory) to update dimensions atomically after generation, exposes build_prompt_context() for tutor.runtime, and implements on_erase() completely for right-to-erasure."},
+  {name:"curriculum.graph", kind:"kernel", one:"NCERT concept graph + RAG retrieval.",
+    owns:"concept(id,label,subject,grade_range), concept_edge(from,to,type)",
+    consumed:"interaction.requested",
+    published:"curriculum.context_retrieved, prerequisite.gap_detected",
+    detail:"Stores and traverses the curriculum as a graph of prerequisites/co-requisites. Given a concept mention, returns its neighbourhood — what the child should already know, co-concepts, what comes next — and detects when a question implies a prerequisite gap."},
+  {name:"meaning.graph", kind:"kernel", one:"Injects meaning-graph context ahead of generation.",
+    owns:"Concept ↔ real-world-meaning associations", consumed:"interaction.requested",
+    published:"meaning graph context merged into prompt",
+    detail:"service.py does retrieval + prompt-context assembly + a Neo4j export helper. Exposed directly too, via /meaning, /meaning/graph, /meaning/puzzles, /meaning/puzzle/{id}, /meaning/neo4j/export."},
+  {name:"mag.memory", kind:"kernel", one:"Memory-Augmented Generation — a second memory system beside RAG.",
+    owns:"Per-learner interaction history as a traversable event graph",
+    consumed:"interaction.requested (read) / interaction.completed (write)",
+    published:"memory_context for tutor.runtime; new event nodes on the graph",
+    detail:"Phase 1 retrieves a query-adaptive slice of the learner's own history — graph-traversed, not just similarity search. Phase 3 fast-path ingests the just-completed turn (Algorithm 2), then fires slow-path consolidation (Algorithm 3) as a background task so it never adds latency. Implements MAGMA-paper-style memory alongside curriculum.graph's RAG. 3 concurrency bugs + 1 pre-existing SQL bug were found and fixed here via live testing, not unit tests."},
+  {name:"wonder.engine", kind:"kernel", one:"Cross-domain discovery detours — reframes misconceptions as things worth investigating.",
+    owns:"bridges.py's cross-domain analogy library", consumed:"interaction.requested / interaction.completed",
+    published:"an optional context block for tutor_runtime/prompt.py",
+    detail:"Additive only — curriculum.graph's RAG and MAG's memory graph are untouched, and this module never replaces answering what the child actually asked. Gated on learner.state's misconception_hint plus this session's curiosity heat, subject to a cadence gate so detours don't fire every turn."},
+  {name:"tutor.runtime", kind:"kernel", one:"The only module that knows an LLM backend exists.",
+    owns:"Prompt assembly, model selection, inference, streaming, verification",
+    consumed:"called synchronously — it's in the critical path",
+    published:"tutor.response_generated (token count, model, latency)",
+    detail:"Assembles the final system prompt from every upstream context slice, routes to gemma3:12b vs llama3.2 by complexity signal (Config.TUTOR_BACKEND: auto / anthropic / ollama), calls the model, handles timeouts and fallback. evaluator.py + verifier.py live here too."},
+  {name:"practice.engine", kind:"kernel", one:"SM-2 spaced repetition + question scheduling.",
+    owns:"practice_card(learner_id,concept_id,next_review,interval,ease_factor), practice_answer",
+    consumed:"interaction.completed, learner.milestone_reached",
+    published:"practice.question_ready, practice.concept_cleared",
+    detail:"Generates practice questions per concept, schedules next review from the learner's last answer and p_mastery, feeds correct/incorrect signals back to learner.state, detects readiness to advance in curriculum.graph."},
+  {name:"parent.dashboard", kind:"kernel", one:"Everything parent-facing lives here and nowhere else.",
+    owns:"Weekly digests, consent UI hooks, alerts, data export",
+    consumed:"learner.milestone_reached, learner.struggling, interaction.completed (summary)",
+    published:"parent.report_generated, parent.consent_updated",
+    detail:"Composes weekly progress digests from learner.state events, surfaces consent approve/revoke/modify, alerts on learner.struggling, exports learner data in human-readable form. Gates every write on identity.consent."},
+  {name:"attention.federated", kind:"kernel", one:"Population-level learning priors, no raw data centralised.",
+    owns:"Aggregate concept-difficulty + analogy-effectiveness priors",
+    consumed:"learner.state_updated (anonymised)", published:"attention.priors_updated",
+    detail:"Currently stores local aggregates only — cross-deployment differential-privacy gradient sharing is still a future Sprint 5 feature, not live. Feeds cold-start priors back into learner.state for new learners."},
+  {name:"puzzle.engine", kind:"kernel", one:"Portrait-aware puzzle delivery — cold-start onboarding.",
+    owns:"puzzle schema, selector.py (ZPD-matched), evaluator.py, portrait.py",
+    consumed:"puzzle.next_requested, puzzle.response_recorded (own endpoints, not the chat pipeline)",
+    published:"portrait signals back into learner.state via the outbox",
+    detail:"Does NOT run in the main chat pipeline — dedicated endpoints (/puzzle/next, /puzzle/respond, /puzzle/portrait, /puzzle/bridge) drive it directly. Delivers puzzles matched to zone-of-proximal-development, register, and running portrait; register.py + cold_start.py handle the very first interactions before a full learner.state profile exists. classic.py is a separate simplified puzzle variant, tested in test_classic.py."},
+
+  {name:"iam", kind:"route", one:"DID-Auth, DPDP consent, delegated access, audit trail.",
+    owns:"identities, guardian_links, delegated grants, append-only audit log",
+    consumed:"—", published:"—",
+    detail:"Prefix /iam. Four endpoint groups: /iam/auth (DID-Auth challenge → JWT via Ed25519, foundation/auth.py + did.py), /iam/consent (DPDP Sec.9 parental consent, consent_vc.py), /iam/delegation (guardian → teacher delegated access, delegated_access.py), /iam/audit (append-only trail, audit.py)."},
+  {name:"teacher", kind:"route", one:"Teacher feedback form — no student login required.",
+    owns:"Portraits keyed on (teacher_phone, student_name, subject)",
+    consumed:"—", published:"—",
+    detail:"Prefix /teacher. Static link /teacher/form. Teacher enters phone + student name + grade + subject; an optional student_code resolves to a learner_id so Parth can inject the portrait into chat context automatically. Without a code, portraits are stored and matched later once the student's learner_id links to the teacher's phone."},
+  {name:"notify", kind:"route", one:"Pilot ops comms — email / SMS / WhatsApp reminders.",
+    owns:"A small hardcoded template registry", consumed:"—", published:"—",
+    detail:"Prefix /notify. Sends templated reminders and logs the attempt so a pilot lead can see why something didn't land. Deliberately not a general CMS — add a template only when a real pilot-comms need shows up."},
+  {name:"survey", kind:"route", one:"Tokenized, trackable links to the teacher feedback form.",
+    owns:"Short-lived HS256 JWT share links", consumed:"—", published:"—",
+    detail:"Prefix /survey. Issued per-invitation from the app instead of one static URL for everyone. Deliberately uses a separate plain HS256 JWT rather than foundation.auth's Ed25519 — a different problem (short-lived unauthenticated share link vs. identity-bound auth)."},
+  {name:"observation_engine", kind:"route", one:"Turns one real-world thing a student noticed into cross-domain Socratic openings.",
+    owns:"No new storage — reuses learner_state/episodes.py + open_loops.py",
+    consumed:"POST /observation", published:"—",
+    detail:"Not a new subsystem: its only real job is producing structured JSON from an observation_text + grade. Because it reuses existing storage unchanged, every live adaptation mechanism (emotion, register, curriculum context) applies to the resulting conversation automatically from the next /chat turn onward."},
+  {name:"shared_world", kind:"route", one:"Multiplayer-ish shared locations — presence + peer chat.",
+    owns:"locations, presence", consumed:"—", published:"—",
+    detail:"Backs /world/locations, /world/arrive, /world/depart, /world/presence/{id}, /world/chat — a lightweight shared space where learners can be co-present and chat, separate from the 1:1 tutoring pipeline."},
+  {name:"krishna_oracle", kind:"route", one:"Frontier-model pedagogical advisor, running in the background.",
+    owns:"Strategic per-learner guidance, written back for Parth to apply",
+    consumed:"async, every N interactions", published:"—",
+    detail:"Parth (Ollama, local) is the frontline tutor for every message — free, fast, private. Krishna (Claude/GPT-4) reads the child's full trajectory periodically and writes strategic guidance Parth applies in subsequent sessions. Always asynchronous, never in the critical request path; silently disabled if ANTHROPIC_API_KEY is absent."},
+  {name:"lens", kind:"route", one:"Five read-only portrait computations over learner history.",
+    owns:"cognitive.py, affect.py, psychological.py, contextual.py, relational.py",
+    consumed:"GET/POST /api/lens/{lens_name}/{learner_id}", published:"—",
+    detail:"On-demand, not always-on like the learner_state agents: /api/lens/{lens}/{learner_id}/run computes and saves a portrait for a given lens over a period_days window. Distinct code path from the always-on agents in the Learner Agents tab."},
+];
+
+const modgrid = document.getElementById('modgrid');
+function renderModules(filter){
+  modgrid.innerHTML = "";
+  MODULES.filter(m=> filter==="all" || m.kind===filter).forEach(m=>{
+    const d = document.createElement('details');
+    d.className = 'card';
+    d.innerHTML = `
+      <summary>
+        <div class="card-h">
+          <div class="name">${m.name}</div>
+          <div class="oneliner">
+            <span class="badge ${m.kind==='kernel'?'kernel':'route'}">${m.kind==='kernel'?'kernel-routed':'router / side-system'}</span>
+            ${m.veto?'<span class="badge veto">veto power</span>':''}
+          </div>
+          <div class="oneliner">${m.one}</div>
+        </div>
+        <span class="chev">▸</span>
+      </summary>
+      <div class="card-body">
+        <dl class="kv">
+          <dt>Owns</dt><dd>${m.owns}</dd>
+          <dt>Consumes</dt><dd><code>${m.consumed}</code></dd>
+          <dt>Publishes</dt><dd><code>${m.published}</code></dd>
+          <dt>Detail</dt><dd>${m.detail}</dd>
+        </dl>
+      </div>`;
+    modgrid.appendChild(d);
+  });
+}
+renderModules('all');
+document.querySelectorAll('.filterbtn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('.filterbtn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    renderModules(b.dataset.filter);
+  });
+});
+
+// ---------------- agents ----------------
+// Layers exactly as dependency-ordered in agents/__init__.py::build_agent_registry() —
+// only these 18 are actually wired and dispatched.
+const AGENT_LAYERS = {
+  "Layer 0 — independent observers (no event deps; fire first)": [
+    ["emotion_compass","01 · affect vector → distress.detected / engagement.high / curiosity.active"],
+    ["curriculum_cartographer","02 · coverage map, no event deps"],
+    ["mastery_tracker","03 · knowledge.py mastery + kt_events log → concept.weak"],
+    ["misconception_hunter","04 · → misconception.active"],
+    ["language_bridge","05 · → lang.preference"],
+    ["belief_coach","06 · sole psyche writer → confidence.bias"],
+  ],
+  "Layer 1 — event-aware (read Layer 0 events)": [
+    ["challenge_calibrator","07 · reads distress.detected + concept.weak → difficulty.adjust"],
+    ["memory_keeper","08 · SM-2 review + episodic memory"],
+    ["transfer_weaver","09 · → analogy.suggested"],
+    ["register_tuner","10 · reads lang.preference → register.profile"],
+    ["humor_delight_guide","11 · reads distress.detected → delight.approved"],
+    ["learning_velocity","12 · ZPD-normalized time-to-mastery"],
+    ["motivation_drive","13 · voluntary return under difficulty"],
+    ["social_preference","14 · group / solo / teach-back preference"],
+  ],
+  "Layer 2 — integrators (read Layer 0 + 1 events)": [
+    ["inquiry_alchemist","15 · curiosity threads + SEL repair"],
+    ["family_alliance","16 · consent-gated caregiver context"],
+    ["rhythm_time_steward","17 · pacing + peak-focus window"],
+  ],
+  "Layer 3 — synthesiser (reads episodes + curiosity threads; always last)": [
+    ["pattern_creation_guide","18 · wonder questions + cross-scale pattern tracking"],
+  ],
+};
+const wrap = document.getElementById('agentwrap');
+Object.entries(AGENT_LAYERS).forEach(([group, agents])=>{
+  const g = document.createElement('div');
+  g.className = 'agentgroup';
+  g.innerHTML = `<h4>${group} · ${agents.length}</h4><div class="agentgrid">${agents.map(([a,d])=>`<div class="agentchip"><b>${a}.py</b><br><span style="color:var(--ink-faint);font-family:'IBM Plex Sans',sans-serif;font-size:.72rem;">${d}</span></div>`).join('')}</div>`;
+  wrap.appendChild(g);
+});
+
+// ---------------- foundation ----------------
+const FOUNDATION = [
+  {name:"foundation.outbox", one:"Transactional outbox — no event without a matching DB write.",
+   detail:"Every module writes its own tables AND an outbox row in one transaction. No outbox row = no event = no subscriber update. A relay (LISTEN/NOTIFY or pg_cron) delivers pending rows to subscribers and marks them delivered; multi-instance deployments use FOR UPDATE SKIP LOCKED."},
+  {name:"foundation.identity", one:"Parental-consent-aware identity, DPDP/COPPA compliant.",
+   detail:"identities(type: child|guardian|teacher) + guardian_links(consent_given, consent_ts, scope[]). Every module touching child data calls check_consent(learner_id, scope) before writing; missing/revoked consent blocks the write and publishes consent.required. erase(learner_id) cascades via FK + each module's on_erase hook."},
+  {name:"foundation.db (idempotency)", one:"foundation.idempotency table — replay-safe requests.",
+   detail:"request_id → cached response, TTL ~24h. A retried request_id returns the cached response immediately instead of re-running any module."},
+  {name:"foundation.auth / did / iam_schema", one:"DID-Auth challenge/response → Ed25519-signed JWT.",
+   detail:"Backs /iam/auth/*. Kept deliberately separate from survey's plain HS256 share-link JWTs — identity-bound auth vs. short-lived unauthenticated links are different problems."},
+  {name:"foundation.consent_vc / vc", one:"Verifiable-credential-shaped consent records.",
+   detail:"Consent grants modeled as (verifiable-credential-style) VCs rather than a plain boolean, so consent scope and provenance travel with the record."},
+  {name:"foundation.observability", one:"Structured JSON logs + OpenTelemetry-style trace/request IDs.",
+   detail:"The kernel stamps trace_id + request_id on every event; every module log line carries both, so one trace_id reconstructs a full interaction across every module it touched."},
+  {name:"foundation.policy", one:"RBAC cache for delegated access.",
+   detail:"load_rbac_cache() backs guardian → teacher delegated-access checks used by /iam/delegation."},
+  {name:"foundation.metrics", one:"Prometheus-style counters.",
+   detail:"Request latency, token counts, p_mastery distribution, emotion-state histogram, per-module error rates."},
+];
+const fgrid = document.getElementById('foundationgrid');
+FOUNDATION.forEach(f=>{
+  const d = document.createElement('details');
+  d.className = 'card';
+  d.innerHTML = `
+    <summary>
+      <div class="card-h">
+        <div class="name">${f.name}</div>
+        <div class="oneliner">${f.one}</div>
+      </div>
+      <span class="chev">▸</span>
+    </summary>
+    <div class="card-body"><dl class="kv"><dt>Detail</dt><dd>${f.detail}</dd></dl></div>`;
+  fgrid.appendChild(d);
+});
+
+// ---------------- demo surfaces ----------------
+const DEMOS = [
+  {route:"/demo", file:"demo.html", desc:"Investor demo — chats with the scripted personas from tests/personas.py (see note below on the actual count)."},
+  {route:"/mirror", file:"portrait_demo.html", desc:"Magic Mirror — live portrait build, continuous valence/intensity emotion trajectory per turn."},
+  {route:"/graph", file:"graph.html", desc:"Knowledge-graph UI over curriculum.graph — mastery map per learner."},
+  {route:"/meaning", file:"meaning_graph.html", desc:"Meaning-graph explorer — concepts, puzzles, Neo4j export."},
+  {route:"/monitor", file:"monitor.html", desc:"Live SSE stream of interactions across all learners — ops-facing."},
+  {route:"/playground", file:"playground.html", desc:"Free-form chat playground, no persona scripting."},
+  {route:"/observer", file:"observer.html", desc:"Agent observatory — renders the _agent_trace read/dispatch trace from every response."},
+  {route:"/onboarding", file:"onboarding.html", desc:"Cold-start onboarding flow UI, backed by /api/onboarding/*."},
+  {route:"/classic", file:"classic.html", desc:"Simplified puzzle_engine variant (classic.py) — its own schema + tests."},
+  {route:"/teacher/form", file:"teacher_form.html", desc:"No-login teacher feedback form, served from the teacher router itself."},
+  {route:"— (unwired)", file:"parthos_discovery.html", desc:"On disk, 52KB, no FileResponse or router serves it — orphaned, not reachable from any live route.", orphan:true},
+];
+const dgrid = document.getElementById('demogrid');
+DEMOS.forEach(d=>{
+  const c = document.createElement('div');
+  c.className = 'democard' + (d.orphan?' orphan':'');
+  c.innerHTML = `<div class="route">${d.route}</div><div class="file">static/${d.file}</div><p>${d.desc}</p>`;
+  dgrid.appendChild(c);
+});
+
+// ---------------- endpoints ----------------
+const ENDPOINT_GROUPS = [
+  {title:"Core tutoring", rows:[
+    ["POST","/chat","Main kernel entry point — the pipeline in Request Flow."],
+    ["POST","/observation","observation.engine — real-world noticing → Socratic openings."],
+  ]},
+  {title:"Learner & consent", rows:[
+    ["POST","/consent/grant","Grant guardian consent."],
+    ["POST","/learner/consent","Learner-side consent record."],
+    ["POST","/learner/register","Register a new learner identity."],
+    ["GET","/learner/{id}/dimensions","All 15 learner dimensions."],
+    ["GET","/learner/{id}/reflection-prompt","Next reflection prompt."],
+    ["POST","/learner/{id}/reflection","Submit a reflection."],
+    ["GET","/learner/{id}","Full learner record."],
+    ["GET","/learner/{id}/config","Child-specific config (child_config.py)."],
+    ["GET","/learner/{id}/psyche","Psychological profile (psyche.py)."],
+  ]},
+  {title:"Puzzle engine (cold-start)", rows:[
+    ["GET","/puzzle/next/{id}","Next ZPD-matched puzzle."],
+    ["POST","/puzzle/respond","Record + evaluate a puzzle response."],
+    ["GET","/puzzle/portrait/{id}","Portrait built so far from puzzles."],
+    ["GET","/puzzle/bridge/{concept_id}","Concept bridge lookup."],
+    ["GET","/classic","classic.html UI."],
+    ["GET","/api/classic","classic.py API."],
+  ]},
+  {title:"Parent & pilot ops", rows:[
+    ["GET","/parent/{id}/report","parent.dashboard digest."],
+    ["GET","/parent/{id}/alerts","learner.struggling alerts."],
+    ["GET","/metrics/pilot/{id}","Per-learner pilot metrics."],
+    ["GET","/pilot/funnel","Pilot funnel stats."],
+  ]},
+  {title:"Monitor & agent trace", rows:[
+    ["GET","/monitor","monitor.html UI."],
+    ["GET","/monitor/stream","SSE live interaction stream."],
+    ["GET","/monitor/stats","Aggregate stats."],
+    ["GET","/api/trace/{id}","Agent dispatch trace for a learner."],
+    ["GET","/api/trace/{id}/latest","Most recent trace only."],
+    ["GET","/observer","observer.html UI."],
+  ]},
+  {title:"Magic Mirror", rows:[
+    ["GET","/mirror","portrait_demo.html UI."],
+    ["POST","/mirror/emotion","Fold one turn into the live valence/intensity trajectory."],
+  ]},
+  {title:"Graphs", rows:[
+    ["GET","/graph","graph.html UI."],
+    ["GET","/graph/data","Mastery map data."],
+    ["GET","/meaning","meaning_graph.html UI."],
+    ["GET","/meaning/graph","Graph data."],
+    ["GET","/meaning/puzzles","Puzzle list."],
+    ["GET","/meaning/puzzle/{id}","Single puzzle."],
+    ["GET","/meaning/neo4j/export","Neo4j-format export."],
+  ]},
+  {title:"Shared world", rows:[
+    ["GET","/world/locations","List shared locations."],
+    ["POST","/world/arrive","Enter a location."],
+    ["POST","/world/depart","Leave a location."],
+    ["GET","/world/presence/{id}","Who's present."],
+    ["POST","/world/chat","Peer chat in a shared location."],
+  ]},
+  {title:"Onboarding & lens", rows:[
+    ["GET","/onboarding","onboarding.html UI."],
+    ["POST","/api/onboarding/start","Begin onboarding session."],
+    ["POST","/api/onboarding/{sid}/answer","Answer a step."],
+    ["GET","/api/onboarding/{sid}","Session state."],
+    ["POST","/api/onboarding/{sid}/apply","Apply results to learner.state."],
+    ["GET","/api/lens/{lens}/{id}","Cached lens portrait."],
+    ["POST","/api/lens/{lens}/{id}/run","Compute + save a lens portrait."],
+  ]},
+  {title:"Misc UI + system", rows:[
+    ["GET","/demo","demo.html — investor demo."],
+    ["GET","/playground","playground.html — free chat."],
+    ["GET","/models","Available LLM models."],
+    ["GET","/health","Liveness + default model."],
+    ["GET","/","Server identity + version."],
+  ]},
+  {title:"Mounted routers", rows:[
+    ["*","/iam/*","DID-Auth, DPDP consent, delegation, audit (modules/iam)."],
+    ["*","/teacher/*","Teacher feedback form (modules/teacher)."],
+    ["*","/notify/*","Pilot comms — email/SMS/WhatsApp (modules/notify)."],
+    ["*","/survey/*","Tokenized survey links (modules/survey)."],
+  ]},
+];
+const ewrap = document.getElementById('endpointwrap');
+ENDPOINT_GROUPS.forEach(g=>{
+  const box = document.createElement('div');
+  box.style.marginBottom = "18px";
+  const rows = g.rows.map(([method,path,desc])=>{
+    const cls = method==="GET"?"get":method==="POST"?"post":"get";
+    return `<tr><td><span class="methodbadge ${cls}">${method}</span></td><td><code>${path}</code></td><td class="desc">${desc}</td></tr>`;
+  }).join('');
+  box.innerHTML = `<h4 style="font-family:'IBM Plex Mono',monospace;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:8px;">${g.title}</h4>
+    <div class="twrap"><table><tr><th></th><th>Path</th><th>What</th></tr>${rows}</table></div>`;
+  ewrap.appendChild(box);
+});
+</script>
