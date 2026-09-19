@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-09-19T01:02:18.320271+00:00",
+  "git_commit": "9409c38",
+  "min_events_filter": 1,
+  "n_events": 157,
+  "n_learners": 26,
+  "n_concepts": 11,
+  "overall": {
+    "knowledge.py (_mastery, live)": {
+      "n": 157,
+      "base_rate": 0.5669,
+      "auc": 0.7682,
+      "log_loss": 0.8277,
+      "brier": 0.2389
+    },
+    "baseline: base rate": {
+      "n": 157,
+      "base_rate": 0.5669,
+      "auc": 0.5,
+      "log_loss": 0.6842,
+      "brier": 0.2455
+    },
+    "baseline: always 0.5": {
+      "n": 157,
+      "base_rate": 0.5669,
+      "auc": 0.5,
+      "log_loss": 0.6931,
+      "brier": 0.25
+    },
+    "baseline: last outcome": {
+      "n": 157,
+      "base_rate": 0.5669,
+      "auc": 0.8923,
+      "log_loss": 1.3778,
+      "brier": 0.1258
+    }
+  },
+  "by_prior_exposure": {
+    "0 (cold start)": {
+      "n": 43,
+      "base_rate": 0.6512,
+      "auc": 0.5,
+      "log_loss": 1.9686,
+      "brier": 0.5885
+    },
+    "1-2": {
+      "n": 54,
+      "base_rate": 0.7037,
+      "auc": 0.8569,
+      "log_loss": 0.5196,
+      "brier": 0.1434
+    },
+    "3-5": {
+      "n": 27,
+      "base_rate": 0.5926,
+      "auc": 0.8778,
+      "log_loss": 0.4736,
+      "brier": 0.1271
+    },
+    "6+": {
+      "n": 33,
+      "base_rate": 0.2121,
+      "auc": 0.9725,
+      "log_loss": 0.1347,
+      "brier": 0.0311
+    }
+  },
+  "same_turn_credit_gaps": 9
+}

@@ -1326,6 +1326,38 @@ async def mirror_emotion(req: MirrorEmotionRequest, _: None = Depends(rate_limit
     }
 
 
+@app.get("/api/mastery/{learner_id}")
+async def learner_mastery(learner_id: str, _: None = Depends(rate_limit)):
+    """Per-concept BKT mastery for one learner — the live knowledge-trace
+    view (demo.html) and any other lightweight consumer that just wants
+    learner_state.knowledge's current p_mastery rows, without pulling in
+    the full curriculum graph /graph/data does."""
+    _require_uuid(learner_id)
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT concept_id, p_mastery, exposures, demonstrations, misconceptions, last_updated
+            FROM learner_state.knowledge
+            WHERE learner_id = $1
+            ORDER BY last_updated DESC
+            """,
+            learner_id,
+        )
+    concepts = [
+        {
+            "concept_id": r["concept_id"],
+            "p_mastery": round(r["p_mastery"], 3),
+            "exposures": r["exposures"],
+            "demonstrations": r["demonstrations"],
+            "misconceptions": r["misconceptions"],
+        }
+        for r in rows
+    ]
+    avg_mastery = round(sum(c["p_mastery"] for c in concepts) / len(concepts), 3) if concepts else None
+    return {"learner_id": learner_id, "concepts": concepts, "avg_mastery": avg_mastery}
+
+
 # ── Knowledge Graph UI & API ─────────────────────────────────────────────────
 @app.get("/graph")
 async def graph_ui():
